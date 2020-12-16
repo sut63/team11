@@ -1,4 +1,6 @@
 package main
 
-type  Story struct {
+type Story struct{
 }
+
+
