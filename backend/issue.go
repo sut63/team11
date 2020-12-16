@@ -1,0 +1,5 @@
+package
+
+type Story struct{}
+
+
