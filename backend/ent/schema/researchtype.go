@@ -23,7 +23,6 @@ func (Researchtype) Fields() []ent.Field {
 
 // Edges of the Researchtype.
 func (Researchtype) Edges() []ent.Edge {
-	edge.To("researchType", Research.Type).
-            StorageKey(edge.Column("TYPE_ID")),
+	edge.To("researchType", Research.Type).StorageKey(edge.Column("TYPE_ID")),
 
 }
