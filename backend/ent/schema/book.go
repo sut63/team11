@@ -2,6 +2,7 @@ package schema
 
 import (
 	"github.com/facebookincubator/ent"
+	"github.com/facebookincubator/ent/schema/edge"
 	"github.com/facebookincubator/ent/schema/field"
 )
 
@@ -16,12 +17,14 @@ func (Book) Fields() []ent.Field {
 		field.String("BookName").
 			NotEmpty().
 			Unique(),
-		field.String("Auther").
-			NotEmpty(),
 	}
 }
 
 // Edges of the Book.
 func (Book) Edges() []ent.Edge {
-	return nil
+	return []ent.Edge{
+		edge.From("category", Category.Type).Ref("catof").Unique(),
+		edge.From("author", Author.Type).Ref("writer").Unique(),
+		edge.From("user", User.Type).Ref("addby").Unique(),
+	}
 }

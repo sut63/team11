@@ -30,5 +30,7 @@ func (User) Edges() []ent.Edge {
 		edge.From("position", Role.Type).
 			Ref("role").
 			Unique(),
+		edge.To("addby", Book.Type).
+			StorageKey(edge.Column("USER_ID")),
 	}
 }
