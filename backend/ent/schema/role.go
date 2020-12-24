@@ -5,6 +5,7 @@ import (
 	"github.com/facebookincubator/ent/schema/edge"
 	"github.com/facebookincubator/ent/schema/field"
 )
+
 // Role holds the schema definition for the Role entity.
 type Role struct {
 	ent.Schema

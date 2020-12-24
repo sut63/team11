@@ -15,7 +15,7 @@ type Bookreturn struct {
 // Fields of the Bookreturn.
 func (Bookreturn) Fields() []ent.Field {
 	return []ent.Field{
-		field.String("book_name").NotEmpty();
+		field.String("book_name").NotEmpty(),
     }
 }
 
