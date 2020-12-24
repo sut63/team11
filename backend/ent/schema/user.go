@@ -27,7 +27,7 @@ func (User) Edges() []ent.Edge {
 	return []ent.Edge{
 		edge.To("booking", Booking.Type).
 			StorageKey(edge.Column("USER_ID")),
-		edge.From("roleplay", Role.Type).
+		edge.From("position", Role.Type).
 			Ref("role").
 			Unique(),
 	}
