@@ -24,6 +24,6 @@ func (Role) Fields() []ent.Field {
 func (Role) Edges() []ent.Edge {
 	return []ent.Edge{
 		edge.To("role", User.Type).
-			StorageKey(edge.Column("ROLE_ID")),
+			StorageKey(edge.Column("role_id")),
 	}
 }
