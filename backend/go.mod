@@ -1,4 +1,4 @@
-module github.com/tanapon395/playlist-video
+module github.com/B6111427/team11
 
 go 1.14
 

@@ -21,6 +21,6 @@ func (Purpose) Fields() []ent.Field {
 // Edges of the Purpose.
 func (Purpose) Edges() []ent.Edge {
 	return []ent.Edge{
-		edge.To("for", BookBorrow.Type).StorageKey(edge.Column("PURPOSE_ID")),
+		edge.To("for", Bookborrow.Type).StorageKey(edge.Column("PURPOSE_ID")),
 	}
 }

@@ -1,6 +1,7 @@
 package schema
 
 import (
+	"time"
 	"github.com/facebookincubator/ent"
 	"github.com/facebookincubator/ent/schema/edge"
 	"github.com/facebookincubator/ent/schema/field"
@@ -27,7 +28,7 @@ func (Bookborrow) Edges() []ent.Edge {
 		edge.From("BOOK", Book.Type).
 			Ref("booklist").
 			Unique(),
-		edge.From("SERVICEPOINT", Servicepoint.Type).
+		edge.From("SERVICEPOINT", ServicePoint.Type).
 			Ref("from").
 			Unique(),
 	}

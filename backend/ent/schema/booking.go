@@ -28,8 +28,8 @@ func (Booking) Edges() []ent.Edge {
 		edge.From("usedby", User.Type).
 			Ref("booking").
 			Unique(),
-		edge.From("book", Bookingtype.Type).
-			Ref("booktype").
+		edge.From("getservice", ServicePoint.Type).
+			Ref("servicepoint").
 			Unique(),
 		edge.From("using", ClientEntity.Type).
 			Ref("booked").

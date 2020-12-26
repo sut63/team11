@@ -2,6 +2,7 @@ package schema
 
 import (
 	"github.com/facebookincubator/ent"
+	"github.com/facebookincubator/ent/schema/edge"
 	"github.com/facebookincubator/ent/schema/field"
 )
 
@@ -23,5 +24,10 @@ func (ServicePoint) Fields() []ent.Field {
 
 // Edges of the ServicePoint.
 func (ServicePoint) Edges() []ent.Edge {
-	return []ent.Edge{}
+	return []ent.Edge{
+		edge.To("from", Bookborrow.Type).
+			StorageKey(edge.Column("servicepoint_id")),
+		edge.To("servicepoint", Bookborrow.Type).
+			StorageKey(edge.Column("servicepoint_id")),
+	}
 }
