@@ -18,7 +18,7 @@ func (Author) Fields() []ent.Field {
         field.String("Name").
             NotEmpty().
             Unique(),
-        field.String("Institutes").
+        field.String("Position").
             NotEmpty(),
     }
 
@@ -27,8 +27,7 @@ func (Author) Fields() []ent.Field {
 // Edges of the Author.
 func (Author) Edges() []ent.Edge {
 	return []ent.Edge{
-        edge.To("owner", Research.Type).StorageKey(edge.Column("OWNER_ID")),
-        edge.To("writer", Book.Type).StorageKey(edge.Column("Author_id")),
+		edge.To("owner", Research.Type).StorageKey(edge.Column("OWNER_ID")),
     }
 
 }
