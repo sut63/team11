@@ -16,7 +16,7 @@ func (ServicePoint) Fields() []ent.Field {
 	return []ent.Field{
 		field.String("BUILDING_NAME").
 			NotEmpty(),
-		field.String("FLOOR").
+		field.String("COUNTER_NUMBER").
 			Unique().
 			NotEmpty(),
 	}
@@ -26,8 +26,8 @@ func (ServicePoint) Fields() []ent.Field {
 func (ServicePoint) Edges() []ent.Edge {
 	return []ent.Edge{
 		edge.To("from", Bookborrow.Type).
-			StorageKey(edge.Column("servicepoint_id")),
-		edge.To("servicepoint", Bookborrow.Type).
-			StorageKey(edge.Column("servicepoint_id")),
+			StorageKey(edge.Column("SERVICEPOINT_ID")),
+		edge.To("servicepoint", Booking.Type).
+			StorageKey(edge.Column("SERVICEPOINT_ID")),
 	}
 }
