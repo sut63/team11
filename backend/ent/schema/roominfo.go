@@ -30,8 +30,8 @@ func (Preemption) Edges() []ent.Edge {
 			Ref("preemption").Unique(),
 		edge.From("PurposeID", Purpose.Type).
 			Ref("preemption").Unique(),
-		edge.From("RoomID", Roominfo.Type).
-			Ref("preemption").Unique(),
+		// edge.From("RoomID", Roominfo.Type).
+		// 	Ref("preemption").Unique(),
 	}
 }
 
