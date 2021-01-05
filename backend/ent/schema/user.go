@@ -26,11 +26,11 @@ func (User) Fields() []ent.Field {
 func (User) Edges() []ent.Edge {
 	return []ent.Edge{
 		edge.To("booking", Booking.Type).
-			StorageKey(edge.Column("user_id")),
+			StorageKey(edge.Column("USER_ID")),
 		edge.From("position", Role.Type).
 			Ref("role").
 			Unique(),
 		edge.To("addby", Book.Type).
-			StorageKey(edge.Column("user_id")),
+			StorageKey(edge.Column("USER_ID")),
 	}
 }
