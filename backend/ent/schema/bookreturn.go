@@ -2,7 +2,6 @@ package schema
 
 import (
 	"github.com/facebookincubator/ent"
-	"github.com/facebookincubator/ent/schema/edge"
 	"github.com/facebookincubator/ent/schema/field"
 )
 
@@ -21,5 +20,6 @@ func (Bookreturn) Fields() []ent.Field {
 
 // Edges of the Bookreturn.
 func (Bookreturn) Edges() []ent.Edge {
-	edge.To("books",Bill.Type).StorageKey(edge.Column("book_id"))
+	return []ent.Edge{
+	}
 }
