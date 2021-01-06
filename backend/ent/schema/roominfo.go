@@ -1,37 +1,31 @@
 package schema
 
 import (
-	"time"
-
 	"github.com/facebookincubator/ent"
 	"github.com/facebookincubator/ent/schema/edge"
 	"github.com/facebookincubator/ent/schema/field"
 )
 
-// Preemption holds the schema definition for the Preemption entity.
-type Preemption struct {
+// Roominfo holds the schema definition for the Roominfo entity.
+type Roominfo struct {
 	ent.Schema
 }
 
-// Fields of the Preemption.
-func (Preemption) Fields() []ent.Field {
+// Fields of the Roominfo.
+func (Roominfo) Fields() []ent.Field {
 	return []ent.Field{
-
-		
-		field.Time("PreemptTime").
-			Default(time.Now),
+		field.String("RoomID").
+			Unique(),
+		field.String("RoomNo").NotEmpty(),
+		field.String("RoomType").NotEmpty(),
+		field.String("RoomTime").NotEmpty(),
+		field.String("RoomStatus").NotEmpty(),
 	}
 }
 
-// Edges of the Preemption.
-func (Preemption) Edges() []ent.Edge {
+// Edges of the Roominfo.
+func (Roominfo) Edges() []ent.Edge {
 	return []ent.Edge{
-		edge.From("UserID", User.Type).
-			Ref("preemption").Unique(),
-		edge.From("PurposeID", Purpose.Type).
-			Ref("preemption").Unique(),
-		// edge.From("RoomID", Roominfo.Type).
-		// 	Ref("preemption").Unique(),
+		edge.To("preemption", Preemption.Type).StorageKey(edge.Column("RoomID")),
 	}
 }
-
