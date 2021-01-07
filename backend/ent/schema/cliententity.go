@@ -24,7 +24,7 @@ func (ClientEntity) Fields() []ent.Field {
 func (ClientEntity) Edges() []ent.Edge {
 	return []ent.Edge{
 		edge.To("booked", Booking.Type).
-			StorageKey(edge.Column("client_id")),
+			StorageKey(edge.Column("CLIENT_ID")),
 		edge.From("state", Status.Type).
 			Ref("status").
 			Unique(),

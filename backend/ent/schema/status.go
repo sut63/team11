@@ -24,8 +24,8 @@ func (Status) Fields() []ent.Field {
 func (Status) Edges() []ent.Edge {
 	return []ent.Edge{
 		edge.To("status", ClientEntity.Type).
-			StorageKey(edge.Column("status_id")),
-		edge.To("STATUS", Book.Type).
+			StorageKey(edge.Column("STATUS_ID")),
+		edge.To("statusofbook", Book.Type).
             StorageKey(edge.Column("STATUS_ID")),
 	}
 }

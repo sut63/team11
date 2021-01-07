@@ -3,20 +3,56 @@
 package predicate
 
 import (
-	"github.com/facebook/ent/dialect/sql"
+	"github.com/facebookincubator/ent/dialect/sql"
 )
 
-// Playlist is the predicate function for playlist builders.
-type Playlist func(*sql.Selector)
+// Author is the predicate function for author builders.
+type Author func(*sql.Selector)
 
-// Playlist_Video is the predicate function for playlist_video builders.
-type Playlist_Video func(*sql.Selector)
+// Book is the predicate function for book builders.
+type Book func(*sql.Selector)
 
-// Resolution is the predicate function for resolution builders.
-type Resolution func(*sql.Selector)
+// Bookborrow is the predicate function for bookborrow builders.
+type Bookborrow func(*sql.Selector)
+
+// Booking is the predicate function for booking builders.
+type Booking func(*sql.Selector)
+
+// Bookreturn is the predicate function for bookreturn builders.
+type Bookreturn func(*sql.Selector)
+
+// Category is the predicate function for category builders.
+type Category func(*sql.Selector)
+
+// ClientEntity is the predicate function for cliententity builders.
+type ClientEntity func(*sql.Selector)
+
+// Location is the predicate function for location builders.
+type Location func(*sql.Selector)
+
+// Preemption is the predicate function for preemption builders.
+type Preemption func(*sql.Selector)
+
+// Purpose is the predicate function for purpose builders.
+type Purpose func(*sql.Selector)
+
+// Research is the predicate function for research builders.
+type Research func(*sql.Selector)
+
+// Researchtype is the predicate function for researchtype builders.
+type Researchtype func(*sql.Selector)
+
+// Role is the predicate function for role builders.
+type Role func(*sql.Selector)
+
+// Roominfo is the predicate function for roominfo builders.
+type Roominfo func(*sql.Selector)
+
+// ServicePoint is the predicate function for servicepoint builders.
+type ServicePoint func(*sql.Selector)
+
+// Status is the predicate function for status builders.
+type Status func(*sql.Selector)
 
 // User is the predicate function for user builders.
 type User func(*sql.Selector)
-
-// Video is the predicate function for video builders.
-type Video func(*sql.Selector)
