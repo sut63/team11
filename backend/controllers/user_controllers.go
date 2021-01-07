@@ -16,7 +16,13 @@ type UserController struct {
 	client *ent.Client
 	router gin.IRouter
 }
+//User struct
+type User struct {
+	Email       string
+	Name      	string
+	Password 	string
 
+}
 // CreateUser handles POST requests for adding user entities
 // @Summary Create user
 // @Description Create user
@@ -118,7 +124,7 @@ func (ctl *UserController) ListUser(c *gin.Context) {
 	}
 	users, err := ctl.client.User.
 		Query().
-		Where(user.HasRoleplayWith(role.IDEQ(1))).
+		Where(user.HasPositionWith(role.IDEQ(1))).
 		Limit(limit).
 		Offset(offset).
 		All(context.Background())

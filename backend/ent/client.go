@@ -633,6 +633,22 @@ func (c *BookborrowClient) QuerySERVICEPOINT(b *Bookborrow) *ServicePointQuery {
 	return query
 }
 
+// QueryBorrowed queries the borrowed edge of a Bookborrow.
+func (c *BookborrowClient) QueryBorrowed(b *Bookborrow) *BookreturnQuery {
+	query := &BookreturnQuery{config: c.config}
+	query.path = func(ctx context.Context) (fromV *sql.Selector, _ error) {
+		id := b.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(bookborrow.Table, bookborrow.FieldID, id),
+			sqlgraph.To(bookreturn.Table, bookreturn.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, bookborrow.BorrowedTable, bookborrow.BorrowedColumn),
+		)
+		fromV = sqlgraph.Neighbors(b.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // Hooks returns the client hooks.
 func (c *BookborrowClient) Hooks() []Hook {
 	return c.hooks.Bookborrow
@@ -845,6 +861,22 @@ func (c *BookreturnClient) GetX(ctx context.Context, id int) *Bookreturn {
 		panic(err)
 	}
 	return b
+}
+
+// QueryMustreturn queries the mustreturn edge of a Bookreturn.
+func (c *BookreturnClient) QueryMustreturn(b *Bookreturn) *BookborrowQuery {
+	query := &BookborrowQuery{config: c.config}
+	query.path = func(ctx context.Context) (fromV *sql.Selector, _ error) {
+		id := b.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(bookreturn.Table, bookreturn.FieldID, id),
+			sqlgraph.To(bookborrow.Table, bookborrow.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, bookreturn.MustreturnTable, bookreturn.MustreturnColumn),
+		)
+		fromV = sqlgraph.Neighbors(b.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
 }
 
 // Hooks returns the client hooks.

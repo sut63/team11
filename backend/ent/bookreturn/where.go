@@ -4,6 +4,7 @@ package bookreturn
 
 import (
 	"github.com/facebookincubator/ent/dialect/sql"
+	"github.com/facebookincubator/ent/dialect/sql/sqlgraph"
 	"github.com/team11/app/ent/predicate"
 )
 
@@ -205,6 +206,34 @@ func BookNameEqualFold(v string) predicate.Bookreturn {
 func BookNameContainsFold(v string) predicate.Bookreturn {
 	return predicate.Bookreturn(func(s *sql.Selector) {
 		s.Where(sql.ContainsFold(s.C(FieldBookName), v))
+	})
+}
+
+// HasMustreturn applies the HasEdge predicate on the "mustreturn" edge.
+func HasMustreturn() predicate.Bookreturn {
+	return predicate.Bookreturn(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.To(MustreturnTable, FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, MustreturnTable, MustreturnColumn),
+		)
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasMustreturnWith applies the HasEdge predicate on the "mustreturn" edge with a given conditions (other predicates).
+func HasMustreturnWith(preds ...predicate.Bookborrow) predicate.Bookreturn {
+	return predicate.Bookreturn(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.To(MustreturnInverseTable, FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, MustreturnTable, MustreturnColumn),
+		)
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
 	})
 }
 
