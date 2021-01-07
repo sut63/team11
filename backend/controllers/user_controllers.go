@@ -5,10 +5,10 @@ import (
 	"fmt"
 	"strconv"
 
-	"github.com/B6111427/team11/ent"
-	"github.com/B6111427/team11/ent/role"
-	"github.com/B6111427/team11/ent/user"
 	"github.com/gin-gonic/gin"
+	"github.com/team11/app/ent"
+	"github.com/team11/app/ent/role"
+	"github.com/team11/app/ent/user"
 )
 
 // UserController defines the struct for the user controller
@@ -41,6 +41,7 @@ func (ctl *UserController) CreateUser(c *gin.Context) {
 		Create().
 		SetUSEREMAIL(obj.USEREMAIL).
 		SetUSERNAME(obj.USERNAME).
+		SetPASSWORD(obj.PASSWORD).
 		Save(context.Background())
 	if err != nil {
 		c.JSON(400, gin.H{
@@ -115,7 +116,6 @@ func (ctl *UserController) ListUser(c *gin.Context) {
 			offset = int(offset64)
 		}
 	}
-
 	users, err := ctl.client.User.
 		Query().
 		Where(user.HasRoleplayWith(role.IDEQ(1))).

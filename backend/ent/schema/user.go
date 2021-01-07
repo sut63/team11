@@ -19,6 +19,8 @@ func (User) Fields() []ent.Field {
 			Unique(),
 		field.String("USER_NAME").
 			NotEmpty(),
+		field.String("PASSWORD").
+			NotEmpty(),
 	}
 }
 
@@ -34,6 +36,10 @@ func (User) Edges() []ent.Edge {
 		edge.To("addby", Book.Type).
 			StorageKey(edge.Column("USER_ID")),
 		edge.To("borrow", Bookborrow.Type).
+			StorageKey(edge.Column("USER_ID")),
+		edge.To("preemption", Preemption.Type).
+			StorageKey(edge.Column("USER_ID")),
+		edge.To("record", Research.Type).
 			StorageKey(edge.Column("USER_ID")),
 	}
 }

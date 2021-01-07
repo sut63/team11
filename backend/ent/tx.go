@@ -6,22 +6,46 @@ import (
 	"context"
 	"sync"
 
-	"github.com/facebook/ent/dialect"
+	"github.com/facebookincubator/ent/dialect"
 )
 
 // Tx is a transactional client that is created by calling Client.Tx().
 type Tx struct {
 	config
-	// Playlist is the client for interacting with the Playlist builders.
-	Playlist *PlaylistClient
-	// Playlist_Video is the client for interacting with the Playlist_Video builders.
-	Playlist_Video *Playlist_VideoClient
-	// Resolution is the client for interacting with the Resolution builders.
-	Resolution *ResolutionClient
+	// Author is the client for interacting with the Author builders.
+	Author *AuthorClient
+	// Book is the client for interacting with the Book builders.
+	Book *BookClient
+	// Bookborrow is the client for interacting with the Bookborrow builders.
+	Bookborrow *BookborrowClient
+	// Booking is the client for interacting with the Booking builders.
+	Booking *BookingClient
+	// Bookreturn is the client for interacting with the Bookreturn builders.
+	Bookreturn *BookreturnClient
+	// Category is the client for interacting with the Category builders.
+	Category *CategoryClient
+	// ClientEntity is the client for interacting with the ClientEntity builders.
+	ClientEntity *ClientEntityClient
+	// Location is the client for interacting with the Location builders.
+	Location *LocationClient
+	// Preemption is the client for interacting with the Preemption builders.
+	Preemption *PreemptionClient
+	// Purpose is the client for interacting with the Purpose builders.
+	Purpose *PurposeClient
+	// Research is the client for interacting with the Research builders.
+	Research *ResearchClient
+	// Researchtype is the client for interacting with the Researchtype builders.
+	Researchtype *ResearchtypeClient
+	// Role is the client for interacting with the Role builders.
+	Role *RoleClient
+	// Roominfo is the client for interacting with the Roominfo builders.
+	Roominfo *RoominfoClient
+	// ServicePoint is the client for interacting with the ServicePoint builders.
+	ServicePoint *ServicePointClient
+	// Status is the client for interacting with the Status builders.
+	Status *StatusClient
 	// User is the client for interacting with the User builders.
 	User *UserClient
-	// Video is the client for interacting with the Video builders.
-	Video *VideoClient
 
 	// lazily loaded.
 	client     *Client
@@ -157,11 +181,23 @@ func (tx *Tx) Client() *Client {
 }
 
 func (tx *Tx) init() {
-	tx.Playlist = NewPlaylistClient(tx.config)
-	tx.Playlist_Video = NewPlaylist_VideoClient(tx.config)
-	tx.Resolution = NewResolutionClient(tx.config)
+	tx.Author = NewAuthorClient(tx.config)
+	tx.Book = NewBookClient(tx.config)
+	tx.Bookborrow = NewBookborrowClient(tx.config)
+	tx.Booking = NewBookingClient(tx.config)
+	tx.Bookreturn = NewBookreturnClient(tx.config)
+	tx.Category = NewCategoryClient(tx.config)
+	tx.ClientEntity = NewClientEntityClient(tx.config)
+	tx.Location = NewLocationClient(tx.config)
+	tx.Preemption = NewPreemptionClient(tx.config)
+	tx.Purpose = NewPurposeClient(tx.config)
+	tx.Research = NewResearchClient(tx.config)
+	tx.Researchtype = NewResearchtypeClient(tx.config)
+	tx.Role = NewRoleClient(tx.config)
+	tx.Roominfo = NewRoominfoClient(tx.config)
+	tx.ServicePoint = NewServicePointClient(tx.config)
+	tx.Status = NewStatusClient(tx.config)
 	tx.User = NewUserClient(tx.config)
-	tx.Video = NewVideoClient(tx.config)
 }
 
 // txDriver wraps the given dialect.Tx with a nop dialect.Driver implementation.
@@ -171,7 +207,7 @@ func (tx *Tx) init() {
 // of them in order to commit or rollback the transaction.
 //
 // If a closed transaction is embedded in one of the generated entities, and the entity
-// applies a query, for example: Playlist.QueryXXX(), the query will be executed
+// applies a query, for example: Author.QueryXXX(), the query will be executed
 // through the driver which created this transaction.
 //
 // Note that txDriver is not goroutine safe.

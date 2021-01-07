@@ -1,144 +1,501 @@
 basePath: /api/v1
 definitions:
-  ent.Playlist:
+  ent.Author:
     properties:
-      edges:
-        $ref: '#/definitions/ent.PlaylistEdges'
-        description: |-
-          Edges holds the relations/edges for other nodes in the graph.
-          The values are being populated by the PlaylistQuery when eager-loading is set.
-        type: object
-      id:
-        description: ID of the ent.
-        type: integer
-      title:
-        description: Title holds the value of the "title" field.
+      Name:
+        description: Name holds the value of the "Name" field.
         type: string
-    type: object
-  ent.Playlist_Video:
-    properties:
-      added_time:
-        description: AddedTime holds the value of the "added_time" field.
+      Position:
+        description: Position holds the value of the "Position" field.
         type: string
       edges:
-        $ref: '#/definitions/ent.Playlist_VideoEdges'
+        $ref: '#/definitions/ent.AuthorEdges'
         description: |-
           Edges holds the relations/edges for other nodes in the graph.
-          The values are being populated by the Playlist_VideoQuery when eager-loading is set.
+          The values are being populated by the AuthorQuery when eager-loading is set.
         type: object
       id:
         description: ID of the ent.
         type: integer
     type: object
-  ent.Playlist_VideoEdges:
-    properties:
-      playlist:
-        $ref: '#/definitions/ent.Playlist'
-        description: Playlist holds the value of the playlist edge.
-        type: object
-      resolution:
-        $ref: '#/definitions/ent.Resolution'
-        description: Resolution holds the value of the resolution edge.
-        type: object
-      video:
-        $ref: '#/definitions/ent.Video'
-        description: Video holds the value of the video edge.
-        type: object
-    type: object
-  ent.PlaylistEdges:
+  ent.AuthorEdges:
     properties:
       owner:
-        $ref: '#/definitions/ent.User'
         description: Owner holds the value of the owner edge.
-        type: object
-      playlistVideos:
-        description: PlaylistVideos holds the value of the playlist_videos edge.
         items:
-          $ref: '#/definitions/ent.Playlist_Video'
+          $ref: '#/definitions/ent.Research'
+        type: array
+      writer:
+        description: Writer holds the value of the writer edge.
+        items:
+          $ref: '#/definitions/ent.Book'
         type: array
     type: object
-  ent.Resolution:
+  ent.Book:
     properties:
+      BookName:
+        description: BookName holds the value of the "BookName" field.
+        type: string
+      author_ID:
+        type: integer
+      category_id:
+        type: integer
       edges:
-        $ref: '#/definitions/ent.ResolutionEdges'
+        $ref: '#/definitions/ent.BookEdges'
         description: |-
           Edges holds the relations/edges for other nodes in the graph.
-          The values are being populated by the ResolutionQuery when eager-loading is set.
+          The values are being populated by the BookQuery when eager-loading is set.
         type: object
       id:
         description: ID of the ent.
         type: integer
-      value:
-        description: Value holds the value of the "value" field.
+      status_ID:
+        type: integer
+      user_ID:
         type: integer
     type: object
-  ent.ResolutionEdges:
+  ent.BookEdges:
     properties:
-      playlistVideos:
-        description: PlaylistVideos holds the value of the playlist_videos edge.
+      author:
+        $ref: '#/definitions/ent.Author'
+        description: Author holds the value of the author edge.
+        type: object
+      booklist:
+        description: Booklist holds the value of the booklist edge.
         items:
-          $ref: '#/definitions/ent.Playlist_Video'
+          $ref: '#/definitions/ent.Bookborrow'
+        type: array
+      category:
+        $ref: '#/definitions/ent.Category'
+        description: Category holds the value of the category edge.
+        type: object
+      status:
+        $ref: '#/definitions/ent.Status'
+        description: Status holds the value of the Status edge.
+        type: object
+      user:
+        $ref: '#/definitions/ent.User'
+        description: User holds the value of the user edge.
+        type: object
+    type: object
+  ent.Bookborrow:
+    properties:
+      BORROW_DATE:
+        description: BORROWDATE holds the value of the "BORROW_DATE" field.
+        type: string
+      book_ID:
+        type: integer
+      edges:
+        $ref: '#/definitions/ent.BookborrowEdges'
+        description: |-
+          Edges holds the relations/edges for other nodes in the graph.
+          The values are being populated by the BookborrowQuery when eager-loading is set.
+        type: object
+      id:
+        description: ID of the ent.
+        type: integer
+      servicepoint_ID:
+        type: integer
+      user_ID:
+        type: integer
+    type: object
+  ent.BookborrowEdges:
+    properties:
+      book:
+        $ref: '#/definitions/ent.Book'
+        description: BOOK holds the value of the BOOK edge.
+        type: object
+      servicepoint:
+        $ref: '#/definitions/ent.ServicePoint'
+        description: SERVICEPOINT holds the value of the SERVICEPOINT edge.
+        type: object
+      user:
+        $ref: '#/definitions/ent.User'
+        description: USER holds the value of the USER edge.
+        type: object
+    type: object
+  ent.Booking:
+    properties:
+      BOOKING_DATE:
+        description: BOOKINGDATE holds the value of the "BOOKING_DATE" field.
+        type: string
+      TIME_LEFT:
+        description: TIMELEFT holds the value of the "TIME_LEFT" field.
+        type: string
+      client_ID:
+        type: integer
+      edges:
+        $ref: '#/definitions/ent.BookingEdges'
+        description: |-
+          Edges holds the relations/edges for other nodes in the graph.
+          The values are being populated by the BookingQuery when eager-loading is set.
+        type: object
+      id:
+        description: ID of the ent.
+        type: integer
+      servicepoint_ID:
+        type: integer
+      user_ID:
+        type: integer
+    type: object
+  ent.BookingEdges:
+    properties:
+      getservice:
+        $ref: '#/definitions/ent.ServicePoint'
+        description: Getservice holds the value of the getservice edge.
+        type: object
+      usedby:
+        $ref: '#/definitions/ent.User'
+        description: Usedby holds the value of the usedby edge.
+        type: object
+      using:
+        $ref: '#/definitions/ent.ClientEntity'
+        description: Using holds the value of the using edge.
+        type: object
+    type: object
+  ent.Category:
+    properties:
+      CategoryName:
+        description: CategoryName holds the value of the "CategoryName" field.
+        type: string
+      edges:
+        $ref: '#/definitions/ent.CategoryEdges'
+        description: |-
+          Edges holds the relations/edges for other nodes in the graph.
+          The values are being populated by the CategoryQuery when eager-loading is set.
+        type: object
+      id:
+        description: ID of the ent.
+        type: integer
+    type: object
+  ent.CategoryEdges:
+    properties:
+      catof:
+        description: Catof holds the value of the catof edge.
+        items:
+          $ref: '#/definitions/ent.Book'
+        type: array
+    type: object
+  ent.ClientEntity:
+    properties:
+      CLIENT_NAME:
+        description: CLIENTNAME holds the value of the "CLIENT_NAME" field.
+        type: string
+      edges:
+        $ref: '#/definitions/ent.ClientEntityEdges'
+        description: |-
+          Edges holds the relations/edges for other nodes in the graph.
+          The values are being populated by the ClientEntityQuery when eager-loading is set.
+        type: object
+      id:
+        description: ID of the ent.
+        type: integer
+      status_ID:
+        type: integer
+    type: object
+  ent.ClientEntityEdges:
+    properties:
+      booked:
+        description: Booked holds the value of the booked edge.
+        items:
+          $ref: '#/definitions/ent.Booking'
+        type: array
+      state:
+        $ref: '#/definitions/ent.Status'
+        description: State holds the value of the state edge.
+        type: object
+    type: object
+  ent.Preemption:
+    properties:
+      PreemptTime:
+        description: PreemptTime holds the value of the "PreemptTime" field.
+        type: string
+      edges:
+        $ref: '#/definitions/ent.PreemptionEdges'
+        description: |-
+          Edges holds the relations/edges for other nodes in the graph.
+          The values are being populated by the PreemptionQuery when eager-loading is set.
+        type: object
+      id:
+        description: ID of the ent.
+        type: integer
+      purposeID:
+        type: integer
+      roomID:
+        type: integer
+      user_ID:
+        type: integer
+    type: object
+  ent.PreemptionEdges:
+    properties:
+      purposeID:
+        $ref: '#/definitions/ent.Purpose'
+        description: PurposeID holds the value of the PurposeID edge.
+        type: object
+      roomID:
+        $ref: '#/definitions/ent.Roominfo'
+        description: RoomID holds the value of the RoomID edge.
+        type: object
+      userID:
+        $ref: '#/definitions/ent.User'
+        description: UserID holds the value of the User_ID edge.
+        type: object
+    type: object
+  ent.Purpose:
+    properties:
+      PurposeName:
+        description: PurposeName holds the value of the "PurposeName" field.
+        type: string
+      edges:
+        $ref: '#/definitions/ent.PurposeEdges'
+        description: |-
+          Edges holds the relations/edges for other nodes in the graph.
+          The values are being populated by the PurposeQuery when eager-loading is set.
+        type: object
+      id:
+        description: ID of the ent.
+        type: integer
+    type: object
+  ent.PurposeEdges:
+    properties:
+      preemption:
+        description: Preemption holds the value of the preemption edge.
+        items:
+          $ref: '#/definitions/ent.Preemption'
+        type: array
+    type: object
+  ent.Research:
+    properties:
+      DATE:
+        description: DATE holds the value of the "DATE" field.
+        type: string
+      DOC_NAME:
+        description: DOCNAME holds the value of the "DOC_NAME" field.
+        type: string
+      edges:
+        $ref: '#/definitions/ent.ResearchEdges'
+        description: |-
+          Edges holds the relations/edges for other nodes in the graph.
+          The values are being populated by the ResearchQuery when eager-loading is set.
+        type: object
+      id:
+        description: ID of the ent.
+        type: integer
+      owner_ID:
+        type: integer
+      type_ID:
+        type: integer
+      user_ID:
+        type: integer
+    type: object
+  ent.ResearchEdges:
+    properties:
+      docType:
+        $ref: '#/definitions/ent.Researchtype'
+        description: DocType holds the value of the docType edge.
+        type: object
+      myDoc:
+        $ref: '#/definitions/ent.Author'
+        description: MyDoc holds the value of the myDoc edge.
+        type: object
+      register:
+        $ref: '#/definitions/ent.User'
+        description: Register holds the value of the register edge.
+        type: object
+    type: object
+  ent.Researchtype:
+    properties:
+      TYPE_NAME:
+        description: TYPENAME holds the value of the "TYPE_NAME" field.
+        type: string
+      edges:
+        $ref: '#/definitions/ent.ResearchtypeEdges'
+        description: |-
+          Edges holds the relations/edges for other nodes in the graph.
+          The values are being populated by the ResearchtypeQuery when eager-loading is set.
+        type: object
+      id:
+        description: ID of the ent.
+        type: integer
+    type: object
+  ent.ResearchtypeEdges:
+    properties:
+      researchType:
+        description: ResearchType holds the value of the researchType edge.
+        items:
+          $ref: '#/definitions/ent.Research'
+        type: array
+    type: object
+  ent.Role:
+    properties:
+      ROLE_NAME:
+        description: ROLENAME holds the value of the "ROLE_NAME" field.
+        type: string
+      edges:
+        $ref: '#/definitions/ent.RoleEdges'
+        description: |-
+          Edges holds the relations/edges for other nodes in the graph.
+          The values are being populated by the RoleQuery when eager-loading is set.
+        type: object
+      id:
+        description: ID of the ent.
+        type: integer
+    type: object
+  ent.RoleEdges:
+    properties:
+      role:
+        description: Role holds the value of the role edge.
+        items:
+          $ref: '#/definitions/ent.User'
+        type: array
+    type: object
+  ent.Roominfo:
+    properties:
+      RoomID:
+        description: RoomID holds the value of the "RoomID" field.
+        type: string
+      RoomNo:
+        description: RoomNo holds the value of the "RoomNo" field.
+        type: string
+      RoomStatus:
+        description: RoomStatus holds the value of the "RoomStatus" field.
+        type: string
+      RoomTime:
+        description: RoomTime holds the value of the "RoomTime" field.
+        type: string
+      RoomType:
+        description: RoomType holds the value of the "RoomType" field.
+        type: string
+      edges:
+        $ref: '#/definitions/ent.RoominfoEdges'
+        description: |-
+          Edges holds the relations/edges for other nodes in the graph.
+          The values are being populated by the RoominfoQuery when eager-loading is set.
+        type: object
+      id:
+        description: ID of the ent.
+        type: integer
+    type: object
+  ent.RoominfoEdges:
+    properties:
+      preemption:
+        description: Preemption holds the value of the preemption edge.
+        items:
+          $ref: '#/definitions/ent.Preemption'
+        type: array
+    type: object
+  ent.ServicePoint:
+    properties:
+      BUILDING_NAME:
+        description: BUILDINGNAME holds the value of the "BUILDING_NAME" field.
+        type: string
+      COUNTER_NUMBER:
+        description: COUNTERNUMBER holds the value of the "COUNTER_NUMBER" field.
+        type: string
+      edges:
+        $ref: '#/definitions/ent.ServicePointEdges'
+        description: |-
+          Edges holds the relations/edges for other nodes in the graph.
+          The values are being populated by the ServicePointQuery when eager-loading is set.
+        type: object
+      id:
+        description: ID of the ent.
+        type: integer
+    type: object
+  ent.ServicePointEdges:
+    properties:
+      from:
+        description: From holds the value of the from edge.
+        items:
+          $ref: '#/definitions/ent.Bookborrow'
+        type: array
+      servicepoint:
+        description: Servicepoint holds the value of the servicepoint edge.
+        items:
+          $ref: '#/definitions/ent.Booking'
+        type: array
+    type: object
+  ent.Status:
+    properties:
+      STATUS_NAME:
+        description: STATUSNAME holds the value of the "STATUS_NAME" field.
+        type: string
+      edges:
+        $ref: '#/definitions/ent.StatusEdges'
+        description: |-
+          Edges holds the relations/edges for other nodes in the graph.
+          The values are being populated by the StatusQuery when eager-loading is set.
+        type: object
+      id:
+        description: ID of the ent.
+        type: integer
+    type: object
+  ent.StatusEdges:
+    properties:
+      status:
+        description: Status holds the value of the status edge.
+        items:
+          $ref: '#/definitions/ent.ClientEntity'
+        type: array
+      statusofbook:
+        description: Statusofbook holds the value of the statusofbook edge.
+        items:
+          $ref: '#/definitions/ent.Book'
         type: array
     type: object
   ent.User:
     properties:
+      PASSWORD:
+        description: PASSWORD holds the value of the "PASSWORD" field.
+        type: string
+      USER_EMAIL:
+        description: USEREMAIL holds the value of the "USER_EMAIL" field.
+        type: string
+      USER_NAME:
+        description: USERNAME holds the value of the "USER_NAME" field.
+        type: string
       edges:
         $ref: '#/definitions/ent.UserEdges'
         description: |-
           Edges holds the relations/edges for other nodes in the graph.
           The values are being populated by the UserQuery when eager-loading is set.
         type: object
-      email:
-        description: Email holds the value of the "email" field.
-        type: string
       id:
         description: ID of the ent.
         type: integer
-      name:
-        description: Name holds the value of the "name" field.
-        type: string
+      role_ID:
+        type: integer
     type: object
   ent.UserEdges:
     properties:
-      playlists:
-        description: Playlists holds the value of the playlists edge.
+      addby:
+        description: Addby holds the value of the addby edge.
         items:
-          $ref: '#/definitions/ent.Playlist'
+          $ref: '#/definitions/ent.Book'
         type: array
-      videos:
-        description: Videos holds the value of the videos edge.
+      booking:
+        description: Booking holds the value of the booking edge.
         items:
-          $ref: '#/definitions/ent.Video'
+          $ref: '#/definitions/ent.Booking'
         type: array
-    type: object
-  ent.Video:
-    properties:
-      edges:
-        $ref: '#/definitions/ent.VideoEdges'
-        description: |-
-          Edges holds the relations/edges for other nodes in the graph.
-          The values are being populated by the VideoQuery when eager-loading is set.
-        type: object
-      id:
-        description: ID of the ent.
-        type: integer
-      name:
-        description: Name holds the value of the "name" field.
-        type: string
-      url:
-        description: URL holds the value of the "url" field.
-        type: string
-    type: object
-  ent.VideoEdges:
-    properties:
-      owner:
-        $ref: '#/definitions/ent.User'
-        description: Owner holds the value of the owner edge.
-        type: object
-      playlistVideos:
-        description: PlaylistVideos holds the value of the playlist_videos edge.
+      borrow:
+        description: Borrow holds the value of the borrow edge.
         items:
-          $ref: '#/definitions/ent.Playlist_Video'
+          $ref: '#/definitions/ent.Bookborrow'
+        type: array
+      position:
+        $ref: '#/definitions/ent.Role'
+        description: Position holds the value of the position edge.
+        type: object
+      preemption:
+        description: Preemption holds the value of the preemption edge.
+        items:
+          $ref: '#/definitions/ent.Preemption'
+        type: array
+      record:
+        description: Record holds the value of the record edge.
+        items:
+          $ref: '#/definitions/ent.Research'
         type: array
     type: object
   gin.H:
@@ -158,243 +515,6 @@ info:
   title: SUT SA Example API Playlist Vidoe
   version: "1.0"
 paths:
-  /playlist-videos:
-    get:
-      description: list playlist-video entities
-      operationId: list-playlist-video
-      parameters:
-      - description: Limit
-        in: query
-        name: limit
-        type: integer
-      - description: Offset
-        in: query
-        name: offset
-        type: integer
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            items:
-              $ref: '#/definitions/ent.Playlist_Video'
-            type: array
-        "400":
-          description: Bad Request
-          schema:
-            $ref: '#/definitions/gin.H'
-        "500":
-          description: Internal Server Error
-          schema:
-            $ref: '#/definitions/gin.H'
-      summary: List playlist-video entities
-    post:
-      consumes:
-      - application/json
-      description: Create playlist-video
-      operationId: create-playlist-video
-      parameters:
-      - description: Playlist_Video entity
-        in: body
-        name: playlist-video
-        required: true
-        schema:
-          $ref: '#/definitions/ent.Playlist_Video'
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/ent.Playlist_Video'
-        "400":
-          description: Bad Request
-          schema:
-            $ref: '#/definitions/gin.H'
-        "500":
-          description: Internal Server Error
-          schema:
-            $ref: '#/definitions/gin.H'
-      summary: Create playlist-video
-  /playlists:
-    get:
-      description: list playlist entities
-      operationId: list-playlist
-      parameters:
-      - description: Limit
-        in: query
-        name: limit
-        type: integer
-      - description: Offset
-        in: query
-        name: offset
-        type: integer
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            items:
-              $ref: '#/definitions/ent.Playlist'
-            type: array
-        "400":
-          description: Bad Request
-          schema:
-            $ref: '#/definitions/gin.H'
-        "500":
-          description: Internal Server Error
-          schema:
-            $ref: '#/definitions/gin.H'
-      summary: List playlist entities
-    post:
-      consumes:
-      - application/json
-      description: Create playlist
-      operationId: create-playlist
-      parameters:
-      - description: Playlist entity
-        in: body
-        name: playlist
-        required: true
-        schema:
-          $ref: '#/definitions/ent.Playlist'
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/ent.Playlist'
-        "400":
-          description: Bad Request
-          schema:
-            $ref: '#/definitions/gin.H'
-        "500":
-          description: Internal Server Error
-          schema:
-            $ref: '#/definitions/gin.H'
-      summary: Create playlist
-  /playlists/{id}:
-    get:
-      description: get playlist by ID
-      operationId: get-playlist
-      parameters:
-      - description: Playlist ID
-        in: path
-        name: id
-        required: true
-        type: integer
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/ent.Playlist'
-        "400":
-          description: Bad Request
-          schema:
-            $ref: '#/definitions/gin.H'
-        "404":
-          description: Not Found
-          schema:
-            $ref: '#/definitions/gin.H'
-        "500":
-          description: Internal Server Error
-          schema:
-            $ref: '#/definitions/gin.H'
-      summary: Get a playlist entity by ID
-  /resolutions:
-    get:
-      description: list resolution entities
-      operationId: list-resolution
-      parameters:
-      - description: Limit
-        in: query
-        name: limit
-        type: integer
-      - description: Offset
-        in: query
-        name: offset
-        type: integer
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            items:
-              $ref: '#/definitions/ent.Resolution'
-            type: array
-        "400":
-          description: Bad Request
-          schema:
-            $ref: '#/definitions/gin.H'
-        "500":
-          description: Internal Server Error
-          schema:
-            $ref: '#/definitions/gin.H'
-      summary: List resolution entities
-    post:
-      consumes:
-      - application/json
-      description: Create resolution
-      operationId: create-resolution
-      parameters:
-      - description: Resolution entity
-        in: body
-        name: resolution
-        required: true
-        schema:
-          $ref: '#/definitions/ent.Resolution'
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/ent.Resolution'
-        "400":
-          description: Bad Request
-          schema:
-            $ref: '#/definitions/gin.H'
-        "500":
-          description: Internal Server Error
-          schema:
-            $ref: '#/definitions/gin.H'
-      summary: Create resolution
-  /resolutions/{id}:
-    get:
-      description: get resolution by ID
-      operationId: get-resolution
-      parameters:
-      - description: Resolution ID
-        in: path
-        name: id
-        required: true
-        type: integer
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/ent.Resolution'
-        "400":
-          description: Bad Request
-          schema:
-            $ref: '#/definitions/gin.H'
-        "404":
-          description: Not Found
-          schema:
-            $ref: '#/definitions/gin.H'
-        "500":
-          description: Internal Server Error
-          schema:
-            $ref: '#/definitions/gin.H'
-      summary: Get a resolution entity by ID
   /users:
     get:
       description: list user entities
@@ -546,157 +666,6 @@ paths:
           schema:
             $ref: '#/definitions/gin.H'
       summary: Update a user entity by ID
-  /videos:
-    get:
-      description: list video entities
-      operationId: list-video
-      parameters:
-      - description: Limit
-        in: query
-        name: limit
-        type: integer
-      - description: Offset
-        in: query
-        name: offset
-        type: integer
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            items:
-              $ref: '#/definitions/ent.Video'
-            type: array
-        "400":
-          description: Bad Request
-          schema:
-            $ref: '#/definitions/gin.H'
-        "500":
-          description: Internal Server Error
-          schema:
-            $ref: '#/definitions/gin.H'
-      summary: List video entities
-    post:
-      consumes:
-      - application/json
-      description: Create video
-      operationId: create-video
-      parameters:
-      - description: Video entity
-        in: body
-        name: video
-        required: true
-        schema:
-          $ref: '#/definitions/ent.Video'
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/ent.Video'
-        "400":
-          description: Bad Request
-          schema:
-            $ref: '#/definitions/gin.H'
-        "500":
-          description: Internal Server Error
-          schema:
-            $ref: '#/definitions/gin.H'
-      summary: Create video
-  /videos/{id}:
-    delete:
-      description: get video by ID
-      operationId: delete-video
-      parameters:
-      - description: Video ID
-        in: path
-        name: id
-        required: true
-        type: integer
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/gin.H'
-        "400":
-          description: Bad Request
-          schema:
-            $ref: '#/definitions/gin.H'
-        "404":
-          description: Not Found
-          schema:
-            $ref: '#/definitions/gin.H'
-        "500":
-          description: Internal Server Error
-          schema:
-            $ref: '#/definitions/gin.H'
-      summary: Delete a video entity by ID
-    get:
-      description: get video by ID
-      operationId: get-video
-      parameters:
-      - description: Video ID
-        in: path
-        name: id
-        required: true
-        type: integer
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/ent.Video'
-        "400":
-          description: Bad Request
-          schema:
-            $ref: '#/definitions/gin.H'
-        "404":
-          description: Not Found
-          schema:
-            $ref: '#/definitions/gin.H'
-        "500":
-          description: Internal Server Error
-          schema:
-            $ref: '#/definitions/gin.H'
-      summary: Get a video entity by ID
-    put:
-      consumes:
-      - application/json
-      description: update video by ID
-      operationId: update-video
-      parameters:
-      - description: Video ID
-        in: path
-        name: id
-        required: true
-        type: integer
-      - description: Video entity
-        in: body
-        name: video
-        required: true
-        schema:
-          $ref: '#/definitions/ent.Video'
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/ent.Video'
-        "400":
-          description: Bad Request
-          schema:
-            $ref: '#/definitions/gin.H'
-        "500":
-          description: Internal Server Error
-          schema:
-            $ref: '#/definitions/gin.H'
-      summary: Update a video entity by ID
 securityDefinitions:
   ApiKeyAuth:
     in: header
@@ -712,6 +681,7 @@ securityDefinitions:
     tokenUrl: https://example.com/oauth/token
     type: oauth2
   OAuth2Application:
+    authorizationUrl: ""
     flow: application
     scopes:
       admin: ' Grants read and write access to administrative information'
@@ -726,6 +696,7 @@ securityDefinitions:
       write: ' Grants write access'
     type: oauth2
   OAuth2Password:
+    authorizationUrl: ""
     flow: password
     scopes:
       admin: ' Grants read and write access to administrative information'

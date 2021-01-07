@@ -33,363 +33,6 @@ var doc = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
-        "/playlist-videos": {
-            "get": {
-                "description": "list playlist-video entities",
-                "produces": [
-                    "application/json"
-                ],
-                "summary": "List playlist-video entities",
-                "operationId": "list-playlist-video",
-                "parameters": [
-                    {
-                        "type": "integer",
-                        "description": "Limit",
-                        "name": "limit",
-                        "in": "query"
-                    },
-                    {
-                        "type": "integer",
-                        "description": "Offset",
-                        "name": "offset",
-                        "in": "query"
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "type": "array",
-                            "items": {
-                                "$ref": "#/definitions/ent.Playlist_Video"
-                            }
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "schema": {
-                            "$ref": "#/definitions/gin.H"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/gin.H"
-                        }
-                    }
-                }
-            },
-            "post": {
-                "description": "Create playlist-video",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "summary": "Create playlist-video",
-                "operationId": "create-playlist-video",
-                "parameters": [
-                    {
-                        "description": "Playlist_Video entity",
-                        "name": "playlist-video",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/ent.Playlist_Video"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/ent.Playlist_Video"
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "schema": {
-                            "$ref": "#/definitions/gin.H"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/gin.H"
-                        }
-                    }
-                }
-            }
-        },
-        "/playlists": {
-            "get": {
-                "description": "list playlist entities",
-                "produces": [
-                    "application/json"
-                ],
-                "summary": "List playlist entities",
-                "operationId": "list-playlist",
-                "parameters": [
-                    {
-                        "type": "integer",
-                        "description": "Limit",
-                        "name": "limit",
-                        "in": "query"
-                    },
-                    {
-                        "type": "integer",
-                        "description": "Offset",
-                        "name": "offset",
-                        "in": "query"
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "type": "array",
-                            "items": {
-                                "$ref": "#/definitions/ent.Playlist"
-                            }
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "schema": {
-                            "$ref": "#/definitions/gin.H"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/gin.H"
-                        }
-                    }
-                }
-            },
-            "post": {
-                "description": "Create playlist",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "summary": "Create playlist",
-                "operationId": "create-playlist",
-                "parameters": [
-                    {
-                        "description": "Playlist entity",
-                        "name": "playlist",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/ent.Playlist"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/ent.Playlist"
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "schema": {
-                            "$ref": "#/definitions/gin.H"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/gin.H"
-                        }
-                    }
-                }
-            }
-        },
-        "/playlists/{id}": {
-            "get": {
-                "description": "get playlist by ID",
-                "produces": [
-                    "application/json"
-                ],
-                "summary": "Get a playlist entity by ID",
-                "operationId": "get-playlist",
-                "parameters": [
-                    {
-                        "type": "integer",
-                        "description": "Playlist ID",
-                        "name": "id",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/ent.Playlist"
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "schema": {
-                            "$ref": "#/definitions/gin.H"
-                        }
-                    },
-                    "404": {
-                        "description": "Not Found",
-                        "schema": {
-                            "$ref": "#/definitions/gin.H"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/gin.H"
-                        }
-                    }
-                }
-            }
-        },
-        "/resolutions": {
-            "get": {
-                "description": "list resolution entities",
-                "produces": [
-                    "application/json"
-                ],
-                "summary": "List resolution entities",
-                "operationId": "list-resolution",
-                "parameters": [
-                    {
-                        "type": "integer",
-                        "description": "Limit",
-                        "name": "limit",
-                        "in": "query"
-                    },
-                    {
-                        "type": "integer",
-                        "description": "Offset",
-                        "name": "offset",
-                        "in": "query"
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "type": "array",
-                            "items": {
-                                "$ref": "#/definitions/ent.Resolution"
-                            }
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "schema": {
-                            "$ref": "#/definitions/gin.H"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/gin.H"
-                        }
-                    }
-                }
-            },
-            "post": {
-                "description": "Create resolution",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "summary": "Create resolution",
-                "operationId": "create-resolution",
-                "parameters": [
-                    {
-                        "description": "Resolution entity",
-                        "name": "resolution",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/ent.Resolution"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/ent.Resolution"
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "schema": {
-                            "$ref": "#/definitions/gin.H"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/gin.H"
-                        }
-                    }
-                }
-            }
-        },
-        "/resolutions/{id}": {
-            "get": {
-                "description": "get resolution by ID",
-                "produces": [
-                    "application/json"
-                ],
-                "summary": "Get a resolution entity by ID",
-                "operationId": "get-resolution",
-                "parameters": [
-                    {
-                        "type": "integer",
-                        "description": "Resolution ID",
-                        "name": "id",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/ent.Resolution"
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "schema": {
-                            "$ref": "#/definitions/gin.H"
-                        }
-                    },
-                    "404": {
-                        "description": "Not Found",
-                        "schema": {
-                            "$ref": "#/definitions/gin.H"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/gin.H"
-                        }
-                    }
-                }
-            }
-        },
         "/users": {
             "get": {
                 "description": "list user entities",
@@ -615,281 +258,221 @@ var doc = `{
                     }
                 }
             }
-        },
-        "/videos": {
-            "get": {
-                "description": "list video entities",
-                "produces": [
-                    "application/json"
-                ],
-                "summary": "List video entities",
-                "operationId": "list-video",
-                "parameters": [
-                    {
-                        "type": "integer",
-                        "description": "Limit",
-                        "name": "limit",
-                        "in": "query"
-                    },
-                    {
-                        "type": "integer",
-                        "description": "Offset",
-                        "name": "offset",
-                        "in": "query"
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "type": "array",
-                            "items": {
-                                "$ref": "#/definitions/ent.Video"
-                            }
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "schema": {
-                            "$ref": "#/definitions/gin.H"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/gin.H"
-                        }
-                    }
-                }
-            },
-            "post": {
-                "description": "Create video",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "summary": "Create video",
-                "operationId": "create-video",
-                "parameters": [
-                    {
-                        "description": "Video entity",
-                        "name": "video",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/ent.Video"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/ent.Video"
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "schema": {
-                            "$ref": "#/definitions/gin.H"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/gin.H"
-                        }
-                    }
-                }
-            }
-        },
-        "/videos/{id}": {
-            "get": {
-                "description": "get video by ID",
-                "produces": [
-                    "application/json"
-                ],
-                "summary": "Get a video entity by ID",
-                "operationId": "get-video",
-                "parameters": [
-                    {
-                        "type": "integer",
-                        "description": "Video ID",
-                        "name": "id",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/ent.Video"
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "schema": {
-                            "$ref": "#/definitions/gin.H"
-                        }
-                    },
-                    "404": {
-                        "description": "Not Found",
-                        "schema": {
-                            "$ref": "#/definitions/gin.H"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/gin.H"
-                        }
-                    }
-                }
-            },
-            "put": {
-                "description": "update video by ID",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "summary": "Update a video entity by ID",
-                "operationId": "update-video",
-                "parameters": [
-                    {
-                        "type": "integer",
-                        "description": "Video ID",
-                        "name": "id",
-                        "in": "path",
-                        "required": true
-                    },
-                    {
-                        "description": "Video entity",
-                        "name": "video",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/ent.Video"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/ent.Video"
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "schema": {
-                            "$ref": "#/definitions/gin.H"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/gin.H"
-                        }
-                    }
-                }
-            },
-            "delete": {
-                "description": "get video by ID",
-                "produces": [
-                    "application/json"
-                ],
-                "summary": "Delete a video entity by ID",
-                "operationId": "delete-video",
-                "parameters": [
-                    {
-                        "type": "integer",
-                        "description": "Video ID",
-                        "name": "id",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/gin.H"
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "schema": {
-                            "$ref": "#/definitions/gin.H"
-                        }
-                    },
-                    "404": {
-                        "description": "Not Found",
-                        "schema": {
-                            "$ref": "#/definitions/gin.H"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/gin.H"
-                        }
-                    }
-                }
-            }
         }
     },
     "definitions": {
-        "ent.Playlist": {
+        "ent.Author": {
             "type": "object",
             "properties": {
+                "Name": {
+                    "description": "Name holds the value of the \"Name\" field.",
+                    "type": "string"
+                },
+                "Position": {
+                    "description": "Position holds the value of the \"Position\" field.",
+                    "type": "string"
+                },
                 "edges": {
-                    "description": "Edges holds the relations/edges for other nodes in the graph.\nThe values are being populated by the PlaylistQuery when eager-loading is set.",
+                    "description": "Edges holds the relations/edges for other nodes in the graph.\nThe values are being populated by the AuthorQuery when eager-loading is set.",
                     "type": "object",
-                    "$ref": "#/definitions/ent.PlaylistEdges"
+                    "$ref": "#/definitions/ent.AuthorEdges"
                 },
                 "id": {
                     "description": "ID of the ent.",
                     "type": "integer"
-                },
-                "title": {
-                    "description": "Title holds the value of the \"title\" field.",
-                    "type": "string"
                 }
             }
         },
-        "ent.PlaylistEdges": {
+        "ent.AuthorEdges": {
             "type": "object",
             "properties": {
                 "owner": {
                     "description": "Owner holds the value of the owner edge.",
-                    "type": "object",
-                    "$ref": "#/definitions/ent.User"
-                },
-                "playlistVideos": {
-                    "description": "PlaylistVideos holds the value of the playlist_videos edge.",
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/ent.Playlist_Video"
+                        "$ref": "#/definitions/ent.Research"
+                    }
+                },
+                "writer": {
+                    "description": "Writer holds the value of the writer edge.",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/ent.Book"
                     }
                 }
             }
         },
-        "ent.Playlist_Video": {
+        "ent.Book": {
             "type": "object",
             "properties": {
-                "added_time": {
-                    "description": "AddedTime holds the value of the \"added_time\" field.",
+                "BookName": {
+                    "description": "BookName holds the value of the \"BookName\" field.",
+                    "type": "string"
+                },
+                "author_ID": {
+                    "type": "integer"
+                },
+                "category_id": {
+                    "type": "integer"
+                },
+                "edges": {
+                    "description": "Edges holds the relations/edges for other nodes in the graph.\nThe values are being populated by the BookQuery when eager-loading is set.",
+                    "type": "object",
+                    "$ref": "#/definitions/ent.BookEdges"
+                },
+                "id": {
+                    "description": "ID of the ent.",
+                    "type": "integer"
+                },
+                "status_ID": {
+                    "type": "integer"
+                },
+                "user_ID": {
+                    "type": "integer"
+                }
+            }
+        },
+        "ent.BookEdges": {
+            "type": "object",
+            "properties": {
+                "author": {
+                    "description": "Author holds the value of the author edge.",
+                    "type": "object",
+                    "$ref": "#/definitions/ent.Author"
+                },
+                "booklist": {
+                    "description": "Booklist holds the value of the booklist edge.",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/ent.Bookborrow"
+                    }
+                },
+                "category": {
+                    "description": "Category holds the value of the category edge.",
+                    "type": "object",
+                    "$ref": "#/definitions/ent.Category"
+                },
+                "status": {
+                    "description": "Status holds the value of the Status edge.",
+                    "type": "object",
+                    "$ref": "#/definitions/ent.Status"
+                },
+                "user": {
+                    "description": "User holds the value of the user edge.",
+                    "type": "object",
+                    "$ref": "#/definitions/ent.User"
+                }
+            }
+        },
+        "ent.Bookborrow": {
+            "type": "object",
+            "properties": {
+                "BORROW_DATE": {
+                    "description": "BORROWDATE holds the value of the \"BORROW_DATE\" field.",
+                    "type": "string"
+                },
+                "book_ID": {
+                    "type": "integer"
+                },
+                "edges": {
+                    "description": "Edges holds the relations/edges for other nodes in the graph.\nThe values are being populated by the BookborrowQuery when eager-loading is set.",
+                    "type": "object",
+                    "$ref": "#/definitions/ent.BookborrowEdges"
+                },
+                "id": {
+                    "description": "ID of the ent.",
+                    "type": "integer"
+                },
+                "servicepoint_ID": {
+                    "type": "integer"
+                },
+                "user_ID": {
+                    "type": "integer"
+                }
+            }
+        },
+        "ent.BookborrowEdges": {
+            "type": "object",
+            "properties": {
+                "book": {
+                    "description": "BOOK holds the value of the BOOK edge.",
+                    "type": "object",
+                    "$ref": "#/definitions/ent.Book"
+                },
+                "servicepoint": {
+                    "description": "SERVICEPOINT holds the value of the SERVICEPOINT edge.",
+                    "type": "object",
+                    "$ref": "#/definitions/ent.ServicePoint"
+                },
+                "user": {
+                    "description": "USER holds the value of the USER edge.",
+                    "type": "object",
+                    "$ref": "#/definitions/ent.User"
+                }
+            }
+        },
+        "ent.Booking": {
+            "type": "object",
+            "properties": {
+                "BOOKING_DATE": {
+                    "description": "BOOKINGDATE holds the value of the \"BOOKING_DATE\" field.",
+                    "type": "string"
+                },
+                "TIME_LEFT": {
+                    "description": "TIMELEFT holds the value of the \"TIME_LEFT\" field.",
+                    "type": "string"
+                },
+                "client_ID": {
+                    "type": "integer"
+                },
+                "edges": {
+                    "description": "Edges holds the relations/edges for other nodes in the graph.\nThe values are being populated by the BookingQuery when eager-loading is set.",
+                    "type": "object",
+                    "$ref": "#/definitions/ent.BookingEdges"
+                },
+                "id": {
+                    "description": "ID of the ent.",
+                    "type": "integer"
+                },
+                "servicepoint_ID": {
+                    "type": "integer"
+                },
+                "user_ID": {
+                    "type": "integer"
+                }
+            }
+        },
+        "ent.BookingEdges": {
+            "type": "object",
+            "properties": {
+                "getservice": {
+                    "description": "Getservice holds the value of the getservice edge.",
+                    "type": "object",
+                    "$ref": "#/definitions/ent.ServicePoint"
+                },
+                "usedby": {
+                    "description": "Usedby holds the value of the usedby edge.",
+                    "type": "object",
+                    "$ref": "#/definitions/ent.User"
+                },
+                "using": {
+                    "description": "Using holds the value of the using edge.",
+                    "type": "object",
+                    "$ref": "#/definitions/ent.ClientEntity"
+                }
+            }
+        },
+        "ent.Category": {
+            "type": "object",
+            "properties": {
+                "CategoryName": {
+                    "description": "CategoryName holds the value of the \"CategoryName\" field.",
                     "type": "string"
                 },
                 "edges": {
-                    "description": "Edges holds the relations/edges for other nodes in the graph.\nThe values are being populated by the Playlist_VideoQuery when eager-loading is set.",
+                    "description": "Edges holds the relations/edges for other nodes in the graph.\nThe values are being populated by the CategoryQuery when eager-loading is set.",
                     "type": "object",
-                    "$ref": "#/definitions/ent.Playlist_VideoEdges"
+                    "$ref": "#/definitions/ent.CategoryEdges"
                 },
                 "id": {
                     "description": "ID of the ent.",
@@ -897,52 +480,364 @@ var doc = `{
                 }
             }
         },
-        "ent.Playlist_VideoEdges": {
+        "ent.CategoryEdges": {
             "type": "object",
             "properties": {
-                "playlist": {
-                    "description": "Playlist holds the value of the playlist edge.",
-                    "type": "object",
-                    "$ref": "#/definitions/ent.Playlist"
-                },
-                "resolution": {
-                    "description": "Resolution holds the value of the resolution edge.",
-                    "type": "object",
-                    "$ref": "#/definitions/ent.Resolution"
-                },
-                "video": {
-                    "description": "Video holds the value of the video edge.",
-                    "type": "object",
-                    "$ref": "#/definitions/ent.Video"
-                }
-            }
-        },
-        "ent.Resolution": {
-            "type": "object",
-            "properties": {
-                "edges": {
-                    "description": "Edges holds the relations/edges for other nodes in the graph.\nThe values are being populated by the ResolutionQuery when eager-loading is set.",
-                    "type": "object",
-                    "$ref": "#/definitions/ent.ResolutionEdges"
-                },
-                "id": {
-                    "description": "ID of the ent.",
-                    "type": "integer"
-                },
-                "value": {
-                    "description": "Value holds the value of the \"value\" field.",
-                    "type": "integer"
-                }
-            }
-        },
-        "ent.ResolutionEdges": {
-            "type": "object",
-            "properties": {
-                "playlistVideos": {
-                    "description": "PlaylistVideos holds the value of the playlist_videos edge.",
+                "catof": {
+                    "description": "Catof holds the value of the catof edge.",
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/ent.Playlist_Video"
+                        "$ref": "#/definitions/ent.Book"
+                    }
+                }
+            }
+        },
+        "ent.ClientEntity": {
+            "type": "object",
+            "properties": {
+                "CLIENT_NAME": {
+                    "description": "CLIENTNAME holds the value of the \"CLIENT_NAME\" field.",
+                    "type": "string"
+                },
+                "edges": {
+                    "description": "Edges holds the relations/edges for other nodes in the graph.\nThe values are being populated by the ClientEntityQuery when eager-loading is set.",
+                    "type": "object",
+                    "$ref": "#/definitions/ent.ClientEntityEdges"
+                },
+                "id": {
+                    "description": "ID of the ent.",
+                    "type": "integer"
+                },
+                "status_ID": {
+                    "type": "integer"
+                }
+            }
+        },
+        "ent.ClientEntityEdges": {
+            "type": "object",
+            "properties": {
+                "booked": {
+                    "description": "Booked holds the value of the booked edge.",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/ent.Booking"
+                    }
+                },
+                "state": {
+                    "description": "State holds the value of the state edge.",
+                    "type": "object",
+                    "$ref": "#/definitions/ent.Status"
+                }
+            }
+        },
+        "ent.Preemption": {
+            "type": "object",
+            "properties": {
+                "PreemptTime": {
+                    "description": "PreemptTime holds the value of the \"PreemptTime\" field.",
+                    "type": "string"
+                },
+                "edges": {
+                    "description": "Edges holds the relations/edges for other nodes in the graph.\nThe values are being populated by the PreemptionQuery when eager-loading is set.",
+                    "type": "object",
+                    "$ref": "#/definitions/ent.PreemptionEdges"
+                },
+                "id": {
+                    "description": "ID of the ent.",
+                    "type": "integer"
+                },
+                "purposeID": {
+                    "type": "integer"
+                },
+                "roomID": {
+                    "type": "integer"
+                },
+                "user_ID": {
+                    "type": "integer"
+                }
+            }
+        },
+        "ent.PreemptionEdges": {
+            "type": "object",
+            "properties": {
+                "purposeID": {
+                    "description": "PurposeID holds the value of the PurposeID edge.",
+                    "type": "object",
+                    "$ref": "#/definitions/ent.Purpose"
+                },
+                "roomID": {
+                    "description": "RoomID holds the value of the RoomID edge.",
+                    "type": "object",
+                    "$ref": "#/definitions/ent.Roominfo"
+                },
+                "userID": {
+                    "description": "UserID holds the value of the User_ID edge.",
+                    "type": "object",
+                    "$ref": "#/definitions/ent.User"
+                }
+            }
+        },
+        "ent.Purpose": {
+            "type": "object",
+            "properties": {
+                "PurposeName": {
+                    "description": "PurposeName holds the value of the \"PurposeName\" field.",
+                    "type": "string"
+                },
+                "edges": {
+                    "description": "Edges holds the relations/edges for other nodes in the graph.\nThe values are being populated by the PurposeQuery when eager-loading is set.",
+                    "type": "object",
+                    "$ref": "#/definitions/ent.PurposeEdges"
+                },
+                "id": {
+                    "description": "ID of the ent.",
+                    "type": "integer"
+                }
+            }
+        },
+        "ent.PurposeEdges": {
+            "type": "object",
+            "properties": {
+                "preemption": {
+                    "description": "Preemption holds the value of the preemption edge.",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/ent.Preemption"
+                    }
+                }
+            }
+        },
+        "ent.Research": {
+            "type": "object",
+            "properties": {
+                "DATE": {
+                    "description": "DATE holds the value of the \"DATE\" field.",
+                    "type": "string"
+                },
+                "DOC_NAME": {
+                    "description": "DOCNAME holds the value of the \"DOC_NAME\" field.",
+                    "type": "string"
+                },
+                "edges": {
+                    "description": "Edges holds the relations/edges for other nodes in the graph.\nThe values are being populated by the ResearchQuery when eager-loading is set.",
+                    "type": "object",
+                    "$ref": "#/definitions/ent.ResearchEdges"
+                },
+                "id": {
+                    "description": "ID of the ent.",
+                    "type": "integer"
+                },
+                "owner_ID": {
+                    "type": "integer"
+                },
+                "type_ID": {
+                    "type": "integer"
+                },
+                "user_ID": {
+                    "type": "integer"
+                }
+            }
+        },
+        "ent.ResearchEdges": {
+            "type": "object",
+            "properties": {
+                "docType": {
+                    "description": "DocType holds the value of the docType edge.",
+                    "type": "object",
+                    "$ref": "#/definitions/ent.Researchtype"
+                },
+                "myDoc": {
+                    "description": "MyDoc holds the value of the myDoc edge.",
+                    "type": "object",
+                    "$ref": "#/definitions/ent.Author"
+                },
+                "register": {
+                    "description": "Register holds the value of the register edge.",
+                    "type": "object",
+                    "$ref": "#/definitions/ent.User"
+                }
+            }
+        },
+        "ent.Researchtype": {
+            "type": "object",
+            "properties": {
+                "TYPE_NAME": {
+                    "description": "TYPENAME holds the value of the \"TYPE_NAME\" field.",
+                    "type": "string"
+                },
+                "edges": {
+                    "description": "Edges holds the relations/edges for other nodes in the graph.\nThe values are being populated by the ResearchtypeQuery when eager-loading is set.",
+                    "type": "object",
+                    "$ref": "#/definitions/ent.ResearchtypeEdges"
+                },
+                "id": {
+                    "description": "ID of the ent.",
+                    "type": "integer"
+                }
+            }
+        },
+        "ent.ResearchtypeEdges": {
+            "type": "object",
+            "properties": {
+                "researchType": {
+                    "description": "ResearchType holds the value of the researchType edge.",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/ent.Research"
+                    }
+                }
+            }
+        },
+        "ent.Role": {
+            "type": "object",
+            "properties": {
+                "ROLE_NAME": {
+                    "description": "ROLENAME holds the value of the \"ROLE_NAME\" field.",
+                    "type": "string"
+                },
+                "edges": {
+                    "description": "Edges holds the relations/edges for other nodes in the graph.\nThe values are being populated by the RoleQuery when eager-loading is set.",
+                    "type": "object",
+                    "$ref": "#/definitions/ent.RoleEdges"
+                },
+                "id": {
+                    "description": "ID of the ent.",
+                    "type": "integer"
+                }
+            }
+        },
+        "ent.RoleEdges": {
+            "type": "object",
+            "properties": {
+                "role": {
+                    "description": "Role holds the value of the role edge.",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/ent.User"
+                    }
+                }
+            }
+        },
+        "ent.Roominfo": {
+            "type": "object",
+            "properties": {
+                "RoomID": {
+                    "description": "RoomID holds the value of the \"RoomID\" field.",
+                    "type": "string"
+                },
+                "RoomNo": {
+                    "description": "RoomNo holds the value of the \"RoomNo\" field.",
+                    "type": "string"
+                },
+                "RoomStatus": {
+                    "description": "RoomStatus holds the value of the \"RoomStatus\" field.",
+                    "type": "string"
+                },
+                "RoomTime": {
+                    "description": "RoomTime holds the value of the \"RoomTime\" field.",
+                    "type": "string"
+                },
+                "RoomType": {
+                    "description": "RoomType holds the value of the \"RoomType\" field.",
+                    "type": "string"
+                },
+                "edges": {
+                    "description": "Edges holds the relations/edges for other nodes in the graph.\nThe values are being populated by the RoominfoQuery when eager-loading is set.",
+                    "type": "object",
+                    "$ref": "#/definitions/ent.RoominfoEdges"
+                },
+                "id": {
+                    "description": "ID of the ent.",
+                    "type": "integer"
+                }
+            }
+        },
+        "ent.RoominfoEdges": {
+            "type": "object",
+            "properties": {
+                "preemption": {
+                    "description": "Preemption holds the value of the preemption edge.",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/ent.Preemption"
+                    }
+                }
+            }
+        },
+        "ent.ServicePoint": {
+            "type": "object",
+            "properties": {
+                "BUILDING_NAME": {
+                    "description": "BUILDINGNAME holds the value of the \"BUILDING_NAME\" field.",
+                    "type": "string"
+                },
+                "COUNTER_NUMBER": {
+                    "description": "COUNTERNUMBER holds the value of the \"COUNTER_NUMBER\" field.",
+                    "type": "string"
+                },
+                "edges": {
+                    "description": "Edges holds the relations/edges for other nodes in the graph.\nThe values are being populated by the ServicePointQuery when eager-loading is set.",
+                    "type": "object",
+                    "$ref": "#/definitions/ent.ServicePointEdges"
+                },
+                "id": {
+                    "description": "ID of the ent.",
+                    "type": "integer"
+                }
+            }
+        },
+        "ent.ServicePointEdges": {
+            "type": "object",
+            "properties": {
+                "from": {
+                    "description": "From holds the value of the from edge.",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/ent.Bookborrow"
+                    }
+                },
+                "servicepoint": {
+                    "description": "Servicepoint holds the value of the servicepoint edge.",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/ent.Booking"
+                    }
+                }
+            }
+        },
+        "ent.Status": {
+            "type": "object",
+            "properties": {
+                "STATUS_NAME": {
+                    "description": "STATUSNAME holds the value of the \"STATUS_NAME\" field.",
+                    "type": "string"
+                },
+                "edges": {
+                    "description": "Edges holds the relations/edges for other nodes in the graph.\nThe values are being populated by the StatusQuery when eager-loading is set.",
+                    "type": "object",
+                    "$ref": "#/definitions/ent.StatusEdges"
+                },
+                "id": {
+                    "description": "ID of the ent.",
+                    "type": "integer"
+                }
+            }
+        },
+        "ent.StatusEdges": {
+            "type": "object",
+            "properties": {
+                "status": {
+                    "description": "Status holds the value of the status edge.",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/ent.ClientEntity"
+                    }
+                },
+                "statusofbook": {
+                    "description": "Statusofbook holds the value of the statusofbook edge.",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/ent.Book"
                     }
                 }
             }
@@ -950,79 +845,73 @@ var doc = `{
         "ent.User": {
             "type": "object",
             "properties": {
+                "PASSWORD": {
+                    "description": "PASSWORD holds the value of the \"PASSWORD\" field.",
+                    "type": "string"
+                },
+                "USER_EMAIL": {
+                    "description": "USEREMAIL holds the value of the \"USER_EMAIL\" field.",
+                    "type": "string"
+                },
+                "USER_NAME": {
+                    "description": "USERNAME holds the value of the \"USER_NAME\" field.",
+                    "type": "string"
+                },
                 "edges": {
                     "description": "Edges holds the relations/edges for other nodes in the graph.\nThe values are being populated by the UserQuery when eager-loading is set.",
                     "type": "object",
                     "$ref": "#/definitions/ent.UserEdges"
                 },
-                "email": {
-                    "description": "Email holds the value of the \"email\" field.",
-                    "type": "string"
-                },
                 "id": {
                     "description": "ID of the ent.",
                     "type": "integer"
                 },
-                "name": {
-                    "description": "Name holds the value of the \"name\" field.",
-                    "type": "string"
+                "role_ID": {
+                    "type": "integer"
                 }
             }
         },
         "ent.UserEdges": {
             "type": "object",
             "properties": {
-                "playlists": {
-                    "description": "Playlists holds the value of the playlists edge.",
+                "addby": {
+                    "description": "Addby holds the value of the addby edge.",
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/ent.Playlist"
+                        "$ref": "#/definitions/ent.Book"
                     }
                 },
-                "videos": {
-                    "description": "Videos holds the value of the videos edge.",
+                "booking": {
+                    "description": "Booking holds the value of the booking edge.",
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/ent.Video"
+                        "$ref": "#/definitions/ent.Booking"
                     }
-                }
-            }
-        },
-        "ent.Video": {
-            "type": "object",
-            "properties": {
-                "edges": {
-                    "description": "Edges holds the relations/edges for other nodes in the graph.\nThe values are being populated by the VideoQuery when eager-loading is set.",
-                    "type": "object",
-                    "$ref": "#/definitions/ent.VideoEdges"
                 },
-                "id": {
-                    "description": "ID of the ent.",
-                    "type": "integer"
-                },
-                "name": {
-                    "description": "Name holds the value of the \"name\" field.",
-                    "type": "string"
-                },
-                "url": {
-                    "description": "URL holds the value of the \"url\" field.",
-                    "type": "string"
-                }
-            }
-        },
-        "ent.VideoEdges": {
-            "type": "object",
-            "properties": {
-                "owner": {
-                    "description": "Owner holds the value of the owner edge.",
-                    "type": "object",
-                    "$ref": "#/definitions/ent.User"
-                },
-                "playlistVideos": {
-                    "description": "PlaylistVideos holds the value of the playlist_videos edge.",
+                "borrow": {
+                    "description": "Borrow holds the value of the borrow edge.",
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/ent.Playlist_Video"
+                        "$ref": "#/definitions/ent.Bookborrow"
+                    }
+                },
+                "position": {
+                    "description": "Position holds the value of the position edge.",
+                    "type": "object",
+                    "$ref": "#/definitions/ent.Role"
+                },
+                "preemption": {
+                    "description": "Preemption holds the value of the preemption edge.",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/ent.Preemption"
+                    }
+                },
+                "record": {
+                    "description": "Record holds the value of the record edge.",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/ent.Research"
                     }
                 }
             }
@@ -1053,6 +942,7 @@ var doc = `{
         "OAuth2Application": {
             "type": "oauth2",
             "flow": "application",
+            "authorizationUrl": "",
             "tokenUrl": "https://example.com/oauth/token",
             "scopes": {
                 "admin": " Grants read and write access to administrative information",
@@ -1071,6 +961,7 @@ var doc = `{
         "OAuth2Password": {
             "type": "oauth2",
             "flow": "password",
+            "authorizationUrl": "",
             "tokenUrl": "https://example.com/oauth/token",
             "scopes": {
                 "admin": " Grants read and write access to administrative information",
