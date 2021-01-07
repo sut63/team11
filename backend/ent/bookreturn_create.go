@@ -9,6 +9,7 @@ import (
 
 	"github.com/facebookincubator/ent/dialect/sql/sqlgraph"
 	"github.com/facebookincubator/ent/schema/field"
+	"github.com/team11/app/ent/bookborrow"
 	"github.com/team11/app/ent/bookreturn"
 )
 
@@ -23,6 +24,25 @@ type BookreturnCreate struct {
 func (bc *BookreturnCreate) SetBookName(s string) *BookreturnCreate {
 	bc.mutation.SetBookName(s)
 	return bc
+}
+
+// SetMustreturnID sets the mustreturn edge to Bookborrow by id.
+func (bc *BookreturnCreate) SetMustreturnID(id int) *BookreturnCreate {
+	bc.mutation.SetMustreturnID(id)
+	return bc
+}
+
+// SetNillableMustreturnID sets the mustreturn edge to Bookborrow by id if the given value is not nil.
+func (bc *BookreturnCreate) SetNillableMustreturnID(id *int) *BookreturnCreate {
+	if id != nil {
+		bc = bc.SetMustreturnID(*id)
+	}
+	return bc
+}
+
+// SetMustreturn sets the mustreturn edge to Bookborrow.
+func (bc *BookreturnCreate) SetMustreturn(b *Bookborrow) *BookreturnCreate {
+	return bc.SetMustreturnID(b.ID)
 }
 
 // Mutation returns the BookreturnMutation object of the builder.
@@ -107,6 +127,25 @@ func (bc *BookreturnCreate) createSpec() (*Bookreturn, *sqlgraph.CreateSpec) {
 			Column: bookreturn.FieldBookName,
 		})
 		b.BookName = value
+	}
+	if nodes := bc.mutation.MustreturnIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   bookreturn.MustreturnTable,
+			Columns: []string{bookreturn.MustreturnColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: &sqlgraph.FieldSpec{
+					Type:   field.TypeInt,
+					Column: bookborrow.FieldID,
+				},
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
 	}
 	return b, _spec
 }

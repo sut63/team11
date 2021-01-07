@@ -11,6 +11,7 @@ import (
 	"github.com/facebookincubator/ent/dialect/sql"
 	"github.com/facebookincubator/ent/dialect/sql/sqlgraph"
 	"github.com/facebookincubator/ent/schema/field"
+	"github.com/team11/app/ent/bookborrow"
 	"github.com/team11/app/ent/bookreturn"
 	"github.com/team11/app/ent/predicate"
 )
@@ -23,7 +24,9 @@ type BookreturnQuery struct {
 	order      []OrderFunc
 	unique     []string
 	predicates []predicate.Bookreturn
-	withFKs    bool
+	// eager-loading edges.
+	withMustreturn *BookborrowQuery
+	withFKs        bool
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -51,6 +54,24 @@ func (bq *BookreturnQuery) Offset(offset int) *BookreturnQuery {
 func (bq *BookreturnQuery) Order(o ...OrderFunc) *BookreturnQuery {
 	bq.order = append(bq.order, o...)
 	return bq
+}
+
+// QueryMustreturn chains the current query on the mustreturn edge.
+func (bq *BookreturnQuery) QueryMustreturn() *BookborrowQuery {
+	query := &BookborrowQuery{config: bq.config}
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := bq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(bookreturn.Table, bookreturn.FieldID, bq.sqlQuery()),
+			sqlgraph.To(bookborrow.Table, bookborrow.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, bookreturn.MustreturnTable, bookreturn.MustreturnColumn),
+		)
+		fromU = sqlgraph.SetNeighbors(bq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
 }
 
 // First returns the first Bookreturn entity in the query. Returns *NotFoundError when no bookreturn was found.
@@ -232,6 +253,17 @@ func (bq *BookreturnQuery) Clone() *BookreturnQuery {
 	}
 }
 
+//  WithMustreturn tells the query-builder to eager-loads the nodes that are connected to
+// the "mustreturn" edge. The optional arguments used to configure the query builder of the edge.
+func (bq *BookreturnQuery) WithMustreturn(opts ...func(*BookborrowQuery)) *BookreturnQuery {
+	query := &BookborrowQuery{config: bq.config}
+	for _, opt := range opts {
+		opt(query)
+	}
+	bq.withMustreturn = query
+	return bq
+}
+
 // GroupBy used to group vertices by one or more fields/columns.
 // It is often used with aggregate functions, like: count, max, mean, min, sum.
 //
@@ -296,10 +328,16 @@ func (bq *BookreturnQuery) prepareQuery(ctx context.Context) error {
 
 func (bq *BookreturnQuery) sqlAll(ctx context.Context) ([]*Bookreturn, error) {
 	var (
-		nodes   = []*Bookreturn{}
-		withFKs = bq.withFKs
-		_spec   = bq.querySpec()
+		nodes       = []*Bookreturn{}
+		withFKs     = bq.withFKs
+		_spec       = bq.querySpec()
+		loadedTypes = [1]bool{
+			bq.withMustreturn != nil,
+		}
 	)
+	if bq.withMustreturn != nil {
+		withFKs = true
+	}
 	if withFKs {
 		_spec.Node.Columns = append(_spec.Node.Columns, bookreturn.ForeignKeys...)
 	}
@@ -317,6 +355,7 @@ func (bq *BookreturnQuery) sqlAll(ctx context.Context) ([]*Bookreturn, error) {
 			return fmt.Errorf("ent: Assign called without calling ScanValues")
 		}
 		node := nodes[len(nodes)-1]
+		node.Edges.loadedTypes = loadedTypes
 		return node.assignValues(values...)
 	}
 	if err := sqlgraph.QueryNodes(ctx, bq.driver, _spec); err != nil {
@@ -325,6 +364,32 @@ func (bq *BookreturnQuery) sqlAll(ctx context.Context) ([]*Bookreturn, error) {
 	if len(nodes) == 0 {
 		return nodes, nil
 	}
+
+	if query := bq.withMustreturn; query != nil {
+		ids := make([]int, 0, len(nodes))
+		nodeids := make(map[int][]*Bookreturn)
+		for i := range nodes {
+			if fk := nodes[i].CLIENT_ID; fk != nil {
+				ids = append(ids, *fk)
+				nodeids[*fk] = append(nodeids[*fk], nodes[i])
+			}
+		}
+		query.Where(bookborrow.IDIn(ids...))
+		neighbors, err := query.All(ctx)
+		if err != nil {
+			return nil, err
+		}
+		for _, n := range neighbors {
+			nodes, ok := nodeids[n.ID]
+			if !ok {
+				return nil, fmt.Errorf(`unexpected foreign-key "CLIENT_ID" returned %v`, n.ID)
+			}
+			for i := range nodes {
+				nodes[i].Edges.Mustreturn = n
+			}
+		}
+	}
+
 	return nodes, nil
 }
 

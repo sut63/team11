@@ -37,9 +37,11 @@ type BookborrowEdges struct {
 	BOOK *Book
 	// SERVICEPOINT holds the value of the SERVICEPOINT edge.
 	SERVICEPOINT *ServicePoint
+	// Borrowed holds the value of the borrowed edge.
+	Borrowed []*Bookreturn
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [3]bool
+	loadedTypes [4]bool
 }
 
 // USEROrErr returns the USER value or an error if the edge
@@ -82,6 +84,15 @@ func (e BookborrowEdges) SERVICEPOINTOrErr() (*ServicePoint, error) {
 		return e.SERVICEPOINT, nil
 	}
 	return nil, &NotLoadedError{edge: "SERVICEPOINT"}
+}
+
+// BorrowedOrErr returns the Borrowed value or an error if the edge
+// was not loaded in eager-loading.
+func (e BookborrowEdges) BorrowedOrErr() ([]*Bookreturn, error) {
+	if e.loadedTypes[3] {
+		return e.Borrowed, nil
+	}
+	return nil, &NotLoadedError{edge: "borrowed"}
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -155,6 +166,11 @@ func (b *Bookborrow) QueryBOOK() *BookQuery {
 // QuerySERVICEPOINT queries the SERVICEPOINT edge of the Bookborrow.
 func (b *Bookborrow) QuerySERVICEPOINT() *ServicePointQuery {
 	return (&BookborrowClient{config: b.config}).QuerySERVICEPOINT(b)
+}
+
+// QueryBorrowed queries the borrowed edge of the Bookborrow.
+func (b *Bookborrow) QueryBorrowed() *BookreturnQuery {
+	return (&BookborrowClient{config: b.config}).QueryBorrowed(b)
 }
 
 // Update returns a builder for updating this Bookborrow.

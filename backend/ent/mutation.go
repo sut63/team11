@@ -1164,6 +1164,8 @@ type BookborrowMutation struct {
 	cleared_BOOK         bool
 	_SERVICEPOINT        *int
 	cleared_SERVICEPOINT bool
+	borrowed             map[int]struct{}
+	removedborrowed      map[int]struct{}
 	done                 bool
 	oldValue             func(context.Context) (*Bookborrow, error)
 }
@@ -1401,6 +1403,48 @@ func (m *BookborrowMutation) ResetSERVICEPOINT() {
 	m.cleared_SERVICEPOINT = false
 }
 
+// AddBorrowedIDs adds the borrowed edge to Bookreturn by ids.
+func (m *BookborrowMutation) AddBorrowedIDs(ids ...int) {
+	if m.borrowed == nil {
+		m.borrowed = make(map[int]struct{})
+	}
+	for i := range ids {
+		m.borrowed[ids[i]] = struct{}{}
+	}
+}
+
+// RemoveBorrowedIDs removes the borrowed edge to Bookreturn by ids.
+func (m *BookborrowMutation) RemoveBorrowedIDs(ids ...int) {
+	if m.removedborrowed == nil {
+		m.removedborrowed = make(map[int]struct{})
+	}
+	for i := range ids {
+		m.removedborrowed[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedBorrowed returns the removed ids of borrowed.
+func (m *BookborrowMutation) RemovedBorrowedIDs() (ids []int) {
+	for id := range m.removedborrowed {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// BorrowedIDs returns the borrowed ids in the mutation.
+func (m *BookborrowMutation) BorrowedIDs() (ids []int) {
+	for id := range m.borrowed {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetBorrowed reset all changes of the "borrowed" edge.
+func (m *BookborrowMutation) ResetBorrowed() {
+	m.borrowed = nil
+	m.removedborrowed = nil
+}
+
 // Op returns the operation name.
 func (m *BookborrowMutation) Op() Op {
 	return m.op
@@ -1516,7 +1560,7 @@ func (m *BookborrowMutation) ResetField(name string) error {
 // AddedEdges returns all edge names that were set/added in this
 // mutation.
 func (m *BookborrowMutation) AddedEdges() []string {
-	edges := make([]string, 0, 3)
+	edges := make([]string, 0, 4)
 	if m._USER != nil {
 		edges = append(edges, bookborrow.EdgeUSER)
 	}
@@ -1525,6 +1569,9 @@ func (m *BookborrowMutation) AddedEdges() []string {
 	}
 	if m._SERVICEPOINT != nil {
 		edges = append(edges, bookborrow.EdgeSERVICEPOINT)
+	}
+	if m.borrowed != nil {
+		edges = append(edges, bookborrow.EdgeBorrowed)
 	}
 	return edges
 }
@@ -1545,6 +1592,12 @@ func (m *BookborrowMutation) AddedIDs(name string) []ent.Value {
 		if id := m._SERVICEPOINT; id != nil {
 			return []ent.Value{*id}
 		}
+	case bookborrow.EdgeBorrowed:
+		ids := make([]ent.Value, 0, len(m.borrowed))
+		for id := range m.borrowed {
+			ids = append(ids, id)
+		}
+		return ids
 	}
 	return nil
 }
@@ -1552,7 +1605,10 @@ func (m *BookborrowMutation) AddedIDs(name string) []ent.Value {
 // RemovedEdges returns all edge names that were removed in this
 // mutation.
 func (m *BookborrowMutation) RemovedEdges() []string {
-	edges := make([]string, 0, 3)
+	edges := make([]string, 0, 4)
+	if m.removedborrowed != nil {
+		edges = append(edges, bookborrow.EdgeBorrowed)
+	}
 	return edges
 }
 
@@ -1560,6 +1616,12 @@ func (m *BookborrowMutation) RemovedEdges() []string {
 // the given edge name.
 func (m *BookborrowMutation) RemovedIDs(name string) []ent.Value {
 	switch name {
+	case bookborrow.EdgeBorrowed:
+		ids := make([]ent.Value, 0, len(m.removedborrowed))
+		for id := range m.removedborrowed {
+			ids = append(ids, id)
+		}
+		return ids
 	}
 	return nil
 }
@@ -1567,7 +1629,7 @@ func (m *BookborrowMutation) RemovedIDs(name string) []ent.Value {
 // ClearedEdges returns all edge names that were cleared in this
 // mutation.
 func (m *BookborrowMutation) ClearedEdges() []string {
-	edges := make([]string, 0, 3)
+	edges := make([]string, 0, 4)
 	if m.cleared_USER {
 		edges = append(edges, bookborrow.EdgeUSER)
 	}
@@ -1624,6 +1686,9 @@ func (m *BookborrowMutation) ResetEdge(name string) error {
 		return nil
 	case bookborrow.EdgeSERVICEPOINT:
 		m.ResetSERVICEPOINT()
+		return nil
+	case bookborrow.EdgeBorrowed:
+		m.ResetBorrowed()
 		return nil
 	}
 	return fmt.Errorf("unknown Bookborrow edge %s", name)
@@ -2168,13 +2233,15 @@ func (m *BookingMutation) ResetEdge(name string) error {
 // nodes in the graph.
 type BookreturnMutation struct {
 	config
-	op            Op
-	typ           string
-	id            *int
-	book_name     *string
-	clearedFields map[string]struct{}
-	done          bool
-	oldValue      func(context.Context) (*Bookreturn, error)
+	op                Op
+	typ               string
+	id                *int
+	book_name         *string
+	clearedFields     map[string]struct{}
+	mustreturn        *int
+	clearedmustreturn bool
+	done              bool
+	oldValue          func(context.Context) (*Bookreturn, error)
 }
 
 var _ ent.Mutation = (*BookreturnMutation)(nil)
@@ -2293,6 +2360,45 @@ func (m *BookreturnMutation) ResetBookName() {
 	m.book_name = nil
 }
 
+// SetMustreturnID sets the mustreturn edge to Bookborrow by id.
+func (m *BookreturnMutation) SetMustreturnID(id int) {
+	m.mustreturn = &id
+}
+
+// ClearMustreturn clears the mustreturn edge to Bookborrow.
+func (m *BookreturnMutation) ClearMustreturn() {
+	m.clearedmustreturn = true
+}
+
+// MustreturnCleared returns if the edge mustreturn was cleared.
+func (m *BookreturnMutation) MustreturnCleared() bool {
+	return m.clearedmustreturn
+}
+
+// MustreturnID returns the mustreturn id in the mutation.
+func (m *BookreturnMutation) MustreturnID() (id int, exists bool) {
+	if m.mustreturn != nil {
+		return *m.mustreturn, true
+	}
+	return
+}
+
+// MustreturnIDs returns the mustreturn ids in the mutation.
+// Note that ids always returns len(ids) <= 1 for unique edges, and you should use
+// MustreturnID instead. It exists only for internal usage by the builders.
+func (m *BookreturnMutation) MustreturnIDs() (ids []int) {
+	if id := m.mustreturn; id != nil {
+		ids = append(ids, *id)
+	}
+	return
+}
+
+// ResetMustreturn reset all changes of the "mustreturn" edge.
+func (m *BookreturnMutation) ResetMustreturn() {
+	m.mustreturn = nil
+	m.clearedmustreturn = false
+}
+
 // Op returns the operation name.
 func (m *BookreturnMutation) Op() Op {
 	return m.op
@@ -2408,45 +2514,68 @@ func (m *BookreturnMutation) ResetField(name string) error {
 // AddedEdges returns all edge names that were set/added in this
 // mutation.
 func (m *BookreturnMutation) AddedEdges() []string {
-	edges := make([]string, 0, 0)
+	edges := make([]string, 0, 1)
+	if m.mustreturn != nil {
+		edges = append(edges, bookreturn.EdgeMustreturn)
+	}
 	return edges
 }
 
 // AddedIDs returns all ids (to other nodes) that were added for
 // the given edge name.
 func (m *BookreturnMutation) AddedIDs(name string) []ent.Value {
+	switch name {
+	case bookreturn.EdgeMustreturn:
+		if id := m.mustreturn; id != nil {
+			return []ent.Value{*id}
+		}
+	}
 	return nil
 }
 
 // RemovedEdges returns all edge names that were removed in this
 // mutation.
 func (m *BookreturnMutation) RemovedEdges() []string {
-	edges := make([]string, 0, 0)
+	edges := make([]string, 0, 1)
 	return edges
 }
 
 // RemovedIDs returns all ids (to other nodes) that were removed for
 // the given edge name.
 func (m *BookreturnMutation) RemovedIDs(name string) []ent.Value {
+	switch name {
+	}
 	return nil
 }
 
 // ClearedEdges returns all edge names that were cleared in this
 // mutation.
 func (m *BookreturnMutation) ClearedEdges() []string {
-	edges := make([]string, 0, 0)
+	edges := make([]string, 0, 1)
+	if m.clearedmustreturn {
+		edges = append(edges, bookreturn.EdgeMustreturn)
+	}
 	return edges
 }
 
 // EdgeCleared returns a boolean indicates if this edge was
 // cleared in this mutation.
 func (m *BookreturnMutation) EdgeCleared(name string) bool {
+	switch name {
+	case bookreturn.EdgeMustreturn:
+		return m.clearedmustreturn
+	}
 	return false
 }
 
 // ClearEdge clears the value for the given name. It returns an
 // error if the edge name is not defined in the schema.
 func (m *BookreturnMutation) ClearEdge(name string) error {
+	switch name {
+	case bookreturn.EdgeMustreturn:
+		m.ClearMustreturn()
+		return nil
+	}
 	return fmt.Errorf("unknown Bookreturn unique edge %s", name)
 }
 
@@ -2454,6 +2583,11 @@ func (m *BookreturnMutation) ClearEdge(name string) error {
 // given edge name. It returns an error if the edge is not
 // defined in the schema.
 func (m *BookreturnMutation) ResetEdge(name string) error {
+	switch name {
+	case bookreturn.EdgeMustreturn:
+		m.ResetMustreturn()
+		return nil
+	}
 	return fmt.Errorf("unknown Bookreturn edge %s", name)
 }
 

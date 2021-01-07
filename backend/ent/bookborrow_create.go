@@ -11,6 +11,7 @@ import (
 	"github.com/facebookincubator/ent/schema/field"
 	"github.com/team11/app/ent/book"
 	"github.com/team11/app/ent/bookborrow"
+	"github.com/team11/app/ent/bookreturn"
 	"github.com/team11/app/ent/servicepoint"
 	"github.com/team11/app/ent/user"
 )
@@ -91,6 +92,21 @@ func (bc *BookborrowCreate) SetNillableSERVICEPOINTID(id *int) *BookborrowCreate
 // SetSERVICEPOINT sets the SERVICEPOINT edge to ServicePoint.
 func (bc *BookborrowCreate) SetSERVICEPOINT(s *ServicePoint) *BookborrowCreate {
 	return bc.SetSERVICEPOINTID(s.ID)
+}
+
+// AddBorrowedIDs adds the borrowed edge to Bookreturn by ids.
+func (bc *BookborrowCreate) AddBorrowedIDs(ids ...int) *BookborrowCreate {
+	bc.mutation.AddBorrowedIDs(ids...)
+	return bc
+}
+
+// AddBorrowed adds the borrowed edges to Bookreturn.
+func (bc *BookborrowCreate) AddBorrowed(b ...*Bookreturn) *BookborrowCreate {
+	ids := make([]int, len(b))
+	for i := range b {
+		ids[i] = b[i].ID
+	}
+	return bc.AddBorrowedIDs(ids...)
 }
 
 // Mutation returns the BookborrowMutation object of the builder.
@@ -221,6 +237,25 @@ func (bc *BookborrowCreate) createSpec() (*Bookborrow, *sqlgraph.CreateSpec) {
 				IDSpec: &sqlgraph.FieldSpec{
 					Type:   field.TypeInt,
 					Column: servicepoint.FieldID,
+				},
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := bc.mutation.BorrowedIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   bookborrow.BorrowedTable,
+			Columns: []string{bookborrow.BorrowedColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: &sqlgraph.FieldSpec{
+					Type:   field.TypeInt,
+					Column: bookreturn.FieldID,
 				},
 			},
 		}

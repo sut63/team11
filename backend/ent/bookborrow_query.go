@@ -4,6 +4,7 @@ package ent
 
 import (
 	"context"
+	"database/sql/driver"
 	"errors"
 	"fmt"
 	"math"
@@ -13,6 +14,7 @@ import (
 	"github.com/facebookincubator/ent/schema/field"
 	"github.com/team11/app/ent/book"
 	"github.com/team11/app/ent/bookborrow"
+	"github.com/team11/app/ent/bookreturn"
 	"github.com/team11/app/ent/predicate"
 	"github.com/team11/app/ent/servicepoint"
 	"github.com/team11/app/ent/user"
@@ -30,6 +32,7 @@ type BookborrowQuery struct {
 	withUSER         *UserQuery
 	withBOOK         *BookQuery
 	withSERVICEPOINT *ServicePointQuery
+	withBorrowed     *BookreturnQuery
 	withFKs          bool
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
@@ -107,6 +110,24 @@ func (bq *BookborrowQuery) QuerySERVICEPOINT() *ServicePointQuery {
 			sqlgraph.From(bookborrow.Table, bookborrow.FieldID, bq.sqlQuery()),
 			sqlgraph.To(servicepoint.Table, servicepoint.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, bookborrow.SERVICEPOINTTable, bookborrow.SERVICEPOINTColumn),
+		)
+		fromU = sqlgraph.SetNeighbors(bq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryBorrowed chains the current query on the borrowed edge.
+func (bq *BookborrowQuery) QueryBorrowed() *BookreturnQuery {
+	query := &BookreturnQuery{config: bq.config}
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := bq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(bookborrow.Table, bookborrow.FieldID, bq.sqlQuery()),
+			sqlgraph.To(bookreturn.Table, bookreturn.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, bookborrow.BorrowedTable, bookborrow.BorrowedColumn),
 		)
 		fromU = sqlgraph.SetNeighbors(bq.driver.Dialect(), step)
 		return fromU, nil
@@ -326,6 +347,17 @@ func (bq *BookborrowQuery) WithSERVICEPOINT(opts ...func(*ServicePointQuery)) *B
 	return bq
 }
 
+//  WithBorrowed tells the query-builder to eager-loads the nodes that are connected to
+// the "borrowed" edge. The optional arguments used to configure the query builder of the edge.
+func (bq *BookborrowQuery) WithBorrowed(opts ...func(*BookreturnQuery)) *BookborrowQuery {
+	query := &BookreturnQuery{config: bq.config}
+	for _, opt := range opts {
+		opt(query)
+	}
+	bq.withBorrowed = query
+	return bq
+}
+
 // GroupBy used to group vertices by one or more fields/columns.
 // It is often used with aggregate functions, like: count, max, mean, min, sum.
 //
@@ -393,10 +425,11 @@ func (bq *BookborrowQuery) sqlAll(ctx context.Context) ([]*Bookborrow, error) {
 		nodes       = []*Bookborrow{}
 		withFKs     = bq.withFKs
 		_spec       = bq.querySpec()
-		loadedTypes = [3]bool{
+		loadedTypes = [4]bool{
 			bq.withUSER != nil,
 			bq.withBOOK != nil,
 			bq.withSERVICEPOINT != nil,
+			bq.withBorrowed != nil,
 		}
 	)
 	if bq.withUSER != nil || bq.withBOOK != nil || bq.withSERVICEPOINT != nil {
@@ -501,6 +534,34 @@ func (bq *BookborrowQuery) sqlAll(ctx context.Context) ([]*Bookborrow, error) {
 			for i := range nodes {
 				nodes[i].Edges.SERVICEPOINT = n
 			}
+		}
+	}
+
+	if query := bq.withBorrowed; query != nil {
+		fks := make([]driver.Value, 0, len(nodes))
+		nodeids := make(map[int]*Bookborrow)
+		for i := range nodes {
+			fks = append(fks, nodes[i].ID)
+			nodeids[nodes[i].ID] = nodes[i]
+		}
+		query.withFKs = true
+		query.Where(predicate.Bookreturn(func(s *sql.Selector) {
+			s.Where(sql.InValues(bookborrow.BorrowedColumn, fks...))
+		}))
+		neighbors, err := query.All(ctx)
+		if err != nil {
+			return nil, err
+		}
+		for _, n := range neighbors {
+			fk := n.CLIENT_ID
+			if fk == nil {
+				return nil, fmt.Errorf(`foreign-key "CLIENT_ID" is nil for node %v`, n.ID)
+			}
+			node, ok := nodeids[*fk]
+			if !ok {
+				return nil, fmt.Errorf(`unexpected foreign-key "CLIENT_ID" returned %v for node %v`, *fk, n.ID)
+			}
+			node.Edges.Borrowed = append(node.Edges.Borrowed, n)
 		}
 	}
 

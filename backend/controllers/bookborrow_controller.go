@@ -9,7 +9,6 @@ import (
 	"github.com/team11/app/ent"
 	"github.com/team11/app/ent/book"
 	"github.com/team11/app/ent/bookborrow"
-	"github.com/team11/app/ent/role"
 	"github.com/team11/app/ent/servicepoint"
 	"github.com/team11/app/ent/user"
 )
@@ -165,7 +164,6 @@ func (ctl *BookborrowController) ListBookborrow(c *gin.Context) {
 
 	bookborrows, err := ctl.client.Bookborrow.
 		Query().
-		Where(bookborrow.HasRoleplayWith(role.IDEQ(1))).
 		Limit(limit).
 		Offset(offset).
 		All(context.Background())

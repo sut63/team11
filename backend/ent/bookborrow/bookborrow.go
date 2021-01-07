@@ -20,6 +20,8 @@ const (
 	EdgeBOOK = "BOOK"
 	// EdgeSERVICEPOINT holds the string denoting the servicepoint edge name in mutations.
 	EdgeSERVICEPOINT = "SERVICEPOINT"
+	// EdgeBorrowed holds the string denoting the borrowed edge name in mutations.
+	EdgeBorrowed = "borrowed"
 
 	// Table holds the table name of the bookborrow in the database.
 	Table = "bookborrows"
@@ -44,6 +46,13 @@ const (
 	SERVICEPOINTInverseTable = "service_points"
 	// SERVICEPOINTColumn is the table column denoting the SERVICEPOINT relation/edge.
 	SERVICEPOINTColumn = "SERVICEPOINT_ID"
+	// BorrowedTable is the table the holds the borrowed relation/edge.
+	BorrowedTable = "bookreturns"
+	// BorrowedInverseTable is the table name for the Bookreturn entity.
+	// It exists in this package in order to avoid circular dependency with the "bookreturn" package.
+	BorrowedInverseTable = "bookreturns"
+	// BorrowedColumn is the table column denoting the borrowed relation/edge.
+	BorrowedColumn = "CLIENT_ID"
 )
 
 // Columns holds all SQL columns for bookborrow fields.

@@ -12,6 +12,7 @@ import (
 	"github.com/facebookincubator/ent/schema/field"
 	"github.com/team11/app/ent/book"
 	"github.com/team11/app/ent/bookborrow"
+	"github.com/team11/app/ent/bookreturn"
 	"github.com/team11/app/ent/predicate"
 	"github.com/team11/app/ent/servicepoint"
 	"github.com/team11/app/ent/user"
@@ -102,6 +103,21 @@ func (bu *BookborrowUpdate) SetSERVICEPOINT(s *ServicePoint) *BookborrowUpdate {
 	return bu.SetSERVICEPOINTID(s.ID)
 }
 
+// AddBorrowedIDs adds the borrowed edge to Bookreturn by ids.
+func (bu *BookborrowUpdate) AddBorrowedIDs(ids ...int) *BookborrowUpdate {
+	bu.mutation.AddBorrowedIDs(ids...)
+	return bu
+}
+
+// AddBorrowed adds the borrowed edges to Bookreturn.
+func (bu *BookborrowUpdate) AddBorrowed(b ...*Bookreturn) *BookborrowUpdate {
+	ids := make([]int, len(b))
+	for i := range b {
+		ids[i] = b[i].ID
+	}
+	return bu.AddBorrowedIDs(ids...)
+}
+
 // Mutation returns the BookborrowMutation object of the builder.
 func (bu *BookborrowUpdate) Mutation() *BookborrowMutation {
 	return bu.mutation
@@ -123,6 +139,21 @@ func (bu *BookborrowUpdate) ClearBOOK() *BookborrowUpdate {
 func (bu *BookborrowUpdate) ClearSERVICEPOINT() *BookborrowUpdate {
 	bu.mutation.ClearSERVICEPOINT()
 	return bu
+}
+
+// RemoveBorrowedIDs removes the borrowed edge to Bookreturn by ids.
+func (bu *BookborrowUpdate) RemoveBorrowedIDs(ids ...int) *BookborrowUpdate {
+	bu.mutation.RemoveBorrowedIDs(ids...)
+	return bu
+}
+
+// RemoveBorrowed removes borrowed edges to Bookreturn.
+func (bu *BookborrowUpdate) RemoveBorrowed(b ...*Bookreturn) *BookborrowUpdate {
+	ids := make([]int, len(b))
+	for i := range b {
+		ids[i] = b[i].ID
+	}
+	return bu.RemoveBorrowedIDs(ids...)
 }
 
 // Save executes the query and returns the number of rows/vertices matched by this operation.
@@ -307,6 +338,44 @@ func (bu *BookborrowUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	if nodes := bu.mutation.RemovedBorrowedIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   bookborrow.BorrowedTable,
+			Columns: []string{bookborrow.BorrowedColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: &sqlgraph.FieldSpec{
+					Type:   field.TypeInt,
+					Column: bookreturn.FieldID,
+				},
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := bu.mutation.BorrowedIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   bookborrow.BorrowedTable,
+			Columns: []string{bookborrow.BorrowedColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: &sqlgraph.FieldSpec{
+					Type:   field.TypeInt,
+					Column: bookreturn.FieldID,
+				},
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
 	if n, err = sqlgraph.UpdateNodes(ctx, bu.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{bookborrow.Label}
@@ -396,6 +465,21 @@ func (buo *BookborrowUpdateOne) SetSERVICEPOINT(s *ServicePoint) *BookborrowUpda
 	return buo.SetSERVICEPOINTID(s.ID)
 }
 
+// AddBorrowedIDs adds the borrowed edge to Bookreturn by ids.
+func (buo *BookborrowUpdateOne) AddBorrowedIDs(ids ...int) *BookborrowUpdateOne {
+	buo.mutation.AddBorrowedIDs(ids...)
+	return buo
+}
+
+// AddBorrowed adds the borrowed edges to Bookreturn.
+func (buo *BookborrowUpdateOne) AddBorrowed(b ...*Bookreturn) *BookborrowUpdateOne {
+	ids := make([]int, len(b))
+	for i := range b {
+		ids[i] = b[i].ID
+	}
+	return buo.AddBorrowedIDs(ids...)
+}
+
 // Mutation returns the BookborrowMutation object of the builder.
 func (buo *BookborrowUpdateOne) Mutation() *BookborrowMutation {
 	return buo.mutation
@@ -417,6 +501,21 @@ func (buo *BookborrowUpdateOne) ClearBOOK() *BookborrowUpdateOne {
 func (buo *BookborrowUpdateOne) ClearSERVICEPOINT() *BookborrowUpdateOne {
 	buo.mutation.ClearSERVICEPOINT()
 	return buo
+}
+
+// RemoveBorrowedIDs removes the borrowed edge to Bookreturn by ids.
+func (buo *BookborrowUpdateOne) RemoveBorrowedIDs(ids ...int) *BookborrowUpdateOne {
+	buo.mutation.RemoveBorrowedIDs(ids...)
+	return buo
+}
+
+// RemoveBorrowed removes borrowed edges to Bookreturn.
+func (buo *BookborrowUpdateOne) RemoveBorrowed(b ...*Bookreturn) *BookborrowUpdateOne {
+	ids := make([]int, len(b))
+	for i := range b {
+		ids[i] = b[i].ID
+	}
+	return buo.RemoveBorrowedIDs(ids...)
 }
 
 // Save executes the query and returns the updated entity.
@@ -591,6 +690,44 @@ func (buo *BookborrowUpdateOne) sqlSave(ctx context.Context) (b *Bookborrow, err
 				IDSpec: &sqlgraph.FieldSpec{
 					Type:   field.TypeInt,
 					Column: servicepoint.FieldID,
+				},
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if nodes := buo.mutation.RemovedBorrowedIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   bookborrow.BorrowedTable,
+			Columns: []string{bookborrow.BorrowedColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: &sqlgraph.FieldSpec{
+					Type:   field.TypeInt,
+					Column: bookreturn.FieldID,
+				},
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := buo.mutation.BorrowedIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   bookborrow.BorrowedTable,
+			Columns: []string{bookborrow.BorrowedColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: &sqlgraph.FieldSpec{
+					Type:   field.TypeInt,
+					Column: bookreturn.FieldID,
 				},
 			},
 		}
