@@ -9,6 +9,7 @@ import (
 	"github.com/facebookincubator/ent/dialect/sql"
 	"github.com/facebookincubator/ent/dialect/sql/sqlgraph"
 	"github.com/facebookincubator/ent/schema/field"
+	"github.com/team11/app/ent/bookborrow"
 	"github.com/team11/app/ent/bookreturn"
 	"github.com/team11/app/ent/predicate"
 )
@@ -33,9 +34,34 @@ func (bu *BookreturnUpdate) SetBookName(s string) *BookreturnUpdate {
 	return bu
 }
 
+// SetMustreturnID sets the mustreturn edge to Bookborrow by id.
+func (bu *BookreturnUpdate) SetMustreturnID(id int) *BookreturnUpdate {
+	bu.mutation.SetMustreturnID(id)
+	return bu
+}
+
+// SetNillableMustreturnID sets the mustreturn edge to Bookborrow by id if the given value is not nil.
+func (bu *BookreturnUpdate) SetNillableMustreturnID(id *int) *BookreturnUpdate {
+	if id != nil {
+		bu = bu.SetMustreturnID(*id)
+	}
+	return bu
+}
+
+// SetMustreturn sets the mustreturn edge to Bookborrow.
+func (bu *BookreturnUpdate) SetMustreturn(b *Bookborrow) *BookreturnUpdate {
+	return bu.SetMustreturnID(b.ID)
+}
+
 // Mutation returns the BookreturnMutation object of the builder.
 func (bu *BookreturnUpdate) Mutation() *BookreturnMutation {
 	return bu.mutation
+}
+
+// ClearMustreturn clears the mustreturn edge to Bookborrow.
+func (bu *BookreturnUpdate) ClearMustreturn() *BookreturnUpdate {
+	bu.mutation.ClearMustreturn()
+	return bu
 }
 
 // Save executes the query and returns the number of rows/vertices matched by this operation.
@@ -45,6 +71,7 @@ func (bu *BookreturnUpdate) Save(ctx context.Context) (int, error) {
 			return 0, &ValidationError{Name: "book_name", err: fmt.Errorf("ent: validator failed for field \"book_name\": %w", err)}
 		}
 	}
+
 	var (
 		err      error
 		affected int
@@ -119,6 +146,41 @@ func (bu *BookreturnUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Column: bookreturn.FieldBookName,
 		})
 	}
+	if bu.mutation.MustreturnCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   bookreturn.MustreturnTable,
+			Columns: []string{bookreturn.MustreturnColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: &sqlgraph.FieldSpec{
+					Type:   field.TypeInt,
+					Column: bookborrow.FieldID,
+				},
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := bu.mutation.MustreturnIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   bookreturn.MustreturnTable,
+			Columns: []string{bookreturn.MustreturnColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: &sqlgraph.FieldSpec{
+					Type:   field.TypeInt,
+					Column: bookborrow.FieldID,
+				},
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
 	if n, err = sqlgraph.UpdateNodes(ctx, bu.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{bookreturn.Label}
@@ -143,9 +205,34 @@ func (buo *BookreturnUpdateOne) SetBookName(s string) *BookreturnUpdateOne {
 	return buo
 }
 
+// SetMustreturnID sets the mustreturn edge to Bookborrow by id.
+func (buo *BookreturnUpdateOne) SetMustreturnID(id int) *BookreturnUpdateOne {
+	buo.mutation.SetMustreturnID(id)
+	return buo
+}
+
+// SetNillableMustreturnID sets the mustreturn edge to Bookborrow by id if the given value is not nil.
+func (buo *BookreturnUpdateOne) SetNillableMustreturnID(id *int) *BookreturnUpdateOne {
+	if id != nil {
+		buo = buo.SetMustreturnID(*id)
+	}
+	return buo
+}
+
+// SetMustreturn sets the mustreturn edge to Bookborrow.
+func (buo *BookreturnUpdateOne) SetMustreturn(b *Bookborrow) *BookreturnUpdateOne {
+	return buo.SetMustreturnID(b.ID)
+}
+
 // Mutation returns the BookreturnMutation object of the builder.
 func (buo *BookreturnUpdateOne) Mutation() *BookreturnMutation {
 	return buo.mutation
+}
+
+// ClearMustreturn clears the mustreturn edge to Bookborrow.
+func (buo *BookreturnUpdateOne) ClearMustreturn() *BookreturnUpdateOne {
+	buo.mutation.ClearMustreturn()
+	return buo
 }
 
 // Save executes the query and returns the updated entity.
@@ -155,6 +242,7 @@ func (buo *BookreturnUpdateOne) Save(ctx context.Context) (*Bookreturn, error) {
 			return nil, &ValidationError{Name: "book_name", err: fmt.Errorf("ent: validator failed for field \"book_name\": %w", err)}
 		}
 	}
+
 	var (
 		err  error
 		node *Bookreturn
@@ -226,6 +314,41 @@ func (buo *BookreturnUpdateOne) sqlSave(ctx context.Context) (b *Bookreturn, err
 			Value:  value,
 			Column: bookreturn.FieldBookName,
 		})
+	}
+	if buo.mutation.MustreturnCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   bookreturn.MustreturnTable,
+			Columns: []string{bookreturn.MustreturnColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: &sqlgraph.FieldSpec{
+					Type:   field.TypeInt,
+					Column: bookborrow.FieldID,
+				},
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := buo.mutation.MustreturnIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   bookreturn.MustreturnTable,
+			Columns: []string{bookreturn.MustreturnColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: &sqlgraph.FieldSpec{
+					Type:   field.TypeInt,
+					Column: bookborrow.FieldID,
+				},
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	b = &Bookreturn{config: buo.config}
 	_spec.Assign = b.assignValues

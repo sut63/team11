@@ -10,8 +10,18 @@ const (
 	// FieldBookName holds the string denoting the book_name field in the database.
 	FieldBookName = "book_name"
 
+	// EdgeMustreturn holds the string denoting the mustreturn edge name in mutations.
+	EdgeMustreturn = "mustreturn"
+
 	// Table holds the table name of the bookreturn in the database.
 	Table = "bookreturns"
+	// MustreturnTable is the table the holds the mustreturn relation/edge.
+	MustreturnTable = "bookreturns"
+	// MustreturnInverseTable is the table name for the Bookborrow entity.
+	// It exists in this package in order to avoid circular dependency with the "bookborrow" package.
+	MustreturnInverseTable = "bookborrows"
+	// MustreturnColumn is the table column denoting the mustreturn relation/edge.
+	MustreturnColumn = "CLIENT_ID"
 )
 
 // Columns holds all SQL columns for bookreturn fields.
@@ -22,6 +32,7 @@ var Columns = []string{
 
 // ForeignKeys holds the SQL foreign-keys that are owned by the Bookreturn type.
 var ForeignKeys = []string{
+	"CLIENT_ID",
 	"location_id",
 }
 

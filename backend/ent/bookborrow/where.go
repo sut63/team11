@@ -260,6 +260,34 @@ func HasSERVICEPOINTWith(preds ...predicate.ServicePoint) predicate.Bookborrow {
 	})
 }
 
+// HasBorrowed applies the HasEdge predicate on the "borrowed" edge.
+func HasBorrowed() predicate.Bookborrow {
+	return predicate.Bookborrow(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.To(BorrowedTable, FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, BorrowedTable, BorrowedColumn),
+		)
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasBorrowedWith applies the HasEdge predicate on the "borrowed" edge with a given conditions (other predicates).
+func HasBorrowedWith(preds ...predicate.Bookreturn) predicate.Bookborrow {
+	return predicate.Bookborrow(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.To(BorrowedInverseTable, FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, BorrowedTable, BorrowedColumn),
+		)
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
 // And groups list of predicates with the AND operator between them.
 func And(predicates ...predicate.Bookborrow) predicate.Bookborrow {
 	return predicate.Bookborrow(func(s *sql.Selector) {

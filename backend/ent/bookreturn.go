@@ -7,6 +7,7 @@ import (
 	"strings"
 
 	"github.com/facebookincubator/ent/dialect/sql"
+	"github.com/team11/app/ent/bookborrow"
 	"github.com/team11/app/ent/bookreturn"
 )
 
@@ -16,8 +17,35 @@ type Bookreturn struct {
 	// ID of the ent.
 	ID int `json:"id,omitempty"`
 	// BookName holds the value of the "book_name" field.
-	BookName    string `json:"book_name,omitempty"`
+	BookName string `json:"book_name,omitempty"`
+	// Edges holds the relations/edges for other nodes in the graph.
+	// The values are being populated by the BookreturnQuery when eager-loading is set.
+	Edges       BookreturnEdges `json:"edges"`
+	CLIENT_ID   *int
 	location_id *int
+}
+
+// BookreturnEdges holds the relations/edges for other nodes in the graph.
+type BookreturnEdges struct {
+	// Mustreturn holds the value of the mustreturn edge.
+	Mustreturn *Bookborrow
+	// loadedTypes holds the information for reporting if a
+	// type was loaded (or requested) in eager-loading or not.
+	loadedTypes [1]bool
+}
+
+// MustreturnOrErr returns the Mustreturn value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e BookreturnEdges) MustreturnOrErr() (*Bookborrow, error) {
+	if e.loadedTypes[0] {
+		if e.Mustreturn == nil {
+			// The edge mustreturn was loaded in eager-loading,
+			// but was not found.
+			return nil, &NotFoundError{label: bookborrow.Label}
+		}
+		return e.Mustreturn, nil
+	}
+	return nil, &NotLoadedError{edge: "mustreturn"}
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -31,6 +59,7 @@ func (*Bookreturn) scanValues() []interface{} {
 // fkValues returns the types for scanning foreign-keys values from sql.Rows.
 func (*Bookreturn) fkValues() []interface{} {
 	return []interface{}{
+		&sql.NullInt64{}, // CLIENT_ID
 		&sql.NullInt64{}, // location_id
 	}
 }
@@ -55,6 +84,12 @@ func (b *Bookreturn) assignValues(values ...interface{}) error {
 	values = values[1:]
 	if len(values) == len(bookreturn.ForeignKeys) {
 		if value, ok := values[0].(*sql.NullInt64); !ok {
+			return fmt.Errorf("unexpected type %T for edge-field CLIENT_ID", value)
+		} else if value.Valid {
+			b.CLIENT_ID = new(int)
+			*b.CLIENT_ID = int(value.Int64)
+		}
+		if value, ok := values[1].(*sql.NullInt64); !ok {
 			return fmt.Errorf("unexpected type %T for edge-field location_id", value)
 		} else if value.Valid {
 			b.location_id = new(int)
@@ -62,6 +97,11 @@ func (b *Bookreturn) assignValues(values ...interface{}) error {
 		}
 	}
 	return nil
+}
+
+// QueryMustreturn queries the mustreturn edge of the Bookreturn.
+func (b *Bookreturn) QueryMustreturn() *BookborrowQuery {
+	return (&BookreturnClient{config: b.config}).QueryMustreturn(b)
 }
 
 // Update returns a builder for updating this Bookreturn.
