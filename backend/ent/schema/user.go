@@ -41,5 +41,7 @@ func (User) Edges() []ent.Edge {
 			StorageKey(edge.Column("USER_ID")),
 		edge.To("record", Research.Type).
 			StorageKey(edge.Column("USER_ID")),
+		edge.To("return", Bookreturn.Type).
+			StorageKey(edge.Column("USER_ID")),
 	}
 }

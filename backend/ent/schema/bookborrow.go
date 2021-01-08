@@ -22,6 +22,7 @@ func (Bookborrow) Fields() []ent.Field {
 // Edges of the Bookborrow.
 func (Bookborrow) Edges() []ent.Edge {
 	return []ent.Edge{
+		
 		edge.From("USER", User.Type).
 			Ref("borrow").
 			Unique(),
@@ -31,7 +32,11 @@ func (Bookborrow) Edges() []ent.Edge {
 		edge.From("SERVICEPOINT", ServicePoint.Type).
 			Ref("from").
 			Unique(),
+<<<<<<< HEAD
+
+=======
 		
+>>>>>>> c9cada08bc7f55755261c1e47704a41c6656a7a2
 		edge.To("borrowed", Bookreturn.Type).
 			StorageKey(edge.Column("CLIENT_ID")),
 	}
