@@ -15,7 +15,7 @@ type Bookreturn struct {
 // Fields of the Bookreturn.
 func (Bookreturn) Fields() []ent.Field {
 	return []ent.Field{
-		field.Int("return_deadline").Positive(),
+		field.Time("return_deadline"),
     }
 }
 
