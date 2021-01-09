@@ -6,11 +6,11 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/NoT-Ton/app/ent"
-	"github.com/NoT-Ton/app/ent/user"
-	"github.com/NoT-Ton/app/ent/location"
-	"github.com/NoT-Ton/app/ent/bookborrow"
 	"github.com/gin-gonic/gin"
+	"github.com/team11/app/ent"
+	"github.com/team11/app/ent/bookborrow"
+	"github.com/team11/app/ent/location"
+	"github.com/team11/app/ent/user"
 )
 
 // BookreturnController defines the struct for the bookreturn controller
@@ -21,10 +21,10 @@ type BookreturnController struct {
 
 // Bookreturn defines the struct for the bookreturn
 type Bookreturn struct {
-	UserID     int
-	LocationID  int
+	UserID       int
+	LocationID   int
 	BookborrowID int
-	Deadline    string
+	Deadline     string
 }
 
 // CreateBookreturn handles POST requests for adding bookreturn entities
@@ -100,8 +100,8 @@ func (ctl *BookreturnController) CreateBookreturn(c *gin.Context) {
 		Create().
 		SetUser(u).
 		SetLocation(l).
-		SetBookborrow(b).
-		SetDeadline(times).
+		SetMustreturn(b).
+		SetReturnDeadline(times).
 		Save(context.Background())
 
 	if err != nil {
@@ -111,7 +111,7 @@ func (ctl *BookreturnController) CreateBookreturn(c *gin.Context) {
 		return
 	}
 
-	c.JSON(200, b)
+	c.JSON(200, br)
 }
 
 // ListBookreturn handles request to get a list of bookreturn entities
@@ -148,7 +148,7 @@ func (ctl *BookreturnController) ListBookreturn(c *gin.Context) {
 		Query().
 		WithUser().
 		WithLocation().
-		WithBookborrow().
+		WithMustreturn().
 		Limit(limit).
 		Offset(offset).
 		All(context.Background())

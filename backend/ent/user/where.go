@@ -613,6 +613,34 @@ func HasRecordWith(preds ...predicate.Research) predicate.User {
 	})
 }
 
+// HasReturn applies the HasEdge predicate on the "return" edge.
+func HasReturn() predicate.User {
+	return predicate.User(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.To(ReturnTable, FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, ReturnTable, ReturnColumn),
+		)
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasReturnWith applies the HasEdge predicate on the "return" edge with a given conditions (other predicates).
+func HasReturnWith(preds ...predicate.Bookreturn) predicate.User {
+	return predicate.User(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.To(ReturnInverseTable, FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, ReturnTable, ReturnColumn),
+		)
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
 // And groups list of predicates with the AND operator between them.
 func And(predicates ...predicate.User) predicate.User {
 	return predicate.User(func(s *sql.Selector) {

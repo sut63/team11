@@ -12,6 +12,7 @@ import (
 	"github.com/team11/app/ent/book"
 	"github.com/team11/app/ent/bookborrow"
 	"github.com/team11/app/ent/booking"
+	"github.com/team11/app/ent/bookreturn"
 	"github.com/team11/app/ent/predicate"
 	"github.com/team11/app/ent/preemption"
 	"github.com/team11/app/ent/research"
@@ -145,6 +146,21 @@ func (uu *UserUpdate) AddRecord(r ...*Research) *UserUpdate {
 	return uu.AddRecordIDs(ids...)
 }
 
+// AddReturnIDs adds the return edge to Bookreturn by ids.
+func (uu *UserUpdate) AddReturnIDs(ids ...int) *UserUpdate {
+	uu.mutation.AddReturnIDs(ids...)
+	return uu
+}
+
+// AddReturn adds the return edges to Bookreturn.
+func (uu *UserUpdate) AddReturn(b ...*Bookreturn) *UserUpdate {
+	ids := make([]int, len(b))
+	for i := range b {
+		ids[i] = b[i].ID
+	}
+	return uu.AddReturnIDs(ids...)
+}
+
 // Mutation returns the UserMutation object of the builder.
 func (uu *UserUpdate) Mutation() *UserMutation {
 	return uu.mutation
@@ -229,6 +245,21 @@ func (uu *UserUpdate) RemoveRecord(r ...*Research) *UserUpdate {
 		ids[i] = r[i].ID
 	}
 	return uu.RemoveRecordIDs(ids...)
+}
+
+// RemoveReturnIDs removes the return edge to Bookreturn by ids.
+func (uu *UserUpdate) RemoveReturnIDs(ids ...int) *UserUpdate {
+	uu.mutation.RemoveReturnIDs(ids...)
+	return uu
+}
+
+// RemoveReturn removes return edges to Bookreturn.
+func (uu *UserUpdate) RemoveReturn(b ...*Bookreturn) *UserUpdate {
+	ids := make([]int, len(b))
+	for i := range b {
+		ids[i] = b[i].ID
+	}
+	return uu.RemoveReturnIDs(ids...)
 }
 
 // Save executes the query and returns the number of rows/vertices matched by this operation.
@@ -562,6 +593,44 @@ func (uu *UserUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	if nodes := uu.mutation.RemovedReturnIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   user.ReturnTable,
+			Columns: []string{user.ReturnColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: &sqlgraph.FieldSpec{
+					Type:   field.TypeInt,
+					Column: bookreturn.FieldID,
+				},
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := uu.mutation.ReturnIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   user.ReturnTable,
+			Columns: []string{user.ReturnColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: &sqlgraph.FieldSpec{
+					Type:   field.TypeInt,
+					Column: bookreturn.FieldID,
+				},
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
 	if n, err = sqlgraph.UpdateNodes(ctx, uu.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{user.Label}
@@ -692,6 +761,21 @@ func (uuo *UserUpdateOne) AddRecord(r ...*Research) *UserUpdateOne {
 	return uuo.AddRecordIDs(ids...)
 }
 
+// AddReturnIDs adds the return edge to Bookreturn by ids.
+func (uuo *UserUpdateOne) AddReturnIDs(ids ...int) *UserUpdateOne {
+	uuo.mutation.AddReturnIDs(ids...)
+	return uuo
+}
+
+// AddReturn adds the return edges to Bookreturn.
+func (uuo *UserUpdateOne) AddReturn(b ...*Bookreturn) *UserUpdateOne {
+	ids := make([]int, len(b))
+	for i := range b {
+		ids[i] = b[i].ID
+	}
+	return uuo.AddReturnIDs(ids...)
+}
+
 // Mutation returns the UserMutation object of the builder.
 func (uuo *UserUpdateOne) Mutation() *UserMutation {
 	return uuo.mutation
@@ -776,6 +860,21 @@ func (uuo *UserUpdateOne) RemoveRecord(r ...*Research) *UserUpdateOne {
 		ids[i] = r[i].ID
 	}
 	return uuo.RemoveRecordIDs(ids...)
+}
+
+// RemoveReturnIDs removes the return edge to Bookreturn by ids.
+func (uuo *UserUpdateOne) RemoveReturnIDs(ids ...int) *UserUpdateOne {
+	uuo.mutation.RemoveReturnIDs(ids...)
+	return uuo
+}
+
+// RemoveReturn removes return edges to Bookreturn.
+func (uuo *UserUpdateOne) RemoveReturn(b ...*Bookreturn) *UserUpdateOne {
+	ids := make([]int, len(b))
+	for i := range b {
+		ids[i] = b[i].ID
+	}
+	return uuo.RemoveReturnIDs(ids...)
 }
 
 // Save executes the query and returns the updated entity.
@@ -1099,6 +1198,44 @@ func (uuo *UserUpdateOne) sqlSave(ctx context.Context) (u *User, err error) {
 				IDSpec: &sqlgraph.FieldSpec{
 					Type:   field.TypeInt,
 					Column: research.FieldID,
+				},
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if nodes := uuo.mutation.RemovedReturnIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   user.ReturnTable,
+			Columns: []string{user.ReturnColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: &sqlgraph.FieldSpec{
+					Type:   field.TypeInt,
+					Column: bookreturn.FieldID,
+				},
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := uuo.mutation.ReturnIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   user.ReturnTable,
+			Columns: []string{user.ReturnColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: &sqlgraph.FieldSpec{
+					Type:   field.TypeInt,
+					Column: bookreturn.FieldID,
 				},
 			},
 		}

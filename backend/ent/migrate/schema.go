@@ -144,9 +144,10 @@ var (
 	// BookreturnsColumns holds the columns for the "bookreturns" table.
 	BookreturnsColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt, Increment: true},
-		{Name: "book_name", Type: field.TypeString},
+		{Name: "return_deadline", Type: field.TypeTime},
 		{Name: "CLIENT_ID", Type: field.TypeInt, Nullable: true},
 		{Name: "location_id", Type: field.TypeInt, Nullable: true},
+		{Name: "USER_ID", Type: field.TypeInt, Nullable: true},
 	}
 	// BookreturnsTable holds the schema information for the "bookreturns" table.
 	BookreturnsTable = &schema.Table{
@@ -162,10 +163,17 @@ var (
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:  "bookreturns_locations_locations",
+				Symbol:  "bookreturns_locations_returnfrom",
 				Columns: []*schema.Column{BookreturnsColumns[3]},
 
 				RefColumns: []*schema.Column{LocationsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:  "bookreturns_users_return",
+				Columns: []*schema.Column{BookreturnsColumns[4]},
+
+				RefColumns: []*schema.Column{UsersColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 		},
@@ -425,6 +433,7 @@ func init() {
 	BookingsTable.ForeignKeys[2].RefTable = UsersTable
 	BookreturnsTable.ForeignKeys[0].RefTable = BookborrowsTable
 	BookreturnsTable.ForeignKeys[1].RefTable = LocationsTable
+	BookreturnsTable.ForeignKeys[2].RefTable = UsersTable
 	ClientEntitiesTable.ForeignKeys[0].RefTable = StatusTable
 	PreemptionsTable.ForeignKeys[0].RefTable = PurposesTable
 	PreemptionsTable.ForeignKeys[1].RefTable = RoominfosTable

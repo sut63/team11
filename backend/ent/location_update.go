@@ -34,19 +34,19 @@ func (lu *LocationUpdate) SetLocationName(s string) *LocationUpdate {
 	return lu
 }
 
-// AddLocationIDs adds the locations edge to Bookreturn by ids.
-func (lu *LocationUpdate) AddLocationIDs(ids ...int) *LocationUpdate {
-	lu.mutation.AddLocationIDs(ids...)
+// AddReturnfromIDs adds the returnfrom edge to Bookreturn by ids.
+func (lu *LocationUpdate) AddReturnfromIDs(ids ...int) *LocationUpdate {
+	lu.mutation.AddReturnfromIDs(ids...)
 	return lu
 }
 
-// AddLocations adds the locations edges to Bookreturn.
-func (lu *LocationUpdate) AddLocations(b ...*Bookreturn) *LocationUpdate {
+// AddReturnfrom adds the returnfrom edges to Bookreturn.
+func (lu *LocationUpdate) AddReturnfrom(b ...*Bookreturn) *LocationUpdate {
 	ids := make([]int, len(b))
 	for i := range b {
 		ids[i] = b[i].ID
 	}
-	return lu.AddLocationIDs(ids...)
+	return lu.AddReturnfromIDs(ids...)
 }
 
 // Mutation returns the LocationMutation object of the builder.
@@ -54,19 +54,19 @@ func (lu *LocationUpdate) Mutation() *LocationMutation {
 	return lu.mutation
 }
 
-// RemoveLocationIDs removes the locations edge to Bookreturn by ids.
-func (lu *LocationUpdate) RemoveLocationIDs(ids ...int) *LocationUpdate {
-	lu.mutation.RemoveLocationIDs(ids...)
+// RemoveReturnfromIDs removes the returnfrom edge to Bookreturn by ids.
+func (lu *LocationUpdate) RemoveReturnfromIDs(ids ...int) *LocationUpdate {
+	lu.mutation.RemoveReturnfromIDs(ids...)
 	return lu
 }
 
-// RemoveLocations removes locations edges to Bookreturn.
-func (lu *LocationUpdate) RemoveLocations(b ...*Bookreturn) *LocationUpdate {
+// RemoveReturnfrom removes returnfrom edges to Bookreturn.
+func (lu *LocationUpdate) RemoveReturnfrom(b ...*Bookreturn) *LocationUpdate {
 	ids := make([]int, len(b))
 	for i := range b {
 		ids[i] = b[i].ID
 	}
-	return lu.RemoveLocationIDs(ids...)
+	return lu.RemoveReturnfromIDs(ids...)
 }
 
 // Save executes the query and returns the number of rows/vertices matched by this operation.
@@ -151,12 +151,12 @@ func (lu *LocationUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Column: location.FieldLocationName,
 		})
 	}
-	if nodes := lu.mutation.RemovedLocationsIDs(); len(nodes) > 0 {
+	if nodes := lu.mutation.RemovedReturnfromIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
-			Table:   location.LocationsTable,
-			Columns: []string{location.LocationsColumn},
+			Table:   location.ReturnfromTable,
+			Columns: []string{location.ReturnfromColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: &sqlgraph.FieldSpec{
@@ -170,12 +170,12 @@ func (lu *LocationUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := lu.mutation.LocationsIDs(); len(nodes) > 0 {
+	if nodes := lu.mutation.ReturnfromIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
-			Table:   location.LocationsTable,
-			Columns: []string{location.LocationsColumn},
+			Table:   location.ReturnfromTable,
+			Columns: []string{location.ReturnfromColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: &sqlgraph.FieldSpec{
@@ -213,19 +213,19 @@ func (luo *LocationUpdateOne) SetLocationName(s string) *LocationUpdateOne {
 	return luo
 }
 
-// AddLocationIDs adds the locations edge to Bookreturn by ids.
-func (luo *LocationUpdateOne) AddLocationIDs(ids ...int) *LocationUpdateOne {
-	luo.mutation.AddLocationIDs(ids...)
+// AddReturnfromIDs adds the returnfrom edge to Bookreturn by ids.
+func (luo *LocationUpdateOne) AddReturnfromIDs(ids ...int) *LocationUpdateOne {
+	luo.mutation.AddReturnfromIDs(ids...)
 	return luo
 }
 
-// AddLocations adds the locations edges to Bookreturn.
-func (luo *LocationUpdateOne) AddLocations(b ...*Bookreturn) *LocationUpdateOne {
+// AddReturnfrom adds the returnfrom edges to Bookreturn.
+func (luo *LocationUpdateOne) AddReturnfrom(b ...*Bookreturn) *LocationUpdateOne {
 	ids := make([]int, len(b))
 	for i := range b {
 		ids[i] = b[i].ID
 	}
-	return luo.AddLocationIDs(ids...)
+	return luo.AddReturnfromIDs(ids...)
 }
 
 // Mutation returns the LocationMutation object of the builder.
@@ -233,19 +233,19 @@ func (luo *LocationUpdateOne) Mutation() *LocationMutation {
 	return luo.mutation
 }
 
-// RemoveLocationIDs removes the locations edge to Bookreturn by ids.
-func (luo *LocationUpdateOne) RemoveLocationIDs(ids ...int) *LocationUpdateOne {
-	luo.mutation.RemoveLocationIDs(ids...)
+// RemoveReturnfromIDs removes the returnfrom edge to Bookreturn by ids.
+func (luo *LocationUpdateOne) RemoveReturnfromIDs(ids ...int) *LocationUpdateOne {
+	luo.mutation.RemoveReturnfromIDs(ids...)
 	return luo
 }
 
-// RemoveLocations removes locations edges to Bookreturn.
-func (luo *LocationUpdateOne) RemoveLocations(b ...*Bookreturn) *LocationUpdateOne {
+// RemoveReturnfrom removes returnfrom edges to Bookreturn.
+func (luo *LocationUpdateOne) RemoveReturnfrom(b ...*Bookreturn) *LocationUpdateOne {
 	ids := make([]int, len(b))
 	for i := range b {
 		ids[i] = b[i].ID
 	}
-	return luo.RemoveLocationIDs(ids...)
+	return luo.RemoveReturnfromIDs(ids...)
 }
 
 // Save executes the query and returns the updated entity.
@@ -328,12 +328,12 @@ func (luo *LocationUpdateOne) sqlSave(ctx context.Context) (l *Location, err err
 			Column: location.FieldLocationName,
 		})
 	}
-	if nodes := luo.mutation.RemovedLocationsIDs(); len(nodes) > 0 {
+	if nodes := luo.mutation.RemovedReturnfromIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
-			Table:   location.LocationsTable,
-			Columns: []string{location.LocationsColumn},
+			Table:   location.ReturnfromTable,
+			Columns: []string{location.ReturnfromColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: &sqlgraph.FieldSpec{
@@ -347,12 +347,12 @@ func (luo *LocationUpdateOne) sqlSave(ctx context.Context) (l *Location, err err
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := luo.mutation.LocationsIDs(); len(nodes) > 0 {
+	if nodes := luo.mutation.ReturnfromIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
-			Table:   location.LocationsTable,
-			Columns: []string{location.LocationsColumn},
+			Table:   location.ReturnfromTable,
+			Columns: []string{location.ReturnfromColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: &sqlgraph.FieldSpec{

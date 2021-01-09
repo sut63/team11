@@ -71,7 +71,7 @@ func (ctl *ResearchController) CreateResearch(c *gin.Context) {
         return
     }
 
-    rt, err := ctl.client.ResearchType.
+    rt, err := ctl.client.Researchtype.
         Query().
         Where(researchtype.IDEQ(int(obj.DocType))).
         Only(context.Background())

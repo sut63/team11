@@ -5,13 +5,16 @@ package ent
 import (
 	"context"
 	"fmt"
+	"time"
 
 	"github.com/facebookincubator/ent/dialect/sql"
 	"github.com/facebookincubator/ent/dialect/sql/sqlgraph"
 	"github.com/facebookincubator/ent/schema/field"
 	"github.com/team11/app/ent/bookborrow"
 	"github.com/team11/app/ent/bookreturn"
+	"github.com/team11/app/ent/location"
 	"github.com/team11/app/ent/predicate"
+	"github.com/team11/app/ent/user"
 )
 
 // BookreturnUpdate is the builder for updating Bookreturn entities.
@@ -28,10 +31,48 @@ func (bu *BookreturnUpdate) Where(ps ...predicate.Bookreturn) *BookreturnUpdate 
 	return bu
 }
 
-// SetBookName sets the book_name field.
-func (bu *BookreturnUpdate) SetBookName(s string) *BookreturnUpdate {
-	bu.mutation.SetBookName(s)
+// SetReturnDeadline sets the return_deadline field.
+func (bu *BookreturnUpdate) SetReturnDeadline(t time.Time) *BookreturnUpdate {
+	bu.mutation.SetReturnDeadline(t)
 	return bu
+}
+
+// SetUserID sets the user edge to User by id.
+func (bu *BookreturnUpdate) SetUserID(id int) *BookreturnUpdate {
+	bu.mutation.SetUserID(id)
+	return bu
+}
+
+// SetNillableUserID sets the user edge to User by id if the given value is not nil.
+func (bu *BookreturnUpdate) SetNillableUserID(id *int) *BookreturnUpdate {
+	if id != nil {
+		bu = bu.SetUserID(*id)
+	}
+	return bu
+}
+
+// SetUser sets the user edge to User.
+func (bu *BookreturnUpdate) SetUser(u *User) *BookreturnUpdate {
+	return bu.SetUserID(u.ID)
+}
+
+// SetLocationID sets the location edge to Location by id.
+func (bu *BookreturnUpdate) SetLocationID(id int) *BookreturnUpdate {
+	bu.mutation.SetLocationID(id)
+	return bu
+}
+
+// SetNillableLocationID sets the location edge to Location by id if the given value is not nil.
+func (bu *BookreturnUpdate) SetNillableLocationID(id *int) *BookreturnUpdate {
+	if id != nil {
+		bu = bu.SetLocationID(*id)
+	}
+	return bu
+}
+
+// SetLocation sets the location edge to Location.
+func (bu *BookreturnUpdate) SetLocation(l *Location) *BookreturnUpdate {
+	return bu.SetLocationID(l.ID)
 }
 
 // SetMustreturnID sets the mustreturn edge to Bookborrow by id.
@@ -58,6 +99,18 @@ func (bu *BookreturnUpdate) Mutation() *BookreturnMutation {
 	return bu.mutation
 }
 
+// ClearUser clears the user edge to User.
+func (bu *BookreturnUpdate) ClearUser() *BookreturnUpdate {
+	bu.mutation.ClearUser()
+	return bu
+}
+
+// ClearLocation clears the location edge to Location.
+func (bu *BookreturnUpdate) ClearLocation() *BookreturnUpdate {
+	bu.mutation.ClearLocation()
+	return bu
+}
+
 // ClearMustreturn clears the mustreturn edge to Bookborrow.
 func (bu *BookreturnUpdate) ClearMustreturn() *BookreturnUpdate {
 	bu.mutation.ClearMustreturn()
@@ -66,11 +119,6 @@ func (bu *BookreturnUpdate) ClearMustreturn() *BookreturnUpdate {
 
 // Save executes the query and returns the number of rows/vertices matched by this operation.
 func (bu *BookreturnUpdate) Save(ctx context.Context) (int, error) {
-	if v, ok := bu.mutation.BookName(); ok {
-		if err := bookreturn.BookNameValidator(v); err != nil {
-			return 0, &ValidationError{Name: "book_name", err: fmt.Errorf("ent: validator failed for field \"book_name\": %w", err)}
-		}
-	}
 
 	var (
 		err      error
@@ -139,12 +187,82 @@ func (bu *BookreturnUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			}
 		}
 	}
-	if value, ok := bu.mutation.BookName(); ok {
+	if value, ok := bu.mutation.ReturnDeadline(); ok {
 		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeString,
+			Type:   field.TypeTime,
 			Value:  value,
-			Column: bookreturn.FieldBookName,
+			Column: bookreturn.FieldReturnDeadline,
 		})
+	}
+	if bu.mutation.UserCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   bookreturn.UserTable,
+			Columns: []string{bookreturn.UserColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: &sqlgraph.FieldSpec{
+					Type:   field.TypeInt,
+					Column: user.FieldID,
+				},
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := bu.mutation.UserIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   bookreturn.UserTable,
+			Columns: []string{bookreturn.UserColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: &sqlgraph.FieldSpec{
+					Type:   field.TypeInt,
+					Column: user.FieldID,
+				},
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if bu.mutation.LocationCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   bookreturn.LocationTable,
+			Columns: []string{bookreturn.LocationColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: &sqlgraph.FieldSpec{
+					Type:   field.TypeInt,
+					Column: location.FieldID,
+				},
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := bu.mutation.LocationIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   bookreturn.LocationTable,
+			Columns: []string{bookreturn.LocationColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: &sqlgraph.FieldSpec{
+					Type:   field.TypeInt,
+					Column: location.FieldID,
+				},
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	if bu.mutation.MustreturnCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -199,10 +317,48 @@ type BookreturnUpdateOne struct {
 	mutation *BookreturnMutation
 }
 
-// SetBookName sets the book_name field.
-func (buo *BookreturnUpdateOne) SetBookName(s string) *BookreturnUpdateOne {
-	buo.mutation.SetBookName(s)
+// SetReturnDeadline sets the return_deadline field.
+func (buo *BookreturnUpdateOne) SetReturnDeadline(t time.Time) *BookreturnUpdateOne {
+	buo.mutation.SetReturnDeadline(t)
 	return buo
+}
+
+// SetUserID sets the user edge to User by id.
+func (buo *BookreturnUpdateOne) SetUserID(id int) *BookreturnUpdateOne {
+	buo.mutation.SetUserID(id)
+	return buo
+}
+
+// SetNillableUserID sets the user edge to User by id if the given value is not nil.
+func (buo *BookreturnUpdateOne) SetNillableUserID(id *int) *BookreturnUpdateOne {
+	if id != nil {
+		buo = buo.SetUserID(*id)
+	}
+	return buo
+}
+
+// SetUser sets the user edge to User.
+func (buo *BookreturnUpdateOne) SetUser(u *User) *BookreturnUpdateOne {
+	return buo.SetUserID(u.ID)
+}
+
+// SetLocationID sets the location edge to Location by id.
+func (buo *BookreturnUpdateOne) SetLocationID(id int) *BookreturnUpdateOne {
+	buo.mutation.SetLocationID(id)
+	return buo
+}
+
+// SetNillableLocationID sets the location edge to Location by id if the given value is not nil.
+func (buo *BookreturnUpdateOne) SetNillableLocationID(id *int) *BookreturnUpdateOne {
+	if id != nil {
+		buo = buo.SetLocationID(*id)
+	}
+	return buo
+}
+
+// SetLocation sets the location edge to Location.
+func (buo *BookreturnUpdateOne) SetLocation(l *Location) *BookreturnUpdateOne {
+	return buo.SetLocationID(l.ID)
 }
 
 // SetMustreturnID sets the mustreturn edge to Bookborrow by id.
@@ -229,6 +385,18 @@ func (buo *BookreturnUpdateOne) Mutation() *BookreturnMutation {
 	return buo.mutation
 }
 
+// ClearUser clears the user edge to User.
+func (buo *BookreturnUpdateOne) ClearUser() *BookreturnUpdateOne {
+	buo.mutation.ClearUser()
+	return buo
+}
+
+// ClearLocation clears the location edge to Location.
+func (buo *BookreturnUpdateOne) ClearLocation() *BookreturnUpdateOne {
+	buo.mutation.ClearLocation()
+	return buo
+}
+
 // ClearMustreturn clears the mustreturn edge to Bookborrow.
 func (buo *BookreturnUpdateOne) ClearMustreturn() *BookreturnUpdateOne {
 	buo.mutation.ClearMustreturn()
@@ -237,11 +405,6 @@ func (buo *BookreturnUpdateOne) ClearMustreturn() *BookreturnUpdateOne {
 
 // Save executes the query and returns the updated entity.
 func (buo *BookreturnUpdateOne) Save(ctx context.Context) (*Bookreturn, error) {
-	if v, ok := buo.mutation.BookName(); ok {
-		if err := bookreturn.BookNameValidator(v); err != nil {
-			return nil, &ValidationError{Name: "book_name", err: fmt.Errorf("ent: validator failed for field \"book_name\": %w", err)}
-		}
-	}
 
 	var (
 		err  error
@@ -308,12 +471,82 @@ func (buo *BookreturnUpdateOne) sqlSave(ctx context.Context) (b *Bookreturn, err
 		return nil, &ValidationError{Name: "ID", err: fmt.Errorf("missing Bookreturn.ID for update")}
 	}
 	_spec.Node.ID.Value = id
-	if value, ok := buo.mutation.BookName(); ok {
+	if value, ok := buo.mutation.ReturnDeadline(); ok {
 		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeString,
+			Type:   field.TypeTime,
 			Value:  value,
-			Column: bookreturn.FieldBookName,
+			Column: bookreturn.FieldReturnDeadline,
 		})
+	}
+	if buo.mutation.UserCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   bookreturn.UserTable,
+			Columns: []string{bookreturn.UserColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: &sqlgraph.FieldSpec{
+					Type:   field.TypeInt,
+					Column: user.FieldID,
+				},
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := buo.mutation.UserIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   bookreturn.UserTable,
+			Columns: []string{bookreturn.UserColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: &sqlgraph.FieldSpec{
+					Type:   field.TypeInt,
+					Column: user.FieldID,
+				},
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if buo.mutation.LocationCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   bookreturn.LocationTable,
+			Columns: []string{bookreturn.LocationColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: &sqlgraph.FieldSpec{
+					Type:   field.TypeInt,
+					Column: location.FieldID,
+				},
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := buo.mutation.LocationIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   bookreturn.LocationTable,
+			Columns: []string{bookreturn.LocationColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: &sqlgraph.FieldSpec{
+					Type:   field.TypeInt,
+					Column: location.FieldID,
+				},
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	if buo.mutation.MustreturnCleared() {
 		edge := &sqlgraph.EdgeSpec{

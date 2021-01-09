@@ -5,10 +5,13 @@ package ent
 import (
 	"fmt"
 	"strings"
+	"time"
 
 	"github.com/facebookincubator/ent/dialect/sql"
 	"github.com/team11/app/ent/bookborrow"
 	"github.com/team11/app/ent/bookreturn"
+	"github.com/team11/app/ent/location"
+	"github.com/team11/app/ent/user"
 )
 
 // Bookreturn is the model entity for the Bookreturn schema.
@@ -16,28 +19,61 @@ type Bookreturn struct {
 	config `json:"-"`
 	// ID of the ent.
 	ID int `json:"id,omitempty"`
-	// BookName holds the value of the "book_name" field.
-	BookName string `json:"book_name,omitempty"`
+	// ReturnDeadline holds the value of the "return_deadline" field.
+	ReturnDeadline time.Time `json:"return_deadline,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the BookreturnQuery when eager-loading is set.
 	Edges       BookreturnEdges `json:"edges"`
 	CLIENT_ID   *int
 	location_id *int
+	USER_ID     *int
 }
 
 // BookreturnEdges holds the relations/edges for other nodes in the graph.
 type BookreturnEdges struct {
+	// User holds the value of the user edge.
+	User *User
+	// Location holds the value of the location edge.
+	Location *Location
 	// Mustreturn holds the value of the mustreturn edge.
 	Mustreturn *Bookborrow
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [1]bool
+	loadedTypes [3]bool
+}
+
+// UserOrErr returns the User value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e BookreturnEdges) UserOrErr() (*User, error) {
+	if e.loadedTypes[0] {
+		if e.User == nil {
+			// The edge user was loaded in eager-loading,
+			// but was not found.
+			return nil, &NotFoundError{label: user.Label}
+		}
+		return e.User, nil
+	}
+	return nil, &NotLoadedError{edge: "user"}
+}
+
+// LocationOrErr returns the Location value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e BookreturnEdges) LocationOrErr() (*Location, error) {
+	if e.loadedTypes[1] {
+		if e.Location == nil {
+			// The edge location was loaded in eager-loading,
+			// but was not found.
+			return nil, &NotFoundError{label: location.Label}
+		}
+		return e.Location, nil
+	}
+	return nil, &NotLoadedError{edge: "location"}
 }
 
 // MustreturnOrErr returns the Mustreturn value or an error if the edge
 // was not loaded in eager-loading, or loaded but was not found.
 func (e BookreturnEdges) MustreturnOrErr() (*Bookborrow, error) {
-	if e.loadedTypes[0] {
+	if e.loadedTypes[2] {
 		if e.Mustreturn == nil {
 			// The edge mustreturn was loaded in eager-loading,
 			// but was not found.
@@ -51,8 +87,8 @@ func (e BookreturnEdges) MustreturnOrErr() (*Bookborrow, error) {
 // scanValues returns the types for scanning values from sql.Rows.
 func (*Bookreturn) scanValues() []interface{} {
 	return []interface{}{
-		&sql.NullInt64{},  // id
-		&sql.NullString{}, // book_name
+		&sql.NullInt64{}, // id
+		&sql.NullTime{},  // return_deadline
 	}
 }
 
@@ -61,6 +97,7 @@ func (*Bookreturn) fkValues() []interface{} {
 	return []interface{}{
 		&sql.NullInt64{}, // CLIENT_ID
 		&sql.NullInt64{}, // location_id
+		&sql.NullInt64{}, // USER_ID
 	}
 }
 
@@ -76,10 +113,10 @@ func (b *Bookreturn) assignValues(values ...interface{}) error {
 	}
 	b.ID = int(value.Int64)
 	values = values[1:]
-	if value, ok := values[0].(*sql.NullString); !ok {
-		return fmt.Errorf("unexpected type %T for field book_name", values[0])
+	if value, ok := values[0].(*sql.NullTime); !ok {
+		return fmt.Errorf("unexpected type %T for field return_deadline", values[0])
 	} else if value.Valid {
-		b.BookName = value.String
+		b.ReturnDeadline = value.Time
 	}
 	values = values[1:]
 	if len(values) == len(bookreturn.ForeignKeys) {
@@ -95,8 +132,24 @@ func (b *Bookreturn) assignValues(values ...interface{}) error {
 			b.location_id = new(int)
 			*b.location_id = int(value.Int64)
 		}
+		if value, ok := values[2].(*sql.NullInt64); !ok {
+			return fmt.Errorf("unexpected type %T for edge-field USER_ID", value)
+		} else if value.Valid {
+			b.USER_ID = new(int)
+			*b.USER_ID = int(value.Int64)
+		}
 	}
 	return nil
+}
+
+// QueryUser queries the user edge of the Bookreturn.
+func (b *Bookreturn) QueryUser() *UserQuery {
+	return (&BookreturnClient{config: b.config}).QueryUser(b)
+}
+
+// QueryLocation queries the location edge of the Bookreturn.
+func (b *Bookreturn) QueryLocation() *LocationQuery {
+	return (&BookreturnClient{config: b.config}).QueryLocation(b)
 }
 
 // QueryMustreturn queries the mustreturn edge of the Bookreturn.
@@ -127,8 +180,8 @@ func (b *Bookreturn) String() string {
 	var builder strings.Builder
 	builder.WriteString("Bookreturn(")
 	builder.WriteString(fmt.Sprintf("id=%v", b.ID))
-	builder.WriteString(", book_name=")
-	builder.WriteString(b.BookName)
+	builder.WriteString(", return_deadline=")
+	builder.WriteString(b.ReturnDeadline.Format(time.ANSIC))
 	builder.WriteByte(')')
 	return builder.String()
 }

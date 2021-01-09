@@ -3,6 +3,8 @@
 package bookreturn
 
 import (
+	"time"
+
 	"github.com/facebookincubator/ent/dialect/sql"
 	"github.com/facebookincubator/ent/dialect/sql/sqlgraph"
 	"github.com/team11/app/ent/predicate"
@@ -91,29 +93,29 @@ func IDLTE(id int) predicate.Bookreturn {
 	})
 }
 
-// BookName applies equality check predicate on the "book_name" field. It's identical to BookNameEQ.
-func BookName(v string) predicate.Bookreturn {
+// ReturnDeadline applies equality check predicate on the "return_deadline" field. It's identical to ReturnDeadlineEQ.
+func ReturnDeadline(v time.Time) predicate.Bookreturn {
 	return predicate.Bookreturn(func(s *sql.Selector) {
-		s.Where(sql.EQ(s.C(FieldBookName), v))
+		s.Where(sql.EQ(s.C(FieldReturnDeadline), v))
 	})
 }
 
-// BookNameEQ applies the EQ predicate on the "book_name" field.
-func BookNameEQ(v string) predicate.Bookreturn {
+// ReturnDeadlineEQ applies the EQ predicate on the "return_deadline" field.
+func ReturnDeadlineEQ(v time.Time) predicate.Bookreturn {
 	return predicate.Bookreturn(func(s *sql.Selector) {
-		s.Where(sql.EQ(s.C(FieldBookName), v))
+		s.Where(sql.EQ(s.C(FieldReturnDeadline), v))
 	})
 }
 
-// BookNameNEQ applies the NEQ predicate on the "book_name" field.
-func BookNameNEQ(v string) predicate.Bookreturn {
+// ReturnDeadlineNEQ applies the NEQ predicate on the "return_deadline" field.
+func ReturnDeadlineNEQ(v time.Time) predicate.Bookreturn {
 	return predicate.Bookreturn(func(s *sql.Selector) {
-		s.Where(sql.NEQ(s.C(FieldBookName), v))
+		s.Where(sql.NEQ(s.C(FieldReturnDeadline), v))
 	})
 }
 
-// BookNameIn applies the In predicate on the "book_name" field.
-func BookNameIn(vs ...string) predicate.Bookreturn {
+// ReturnDeadlineIn applies the In predicate on the "return_deadline" field.
+func ReturnDeadlineIn(vs ...time.Time) predicate.Bookreturn {
 	v := make([]interface{}, len(vs))
 	for i := range v {
 		v[i] = vs[i]
@@ -125,12 +127,12 @@ func BookNameIn(vs ...string) predicate.Bookreturn {
 			s.Where(sql.False())
 			return
 		}
-		s.Where(sql.In(s.C(FieldBookName), v...))
+		s.Where(sql.In(s.C(FieldReturnDeadline), v...))
 	})
 }
 
-// BookNameNotIn applies the NotIn predicate on the "book_name" field.
-func BookNameNotIn(vs ...string) predicate.Bookreturn {
+// ReturnDeadlineNotIn applies the NotIn predicate on the "return_deadline" field.
+func ReturnDeadlineNotIn(vs ...time.Time) predicate.Bookreturn {
 	v := make([]interface{}, len(vs))
 	for i := range v {
 		v[i] = vs[i]
@@ -142,70 +144,91 @@ func BookNameNotIn(vs ...string) predicate.Bookreturn {
 			s.Where(sql.False())
 			return
 		}
-		s.Where(sql.NotIn(s.C(FieldBookName), v...))
+		s.Where(sql.NotIn(s.C(FieldReturnDeadline), v...))
 	})
 }
 
-// BookNameGT applies the GT predicate on the "book_name" field.
-func BookNameGT(v string) predicate.Bookreturn {
+// ReturnDeadlineGT applies the GT predicate on the "return_deadline" field.
+func ReturnDeadlineGT(v time.Time) predicate.Bookreturn {
 	return predicate.Bookreturn(func(s *sql.Selector) {
-		s.Where(sql.GT(s.C(FieldBookName), v))
+		s.Where(sql.GT(s.C(FieldReturnDeadline), v))
 	})
 }
 
-// BookNameGTE applies the GTE predicate on the "book_name" field.
-func BookNameGTE(v string) predicate.Bookreturn {
+// ReturnDeadlineGTE applies the GTE predicate on the "return_deadline" field.
+func ReturnDeadlineGTE(v time.Time) predicate.Bookreturn {
 	return predicate.Bookreturn(func(s *sql.Selector) {
-		s.Where(sql.GTE(s.C(FieldBookName), v))
+		s.Where(sql.GTE(s.C(FieldReturnDeadline), v))
 	})
 }
 
-// BookNameLT applies the LT predicate on the "book_name" field.
-func BookNameLT(v string) predicate.Bookreturn {
+// ReturnDeadlineLT applies the LT predicate on the "return_deadline" field.
+func ReturnDeadlineLT(v time.Time) predicate.Bookreturn {
 	return predicate.Bookreturn(func(s *sql.Selector) {
-		s.Where(sql.LT(s.C(FieldBookName), v))
+		s.Where(sql.LT(s.C(FieldReturnDeadline), v))
 	})
 }
 
-// BookNameLTE applies the LTE predicate on the "book_name" field.
-func BookNameLTE(v string) predicate.Bookreturn {
+// ReturnDeadlineLTE applies the LTE predicate on the "return_deadline" field.
+func ReturnDeadlineLTE(v time.Time) predicate.Bookreturn {
 	return predicate.Bookreturn(func(s *sql.Selector) {
-		s.Where(sql.LTE(s.C(FieldBookName), v))
+		s.Where(sql.LTE(s.C(FieldReturnDeadline), v))
 	})
 }
 
-// BookNameContains applies the Contains predicate on the "book_name" field.
-func BookNameContains(v string) predicate.Bookreturn {
+// HasUser applies the HasEdge predicate on the "user" edge.
+func HasUser() predicate.Bookreturn {
 	return predicate.Bookreturn(func(s *sql.Selector) {
-		s.Where(sql.Contains(s.C(FieldBookName), v))
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.To(UserTable, FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, UserTable, UserColumn),
+		)
+		sqlgraph.HasNeighbors(s, step)
 	})
 }
 
-// BookNameHasPrefix applies the HasPrefix predicate on the "book_name" field.
-func BookNameHasPrefix(v string) predicate.Bookreturn {
+// HasUserWith applies the HasEdge predicate on the "user" edge with a given conditions (other predicates).
+func HasUserWith(preds ...predicate.User) predicate.Bookreturn {
 	return predicate.Bookreturn(func(s *sql.Selector) {
-		s.Where(sql.HasPrefix(s.C(FieldBookName), v))
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.To(UserInverseTable, FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, UserTable, UserColumn),
+		)
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
 	})
 }
 
-// BookNameHasSuffix applies the HasSuffix predicate on the "book_name" field.
-func BookNameHasSuffix(v string) predicate.Bookreturn {
+// HasLocation applies the HasEdge predicate on the "location" edge.
+func HasLocation() predicate.Bookreturn {
 	return predicate.Bookreturn(func(s *sql.Selector) {
-		s.Where(sql.HasSuffix(s.C(FieldBookName), v))
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.To(LocationTable, FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, LocationTable, LocationColumn),
+		)
+		sqlgraph.HasNeighbors(s, step)
 	})
 }
 
-// BookNameEqualFold applies the EqualFold predicate on the "book_name" field.
-func BookNameEqualFold(v string) predicate.Bookreturn {
+// HasLocationWith applies the HasEdge predicate on the "location" edge with a given conditions (other predicates).
+func HasLocationWith(preds ...predicate.Location) predicate.Bookreturn {
 	return predicate.Bookreturn(func(s *sql.Selector) {
-		s.Where(sql.EqualFold(s.C(FieldBookName), v))
-	})
-}
-
-// BookNameContainsFold applies the ContainsFold predicate on the "book_name" field.
-func BookNameContainsFold(v string) predicate.Bookreturn {
-	return predicate.Bookreturn(func(s *sql.Selector) {
-		s.Where(sql.ContainsFold(s.C(FieldBookName), v))
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.To(LocationInverseTable, FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, LocationTable, LocationColumn),
+		)
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
 	})
 }
 

@@ -6,11 +6,14 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"time"
 
 	"github.com/facebookincubator/ent/dialect/sql/sqlgraph"
 	"github.com/facebookincubator/ent/schema/field"
 	"github.com/team11/app/ent/bookborrow"
 	"github.com/team11/app/ent/bookreturn"
+	"github.com/team11/app/ent/location"
+	"github.com/team11/app/ent/user"
 )
 
 // BookreturnCreate is the builder for creating a Bookreturn entity.
@@ -20,10 +23,48 @@ type BookreturnCreate struct {
 	hooks    []Hook
 }
 
-// SetBookName sets the book_name field.
-func (bc *BookreturnCreate) SetBookName(s string) *BookreturnCreate {
-	bc.mutation.SetBookName(s)
+// SetReturnDeadline sets the return_deadline field.
+func (bc *BookreturnCreate) SetReturnDeadline(t time.Time) *BookreturnCreate {
+	bc.mutation.SetReturnDeadline(t)
 	return bc
+}
+
+// SetUserID sets the user edge to User by id.
+func (bc *BookreturnCreate) SetUserID(id int) *BookreturnCreate {
+	bc.mutation.SetUserID(id)
+	return bc
+}
+
+// SetNillableUserID sets the user edge to User by id if the given value is not nil.
+func (bc *BookreturnCreate) SetNillableUserID(id *int) *BookreturnCreate {
+	if id != nil {
+		bc = bc.SetUserID(*id)
+	}
+	return bc
+}
+
+// SetUser sets the user edge to User.
+func (bc *BookreturnCreate) SetUser(u *User) *BookreturnCreate {
+	return bc.SetUserID(u.ID)
+}
+
+// SetLocationID sets the location edge to Location by id.
+func (bc *BookreturnCreate) SetLocationID(id int) *BookreturnCreate {
+	bc.mutation.SetLocationID(id)
+	return bc
+}
+
+// SetNillableLocationID sets the location edge to Location by id if the given value is not nil.
+func (bc *BookreturnCreate) SetNillableLocationID(id *int) *BookreturnCreate {
+	if id != nil {
+		bc = bc.SetLocationID(*id)
+	}
+	return bc
+}
+
+// SetLocation sets the location edge to Location.
+func (bc *BookreturnCreate) SetLocation(l *Location) *BookreturnCreate {
+	return bc.SetLocationID(l.ID)
 }
 
 // SetMustreturnID sets the mustreturn edge to Bookborrow by id.
@@ -52,13 +93,8 @@ func (bc *BookreturnCreate) Mutation() *BookreturnMutation {
 
 // Save creates the Bookreturn in the database.
 func (bc *BookreturnCreate) Save(ctx context.Context) (*Bookreturn, error) {
-	if _, ok := bc.mutation.BookName(); !ok {
-		return nil, &ValidationError{Name: "book_name", err: errors.New("ent: missing required field \"book_name\"")}
-	}
-	if v, ok := bc.mutation.BookName(); ok {
-		if err := bookreturn.BookNameValidator(v); err != nil {
-			return nil, &ValidationError{Name: "book_name", err: fmt.Errorf("ent: validator failed for field \"book_name\": %w", err)}
-		}
+	if _, ok := bc.mutation.ReturnDeadline(); !ok {
+		return nil, &ValidationError{Name: "return_deadline", err: errors.New("ent: missing required field \"return_deadline\"")}
 	}
 	var (
 		err  error
@@ -120,13 +156,51 @@ func (bc *BookreturnCreate) createSpec() (*Bookreturn, *sqlgraph.CreateSpec) {
 			},
 		}
 	)
-	if value, ok := bc.mutation.BookName(); ok {
+	if value, ok := bc.mutation.ReturnDeadline(); ok {
 		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
-			Type:   field.TypeString,
+			Type:   field.TypeTime,
 			Value:  value,
-			Column: bookreturn.FieldBookName,
+			Column: bookreturn.FieldReturnDeadline,
 		})
-		b.BookName = value
+		b.ReturnDeadline = value
+	}
+	if nodes := bc.mutation.UserIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   bookreturn.UserTable,
+			Columns: []string{bookreturn.UserColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: &sqlgraph.FieldSpec{
+					Type:   field.TypeInt,
+					Column: user.FieldID,
+				},
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := bc.mutation.LocationIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   bookreturn.LocationTable,
+			Columns: []string{bookreturn.LocationColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: &sqlgraph.FieldSpec{
+					Type:   field.TypeInt,
+					Column: location.FieldID,
+				},
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
 	}
 	if nodes := bc.mutation.MustreturnIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{

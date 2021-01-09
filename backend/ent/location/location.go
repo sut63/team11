@@ -10,18 +10,18 @@ const (
 	// FieldLocationName holds the string denoting the location_name field in the database.
 	FieldLocationName = "location_name"
 
-	// EdgeLocations holds the string denoting the locations edge name in mutations.
-	EdgeLocations = "locations"
+	// EdgeReturnfrom holds the string denoting the returnfrom edge name in mutations.
+	EdgeReturnfrom = "returnfrom"
 
 	// Table holds the table name of the location in the database.
 	Table = "locations"
-	// LocationsTable is the table the holds the locations relation/edge.
-	LocationsTable = "bookreturns"
-	// LocationsInverseTable is the table name for the Bookreturn entity.
+	// ReturnfromTable is the table the holds the returnfrom relation/edge.
+	ReturnfromTable = "bookreturns"
+	// ReturnfromInverseTable is the table name for the Bookreturn entity.
 	// It exists in this package in order to avoid circular dependency with the "bookreturn" package.
-	LocationsInverseTable = "bookreturns"
-	// LocationsColumn is the table column denoting the locations relation/edge.
-	LocationsColumn = "location_id"
+	ReturnfromInverseTable = "bookreturns"
+	// ReturnfromColumn is the table column denoting the returnfrom relation/edge.
+	ReturnfromColumn = "location_id"
 )
 
 // Columns holds all SQL columns for location fields.

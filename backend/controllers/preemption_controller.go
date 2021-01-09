@@ -6,11 +6,11 @@ import (
 	"time"
 
 	"github.com/gin-gonic/gin"
-	"github.com/nonsansap/app/ent"
-	"github.com/nonsansap/app/ent/preemption"
-	"github.com/nonsansap/app/ent/purpose"
-	"github.com/nonsansap/app/ent/roominfo"
-	"github.com/nonsansap/app/ent/user"
+	"github.com/team11/app/ent"
+	"github.com/team11/app/ent/preemption"
+	"github.com/team11/app/ent/purpose"
+	"github.com/team11/app/ent/roominfo"
+	"github.com/team11/app/ent/user"
 )
 
 // PreemptionController defines the struct for the preemption controller
