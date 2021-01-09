@@ -12,6 +12,7 @@ import (
 	"github.com/team11/app/ent/book"
 	"github.com/team11/app/ent/bookborrow"
 	"github.com/team11/app/ent/booking"
+	"github.com/team11/app/ent/bookreturn"
 	"github.com/team11/app/ent/preemption"
 	"github.com/team11/app/ent/research"
 	"github.com/team11/app/ent/role"
@@ -135,6 +136,21 @@ func (uc *UserCreate) AddRecord(r ...*Research) *UserCreate {
 		ids[i] = r[i].ID
 	}
 	return uc.AddRecordIDs(ids...)
+}
+
+// AddReturnIDs adds the return edge to Bookreturn by ids.
+func (uc *UserCreate) AddReturnIDs(ids ...int) *UserCreate {
+	uc.mutation.AddReturnIDs(ids...)
+	return uc
+}
+
+// AddReturn adds the return edges to Bookreturn.
+func (uc *UserCreate) AddReturn(b ...*Bookreturn) *UserCreate {
+	ids := make([]int, len(b))
+	for i := range b {
+		ids[i] = b[i].ID
+	}
+	return uc.AddReturnIDs(ids...)
 }
 
 // Mutation returns the UserMutation object of the builder.
@@ -358,6 +374,25 @@ func (uc *UserCreate) createSpec() (*User, *sqlgraph.CreateSpec) {
 				IDSpec: &sqlgraph.FieldSpec{
 					Type:   field.TypeInt,
 					Column: research.FieldID,
+				},
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := uc.mutation.ReturnIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   user.ReturnTable,
+			Columns: []string{user.ReturnColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: &sqlgraph.FieldSpec{
+					Type:   field.TypeInt,
+					Column: bookreturn.FieldID,
 				},
 			},
 		}

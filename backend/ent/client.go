@@ -863,6 +863,38 @@ func (c *BookreturnClient) GetX(ctx context.Context, id int) *Bookreturn {
 	return b
 }
 
+// QueryUser queries the user edge of a Bookreturn.
+func (c *BookreturnClient) QueryUser(b *Bookreturn) *UserQuery {
+	query := &UserQuery{config: c.config}
+	query.path = func(ctx context.Context) (fromV *sql.Selector, _ error) {
+		id := b.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(bookreturn.Table, bookreturn.FieldID, id),
+			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, bookreturn.UserTable, bookreturn.UserColumn),
+		)
+		fromV = sqlgraph.Neighbors(b.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryLocation queries the location edge of a Bookreturn.
+func (c *BookreturnClient) QueryLocation(b *Bookreturn) *LocationQuery {
+	query := &LocationQuery{config: c.config}
+	query.path = func(ctx context.Context) (fromV *sql.Selector, _ error) {
+		id := b.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(bookreturn.Table, bookreturn.FieldID, id),
+			sqlgraph.To(location.Table, location.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, bookreturn.LocationTable, bookreturn.LocationColumn),
+		)
+		fromV = sqlgraph.Neighbors(b.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // QueryMustreturn queries the mustreturn edge of a Bookreturn.
 func (c *BookreturnClient) QueryMustreturn(b *Bookreturn) *BookborrowQuery {
 	query := &BookborrowQuery{config: c.config}
@@ -1176,15 +1208,15 @@ func (c *LocationClient) GetX(ctx context.Context, id int) *Location {
 	return l
 }
 
-// QueryLocations queries the locations edge of a Location.
-func (c *LocationClient) QueryLocations(l *Location) *BookreturnQuery {
+// QueryReturnfrom queries the returnfrom edge of a Location.
+func (c *LocationClient) QueryReturnfrom(l *Location) *BookreturnQuery {
 	query := &BookreturnQuery{config: c.config}
 	query.path = func(ctx context.Context) (fromV *sql.Selector, _ error) {
 		id := l.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(location.Table, location.FieldID, id),
 			sqlgraph.To(bookreturn.Table, bookreturn.FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, location.LocationsTable, location.LocationsColumn),
+			sqlgraph.Edge(sqlgraph.O2M, false, location.ReturnfromTable, location.ReturnfromColumn),
 		)
 		fromV = sqlgraph.Neighbors(l.driver.Dialect(), step)
 		return fromV, nil
@@ -2252,6 +2284,22 @@ func (c *UserClient) QueryRecord(u *User) *ResearchQuery {
 			sqlgraph.From(user.Table, user.FieldID, id),
 			sqlgraph.To(research.Table, research.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, user.RecordTable, user.RecordColumn),
+		)
+		fromV = sqlgraph.Neighbors(u.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryReturn queries the return edge of a User.
+func (c *UserClient) QueryReturn(u *User) *BookreturnQuery {
+	query := &BookreturnQuery{config: c.config}
+	query.path = func(ctx context.Context) (fromV *sql.Selector, _ error) {
+		id := u.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(user.Table, user.FieldID, id),
+			sqlgraph.To(bookreturn.Table, bookreturn.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, user.ReturnTable, user.ReturnColumn),
 		)
 		fromV = sqlgraph.Neighbors(u.driver.Dialect(), step)
 		return fromV, nil

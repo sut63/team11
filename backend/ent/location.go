@@ -24,20 +24,20 @@ type Location struct {
 
 // LocationEdges holds the relations/edges for other nodes in the graph.
 type LocationEdges struct {
-	// Locations holds the value of the locations edge.
-	Locations []*Bookreturn
+	// Returnfrom holds the value of the returnfrom edge.
+	Returnfrom []*Bookreturn
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
 	loadedTypes [1]bool
 }
 
-// LocationsOrErr returns the Locations value or an error if the edge
+// ReturnfromOrErr returns the Returnfrom value or an error if the edge
 // was not loaded in eager-loading.
-func (e LocationEdges) LocationsOrErr() ([]*Bookreturn, error) {
+func (e LocationEdges) ReturnfromOrErr() ([]*Bookreturn, error) {
 	if e.loadedTypes[0] {
-		return e.Locations, nil
+		return e.Returnfrom, nil
 	}
-	return nil, &NotLoadedError{edge: "locations"}
+	return nil, &NotLoadedError{edge: "returnfrom"}
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -68,9 +68,9 @@ func (l *Location) assignValues(values ...interface{}) error {
 	return nil
 }
 
-// QueryLocations queries the locations edge of the Location.
-func (l *Location) QueryLocations() *BookreturnQuery {
-	return (&LocationClient{config: l.config}).QueryLocations(l)
+// QueryReturnfrom queries the returnfrom edge of the Location.
+func (l *Location) QueryReturnfrom() *BookreturnQuery {
+	return (&LocationClient{config: l.config}).QueryReturnfrom(l)
 }
 
 // Update returns a builder for updating this Location.

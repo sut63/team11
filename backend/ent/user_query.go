@@ -15,6 +15,7 @@ import (
 	"github.com/team11/app/ent/book"
 	"github.com/team11/app/ent/bookborrow"
 	"github.com/team11/app/ent/booking"
+	"github.com/team11/app/ent/bookreturn"
 	"github.com/team11/app/ent/predicate"
 	"github.com/team11/app/ent/preemption"
 	"github.com/team11/app/ent/research"
@@ -37,6 +38,7 @@ type UserQuery struct {
 	withBorrow     *BookborrowQuery
 	withPreemption *PreemptionQuery
 	withRecord     *ResearchQuery
+	withReturn     *BookreturnQuery
 	withFKs        bool
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
@@ -168,6 +170,24 @@ func (uq *UserQuery) QueryRecord() *ResearchQuery {
 			sqlgraph.From(user.Table, user.FieldID, uq.sqlQuery()),
 			sqlgraph.To(research.Table, research.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, user.RecordTable, user.RecordColumn),
+		)
+		fromU = sqlgraph.SetNeighbors(uq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryReturn chains the current query on the return edge.
+func (uq *UserQuery) QueryReturn() *BookreturnQuery {
+	query := &BookreturnQuery{config: uq.config}
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := uq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(user.Table, user.FieldID, uq.sqlQuery()),
+			sqlgraph.To(bookreturn.Table, bookreturn.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, user.ReturnTable, user.ReturnColumn),
 		)
 		fromU = sqlgraph.SetNeighbors(uq.driver.Dialect(), step)
 		return fromU, nil
@@ -420,6 +440,17 @@ func (uq *UserQuery) WithRecord(opts ...func(*ResearchQuery)) *UserQuery {
 	return uq
 }
 
+//  WithReturn tells the query-builder to eager-loads the nodes that are connected to
+// the "return" edge. The optional arguments used to configure the query builder of the edge.
+func (uq *UserQuery) WithReturn(opts ...func(*BookreturnQuery)) *UserQuery {
+	query := &BookreturnQuery{config: uq.config}
+	for _, opt := range opts {
+		opt(query)
+	}
+	uq.withReturn = query
+	return uq
+}
+
 // GroupBy used to group vertices by one or more fields/columns.
 // It is often used with aggregate functions, like: count, max, mean, min, sum.
 //
@@ -487,13 +518,14 @@ func (uq *UserQuery) sqlAll(ctx context.Context) ([]*User, error) {
 		nodes       = []*User{}
 		withFKs     = uq.withFKs
 		_spec       = uq.querySpec()
-		loadedTypes = [6]bool{
+		loadedTypes = [7]bool{
 			uq.withPosition != nil,
 			uq.withBooking != nil,
 			uq.withAddby != nil,
 			uq.withBorrow != nil,
 			uq.withPreemption != nil,
 			uq.withRecord != nil,
+			uq.withReturn != nil,
 		}
 	)
 	if uq.withPosition != nil {
@@ -688,6 +720,34 @@ func (uq *UserQuery) sqlAll(ctx context.Context) ([]*User, error) {
 				return nil, fmt.Errorf(`unexpected foreign-key "USER_ID" returned %v for node %v`, *fk, n.ID)
 			}
 			node.Edges.Record = append(node.Edges.Record, n)
+		}
+	}
+
+	if query := uq.withReturn; query != nil {
+		fks := make([]driver.Value, 0, len(nodes))
+		nodeids := make(map[int]*User)
+		for i := range nodes {
+			fks = append(fks, nodes[i].ID)
+			nodeids[nodes[i].ID] = nodes[i]
+		}
+		query.withFKs = true
+		query.Where(predicate.Bookreturn(func(s *sql.Selector) {
+			s.Where(sql.InValues(user.ReturnColumn, fks...))
+		}))
+		neighbors, err := query.All(ctx)
+		if err != nil {
+			return nil, err
+		}
+		for _, n := range neighbors {
+			fk := n.USER_ID
+			if fk == nil {
+				return nil, fmt.Errorf(`foreign-key "USER_ID" is nil for node %v`, n.ID)
+			}
+			node, ok := nodeids[*fk]
+			if !ok {
+				return nil, fmt.Errorf(`unexpected foreign-key "USER_ID" returned %v for node %v`, *fk, n.ID)
+			}
+			node.Edges.Return = append(node.Edges.Return, n)
 		}
 	}
 

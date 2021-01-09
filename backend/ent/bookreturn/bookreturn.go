@@ -7,14 +7,32 @@ const (
 	Label = "bookreturn"
 	// FieldID holds the string denoting the id field in the database.
 	FieldID = "id"
-	// FieldBookName holds the string denoting the book_name field in the database.
-	FieldBookName = "book_name"
+	// FieldReturnDeadline holds the string denoting the return_deadline field in the database.
+	FieldReturnDeadline = "return_deadline"
 
+	// EdgeUser holds the string denoting the user edge name in mutations.
+	EdgeUser = "user"
+	// EdgeLocation holds the string denoting the location edge name in mutations.
+	EdgeLocation = "location"
 	// EdgeMustreturn holds the string denoting the mustreturn edge name in mutations.
 	EdgeMustreturn = "mustreturn"
 
 	// Table holds the table name of the bookreturn in the database.
 	Table = "bookreturns"
+	// UserTable is the table the holds the user relation/edge.
+	UserTable = "bookreturns"
+	// UserInverseTable is the table name for the User entity.
+	// It exists in this package in order to avoid circular dependency with the "user" package.
+	UserInverseTable = "users"
+	// UserColumn is the table column denoting the user relation/edge.
+	UserColumn = "USER_ID"
+	// LocationTable is the table the holds the location relation/edge.
+	LocationTable = "bookreturns"
+	// LocationInverseTable is the table name for the Location entity.
+	// It exists in this package in order to avoid circular dependency with the "location" package.
+	LocationInverseTable = "locations"
+	// LocationColumn is the table column denoting the location relation/edge.
+	LocationColumn = "location_id"
 	// MustreturnTable is the table the holds the mustreturn relation/edge.
 	MustreturnTable = "bookreturns"
 	// MustreturnInverseTable is the table name for the Bookborrow entity.
@@ -27,16 +45,12 @@ const (
 // Columns holds all SQL columns for bookreturn fields.
 var Columns = []string{
 	FieldID,
-	FieldBookName,
+	FieldReturnDeadline,
 }
 
 // ForeignKeys holds the SQL foreign-keys that are owned by the Bookreturn type.
 var ForeignKeys = []string{
 	"CLIENT_ID",
 	"location_id",
+	"USER_ID",
 }
-
-var (
-	// BookNameValidator is a validator for the "book_name" field. It is called by the builders before save.
-	BookNameValidator func(string) error
-)

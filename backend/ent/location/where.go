@@ -209,25 +209,25 @@ func LocationNameContainsFold(v string) predicate.Location {
 	})
 }
 
-// HasLocations applies the HasEdge predicate on the "locations" edge.
-func HasLocations() predicate.Location {
+// HasReturnfrom applies the HasEdge predicate on the "returnfrom" edge.
+func HasReturnfrom() predicate.Location {
 	return predicate.Location(func(s *sql.Selector) {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(Table, FieldID),
-			sqlgraph.To(LocationsTable, FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, LocationsTable, LocationsColumn),
+			sqlgraph.To(ReturnfromTable, FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, ReturnfromTable, ReturnfromColumn),
 		)
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
 
-// HasLocationsWith applies the HasEdge predicate on the "locations" edge with a given conditions (other predicates).
-func HasLocationsWith(preds ...predicate.Bookreturn) predicate.Location {
+// HasReturnfromWith applies the HasEdge predicate on the "returnfrom" edge with a given conditions (other predicates).
+func HasReturnfromWith(preds ...predicate.Bookreturn) predicate.Location {
 	return predicate.Location(func(s *sql.Selector) {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(Table, FieldID),
-			sqlgraph.To(LocationsInverseTable, FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, LocationsTable, LocationsColumn),
+			sqlgraph.To(ReturnfromInverseTable, FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, ReturnfromTable, ReturnfromColumn),
 		)
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {

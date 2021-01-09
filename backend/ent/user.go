@@ -42,9 +42,11 @@ type UserEdges struct {
 	Preemption []*Preemption
 	// Record holds the value of the record edge.
 	Record []*Research
+	// Return holds the value of the return edge.
+	Return []*Bookreturn
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [6]bool
+	loadedTypes [7]bool
 }
 
 // PositionOrErr returns the Position value or an error if the edge
@@ -104,6 +106,15 @@ func (e UserEdges) RecordOrErr() ([]*Research, error) {
 		return e.Record, nil
 	}
 	return nil, &NotLoadedError{edge: "record"}
+}
+
+// ReturnOrErr returns the Return value or an error if the edge
+// was not loaded in eager-loading.
+func (e UserEdges) ReturnOrErr() ([]*Bookreturn, error) {
+	if e.loadedTypes[6] {
+		return e.Return, nil
+	}
+	return nil, &NotLoadedError{edge: "return"}
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -190,6 +201,11 @@ func (u *User) QueryPreemption() *PreemptionQuery {
 // QueryRecord queries the record edge of the User.
 func (u *User) QueryRecord() *ResearchQuery {
 	return (&UserClient{config: u.config}).QueryRecord(u)
+}
+
+// QueryReturn queries the return edge of the User.
+func (u *User) QueryReturn() *BookreturnQuery {
+	return (&UserClient{config: u.config}).QueryReturn(u)
 }
 
 // Update returns a builder for updating this User.

@@ -13,7 +13,9 @@ import (
 	"github.com/facebookincubator/ent/schema/field"
 	"github.com/team11/app/ent/bookborrow"
 	"github.com/team11/app/ent/bookreturn"
+	"github.com/team11/app/ent/location"
 	"github.com/team11/app/ent/predicate"
+	"github.com/team11/app/ent/user"
 )
 
 // BookreturnQuery is the builder for querying Bookreturn entities.
@@ -25,6 +27,8 @@ type BookreturnQuery struct {
 	unique     []string
 	predicates []predicate.Bookreturn
 	// eager-loading edges.
+	withUser       *UserQuery
+	withLocation   *LocationQuery
 	withMustreturn *BookborrowQuery
 	withFKs        bool
 	// intermediate query (i.e. traversal path).
@@ -54,6 +58,42 @@ func (bq *BookreturnQuery) Offset(offset int) *BookreturnQuery {
 func (bq *BookreturnQuery) Order(o ...OrderFunc) *BookreturnQuery {
 	bq.order = append(bq.order, o...)
 	return bq
+}
+
+// QueryUser chains the current query on the user edge.
+func (bq *BookreturnQuery) QueryUser() *UserQuery {
+	query := &UserQuery{config: bq.config}
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := bq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(bookreturn.Table, bookreturn.FieldID, bq.sqlQuery()),
+			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, bookreturn.UserTable, bookreturn.UserColumn),
+		)
+		fromU = sqlgraph.SetNeighbors(bq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryLocation chains the current query on the location edge.
+func (bq *BookreturnQuery) QueryLocation() *LocationQuery {
+	query := &LocationQuery{config: bq.config}
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := bq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(bookreturn.Table, bookreturn.FieldID, bq.sqlQuery()),
+			sqlgraph.To(location.Table, location.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, bookreturn.LocationTable, bookreturn.LocationColumn),
+		)
+		fromU = sqlgraph.SetNeighbors(bq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
 }
 
 // QueryMustreturn chains the current query on the mustreturn edge.
@@ -253,6 +293,28 @@ func (bq *BookreturnQuery) Clone() *BookreturnQuery {
 	}
 }
 
+//  WithUser tells the query-builder to eager-loads the nodes that are connected to
+// the "user" edge. The optional arguments used to configure the query builder of the edge.
+func (bq *BookreturnQuery) WithUser(opts ...func(*UserQuery)) *BookreturnQuery {
+	query := &UserQuery{config: bq.config}
+	for _, opt := range opts {
+		opt(query)
+	}
+	bq.withUser = query
+	return bq
+}
+
+//  WithLocation tells the query-builder to eager-loads the nodes that are connected to
+// the "location" edge. The optional arguments used to configure the query builder of the edge.
+func (bq *BookreturnQuery) WithLocation(opts ...func(*LocationQuery)) *BookreturnQuery {
+	query := &LocationQuery{config: bq.config}
+	for _, opt := range opts {
+		opt(query)
+	}
+	bq.withLocation = query
+	return bq
+}
+
 //  WithMustreturn tells the query-builder to eager-loads the nodes that are connected to
 // the "mustreturn" edge. The optional arguments used to configure the query builder of the edge.
 func (bq *BookreturnQuery) WithMustreturn(opts ...func(*BookborrowQuery)) *BookreturnQuery {
@@ -270,12 +332,12 @@ func (bq *BookreturnQuery) WithMustreturn(opts ...func(*BookborrowQuery)) *Bookr
 // Example:
 //
 //	var v []struct {
-//		BookName string `json:"book_name,omitempty"`
+//		ReturnDeadline time.Time `json:"return_deadline,omitempty"`
 //		Count int `json:"count,omitempty"`
 //	}
 //
 //	client.Bookreturn.Query().
-//		GroupBy(bookreturn.FieldBookName).
+//		GroupBy(bookreturn.FieldReturnDeadline).
 //		Aggregate(ent.Count()).
 //		Scan(ctx, &v)
 //
@@ -296,11 +358,11 @@ func (bq *BookreturnQuery) GroupBy(field string, fields ...string) *BookreturnGr
 // Example:
 //
 //	var v []struct {
-//		BookName string `json:"book_name,omitempty"`
+//		ReturnDeadline time.Time `json:"return_deadline,omitempty"`
 //	}
 //
 //	client.Bookreturn.Query().
-//		Select(bookreturn.FieldBookName).
+//		Select(bookreturn.FieldReturnDeadline).
 //		Scan(ctx, &v)
 //
 func (bq *BookreturnQuery) Select(field string, fields ...string) *BookreturnSelect {
@@ -331,11 +393,13 @@ func (bq *BookreturnQuery) sqlAll(ctx context.Context) ([]*Bookreturn, error) {
 		nodes       = []*Bookreturn{}
 		withFKs     = bq.withFKs
 		_spec       = bq.querySpec()
-		loadedTypes = [1]bool{
+		loadedTypes = [3]bool{
+			bq.withUser != nil,
+			bq.withLocation != nil,
 			bq.withMustreturn != nil,
 		}
 	)
-	if bq.withMustreturn != nil {
+	if bq.withUser != nil || bq.withLocation != nil || bq.withMustreturn != nil {
 		withFKs = true
 	}
 	if withFKs {
@@ -363,6 +427,56 @@ func (bq *BookreturnQuery) sqlAll(ctx context.Context) ([]*Bookreturn, error) {
 	}
 	if len(nodes) == 0 {
 		return nodes, nil
+	}
+
+	if query := bq.withUser; query != nil {
+		ids := make([]int, 0, len(nodes))
+		nodeids := make(map[int][]*Bookreturn)
+		for i := range nodes {
+			if fk := nodes[i].USER_ID; fk != nil {
+				ids = append(ids, *fk)
+				nodeids[*fk] = append(nodeids[*fk], nodes[i])
+			}
+		}
+		query.Where(user.IDIn(ids...))
+		neighbors, err := query.All(ctx)
+		if err != nil {
+			return nil, err
+		}
+		for _, n := range neighbors {
+			nodes, ok := nodeids[n.ID]
+			if !ok {
+				return nil, fmt.Errorf(`unexpected foreign-key "USER_ID" returned %v`, n.ID)
+			}
+			for i := range nodes {
+				nodes[i].Edges.User = n
+			}
+		}
+	}
+
+	if query := bq.withLocation; query != nil {
+		ids := make([]int, 0, len(nodes))
+		nodeids := make(map[int][]*Bookreturn)
+		for i := range nodes {
+			if fk := nodes[i].location_id; fk != nil {
+				ids = append(ids, *fk)
+				nodeids[*fk] = append(nodeids[*fk], nodes[i])
+			}
+		}
+		query.Where(location.IDIn(ids...))
+		neighbors, err := query.All(ctx)
+		if err != nil {
+			return nil, err
+		}
+		for _, n := range neighbors {
+			nodes, ok := nodeids[n.ID]
+			if !ok {
+				return nil, fmt.Errorf(`unexpected foreign-key "location_id" returned %v`, n.ID)
+			}
+			for i := range nodes {
+				nodes[i].Edges.Location = n
+			}
+		}
 	}
 
 	if query := bq.withMustreturn; query != nil {

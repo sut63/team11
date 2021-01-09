@@ -5,8 +5,8 @@ import (
 	"strconv"
 
 	"github.com/gin-gonic/gin"
-	"github.com/nonsansap/app/ent"
-	"github.com/nonsansap/app/ent/purpose"
+	"github.com/team11/app/ent"
+	"github.com/team11/app/ent/purpose"
 )
 // PurposeController defines the struct for the purpose controller
 type PurposeController struct {

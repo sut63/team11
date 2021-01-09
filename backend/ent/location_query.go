@@ -26,7 +26,7 @@ type LocationQuery struct {
 	unique     []string
 	predicates []predicate.Location
 	// eager-loading edges.
-	withLocations *BookreturnQuery
+	withReturnfrom *BookreturnQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -56,8 +56,8 @@ func (lq *LocationQuery) Order(o ...OrderFunc) *LocationQuery {
 	return lq
 }
 
-// QueryLocations chains the current query on the locations edge.
-func (lq *LocationQuery) QueryLocations() *BookreturnQuery {
+// QueryReturnfrom chains the current query on the returnfrom edge.
+func (lq *LocationQuery) QueryReturnfrom() *BookreturnQuery {
 	query := &BookreturnQuery{config: lq.config}
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
 		if err := lq.prepareQuery(ctx); err != nil {
@@ -66,7 +66,7 @@ func (lq *LocationQuery) QueryLocations() *BookreturnQuery {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(location.Table, location.FieldID, lq.sqlQuery()),
 			sqlgraph.To(bookreturn.Table, bookreturn.FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, location.LocationsTable, location.LocationsColumn),
+			sqlgraph.Edge(sqlgraph.O2M, false, location.ReturnfromTable, location.ReturnfromColumn),
 		)
 		fromU = sqlgraph.SetNeighbors(lq.driver.Dialect(), step)
 		return fromU, nil
@@ -253,14 +253,14 @@ func (lq *LocationQuery) Clone() *LocationQuery {
 	}
 }
 
-//  WithLocations tells the query-builder to eager-loads the nodes that are connected to
-// the "locations" edge. The optional arguments used to configure the query builder of the edge.
-func (lq *LocationQuery) WithLocations(opts ...func(*BookreturnQuery)) *LocationQuery {
+//  WithReturnfrom tells the query-builder to eager-loads the nodes that are connected to
+// the "returnfrom" edge. The optional arguments used to configure the query builder of the edge.
+func (lq *LocationQuery) WithReturnfrom(opts ...func(*BookreturnQuery)) *LocationQuery {
 	query := &BookreturnQuery{config: lq.config}
 	for _, opt := range opts {
 		opt(query)
 	}
-	lq.withLocations = query
+	lq.withReturnfrom = query
 	return lq
 }
 
@@ -331,7 +331,7 @@ func (lq *LocationQuery) sqlAll(ctx context.Context) ([]*Location, error) {
 		nodes       = []*Location{}
 		_spec       = lq.querySpec()
 		loadedTypes = [1]bool{
-			lq.withLocations != nil,
+			lq.withReturnfrom != nil,
 		}
 	)
 	_spec.ScanValues = func() []interface{} {
@@ -355,7 +355,7 @@ func (lq *LocationQuery) sqlAll(ctx context.Context) ([]*Location, error) {
 		return nodes, nil
 	}
 
-	if query := lq.withLocations; query != nil {
+	if query := lq.withReturnfrom; query != nil {
 		fks := make([]driver.Value, 0, len(nodes))
 		nodeids := make(map[int]*Location)
 		for i := range nodes {
@@ -364,7 +364,7 @@ func (lq *LocationQuery) sqlAll(ctx context.Context) ([]*Location, error) {
 		}
 		query.withFKs = true
 		query.Where(predicate.Bookreturn(func(s *sql.Selector) {
-			s.Where(sql.InValues(location.LocationsColumn, fks...))
+			s.Where(sql.InValues(location.ReturnfromColumn, fks...))
 		}))
 		neighbors, err := query.All(ctx)
 		if err != nil {
@@ -379,7 +379,7 @@ func (lq *LocationQuery) sqlAll(ctx context.Context) ([]*Location, error) {
 			if !ok {
 				return nil, fmt.Errorf(`unexpected foreign-key "location_id" returned %v for node %v`, *fk, n.ID)
 			}
-			node.Edges.Locations = append(node.Edges.Locations, n)
+			node.Edges.Returnfrom = append(node.Edges.Returnfrom, n)
 		}
 	}
 

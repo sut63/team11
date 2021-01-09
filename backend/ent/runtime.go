@@ -9,7 +9,6 @@ import (
 	"github.com/team11/app/ent/book"
 	"github.com/team11/app/ent/bookborrow"
 	"github.com/team11/app/ent/booking"
-	"github.com/team11/app/ent/bookreturn"
 	"github.com/team11/app/ent/category"
 	"github.com/team11/app/ent/cliententity"
 	"github.com/team11/app/ent/location"
@@ -56,12 +55,6 @@ func init() {
 	bookingDescBOOKINGDATE := bookingFields[0].Descriptor()
 	// booking.DefaultBOOKINGDATE holds the default value on creation for the BOOKING_DATE field.
 	booking.DefaultBOOKINGDATE = bookingDescBOOKINGDATE.Default.(func() time.Time)
-	bookreturnFields := schema.Bookreturn{}.Fields()
-	_ = bookreturnFields
-	// bookreturnDescBookName is the schema descriptor for book_name field.
-	bookreturnDescBookName := bookreturnFields[0].Descriptor()
-	// bookreturn.BookNameValidator is a validator for the "book_name" field. It is called by the builders before save.
-	bookreturn.BookNameValidator = bookreturnDescBookName.Validators[0].(func(string) error)
 	categoryFields := schema.Category{}.Fields()
 	_ = categoryFields
 	// categoryDescCategoryName is the schema descriptor for CategoryName field.

@@ -4,8 +4,8 @@ import (
    "context"
    "fmt"
    "strconv"
-   "github.com/NoT-Ton/app/ent"
-   "github.com/NoT-Ton/app/ent/location"
+   "github.com/team11/app/ent"
+   "github.com/team11/app/ent/location"
    "github.com/gin-gonic/gin"
 )
  
