@@ -84,10 +84,10 @@ func (ctl *BookreturnController) CreateBookreturn(c *gin.Context) {
 	}
 
 	now := time.Now()
-	then := time.Date(2021, 1, 8, 15, 37, 0, time.UTC)
-	after := time.Date(2021, 1, 15, 15, 37, 0, time.UTC)
-	diff := after.sub(then)
-	times, err := now.ADD(diff)
+	then := time.Date(2021, 1, 8, 15, 37, 0, 0, time.UTC)
+	after := time.Date(2021, 1, 15, 15, 37, 0, 0, time.UTC)
+	diff := after.Sub(then)
+	times := now.Add(diff)
 
 	if err != nil {
 		c.JSON(400, gin.H{
