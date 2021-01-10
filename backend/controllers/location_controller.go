@@ -36,7 +36,7 @@ func (ctl *LocationController) CreateLocation(c *gin.Context) {
   
 	cu, err := ctl.client.Location.
 		Create().
-		SetLocationName(obj.LocationName).
+		SetLOCATIONNAME(obj.LOCATIONNAME).
 		Save(context.Background())
 	if err != nil {
 		c.JSON(400, gin.H{
