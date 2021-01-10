@@ -24,6 +24,11 @@ type User struct {
 	Role     int
 }
 
+//ServicePoint struct
+type ServicePoint struct {
+	CounterNumber	string
+}
+
 //ClientEntity struct
 type ClientEntity struct {
 	Name  string
@@ -196,17 +201,16 @@ func main() {
 	}
 
 	ServicePoint := []ServicePoint{
-		{"อาคารบรรณสาร", "เคาน์เตอร์ 1"},
-		{"อาคารบรรณสาร", "เคาน์เตอร์ 2"},
+		{"เค้าเตอร์ 1"},
+		{"เค้าเตอร์ 2"}
 	}
 	for _, se := range ServicePoint {
 		client.ServicePoint.
 			Create().
-			SetBUILDINGNAME(se.BuildingName).
 			SetCOUNTERNUMBER(se.CounterNumber).
 			Save(context.Background())
 	}
-	
+
 	Author := []string{"โยชิฮิโระ โทงาชิ", "เออิจิโร โอดะ"}
 	for _, au := range Author {
 		client.Author.
