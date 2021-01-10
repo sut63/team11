@@ -215,7 +215,7 @@ func main() {
 			Save(context.Background())
 	}
 
-	Category := []string{"Action", "In Use", "No Service", "Borrowed"}
+	Category := []string{"Fiction", "Short Story", "Comic", "Research", "General Works", "Philosophy", "History", "Geography", "Technology", "Education" }
 	for _, ca := range Category {
 		client.Category.
 			Create().
