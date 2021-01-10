@@ -33,8 +33,8 @@ type Bookreturn struct {
 // @ID create-bookreturn
 // @Accept   json
 // @Produce  json
-// @Param bookreturn body bookreturn true "bookreturn entity"
-// @Success 200 {object} ent.bookreturn
+// @Param bookreturn body Bookreturn true "bookreturn entity"
+// @Success 200 {object} ent.Bookreturn
 // @Failure 400 {object} gin.H
 // @Failure 500 {object} gin.H
 // @Router /bookreturns [post]

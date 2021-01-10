@@ -22,8 +22,8 @@ type ServicePointController struct {
 // @ID create-servicepoint
 // @Accept   json
 // @Produce  json
-// @Param ent.servicepoint body ServicePoint true "ServicePoint entity"
-// @Success 200 {object} ent.servicepoint
+// @Param ent.servicepoint body ent.ServicePoint true "ServicePoint entity"
+// @Success 200 {object} ent.ServicePoint
 // @Failure 400 {object} gin.H
 // @Failure 500 {object} gin.H
 // @Router /servicepoints [post]
