@@ -33,10 +33,6 @@ func init() {
 	authorDescName := authorFields[0].Descriptor()
 	// author.NameValidator is a validator for the "Name" field. It is called by the builders before save.
 	author.NameValidator = authorDescName.Validators[0].(func(string) error)
-	// authorDescPosition is the schema descriptor for Position field.
-	authorDescPosition := authorFields[1].Descriptor()
-	// author.PositionValidator is a validator for the "Position" field. It is called by the builders before save.
-	author.PositionValidator = authorDescPosition.Validators[0].(func(string) error)
 	bookFields := schema.Book{}.Fields()
 	_ = bookFields
 	// bookDescBookName is the schema descriptor for BookName field.

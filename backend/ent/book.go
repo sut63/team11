@@ -38,7 +38,7 @@ type BookEdges struct {
 	Author *Author
 	// User holds the value of the user edge.
 	User *User
-	// Status holds the value of the Status edge.
+	// Status holds the value of the status edge.
 	Status *Status
 	// Booklist holds the value of the booklist edge.
 	Booklist []*Bookborrow
@@ -94,13 +94,13 @@ func (e BookEdges) UserOrErr() (*User, error) {
 func (e BookEdges) StatusOrErr() (*Status, error) {
 	if e.loadedTypes[3] {
 		if e.Status == nil {
-			// The edge Status was loaded in eager-loading,
+			// The edge status was loaded in eager-loading,
 			// but was not found.
 			return nil, &NotFoundError{label: status.Label}
 		}
 		return e.Status, nil
 	}
-	return nil, &NotLoadedError{edge: "Status"}
+	return nil, &NotLoadedError{edge: "status"}
 }
 
 // BooklistOrErr returns the Booklist value or an error if the edge
@@ -192,7 +192,7 @@ func (b *Book) QueryUser() *UserQuery {
 	return (&BookClient{config: b.config}).QueryUser(b)
 }
 
-// QueryStatus queries the Status edge of the Book.
+// QueryStatus queries the status edge of the Book.
 func (b *Book) QueryStatus() *StatusQuery {
 	return (&BookClient{config: b.config}).QueryStatus(b)
 }

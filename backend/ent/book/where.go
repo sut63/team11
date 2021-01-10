@@ -293,7 +293,7 @@ func HasUserWith(preds ...predicate.User) predicate.Book {
 	})
 }
 
-// HasStatus applies the HasEdge predicate on the "Status" edge.
+// HasStatus applies the HasEdge predicate on the "status" edge.
 func HasStatus() predicate.Book {
 	return predicate.Book(func(s *sql.Selector) {
 		step := sqlgraph.NewStep(
@@ -305,7 +305,7 @@ func HasStatus() predicate.Book {
 	})
 }
 
-// HasStatusWith applies the HasEdge predicate on the "Status" edge with a given conditions (other predicates).
+// HasStatusWith applies the HasEdge predicate on the "status" edge with a given conditions (other predicates).
 func HasStatusWith(preds ...predicate.Status) predicate.Book {
 	return predicate.Book(func(s *sql.Selector) {
 		step := sqlgraph.NewStep(

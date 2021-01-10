@@ -17,8 +17,6 @@ type Author struct {
 	ID int `json:"id,omitempty"`
 	// Name holds the value of the "Name" field.
 	Name string `json:"Name,omitempty"`
-	// Position holds the value of the "Position" field.
-	Position string `json:"Position,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the AuthorQuery when eager-loading is set.
 	Edges AuthorEdges `json:"edges"`
@@ -58,7 +56,6 @@ func (*Author) scanValues() []interface{} {
 	return []interface{}{
 		&sql.NullInt64{},  // id
 		&sql.NullString{}, // Name
-		&sql.NullString{}, // Position
 	}
 }
 
@@ -78,11 +75,6 @@ func (a *Author) assignValues(values ...interface{}) error {
 		return fmt.Errorf("unexpected type %T for field Name", values[0])
 	} else if value.Valid {
 		a.Name = value.String
-	}
-	if value, ok := values[1].(*sql.NullString); !ok {
-		return fmt.Errorf("unexpected type %T for field Position", values[1])
-	} else if value.Valid {
-		a.Position = value.String
 	}
 	return nil
 }
@@ -122,8 +114,6 @@ func (a *Author) String() string {
 	builder.WriteString(fmt.Sprintf("id=%v", a.ID))
 	builder.WriteString(", Name=")
 	builder.WriteString(a.Name)
-	builder.WriteString(", Position=")
-	builder.WriteString(a.Position)
 	builder.WriteByte(')')
 	return builder.String()
 }

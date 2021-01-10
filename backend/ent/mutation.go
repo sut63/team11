@@ -65,7 +65,6 @@ type AuthorMutation struct {
 	typ           string
 	id            *int
 	_Name         *string
-	_Position     *string
 	clearedFields map[string]struct{}
 	owner         map[int]struct{}
 	removedowner  map[int]struct{}
@@ -191,43 +190,6 @@ func (m *AuthorMutation) ResetName() {
 	m._Name = nil
 }
 
-// SetPosition sets the Position field.
-func (m *AuthorMutation) SetPosition(s string) {
-	m._Position = &s
-}
-
-// Position returns the Position value in the mutation.
-func (m *AuthorMutation) Position() (r string, exists bool) {
-	v := m._Position
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// OldPosition returns the old Position value of the Author.
-// If the Author object wasn't provided to the builder, the object is fetched
-// from the database.
-// An error is returned if the mutation operation is not UpdateOne, or database query fails.
-func (m *AuthorMutation) OldPosition(ctx context.Context) (v string, err error) {
-	if !m.op.Is(OpUpdateOne) {
-		return v, fmt.Errorf("OldPosition is allowed only on UpdateOne operations")
-	}
-	if m.id == nil || m.oldValue == nil {
-		return v, fmt.Errorf("OldPosition requires an ID field in the mutation")
-	}
-	oldValue, err := m.oldValue(ctx)
-	if err != nil {
-		return v, fmt.Errorf("querying old value for OldPosition: %w", err)
-	}
-	return oldValue.Position, nil
-}
-
-// ResetPosition reset all changes of the "Position" field.
-func (m *AuthorMutation) ResetPosition() {
-	m._Position = nil
-}
-
 // AddOwnerIDs adds the owner edge to Research by ids.
 func (m *AuthorMutation) AddOwnerIDs(ids ...int) {
 	if m.owner == nil {
@@ -326,12 +288,9 @@ func (m *AuthorMutation) Type() string {
 // this mutation. Note that, in order to get all numeric
 // fields that were in/decremented, call AddedFields().
 func (m *AuthorMutation) Fields() []string {
-	fields := make([]string, 0, 2)
+	fields := make([]string, 0, 1)
 	if m._Name != nil {
 		fields = append(fields, author.FieldName)
-	}
-	if m._Position != nil {
-		fields = append(fields, author.FieldPosition)
 	}
 	return fields
 }
@@ -343,8 +302,6 @@ func (m *AuthorMutation) Field(name string) (ent.Value, bool) {
 	switch name {
 	case author.FieldName:
 		return m.Name()
-	case author.FieldPosition:
-		return m.Position()
 	}
 	return nil, false
 }
@@ -356,8 +313,6 @@ func (m *AuthorMutation) OldField(ctx context.Context, name string) (ent.Value, 
 	switch name {
 	case author.FieldName:
 		return m.OldName(ctx)
-	case author.FieldPosition:
-		return m.OldPosition(ctx)
 	}
 	return nil, fmt.Errorf("unknown Author field %s", name)
 }
@@ -373,13 +328,6 @@ func (m *AuthorMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetName(v)
-		return nil
-	case author.FieldPosition:
-		v, ok := value.(string)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.SetPosition(v)
 		return nil
 	}
 	return fmt.Errorf("unknown Author field %s", name)
@@ -433,9 +381,6 @@ func (m *AuthorMutation) ResetField(name string) error {
 	switch name {
 	case author.FieldName:
 		m.ResetName()
-		return nil
-	case author.FieldPosition:
-		m.ResetPosition()
 		return nil
 	}
 	return fmt.Errorf("unknown Author field %s", name)
@@ -560,8 +505,8 @@ type BookMutation struct {
 	clearedauthor   bool
 	user            *int
 	cleareduser     bool
-	_Status         *int
-	cleared_Status  bool
+	status          *int
+	clearedstatus   bool
 	booklist        map[int]struct{}
 	removedbooklist map[int]struct{}
 	done            bool
@@ -801,43 +746,43 @@ func (m *BookMutation) ResetUser() {
 	m.cleareduser = false
 }
 
-// SetStatusID sets the Status edge to Status by id.
+// SetStatusID sets the status edge to Status by id.
 func (m *BookMutation) SetStatusID(id int) {
-	m._Status = &id
+	m.status = &id
 }
 
-// ClearStatus clears the Status edge to Status.
+// ClearStatus clears the status edge to Status.
 func (m *BookMutation) ClearStatus() {
-	m.cleared_Status = true
+	m.clearedstatus = true
 }
 
-// StatusCleared returns if the edge Status was cleared.
+// StatusCleared returns if the edge status was cleared.
 func (m *BookMutation) StatusCleared() bool {
-	return m.cleared_Status
+	return m.clearedstatus
 }
 
-// StatusID returns the Status id in the mutation.
+// StatusID returns the status id in the mutation.
 func (m *BookMutation) StatusID() (id int, exists bool) {
-	if m._Status != nil {
-		return *m._Status, true
+	if m.status != nil {
+		return *m.status, true
 	}
 	return
 }
 
-// StatusIDs returns the Status ids in the mutation.
+// StatusIDs returns the status ids in the mutation.
 // Note that ids always returns len(ids) <= 1 for unique edges, and you should use
 // StatusID instead. It exists only for internal usage by the builders.
 func (m *BookMutation) StatusIDs() (ids []int) {
-	if id := m._Status; id != nil {
+	if id := m.status; id != nil {
 		ids = append(ids, *id)
 	}
 	return
 }
 
-// ResetStatus reset all changes of the "Status" edge.
+// ResetStatus reset all changes of the "status" edge.
 func (m *BookMutation) ResetStatus() {
-	m._Status = nil
-	m.cleared_Status = false
+	m.status = nil
+	m.clearedstatus = false
 }
 
 // AddBooklistIDs adds the booklist edge to Bookborrow by ids.
@@ -1007,7 +952,7 @@ func (m *BookMutation) AddedEdges() []string {
 	if m.user != nil {
 		edges = append(edges, book.EdgeUser)
 	}
-	if m._Status != nil {
+	if m.status != nil {
 		edges = append(edges, book.EdgeStatus)
 	}
 	if m.booklist != nil {
@@ -1033,7 +978,7 @@ func (m *BookMutation) AddedIDs(name string) []ent.Value {
 			return []ent.Value{*id}
 		}
 	case book.EdgeStatus:
-		if id := m._Status; id != nil {
+		if id := m.status; id != nil {
 			return []ent.Value{*id}
 		}
 	case book.EdgeBooklist:
@@ -1083,7 +1028,7 @@ func (m *BookMutation) ClearedEdges() []string {
 	if m.cleareduser {
 		edges = append(edges, book.EdgeUser)
 	}
-	if m.cleared_Status {
+	if m.clearedstatus {
 		edges = append(edges, book.EdgeStatus)
 	}
 	return edges
@@ -1100,7 +1045,7 @@ func (m *BookMutation) EdgeCleared(name string) bool {
 	case book.EdgeUser:
 		return m.cleareduser
 	case book.EdgeStatus:
-		return m.cleared_Status
+		return m.clearedstatus
 	}
 	return false
 }

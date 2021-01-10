@@ -87,13 +87,13 @@ func (bc *BookCreate) SetUser(u *User) *BookCreate {
 	return bc.SetUserID(u.ID)
 }
 
-// SetStatusID sets the Status edge to Status by id.
+// SetStatusID sets the status edge to Status by id.
 func (bc *BookCreate) SetStatusID(id int) *BookCreate {
 	bc.mutation.SetStatusID(id)
 	return bc
 }
 
-// SetNillableStatusID sets the Status edge to Status by id if the given value is not nil.
+// SetNillableStatusID sets the status edge to Status by id if the given value is not nil.
 func (bc *BookCreate) SetNillableStatusID(id *int) *BookCreate {
 	if id != nil {
 		bc = bc.SetStatusID(*id)
@@ -101,7 +101,7 @@ func (bc *BookCreate) SetNillableStatusID(id *int) *BookCreate {
 	return bc
 }
 
-// SetStatus sets the Status edge to Status.
+// SetStatus sets the status edge to Status.
 func (bc *BookCreate) SetStatus(s *Status) *BookCreate {
 	return bc.SetStatusID(s.ID)
 }

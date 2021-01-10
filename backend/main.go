@@ -10,37 +10,31 @@ import (
 	_ "github.com/mattn/go-sqlite3"
 	swaggerFiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
-	"github.com/tanapon395/playlist-video/controllers"
-	"github.com/tanapon395/playlist-video/ent"
-	"github.com/tanapon395/playlist-video/ent/user"
+	"github.com/team11/app/controllers"
+	"github.com/team11/app/ent"
 )
 
-type Users struct {
-	User []User
-}
-
+//User struct
 type User struct {
-	Name  string
-	Email string
+	Name  		string
+	Email 		string
+	Password 	string
+	Role 		int
 }
 
-type Playlists struct {
-	Playlist []Playlist
+//ClientEntity struct
+type ClientEntity struct{
+	Name string
+	State int
 }
 
-type Playlist struct {
-	Title string
-	Owner int
-}
-
-type Videos struct {
-	Video []Video
-}
-
-type Video struct {
-	Name  string
-	Url   string
-	Owner int
+//Book struct
+type Book struct{
+	BookName	string
+	Category	int
+	Author 		int
+	User 		int
+	Status 		int
 }
 
 // @title SUT SA Example API Playlist Vidoe
@@ -99,92 +93,73 @@ func main() {
 	}
 
 	v1 := router.Group("/api/v1")
+	controllers.NewAuthorController(v1, client)
+	controllers.NewBookController(v1, client)
+	controllers.NewBookborrowController(v1, client)
+	controllers.NewBookingController(v1, client)
+	controllers.NewBookreturnController(v1, client)
+	
+	controllers.NewCategoryController(v1, client)
+	controllers.NewClientEntityController(v1, client)
+	controllers.NewLocationController(v1, client)
+	controllers.NewPreemptionController(v1, client)
+	controllers.NewPurposeController(v1, client)
+
+	controllers.NewResearchController(v1, client)
+	controllers.NewResearchTypeController(v1, client)
+	controllers.NewRoleController(v1, client)
+	controllers.NewRoominfoController(v1, client)
+	controllers.NewServicePointController(v1, client)
+
+	controllers.NewStatusController(v1, client)
 	controllers.NewUserController(v1, client)
-	controllers.NewVideoController(v1, client)
-	controllers.NewResolutionController(v1, client)
-	controllers.NewPlaylistController(v1, client)
-	controllers.NewPlaylistVideoController(v1, client)
 
-	// Set Users Data
-	users := Users{
-		User: []User{
-			User{"Chanwit Kaewkasi", "chanwit@gmail.com"},
-			User{"Name Surname", "me@example.com"},
-		},
+	Role := []string{"Library Member","Librarian"}
+	for _, r := range Role{
+		client.Role.
+			Create().
+			SetROLENAME(r).
+			Save(context.Background())
 	}
-
-	for _, u := range users.User {
+	// Set Users Data
+	Users := []User{
+		User{"Suphachai Phetthamrong", "B6111427@gmail.com" , "B6111427" , 1},
+		User{"Name Surname", "me@example.com" , "pass" , 2},
+		User{"root", "root@gmail.com" , "root" , 1},
+	}
+	for _, u := range Users {
 		client.User.
 			Create().
-			SetEmail(u.Email).
-			SetName(u.Name).
+			SetUSEREMAIL(u.Email).
+			SetUSERNAME(u.Name).
+			SetPASSWORD(u.Password).
 			Save(context.Background())
 	}
 
-	// Set Resolutions Data
-	resolutions := []int{240, 360, 480, 720, 1080}
-	for _, r := range resolutions {
-		client.Resolution.
+	Author := []string{"โยชิฮิโระ โทงาชิ","เออิจิโร โอดะ"}
+	for _, au := range Author{
+		client.Author.
 			Create().
-			SetValue(r).
+			SetName(au).
 			Save(context.Background())
 	}
 
-	// Set Playlist Data
-	playlists := Playlists{
-		Playlist: []Playlist{
-			Playlist{"Watched", 1},
-			Playlist{"Watch Later", 1},
-			Playlist{"Watch Later", 2},
-		},
-	}
-
-	for _, p := range playlists.Playlist {
-
-		u, err := client.User.
-			Query().
-			Where(user.IDEQ(int(p.Owner))).
-			Only(context.Background())
-
-		if err != nil {
-			fmt.Println(err.Error())
-			return
-		}
-
-		client.Playlist.
+	Status := []string{"Available","In Use","No Service","Borrowed"}
+	for _, st := range Status{
+		client.Status.
 			Create().
-			SetTitle(p.Title).
-			SetOwner(u).
+			SetSTATUSNAME(st).
 			Save(context.Background())
 	}
 
-	// Set Videos Data
-	videos := Videos{
-		Video: []Video{
-			Video{"SA Lecture 4", "http://google.con", 1},
-			Video{"React and TypeScript - Getting Started", "https://www.youtube.com/watch?v=I9jfsIRnySs&ab_channel=JamesQQuick", 2},
-		},
-	}
-
-	for _, v := range videos.Video {
-
-		u, err := client.User.
-			Query().
-			Where(user.IDEQ(int(v.Owner))).
-			Only(context.Background())
-
-		if err != nil {
-			fmt.Println(err.Error())
-			return
-		}
-
-		client.Video.
+	Category := []string{"Action","In Use","No Service","Borrowed"}
+	for _, ca := range Category{
+		client.Category.
 			Create().
-			SetName(v.Name).
-			SetURL(v.Url).
-			SetOwner(u).
+			SetCategoryName(ca).
 			Save(context.Background())
 	}
+	
 
 	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 	router.Run()

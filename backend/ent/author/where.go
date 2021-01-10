@@ -98,13 +98,6 @@ func Name(v string) predicate.Author {
 	})
 }
 
-// Position applies equality check predicate on the "Position" field. It's identical to PositionEQ.
-func Position(v string) predicate.Author {
-	return predicate.Author(func(s *sql.Selector) {
-		s.Where(sql.EQ(s.C(FieldPosition), v))
-	})
-}
-
 // NameEQ applies the EQ predicate on the "Name" field.
 func NameEQ(v string) predicate.Author {
 	return predicate.Author(func(s *sql.Selector) {
@@ -213,117 +206,6 @@ func NameEqualFold(v string) predicate.Author {
 func NameContainsFold(v string) predicate.Author {
 	return predicate.Author(func(s *sql.Selector) {
 		s.Where(sql.ContainsFold(s.C(FieldName), v))
-	})
-}
-
-// PositionEQ applies the EQ predicate on the "Position" field.
-func PositionEQ(v string) predicate.Author {
-	return predicate.Author(func(s *sql.Selector) {
-		s.Where(sql.EQ(s.C(FieldPosition), v))
-	})
-}
-
-// PositionNEQ applies the NEQ predicate on the "Position" field.
-func PositionNEQ(v string) predicate.Author {
-	return predicate.Author(func(s *sql.Selector) {
-		s.Where(sql.NEQ(s.C(FieldPosition), v))
-	})
-}
-
-// PositionIn applies the In predicate on the "Position" field.
-func PositionIn(vs ...string) predicate.Author {
-	v := make([]interface{}, len(vs))
-	for i := range v {
-		v[i] = vs[i]
-	}
-	return predicate.Author(func(s *sql.Selector) {
-		// if not arguments were provided, append the FALSE constants,
-		// since we can't apply "IN ()". This will make this predicate falsy.
-		if len(v) == 0 {
-			s.Where(sql.False())
-			return
-		}
-		s.Where(sql.In(s.C(FieldPosition), v...))
-	})
-}
-
-// PositionNotIn applies the NotIn predicate on the "Position" field.
-func PositionNotIn(vs ...string) predicate.Author {
-	v := make([]interface{}, len(vs))
-	for i := range v {
-		v[i] = vs[i]
-	}
-	return predicate.Author(func(s *sql.Selector) {
-		// if not arguments were provided, append the FALSE constants,
-		// since we can't apply "IN ()". This will make this predicate falsy.
-		if len(v) == 0 {
-			s.Where(sql.False())
-			return
-		}
-		s.Where(sql.NotIn(s.C(FieldPosition), v...))
-	})
-}
-
-// PositionGT applies the GT predicate on the "Position" field.
-func PositionGT(v string) predicate.Author {
-	return predicate.Author(func(s *sql.Selector) {
-		s.Where(sql.GT(s.C(FieldPosition), v))
-	})
-}
-
-// PositionGTE applies the GTE predicate on the "Position" field.
-func PositionGTE(v string) predicate.Author {
-	return predicate.Author(func(s *sql.Selector) {
-		s.Where(sql.GTE(s.C(FieldPosition), v))
-	})
-}
-
-// PositionLT applies the LT predicate on the "Position" field.
-func PositionLT(v string) predicate.Author {
-	return predicate.Author(func(s *sql.Selector) {
-		s.Where(sql.LT(s.C(FieldPosition), v))
-	})
-}
-
-// PositionLTE applies the LTE predicate on the "Position" field.
-func PositionLTE(v string) predicate.Author {
-	return predicate.Author(func(s *sql.Selector) {
-		s.Where(sql.LTE(s.C(FieldPosition), v))
-	})
-}
-
-// PositionContains applies the Contains predicate on the "Position" field.
-func PositionContains(v string) predicate.Author {
-	return predicate.Author(func(s *sql.Selector) {
-		s.Where(sql.Contains(s.C(FieldPosition), v))
-	})
-}
-
-// PositionHasPrefix applies the HasPrefix predicate on the "Position" field.
-func PositionHasPrefix(v string) predicate.Author {
-	return predicate.Author(func(s *sql.Selector) {
-		s.Where(sql.HasPrefix(s.C(FieldPosition), v))
-	})
-}
-
-// PositionHasSuffix applies the HasSuffix predicate on the "Position" field.
-func PositionHasSuffix(v string) predicate.Author {
-	return predicate.Author(func(s *sql.Selector) {
-		s.Where(sql.HasSuffix(s.C(FieldPosition), v))
-	})
-}
-
-// PositionEqualFold applies the EqualFold predicate on the "Position" field.
-func PositionEqualFold(v string) predicate.Author {
-	return predicate.Author(func(s *sql.Selector) {
-		s.Where(sql.EqualFold(s.C(FieldPosition), v))
-	})
-}
-
-// PositionContainsFold applies the ContainsFold predicate on the "Position" field.
-func PositionContainsFold(v string) predicate.Author {
-	return predicate.Author(func(s *sql.Selector) {
-		s.Where(sql.ContainsFold(s.C(FieldPosition), v))
 	})
 }
 
