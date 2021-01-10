@@ -31,9 +31,9 @@ func (bu *BookreturnUpdate) Where(ps ...predicate.Bookreturn) *BookreturnUpdate 
 	return bu
 }
 
-// SetReturnDeadline sets the return_deadline field.
-func (bu *BookreturnUpdate) SetReturnDeadline(t time.Time) *BookreturnUpdate {
-	bu.mutation.SetReturnDeadline(t)
+// SetDEADLINE sets the DEADLINE field.
+func (bu *BookreturnUpdate) SetDEADLINE(t time.Time) *BookreturnUpdate {
+	bu.mutation.SetDEADLINE(t)
 	return bu
 }
 
@@ -187,11 +187,11 @@ func (bu *BookreturnUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			}
 		}
 	}
-	if value, ok := bu.mutation.ReturnDeadline(); ok {
+	if value, ok := bu.mutation.DEADLINE(); ok {
 		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
 			Type:   field.TypeTime,
 			Value:  value,
-			Column: bookreturn.FieldReturnDeadline,
+			Column: bookreturn.FieldDEADLINE,
 		})
 	}
 	if bu.mutation.UserCleared() {
@@ -317,9 +317,9 @@ type BookreturnUpdateOne struct {
 	mutation *BookreturnMutation
 }
 
-// SetReturnDeadline sets the return_deadline field.
-func (buo *BookreturnUpdateOne) SetReturnDeadline(t time.Time) *BookreturnUpdateOne {
-	buo.mutation.SetReturnDeadline(t)
+// SetDEADLINE sets the DEADLINE field.
+func (buo *BookreturnUpdateOne) SetDEADLINE(t time.Time) *BookreturnUpdateOne {
+	buo.mutation.SetDEADLINE(t)
 	return buo
 }
 
@@ -471,11 +471,11 @@ func (buo *BookreturnUpdateOne) sqlSave(ctx context.Context) (b *Bookreturn, err
 		return nil, &ValidationError{Name: "ID", err: fmt.Errorf("missing Bookreturn.ID for update")}
 	}
 	_spec.Node.ID.Value = id
-	if value, ok := buo.mutation.ReturnDeadline(); ok {
+	if value, ok := buo.mutation.DEADLINE(); ok {
 		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
 			Type:   field.TypeTime,
 			Value:  value,
-			Column: bookreturn.FieldReturnDeadline,
+			Column: bookreturn.FieldDEADLINE,
 		})
 	}
 	if buo.mutation.UserCleared() {
