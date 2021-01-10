@@ -14,6 +14,8 @@ import (
 	"github.com/team11/app/ent"
 	"github.com/team11/app/ent/role"
 	"github.com/team11/app/ent/status"
+
+	"github.com/team11/app/ent/location"
 )
 
 //User struct
@@ -37,6 +39,11 @@ type Book struct {
 	Author   int
 	User     int
 	Status   int
+}
+
+//Location struct
+type Location struct {
+	Name  string
 }
 
 // @title SUT SA Example API Playlist Vidoe
@@ -197,6 +204,14 @@ func main() {
 		client.Category.
 			Create().
 			SetCategoryName(ca).
+			Save(context.Background())
+	}
+
+	Location := []string{"Building A", "Building B", "Building C"}
+	for _, l := range Location {
+		client.Location.
+			Create().
+			SetLocationName(l).
 			Save(context.Background())
 	}
 
