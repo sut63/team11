@@ -25,5 +25,6 @@ func (Bookreturn) Edges() []ent.Edge {
 		edge.From("user",User.Type).Ref("return").Unique(),
 		edge.From("location",Location.Type).Ref("returnfrom").Unique(),
 		edge.From("mustreturn", Bookborrow.Type).Ref("borrowed").Unique(),
+		
 	}
 }
