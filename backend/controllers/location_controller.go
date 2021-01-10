@@ -21,7 +21,7 @@ type LocationController struct {
 // @Accept   json
 // @Produce  json
 // @Param Location body ent.Location true "location entity"
-// @Success 200 {object} ent.LOcation
+// @Success 200 {object} ent.Location
 // @Failure 400 {object} gin.H
 // @Failure 500 {object} gin.H
 // @Router /locations [post]

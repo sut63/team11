@@ -44,6 +44,7 @@
     ]
   },
   "dependencies": {
+    "react-icons": "^4.1.0",
     "sweetalert2": "^10.5.0"
   }
 }
