@@ -209,7 +209,7 @@ func main() {
 	for _, l := range Location {
 		client.Location.
 			Create().
-			SetLocationName(l).
+			SetLOCATIONNAME(l).
 			Save(context.Background())
 	}
 
