@@ -14,6 +14,10 @@ import (
 	"github.com/team11/app/ent"
 	"github.com/team11/app/ent/role"
 	"github.com/team11/app/ent/status"
+	"github.com/team11/app/ent/category"
+	"github.com/team11/app/ent/author"
+	"github.com/team11/app/ent/user"
+
 )
 
 
@@ -226,7 +230,8 @@ func main() {
 			Save(context.Background())
 	}
 
-	Author := []string{"โยชิฮิโระ โทงาชิ", "เออิจิโร โอดะ"}
+	
+	Author := []string{"โยชิฮิโระ โทงาชิ", "เออิจิโร โอดะ","เจ.อาร์.อาร์ โทลคีน"}
 	for _, a := range Author {
 		client.Author.
 			Create().
@@ -242,7 +247,7 @@ func main() {
 			Save(context.Background())
 	}
 
-	Category := []string{"Fiction", "Short Story", "Comic", "Research", "General Works", "Philosophy", "History", "Geography", "Technology", "Education" }
+	Category := []string{"นิยาย", "เรื่องสั้น", "การ์ตูน", "ศิลปกรรม", "ความรู้ทั้วไป", "ปรัชญา จิตวิทยา ศาสนา", "ประวัติศาสตร์", "ภูมิศาสตร์", "เทคโนโลยี", "การศึกษา" }
 	for _, ca := range Category {
 		client.Category.
 			Create().
@@ -251,7 +256,6 @@ func main() {
 	}
 
 
-	
 	Location := []string{"Building A", "Building B", "Building C"}
 	for _, l := range Location {
 		client.Location.
@@ -259,6 +263,58 @@ func main() {
 			SetLOCATIONNAME(l).
 			Save(context.Background())
 	}
+
+	Book := []Book{
+		{"หนูน้อยผจญภัยในโลกไดโนเสาร์",3,1,1,1},
+		{"lord of the ring",1,3,1,1}}
+	for _, b := range Book {
+		
+		ca, err := client.Category.
+			Query().
+			Where(category.IDEQ(int(b.Category))).
+			Only(context.Background())
+		if err != nil {
+			fmt.Println(err.Error())
+			return
+		}
+
+		au, err := client.Author.
+			Query().
+			Where(author.IDEQ(int(b.Author))).
+			Only(context.Background())
+		if err != nil {
+			fmt.Println(err.Error())
+			return
+		}
+
+		us, err := client.User.
+			Query().
+			Where(user.IDEQ(int(b.User))).
+			Only(context.Background())
+		if err != nil {
+			fmt.Println(err.Error())
+			return
+		}
+
+		st, err := client.Status.
+			Query().
+			Where(status.IDEQ(int(b.Status))).
+			Only(context.Background())
+		if err != nil {
+			fmt.Println(err.Error())
+			return
+		}
+
+		client.Book.
+				Create().
+				SetBookName(b.BookName).
+				SetCategory(ca).
+				SetAuthor(au).
+				SetUser(us).
+				SetStatus(st).
+				Save(context.Background())
+		}
+	
 
 	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 	router.Run()
