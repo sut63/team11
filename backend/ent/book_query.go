@@ -119,7 +119,7 @@ func (bq *BookQuery) QueryUser() *UserQuery {
 	return query
 }
 
-// QueryStatus chains the current query on the Status edge.
+// QueryStatus chains the current query on the status edge.
 func (bq *BookQuery) QueryStatus() *StatusQuery {
 	query := &StatusQuery{config: bq.config}
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
@@ -368,7 +368,7 @@ func (bq *BookQuery) WithUser(opts ...func(*UserQuery)) *BookQuery {
 }
 
 //  WithStatus tells the query-builder to eager-loads the nodes that are connected to
-// the "Status" edge. The optional arguments used to configure the query builder of the edge.
+// the "status" edge. The optional arguments used to configure the query builder of the edge.
 func (bq *BookQuery) WithStatus(opts ...func(*StatusQuery)) *BookQuery {
 	query := &StatusQuery{config: bq.config}
 	for _, opt := range opts {

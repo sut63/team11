@@ -65,7 +65,6 @@ type AuthorMutation struct {
 	typ           string
 	id            *int
 	_Name         *string
-	_Position     *string
 	clearedFields map[string]struct{}
 	owner         map[int]struct{}
 	removedowner  map[int]struct{}
@@ -191,43 +190,6 @@ func (m *AuthorMutation) ResetName() {
 	m._Name = nil
 }
 
-// SetPosition sets the Position field.
-func (m *AuthorMutation) SetPosition(s string) {
-	m._Position = &s
-}
-
-// Position returns the Position value in the mutation.
-func (m *AuthorMutation) Position() (r string, exists bool) {
-	v := m._Position
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// OldPosition returns the old Position value of the Author.
-// If the Author object wasn't provided to the builder, the object is fetched
-// from the database.
-// An error is returned if the mutation operation is not UpdateOne, or database query fails.
-func (m *AuthorMutation) OldPosition(ctx context.Context) (v string, err error) {
-	if !m.op.Is(OpUpdateOne) {
-		return v, fmt.Errorf("OldPosition is allowed only on UpdateOne operations")
-	}
-	if m.id == nil || m.oldValue == nil {
-		return v, fmt.Errorf("OldPosition requires an ID field in the mutation")
-	}
-	oldValue, err := m.oldValue(ctx)
-	if err != nil {
-		return v, fmt.Errorf("querying old value for OldPosition: %w", err)
-	}
-	return oldValue.Position, nil
-}
-
-// ResetPosition reset all changes of the "Position" field.
-func (m *AuthorMutation) ResetPosition() {
-	m._Position = nil
-}
-
 // AddOwnerIDs adds the owner edge to Research by ids.
 func (m *AuthorMutation) AddOwnerIDs(ids ...int) {
 	if m.owner == nil {
@@ -326,12 +288,9 @@ func (m *AuthorMutation) Type() string {
 // this mutation. Note that, in order to get all numeric
 // fields that were in/decremented, call AddedFields().
 func (m *AuthorMutation) Fields() []string {
-	fields := make([]string, 0, 2)
+	fields := make([]string, 0, 1)
 	if m._Name != nil {
 		fields = append(fields, author.FieldName)
-	}
-	if m._Position != nil {
-		fields = append(fields, author.FieldPosition)
 	}
 	return fields
 }
@@ -343,8 +302,6 @@ func (m *AuthorMutation) Field(name string) (ent.Value, bool) {
 	switch name {
 	case author.FieldName:
 		return m.Name()
-	case author.FieldPosition:
-		return m.Position()
 	}
 	return nil, false
 }
@@ -356,8 +313,6 @@ func (m *AuthorMutation) OldField(ctx context.Context, name string) (ent.Value, 
 	switch name {
 	case author.FieldName:
 		return m.OldName(ctx)
-	case author.FieldPosition:
-		return m.OldPosition(ctx)
 	}
 	return nil, fmt.Errorf("unknown Author field %s", name)
 }
@@ -373,13 +328,6 @@ func (m *AuthorMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetName(v)
-		return nil
-	case author.FieldPosition:
-		v, ok := value.(string)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.SetPosition(v)
 		return nil
 	}
 	return fmt.Errorf("unknown Author field %s", name)
@@ -433,9 +381,6 @@ func (m *AuthorMutation) ResetField(name string) error {
 	switch name {
 	case author.FieldName:
 		m.ResetName()
-		return nil
-	case author.FieldPosition:
-		m.ResetPosition()
 		return nil
 	}
 	return fmt.Errorf("unknown Author field %s", name)
@@ -560,8 +505,8 @@ type BookMutation struct {
 	clearedauthor   bool
 	user            *int
 	cleareduser     bool
-	_Status         *int
-	cleared_Status  bool
+	status          *int
+	clearedstatus   bool
 	booklist        map[int]struct{}
 	removedbooklist map[int]struct{}
 	done            bool
@@ -801,43 +746,43 @@ func (m *BookMutation) ResetUser() {
 	m.cleareduser = false
 }
 
-// SetStatusID sets the Status edge to Status by id.
+// SetStatusID sets the status edge to Status by id.
 func (m *BookMutation) SetStatusID(id int) {
-	m._Status = &id
+	m.status = &id
 }
 
-// ClearStatus clears the Status edge to Status.
+// ClearStatus clears the status edge to Status.
 func (m *BookMutation) ClearStatus() {
-	m.cleared_Status = true
+	m.clearedstatus = true
 }
 
-// StatusCleared returns if the edge Status was cleared.
+// StatusCleared returns if the edge status was cleared.
 func (m *BookMutation) StatusCleared() bool {
-	return m.cleared_Status
+	return m.clearedstatus
 }
 
-// StatusID returns the Status id in the mutation.
+// StatusID returns the status id in the mutation.
 func (m *BookMutation) StatusID() (id int, exists bool) {
-	if m._Status != nil {
-		return *m._Status, true
+	if m.status != nil {
+		return *m.status, true
 	}
 	return
 }
 
-// StatusIDs returns the Status ids in the mutation.
+// StatusIDs returns the status ids in the mutation.
 // Note that ids always returns len(ids) <= 1 for unique edges, and you should use
 // StatusID instead. It exists only for internal usage by the builders.
 func (m *BookMutation) StatusIDs() (ids []int) {
-	if id := m._Status; id != nil {
+	if id := m.status; id != nil {
 		ids = append(ids, *id)
 	}
 	return
 }
 
-// ResetStatus reset all changes of the "Status" edge.
+// ResetStatus reset all changes of the "status" edge.
 func (m *BookMutation) ResetStatus() {
-	m._Status = nil
-	m.cleared_Status = false
+	m.status = nil
+	m.clearedstatus = false
 }
 
 // AddBooklistIDs adds the booklist edge to Bookborrow by ids.
@@ -1007,7 +952,7 @@ func (m *BookMutation) AddedEdges() []string {
 	if m.user != nil {
 		edges = append(edges, book.EdgeUser)
 	}
-	if m._Status != nil {
+	if m.status != nil {
 		edges = append(edges, book.EdgeStatus)
 	}
 	if m.booklist != nil {
@@ -1033,7 +978,7 @@ func (m *BookMutation) AddedIDs(name string) []ent.Value {
 			return []ent.Value{*id}
 		}
 	case book.EdgeStatus:
-		if id := m._Status; id != nil {
+		if id := m.status; id != nil {
 			return []ent.Value{*id}
 		}
 	case book.EdgeBooklist:
@@ -1083,7 +1028,7 @@ func (m *BookMutation) ClearedEdges() []string {
 	if m.cleareduser {
 		edges = append(edges, book.EdgeUser)
 	}
-	if m.cleared_Status {
+	if m.clearedstatus {
 		edges = append(edges, book.EdgeStatus)
 	}
 	return edges
@@ -1100,7 +1045,7 @@ func (m *BookMutation) EdgeCleared(name string) bool {
 	case book.EdgeUser:
 		return m.cleareduser
 	case book.EdgeStatus:
-		return m.cleared_Status
+		return m.clearedstatus
 	}
 	return false
 }
@@ -2236,8 +2181,12 @@ type BookreturnMutation struct {
 	op                Op
 	typ               string
 	id                *int
-	book_name         *string
+	return_deadline   *time.Time
 	clearedFields     map[string]struct{}
+	user              *int
+	cleareduser       bool
+	location          *int
+	clearedlocation   bool
 	mustreturn        *int
 	clearedmustreturn bool
 	done              bool
@@ -2323,41 +2272,119 @@ func (m *BookreturnMutation) ID() (id int, exists bool) {
 	return *m.id, true
 }
 
-// SetBookName sets the book_name field.
-func (m *BookreturnMutation) SetBookName(s string) {
-	m.book_name = &s
+// SetReturnDeadline sets the return_deadline field.
+func (m *BookreturnMutation) SetReturnDeadline(t time.Time) {
+	m.return_deadline = &t
 }
 
-// BookName returns the book_name value in the mutation.
-func (m *BookreturnMutation) BookName() (r string, exists bool) {
-	v := m.book_name
+// ReturnDeadline returns the return_deadline value in the mutation.
+func (m *BookreturnMutation) ReturnDeadline() (r time.Time, exists bool) {
+	v := m.return_deadline
 	if v == nil {
 		return
 	}
 	return *v, true
 }
 
-// OldBookName returns the old book_name value of the Bookreturn.
+// OldReturnDeadline returns the old return_deadline value of the Bookreturn.
 // If the Bookreturn object wasn't provided to the builder, the object is fetched
 // from the database.
 // An error is returned if the mutation operation is not UpdateOne, or database query fails.
-func (m *BookreturnMutation) OldBookName(ctx context.Context) (v string, err error) {
+func (m *BookreturnMutation) OldReturnDeadline(ctx context.Context) (v time.Time, err error) {
 	if !m.op.Is(OpUpdateOne) {
-		return v, fmt.Errorf("OldBookName is allowed only on UpdateOne operations")
+		return v, fmt.Errorf("OldReturnDeadline is allowed only on UpdateOne operations")
 	}
 	if m.id == nil || m.oldValue == nil {
-		return v, fmt.Errorf("OldBookName requires an ID field in the mutation")
+		return v, fmt.Errorf("OldReturnDeadline requires an ID field in the mutation")
 	}
 	oldValue, err := m.oldValue(ctx)
 	if err != nil {
-		return v, fmt.Errorf("querying old value for OldBookName: %w", err)
+		return v, fmt.Errorf("querying old value for OldReturnDeadline: %w", err)
 	}
-	return oldValue.BookName, nil
+	return oldValue.ReturnDeadline, nil
 }
 
-// ResetBookName reset all changes of the "book_name" field.
-func (m *BookreturnMutation) ResetBookName() {
-	m.book_name = nil
+// ResetReturnDeadline reset all changes of the "return_deadline" field.
+func (m *BookreturnMutation) ResetReturnDeadline() {
+	m.return_deadline = nil
+}
+
+// SetUserID sets the user edge to User by id.
+func (m *BookreturnMutation) SetUserID(id int) {
+	m.user = &id
+}
+
+// ClearUser clears the user edge to User.
+func (m *BookreturnMutation) ClearUser() {
+	m.cleareduser = true
+}
+
+// UserCleared returns if the edge user was cleared.
+func (m *BookreturnMutation) UserCleared() bool {
+	return m.cleareduser
+}
+
+// UserID returns the user id in the mutation.
+func (m *BookreturnMutation) UserID() (id int, exists bool) {
+	if m.user != nil {
+		return *m.user, true
+	}
+	return
+}
+
+// UserIDs returns the user ids in the mutation.
+// Note that ids always returns len(ids) <= 1 for unique edges, and you should use
+// UserID instead. It exists only for internal usage by the builders.
+func (m *BookreturnMutation) UserIDs() (ids []int) {
+	if id := m.user; id != nil {
+		ids = append(ids, *id)
+	}
+	return
+}
+
+// ResetUser reset all changes of the "user" edge.
+func (m *BookreturnMutation) ResetUser() {
+	m.user = nil
+	m.cleareduser = false
+}
+
+// SetLocationID sets the location edge to Location by id.
+func (m *BookreturnMutation) SetLocationID(id int) {
+	m.location = &id
+}
+
+// ClearLocation clears the location edge to Location.
+func (m *BookreturnMutation) ClearLocation() {
+	m.clearedlocation = true
+}
+
+// LocationCleared returns if the edge location was cleared.
+func (m *BookreturnMutation) LocationCleared() bool {
+	return m.clearedlocation
+}
+
+// LocationID returns the location id in the mutation.
+func (m *BookreturnMutation) LocationID() (id int, exists bool) {
+	if m.location != nil {
+		return *m.location, true
+	}
+	return
+}
+
+// LocationIDs returns the location ids in the mutation.
+// Note that ids always returns len(ids) <= 1 for unique edges, and you should use
+// LocationID instead. It exists only for internal usage by the builders.
+func (m *BookreturnMutation) LocationIDs() (ids []int) {
+	if id := m.location; id != nil {
+		ids = append(ids, *id)
+	}
+	return
+}
+
+// ResetLocation reset all changes of the "location" edge.
+func (m *BookreturnMutation) ResetLocation() {
+	m.location = nil
+	m.clearedlocation = false
 }
 
 // SetMustreturnID sets the mustreturn edge to Bookborrow by id.
@@ -2414,8 +2441,8 @@ func (m *BookreturnMutation) Type() string {
 // fields that were in/decremented, call AddedFields().
 func (m *BookreturnMutation) Fields() []string {
 	fields := make([]string, 0, 1)
-	if m.book_name != nil {
-		fields = append(fields, bookreturn.FieldBookName)
+	if m.return_deadline != nil {
+		fields = append(fields, bookreturn.FieldReturnDeadline)
 	}
 	return fields
 }
@@ -2425,8 +2452,8 @@ func (m *BookreturnMutation) Fields() []string {
 // not set, or was not define in the schema.
 func (m *BookreturnMutation) Field(name string) (ent.Value, bool) {
 	switch name {
-	case bookreturn.FieldBookName:
-		return m.BookName()
+	case bookreturn.FieldReturnDeadline:
+		return m.ReturnDeadline()
 	}
 	return nil, false
 }
@@ -2436,8 +2463,8 @@ func (m *BookreturnMutation) Field(name string) (ent.Value, bool) {
 // or the query to the database was failed.
 func (m *BookreturnMutation) OldField(ctx context.Context, name string) (ent.Value, error) {
 	switch name {
-	case bookreturn.FieldBookName:
-		return m.OldBookName(ctx)
+	case bookreturn.FieldReturnDeadline:
+		return m.OldReturnDeadline(ctx)
 	}
 	return nil, fmt.Errorf("unknown Bookreturn field %s", name)
 }
@@ -2447,12 +2474,12 @@ func (m *BookreturnMutation) OldField(ctx context.Context, name string) (ent.Val
 // type mismatch the field type.
 func (m *BookreturnMutation) SetField(name string, value ent.Value) error {
 	switch name {
-	case bookreturn.FieldBookName:
-		v, ok := value.(string)
+	case bookreturn.FieldReturnDeadline:
+		v, ok := value.(time.Time)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
-		m.SetBookName(v)
+		m.SetReturnDeadline(v)
 		return nil
 	}
 	return fmt.Errorf("unknown Bookreturn field %s", name)
@@ -2504,8 +2531,8 @@ func (m *BookreturnMutation) ClearField(name string) error {
 // defined in the schema.
 func (m *BookreturnMutation) ResetField(name string) error {
 	switch name {
-	case bookreturn.FieldBookName:
-		m.ResetBookName()
+	case bookreturn.FieldReturnDeadline:
+		m.ResetReturnDeadline()
 		return nil
 	}
 	return fmt.Errorf("unknown Bookreturn field %s", name)
@@ -2514,7 +2541,13 @@ func (m *BookreturnMutation) ResetField(name string) error {
 // AddedEdges returns all edge names that were set/added in this
 // mutation.
 func (m *BookreturnMutation) AddedEdges() []string {
-	edges := make([]string, 0, 1)
+	edges := make([]string, 0, 3)
+	if m.user != nil {
+		edges = append(edges, bookreturn.EdgeUser)
+	}
+	if m.location != nil {
+		edges = append(edges, bookreturn.EdgeLocation)
+	}
 	if m.mustreturn != nil {
 		edges = append(edges, bookreturn.EdgeMustreturn)
 	}
@@ -2525,6 +2558,14 @@ func (m *BookreturnMutation) AddedEdges() []string {
 // the given edge name.
 func (m *BookreturnMutation) AddedIDs(name string) []ent.Value {
 	switch name {
+	case bookreturn.EdgeUser:
+		if id := m.user; id != nil {
+			return []ent.Value{*id}
+		}
+	case bookreturn.EdgeLocation:
+		if id := m.location; id != nil {
+			return []ent.Value{*id}
+		}
 	case bookreturn.EdgeMustreturn:
 		if id := m.mustreturn; id != nil {
 			return []ent.Value{*id}
@@ -2536,7 +2577,7 @@ func (m *BookreturnMutation) AddedIDs(name string) []ent.Value {
 // RemovedEdges returns all edge names that were removed in this
 // mutation.
 func (m *BookreturnMutation) RemovedEdges() []string {
-	edges := make([]string, 0, 1)
+	edges := make([]string, 0, 3)
 	return edges
 }
 
@@ -2551,7 +2592,13 @@ func (m *BookreturnMutation) RemovedIDs(name string) []ent.Value {
 // ClearedEdges returns all edge names that were cleared in this
 // mutation.
 func (m *BookreturnMutation) ClearedEdges() []string {
-	edges := make([]string, 0, 1)
+	edges := make([]string, 0, 3)
+	if m.cleareduser {
+		edges = append(edges, bookreturn.EdgeUser)
+	}
+	if m.clearedlocation {
+		edges = append(edges, bookreturn.EdgeLocation)
+	}
 	if m.clearedmustreturn {
 		edges = append(edges, bookreturn.EdgeMustreturn)
 	}
@@ -2562,6 +2609,10 @@ func (m *BookreturnMutation) ClearedEdges() []string {
 // cleared in this mutation.
 func (m *BookreturnMutation) EdgeCleared(name string) bool {
 	switch name {
+	case bookreturn.EdgeUser:
+		return m.cleareduser
+	case bookreturn.EdgeLocation:
+		return m.clearedlocation
 	case bookreturn.EdgeMustreturn:
 		return m.clearedmustreturn
 	}
@@ -2572,6 +2623,12 @@ func (m *BookreturnMutation) EdgeCleared(name string) bool {
 // error if the edge name is not defined in the schema.
 func (m *BookreturnMutation) ClearEdge(name string) error {
 	switch name {
+	case bookreturn.EdgeUser:
+		m.ClearUser()
+		return nil
+	case bookreturn.EdgeLocation:
+		m.ClearLocation()
+		return nil
 	case bookreturn.EdgeMustreturn:
 		m.ClearMustreturn()
 		return nil
@@ -2584,6 +2641,12 @@ func (m *BookreturnMutation) ClearEdge(name string) error {
 // defined in the schema.
 func (m *BookreturnMutation) ResetEdge(name string) error {
 	switch name {
+	case bookreturn.EdgeUser:
+		m.ResetUser()
+		return nil
+	case bookreturn.EdgeLocation:
+		m.ResetLocation()
+		return nil
 	case bookreturn.EdgeMustreturn:
 		m.ResetMustreturn()
 		return nil
@@ -3390,15 +3453,15 @@ func (m *ClientEntityMutation) ResetEdge(name string) error {
 // nodes in the graph.
 type LocationMutation struct {
 	config
-	op               Op
-	typ              string
-	id               *int
-	location_name    *string
-	clearedFields    map[string]struct{}
-	locations        map[int]struct{}
-	removedlocations map[int]struct{}
-	done             bool
-	oldValue         func(context.Context) (*Location, error)
+	op                Op
+	typ               string
+	id                *int
+	location_name     *string
+	clearedFields     map[string]struct{}
+	returnfrom        map[int]struct{}
+	removedreturnfrom map[int]struct{}
+	done              bool
+	oldValue          func(context.Context) (*Location, error)
 }
 
 var _ ent.Mutation = (*LocationMutation)(nil)
@@ -3517,46 +3580,46 @@ func (m *LocationMutation) ResetLocationName() {
 	m.location_name = nil
 }
 
-// AddLocationIDs adds the locations edge to Bookreturn by ids.
-func (m *LocationMutation) AddLocationIDs(ids ...int) {
-	if m.locations == nil {
-		m.locations = make(map[int]struct{})
+// AddReturnfromIDs adds the returnfrom edge to Bookreturn by ids.
+func (m *LocationMutation) AddReturnfromIDs(ids ...int) {
+	if m.returnfrom == nil {
+		m.returnfrom = make(map[int]struct{})
 	}
 	for i := range ids {
-		m.locations[ids[i]] = struct{}{}
+		m.returnfrom[ids[i]] = struct{}{}
 	}
 }
 
-// RemoveLocationIDs removes the locations edge to Bookreturn by ids.
-func (m *LocationMutation) RemoveLocationIDs(ids ...int) {
-	if m.removedlocations == nil {
-		m.removedlocations = make(map[int]struct{})
+// RemoveReturnfromIDs removes the returnfrom edge to Bookreturn by ids.
+func (m *LocationMutation) RemoveReturnfromIDs(ids ...int) {
+	if m.removedreturnfrom == nil {
+		m.removedreturnfrom = make(map[int]struct{})
 	}
 	for i := range ids {
-		m.removedlocations[ids[i]] = struct{}{}
+		m.removedreturnfrom[ids[i]] = struct{}{}
 	}
 }
 
-// RemovedLocations returns the removed ids of locations.
-func (m *LocationMutation) RemovedLocationsIDs() (ids []int) {
-	for id := range m.removedlocations {
+// RemovedReturnfrom returns the removed ids of returnfrom.
+func (m *LocationMutation) RemovedReturnfromIDs() (ids []int) {
+	for id := range m.removedreturnfrom {
 		ids = append(ids, id)
 	}
 	return
 }
 
-// LocationsIDs returns the locations ids in the mutation.
-func (m *LocationMutation) LocationsIDs() (ids []int) {
-	for id := range m.locations {
+// ReturnfromIDs returns the returnfrom ids in the mutation.
+func (m *LocationMutation) ReturnfromIDs() (ids []int) {
+	for id := range m.returnfrom {
 		ids = append(ids, id)
 	}
 	return
 }
 
-// ResetLocations reset all changes of the "locations" edge.
-func (m *LocationMutation) ResetLocations() {
-	m.locations = nil
-	m.removedlocations = nil
+// ResetReturnfrom reset all changes of the "returnfrom" edge.
+func (m *LocationMutation) ResetReturnfrom() {
+	m.returnfrom = nil
+	m.removedreturnfrom = nil
 }
 
 // Op returns the operation name.
@@ -3675,8 +3738,8 @@ func (m *LocationMutation) ResetField(name string) error {
 // mutation.
 func (m *LocationMutation) AddedEdges() []string {
 	edges := make([]string, 0, 1)
-	if m.locations != nil {
-		edges = append(edges, location.EdgeLocations)
+	if m.returnfrom != nil {
+		edges = append(edges, location.EdgeReturnfrom)
 	}
 	return edges
 }
@@ -3685,9 +3748,9 @@ func (m *LocationMutation) AddedEdges() []string {
 // the given edge name.
 func (m *LocationMutation) AddedIDs(name string) []ent.Value {
 	switch name {
-	case location.EdgeLocations:
-		ids := make([]ent.Value, 0, len(m.locations))
-		for id := range m.locations {
+	case location.EdgeReturnfrom:
+		ids := make([]ent.Value, 0, len(m.returnfrom))
+		for id := range m.returnfrom {
 			ids = append(ids, id)
 		}
 		return ids
@@ -3699,8 +3762,8 @@ func (m *LocationMutation) AddedIDs(name string) []ent.Value {
 // mutation.
 func (m *LocationMutation) RemovedEdges() []string {
 	edges := make([]string, 0, 1)
-	if m.removedlocations != nil {
-		edges = append(edges, location.EdgeLocations)
+	if m.removedreturnfrom != nil {
+		edges = append(edges, location.EdgeReturnfrom)
 	}
 	return edges
 }
@@ -3709,9 +3772,9 @@ func (m *LocationMutation) RemovedEdges() []string {
 // the given edge name.
 func (m *LocationMutation) RemovedIDs(name string) []ent.Value {
 	switch name {
-	case location.EdgeLocations:
-		ids := make([]ent.Value, 0, len(m.removedlocations))
-		for id := range m.removedlocations {
+	case location.EdgeReturnfrom:
+		ids := make([]ent.Value, 0, len(m.removedreturnfrom))
+		for id := range m.removedreturnfrom {
 			ids = append(ids, id)
 		}
 		return ids
@@ -3747,8 +3810,8 @@ func (m *LocationMutation) ClearEdge(name string) error {
 // defined in the schema.
 func (m *LocationMutation) ResetEdge(name string) error {
 	switch name {
-	case location.EdgeLocations:
-		m.ResetLocations()
+	case location.EdgeReturnfrom:
+		m.ResetReturnfrom()
 		return nil
 	}
 	return fmt.Errorf("unknown Location edge %s", name)
@@ -7405,6 +7468,8 @@ type UserMutation struct {
 	removedpreemption map[int]struct{}
 	record            map[int]struct{}
 	removedrecord     map[int]struct{}
+	_return           map[int]struct{}
+	removed_return    map[int]struct{}
 	done              bool
 	oldValue          func(context.Context) (*User, error)
 }
@@ -7848,6 +7913,48 @@ func (m *UserMutation) ResetRecord() {
 	m.removedrecord = nil
 }
 
+// AddReturnIDs adds the return edge to Bookreturn by ids.
+func (m *UserMutation) AddReturnIDs(ids ...int) {
+	if m._return == nil {
+		m._return = make(map[int]struct{})
+	}
+	for i := range ids {
+		m._return[ids[i]] = struct{}{}
+	}
+}
+
+// RemoveReturnIDs removes the return edge to Bookreturn by ids.
+func (m *UserMutation) RemoveReturnIDs(ids ...int) {
+	if m.removed_return == nil {
+		m.removed_return = make(map[int]struct{})
+	}
+	for i := range ids {
+		m.removed_return[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedReturn returns the removed ids of return.
+func (m *UserMutation) RemovedReturnIDs() (ids []int) {
+	for id := range m.removed_return {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ReturnIDs returns the return ids in the mutation.
+func (m *UserMutation) ReturnIDs() (ids []int) {
+	for id := range m._return {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetReturn reset all changes of the "return" edge.
+func (m *UserMutation) ResetReturn() {
+	m._return = nil
+	m.removed_return = nil
+}
+
 // Op returns the operation name.
 func (m *UserMutation) Op() Op {
 	return m.op
@@ -7997,7 +8104,7 @@ func (m *UserMutation) ResetField(name string) error {
 // AddedEdges returns all edge names that were set/added in this
 // mutation.
 func (m *UserMutation) AddedEdges() []string {
-	edges := make([]string, 0, 6)
+	edges := make([]string, 0, 7)
 	if m.position != nil {
 		edges = append(edges, user.EdgePosition)
 	}
@@ -8015,6 +8122,9 @@ func (m *UserMutation) AddedEdges() []string {
 	}
 	if m.record != nil {
 		edges = append(edges, user.EdgeRecord)
+	}
+	if m._return != nil {
+		edges = append(edges, user.EdgeReturn)
 	}
 	return edges
 }
@@ -8057,6 +8167,12 @@ func (m *UserMutation) AddedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
+	case user.EdgeReturn:
+		ids := make([]ent.Value, 0, len(m._return))
+		for id := range m._return {
+			ids = append(ids, id)
+		}
+		return ids
 	}
 	return nil
 }
@@ -8064,7 +8180,7 @@ func (m *UserMutation) AddedIDs(name string) []ent.Value {
 // RemovedEdges returns all edge names that were removed in this
 // mutation.
 func (m *UserMutation) RemovedEdges() []string {
-	edges := make([]string, 0, 6)
+	edges := make([]string, 0, 7)
 	if m.removedbooking != nil {
 		edges = append(edges, user.EdgeBooking)
 	}
@@ -8079,6 +8195,9 @@ func (m *UserMutation) RemovedEdges() []string {
 	}
 	if m.removedrecord != nil {
 		edges = append(edges, user.EdgeRecord)
+	}
+	if m.removed_return != nil {
+		edges = append(edges, user.EdgeReturn)
 	}
 	return edges
 }
@@ -8117,6 +8236,12 @@ func (m *UserMutation) RemovedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
+	case user.EdgeReturn:
+		ids := make([]ent.Value, 0, len(m.removed_return))
+		for id := range m.removed_return {
+			ids = append(ids, id)
+		}
+		return ids
 	}
 	return nil
 }
@@ -8124,7 +8249,7 @@ func (m *UserMutation) RemovedIDs(name string) []ent.Value {
 // ClearedEdges returns all edge names that were cleared in this
 // mutation.
 func (m *UserMutation) ClearedEdges() []string {
-	edges := make([]string, 0, 6)
+	edges := make([]string, 0, 7)
 	if m.clearedposition {
 		edges = append(edges, user.EdgePosition)
 	}
@@ -8174,6 +8299,9 @@ func (m *UserMutation) ResetEdge(name string) error {
 		return nil
 	case user.EdgeRecord:
 		m.ResetRecord()
+		return nil
+	case user.EdgeReturn:
+		m.ResetReturn()
 		return nil
 	}
 	return fmt.Errorf("unknown User edge %s", name)

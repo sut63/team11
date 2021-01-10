@@ -95,13 +95,13 @@ func (bu *BookUpdate) SetUser(u *User) *BookUpdate {
 	return bu.SetUserID(u.ID)
 }
 
-// SetStatusID sets the Status edge to Status by id.
+// SetStatusID sets the status edge to Status by id.
 func (bu *BookUpdate) SetStatusID(id int) *BookUpdate {
 	bu.mutation.SetStatusID(id)
 	return bu
 }
 
-// SetNillableStatusID sets the Status edge to Status by id if the given value is not nil.
+// SetNillableStatusID sets the status edge to Status by id if the given value is not nil.
 func (bu *BookUpdate) SetNillableStatusID(id *int) *BookUpdate {
 	if id != nil {
 		bu = bu.SetStatusID(*id)
@@ -109,7 +109,7 @@ func (bu *BookUpdate) SetNillableStatusID(id *int) *BookUpdate {
 	return bu
 }
 
-// SetStatus sets the Status edge to Status.
+// SetStatus sets the status edge to Status.
 func (bu *BookUpdate) SetStatus(s *Status) *BookUpdate {
 	return bu.SetStatusID(s.ID)
 }
@@ -152,7 +152,7 @@ func (bu *BookUpdate) ClearUser() *BookUpdate {
 	return bu
 }
 
-// ClearStatus clears the Status edge to Status.
+// ClearStatus clears the status edge to Status.
 func (bu *BookUpdate) ClearStatus() *BookUpdate {
 	bu.mutation.ClearStatus()
 	return bu
@@ -514,13 +514,13 @@ func (buo *BookUpdateOne) SetUser(u *User) *BookUpdateOne {
 	return buo.SetUserID(u.ID)
 }
 
-// SetStatusID sets the Status edge to Status by id.
+// SetStatusID sets the status edge to Status by id.
 func (buo *BookUpdateOne) SetStatusID(id int) *BookUpdateOne {
 	buo.mutation.SetStatusID(id)
 	return buo
 }
 
-// SetNillableStatusID sets the Status edge to Status by id if the given value is not nil.
+// SetNillableStatusID sets the status edge to Status by id if the given value is not nil.
 func (buo *BookUpdateOne) SetNillableStatusID(id *int) *BookUpdateOne {
 	if id != nil {
 		buo = buo.SetStatusID(*id)
@@ -528,7 +528,7 @@ func (buo *BookUpdateOne) SetNillableStatusID(id *int) *BookUpdateOne {
 	return buo
 }
 
-// SetStatus sets the Status edge to Status.
+// SetStatus sets the status edge to Status.
 func (buo *BookUpdateOne) SetStatus(s *Status) *BookUpdateOne {
 	return buo.SetStatusID(s.ID)
 }
@@ -571,7 +571,7 @@ func (buo *BookUpdateOne) ClearUser() *BookUpdateOne {
 	return buo
 }
 
-// ClearStatus clears the Status edge to Status.
+// ClearStatus clears the status edge to Status.
 func (buo *BookUpdateOne) ClearStatus() *BookUpdateOne {
 	buo.mutation.ClearStatus()
 	return buo

@@ -27,12 +27,6 @@ func (ac *AuthorCreate) SetName(s string) *AuthorCreate {
 	return ac
 }
 
-// SetPosition sets the Position field.
-func (ac *AuthorCreate) SetPosition(s string) *AuthorCreate {
-	ac.mutation.SetPosition(s)
-	return ac
-}
-
 // AddOwnerIDs adds the owner edge to Research by ids.
 func (ac *AuthorCreate) AddOwnerIDs(ids ...int) *AuthorCreate {
 	ac.mutation.AddOwnerIDs(ids...)
@@ -76,14 +70,6 @@ func (ac *AuthorCreate) Save(ctx context.Context) (*Author, error) {
 	if v, ok := ac.mutation.Name(); ok {
 		if err := author.NameValidator(v); err != nil {
 			return nil, &ValidationError{Name: "Name", err: fmt.Errorf("ent: validator failed for field \"Name\": %w", err)}
-		}
-	}
-	if _, ok := ac.mutation.Position(); !ok {
-		return nil, &ValidationError{Name: "Position", err: errors.New("ent: missing required field \"Position\"")}
-	}
-	if v, ok := ac.mutation.Position(); ok {
-		if err := author.PositionValidator(v); err != nil {
-			return nil, &ValidationError{Name: "Position", err: fmt.Errorf("ent: validator failed for field \"Position\": %w", err)}
 		}
 	}
 	var (
@@ -153,14 +139,6 @@ func (ac *AuthorCreate) createSpec() (*Author, *sqlgraph.CreateSpec) {
 			Column: author.FieldName,
 		})
 		a.Name = value
-	}
-	if value, ok := ac.mutation.Position(); ok {
-		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
-			Type:   field.TypeString,
-			Value:  value,
-			Column: author.FieldPosition,
-		})
-		a.Position = value
 	}
 	if nodes := ac.mutation.OwnerIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{

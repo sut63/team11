@@ -1,7 +1,6 @@
 package schema
 
 import (
-	"time"
 	"github.com/facebookincubator/ent"
 	"github.com/facebookincubator/ent/schema/edge"
 	"github.com/facebookincubator/ent/schema/field"
@@ -24,7 +23,6 @@ func (Bookreturn) Edges() []ent.Edge {
 	return []ent.Edge{
 		edge.From("user",User.Type).Ref("return").Unique(),
 		edge.From("location",Location.Type).Ref("returnfrom").Unique(),
-		edge.From("mustreturn", Bookborrow.Type).Ref("borrowed").Unique(),
-		
+		edge.From("mustreturn", Bookborrow.Type).Ref("borrowed").Unique(),	
 	}
 }

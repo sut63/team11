@@ -26,7 +26,7 @@ func (Book) Edges() []ent.Edge {
 		edge.From("category", Category.Type).Ref("catof").Unique(),
 		edge.From("author", Author.Type).Ref("writer").Unique(),
 		edge.From("user", User.Type).Ref("addby").Unique(),
-		edge.From("Status", Status.Type).Ref("statusofbook").Unique(),
+		edge.From("status", Status.Type).Ref("statusofbook").Unique(),
 
 		edge.To("booklist", Bookborrow.Type).
 			StorageKey(edge.Column("BOOK_ID")),

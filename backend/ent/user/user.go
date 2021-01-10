@@ -26,6 +26,8 @@ const (
 	EdgePreemption = "preemption"
 	// EdgeRecord holds the string denoting the record edge name in mutations.
 	EdgeRecord = "record"
+	// EdgeReturn holds the string denoting the return edge name in mutations.
+	EdgeReturn = "return"
 
 	// Table holds the table name of the user in the database.
 	Table = "users"
@@ -71,6 +73,13 @@ const (
 	RecordInverseTable = "researches"
 	// RecordColumn is the table column denoting the record relation/edge.
 	RecordColumn = "USER_ID"
+	// ReturnTable is the table the holds the return relation/edge.
+	ReturnTable = "bookreturns"
+	// ReturnInverseTable is the table name for the Bookreturn entity.
+	// It exists in this package in order to avoid circular dependency with the "bookreturn" package.
+	ReturnInverseTable = "bookreturns"
+	// ReturnColumn is the table column denoting the return relation/edge.
+	ReturnColumn = "USER_ID"
 )
 
 // Columns holds all SQL columns for user fields.

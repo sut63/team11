@@ -26,19 +26,19 @@ func (lc *LocationCreate) SetLocationName(s string) *LocationCreate {
 	return lc
 }
 
-// AddLocationIDs adds the locations edge to Bookreturn by ids.
-func (lc *LocationCreate) AddLocationIDs(ids ...int) *LocationCreate {
-	lc.mutation.AddLocationIDs(ids...)
+// AddReturnfromIDs adds the returnfrom edge to Bookreturn by ids.
+func (lc *LocationCreate) AddReturnfromIDs(ids ...int) *LocationCreate {
+	lc.mutation.AddReturnfromIDs(ids...)
 	return lc
 }
 
-// AddLocations adds the locations edges to Bookreturn.
-func (lc *LocationCreate) AddLocations(b ...*Bookreturn) *LocationCreate {
+// AddReturnfrom adds the returnfrom edges to Bookreturn.
+func (lc *LocationCreate) AddReturnfrom(b ...*Bookreturn) *LocationCreate {
 	ids := make([]int, len(b))
 	for i := range b {
 		ids[i] = b[i].ID
 	}
-	return lc.AddLocationIDs(ids...)
+	return lc.AddReturnfromIDs(ids...)
 }
 
 // Mutation returns the LocationMutation object of the builder.
@@ -124,12 +124,12 @@ func (lc *LocationCreate) createSpec() (*Location, *sqlgraph.CreateSpec) {
 		})
 		l.LocationName = value
 	}
-	if nodes := lc.mutation.LocationsIDs(); len(nodes) > 0 {
+	if nodes := lc.mutation.ReturnfromIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
-			Table:   location.LocationsTable,
-			Columns: []string{location.LocationsColumn},
+			Table:   location.ReturnfromTable,
+			Columns: []string{location.ReturnfromColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: &sqlgraph.FieldSpec{
