@@ -227,6 +227,8 @@ func main() {
 			Save(context.Background())
 	}
 
+
+	
 	Location := []string{"Building A", "Building B", "Building C"}
 	for _, l := range Location {
 		client.Location.
