@@ -15,8 +15,8 @@ type Location struct {
 	config `json:"-"`
 	// ID of the ent.
 	ID int `json:"id,omitempty"`
-	// LocationName holds the value of the "location_name" field.
-	LocationName string `json:"location_name,omitempty"`
+	// LOCATIONNAME holds the value of the "LOCATION_NAME" field.
+	LOCATIONNAME string `json:"LOCATION_NAME,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the LocationQuery when eager-loading is set.
 	Edges LocationEdges `json:"edges"`
@@ -44,7 +44,7 @@ func (e LocationEdges) ReturnfromOrErr() ([]*Bookreturn, error) {
 func (*Location) scanValues() []interface{} {
 	return []interface{}{
 		&sql.NullInt64{},  // id
-		&sql.NullString{}, // location_name
+		&sql.NullString{}, // LOCATION_NAME
 	}
 }
 
@@ -61,9 +61,9 @@ func (l *Location) assignValues(values ...interface{}) error {
 	l.ID = int(value.Int64)
 	values = values[1:]
 	if value, ok := values[0].(*sql.NullString); !ok {
-		return fmt.Errorf("unexpected type %T for field location_name", values[0])
+		return fmt.Errorf("unexpected type %T for field LOCATION_NAME", values[0])
 	} else if value.Valid {
-		l.LocationName = value.String
+		l.LOCATIONNAME = value.String
 	}
 	return nil
 }
@@ -96,8 +96,8 @@ func (l *Location) String() string {
 	var builder strings.Builder
 	builder.WriteString("Location(")
 	builder.WriteString(fmt.Sprintf("id=%v", l.ID))
-	builder.WriteString(", location_name=")
-	builder.WriteString(l.LocationName)
+	builder.WriteString(", LOCATION_NAME=")
+	builder.WriteString(l.LOCATIONNAME)
 	builder.WriteByte(')')
 	return builder.String()
 }

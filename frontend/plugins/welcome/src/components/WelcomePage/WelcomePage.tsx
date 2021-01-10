@@ -65,12 +65,12 @@ const WelcomePage: FC<{}> = () => {
         <ContentHeader title="สมาชิกในกลุ่ม"></ContentHeader>
         
         <Grid container>
-          <CardTeam name={"นาย สมชาย ใจดี"} id={"B5012345"} system={"ระบบย่อย..."}></CardTeam>
-          <CardTeam name={"นาย สมชาย ใจดี"} id={"B5012345"} system={"ระบบย่อย..."}></CardTeam>
-          <CardTeam name={"นาย สมชาย ใจดี"} id={"B5012345"} system={"ระบบย่อย..."}></CardTeam>
-          <CardTeam name={"นาย สมชาย ใจดี"} id={"B5012345"} system={"ระบบย่อย..."}></CardTeam>
-          <CardTeam name={"นาย สมชาย ใจดี"} id={"B5012345"} system={"ระบบย่อย..."}></CardTeam>
-          <CardTeam name={"นาย สมชาย ใจดี"} id={"B5012345"} system={"ระบบย่อย..."}></CardTeam>
+          <CardTeam name={"นางสาว มนัสชนก ศรีเครือดง"} id={"B6102647"} system={"ระบบยืมหนังสือ"}></CardTeam>
+          <CardTeam name={"นางสาว ศศิธร เจริญศิริ"} id={"B6105419"} system={"ระบบเพิ่มข้อมูลหนังสือ"}></CardTeam>
+          <CardTeam name={"นาย มฆวัน โทจันทร"} id={"B6107826"} system={"ระบบงานวิจัยและฐานข้อมูลออนไลน์"}></CardTeam>
+          <CardTeam name={"นาย วราเมธ นุ้ยเพียร"} id={"B6108526"} system={"ระบบคืนหนังสือ"}></CardTeam>
+          <CardTeam name={"นาย สุภชัย เพ็ชธัมรงค"} id={"B6111427"} system={"ระบบจองเครื่องรับชม Video on Demand"}></CardTeam>
+          <CardTeam name={"นาย ณัฐนนท์ รักภักดี"} id={"BB6112936"} system={"ระบบระบบจองห้องค้นคว้า"}></CardTeam>
         </Grid>
       </Content>
     </Page>

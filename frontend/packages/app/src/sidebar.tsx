@@ -9,6 +9,7 @@ import Room from '@material-ui/icons/EventSeat';
 import Research from '@material-ui/icons/NoteAdd';
 import Borrow from '@material-ui/icons/AddShoppingCart';
 import Return from '@material-ui/icons/AssignmentReturn';
+import { Link as RouterLink } from 'react-router-dom';
 import {
   Sidebar,
   SidebarItem,
@@ -59,7 +60,7 @@ export const AppSidebar = () => (
     />
     <SidebarItem
       icon={Borrow}
-      to="Borrow"
+      to="Bookborrow"
       text="ยืมหนังสือ"
     />
     <SidebarItem

@@ -143,9 +143,9 @@ var (
 	// BookreturnsColumns holds the columns for the "bookreturns" table.
 	BookreturnsColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt, Increment: true},
-		{Name: "return_deadline", Type: field.TypeTime},
+		{Name: "deadline", Type: field.TypeTime},
 		{Name: "CLIENT_ID", Type: field.TypeInt, Nullable: true},
-		{Name: "location_id", Type: field.TypeInt, Nullable: true},
+		{Name: "LOCATION_NAME", Type: field.TypeInt, Nullable: true},
 		{Name: "USER_ID", Type: field.TypeInt, Nullable: true},
 	}
 	// BookreturnsTable holds the schema information for the "bookreturns" table.
