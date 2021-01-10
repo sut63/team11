@@ -21,6 +21,7 @@ func (Location) Fields() []ent.Field {
 // Edges of the Location.
 func (Location) Edges() []ent.Edge {
 	return []ent.Edge{
-        edge.To("returnfrom",Bookreturn.Type).StorageKey(edge.Column("LOCATION_NAME")),
+		edge.To("returnfrom",Bookreturn.Type).StorageKey(edge.Column("LOCATION_NAME")	
+		
     }
 }
