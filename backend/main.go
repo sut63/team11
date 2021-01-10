@@ -39,9 +39,15 @@ type Book struct {
 	Status   int
 }
 
+//ServicePoint struct
+type ServicePoint struct {
+	BuildingName  string
+	CounterNumber string
+}
+
 //Location struct
 type Location struct {
-	Name  string
+	Name string
 }
 
 // @title SUT SA Example API Playlist Vidoe
@@ -189,6 +195,18 @@ func main() {
 			Save(context.Background())
 	}
 
+	ServicePoint := []ServicePoint{
+		{"อาคารบรรณสาร", "เคาน์เตอร์ 1"},
+		{"อาคารบรรณสาร", "เคาน์เตอร์ 2"},
+	}
+	for _, se := range ServicePoint {
+		client.ServicePoint.
+			Create().
+			SetBUILDINGNAME(se.BuildingName).
+			SetCOUNTERNUMBER(se.CounterNumber).
+			Save(context.Background())
+	}
+	
 	Author := []string{"โยชิฮิโระ โทงาชิ", "เออิจิโร โอดะ"}
 	for _, au := range Author {
 		client.Author.
