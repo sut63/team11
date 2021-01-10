@@ -44,6 +44,17 @@ type Book struct {
 	Status   int
 }
 
+//ServicePoint struct
+type ServicePoint struct {
+	BuildingName  string
+	CounterNumber string
+}
+
+//Location struct
+type Location struct {
+	Name string
+}
+
 // @title SUT SA Example API Playlist Vidoe
 // @version 1.0
 // @description This is a sample server for SUT SE 2563
@@ -208,11 +219,19 @@ func main() {
 			Save(context.Background())
 	}
 
-	Category := []string{"Action", "In Use", "No Service", "Borrowed"}
+	Category := []string{"Fiction", "Short Story", "Comic", "Research", "General Works", "Philosophy", "History", "Geography", "Technology", "Education" }
 	for _, ca := range Category {
 		client.Category.
 			Create().
 			SetCategoryName(ca).
+			Save(context.Background())
+	}
+
+	Location := []string{"Building A", "Building B", "Building C"}
+	for _, l := range Location {
+		client.Location.
+			Create().
+			SetLOCATIONNAME(l).
 			Save(context.Background())
 	}
 
