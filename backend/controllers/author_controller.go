@@ -1,19 +1,19 @@
 package controllers
 
 import (
-    "context"
-    "fmt"
-    "strconv"
+	"context"
+	"fmt"
+	"strconv"
 
-    "github.com/team11/app/ent"
-    "github.com/team11/app/ent/author"
-    "github.com/gin-gonic/gin"
+	"github.com/gin-gonic/gin"
+	"github.com/team11/app/ent"
+	"github.com/team11/app/ent/author"
 )
 
 // AuthorController defines the struct for the author controller
 type AuthorController struct {
-    client *ent.Client
-    router gin.IRouter
+	client *ent.Client
+	router gin.IRouter
 }
 
 // CreateAuthor handles POST requests for adding author entities
@@ -28,27 +28,26 @@ type AuthorController struct {
 // @Failure 500 {object} gin.H
 // @Router /Authors [post]
 func (ctl *AuthorController) CreateAuthor(c *gin.Context) {
-    obj := ent.Author{}
-    if err := c.ShouldBind(&obj); err != nil {
-        c.JSON(400, gin.H{
-            "error": "Author binding failed",
-        })
-        return
-    }
+	obj := ent.Author{}
+	if err := c.ShouldBind(&obj); err != nil {
+		c.JSON(400, gin.H{
+			"error": "Author binding failed",
+		})
+		return
+	}
 
-    a, err := ctl.client.Author.
-        Create().
-        SetName(obj.Name).
-        SetPosition(obj.Position).
-        Save(context.Background())
-    if err != nil {
-        c.JSON(400, gin.H{
-            "error": "saving failed",
-        })
-        return
-    }
+	a, err := ctl.client.Author.
+		Create().
+		SetName(obj.Name).
+		Save(context.Background())
+	if err != nil {
+		c.JSON(400, gin.H{
+			"error": "saving failed",
+		})
+		return
+	}
 
-    c.JSON(200, a)
+	c.JSON(200, a)
 }
 
 // GetAuthor handles GET requests to retrieve a author entity
@@ -63,26 +62,26 @@ func (ctl *AuthorController) CreateAuthor(c *gin.Context) {
 // @Failure 500 {object} gin.H
 // @Router /Authors/{id} [get]
 func (ctl *AuthorController) GetAuthor(c *gin.Context) {
-    id, err := strconv.ParseInt(c.Param("id"), 10, 64)
-    if err != nil {
-        c.JSON(400, gin.H{
-            "error": err.Error(),
-        })
-        return
-    }
+	id, err := strconv.ParseInt(c.Param("id"), 10, 64)
+	if err != nil {
+		c.JSON(400, gin.H{
+			"error": err.Error(),
+		})
+		return
+	}
 
-    a, err := ctl.client.Author.
-        Query().
-        Where(author.IDEQ(int(id))).
-        Only(context.Background())
-    if err != nil {
-        c.JSON(404, gin.H{
-            "error": err.Error(),
-        })
-        return
-    }
+	a, err := ctl.client.Author.
+		Query().
+		Where(author.IDEQ(int(id))).
+		Only(context.Background())
+	if err != nil {
+		c.JSON(404, gin.H{
+			"error": err.Error(),
+		})
+		return
+	}
 
-    c.JSON(200, a)
+	c.JSON(200, a)
 }
 
 // ListAuthor handles request to get a list of author entities
@@ -97,35 +96,35 @@ func (ctl *AuthorController) GetAuthor(c *gin.Context) {
 // @Failure 500 {object} gin.H
 // @Router /Authors [get]
 func (ctl *AuthorController) ListAuthor(c *gin.Context) {
-    limitQuery := c.Query("limit")
-    limit := 10
-    if limitQuery != "" {
-        limit64, err := strconv.ParseInt(limitQuery, 10, 64)
-        if err == nil {
-            limit = int(limit64)
-        }
-    }
+	limitQuery := c.Query("limit")
+	limit := 10
+	if limitQuery != "" {
+		limit64, err := strconv.ParseInt(limitQuery, 10, 64)
+		if err == nil {
+			limit = int(limit64)
+		}
+	}
 
-    offsetQuery := c.Query("offset")
-    offset := 0
-    if offsetQuery != "" {
-        offset64, err := strconv.ParseInt(offsetQuery, 10, 64)
-        if err == nil {
-            offset = int(offset64)
-        }
-    }
+	offsetQuery := c.Query("offset")
+	offset := 0
+	if offsetQuery != "" {
+		offset64, err := strconv.ParseInt(offsetQuery, 10, 64)
+		if err == nil {
+			offset = int(offset64)
+		}
+	}
 
-    Authors, err := ctl.client.Author.
-        Query().
-        Limit(limit).
-        Offset(offset).
-        All(context.Background())
-    if err != nil {
-        c.JSON(400, gin.H{"error": err.Error()})
-        return
-    }
+	Authors, err := ctl.client.Author.
+		Query().
+		Limit(limit).
+		Offset(offset).
+		All(context.Background())
+	if err != nil {
+		c.JSON(400, gin.H{"error": err.Error()})
+		return
+	}
 
-    c.JSON(200, Authors)
+	c.JSON(200, Authors)
 }
 
 // DeleteAuthor handles DELETE requests to delete a author entity
@@ -140,25 +139,25 @@ func (ctl *AuthorController) ListAuthor(c *gin.Context) {
 // @Failure 500 {object} gin.H
 // @Router /Authors/{id} [delete]
 func (ctl *AuthorController) DeleteAuthor(c *gin.Context) {
-    id, err := strconv.ParseInt(c.Param("id"), 10, 64)
-    if err != nil {
-        c.JSON(400, gin.H{
-            "error": err.Error(),
-        })
-        return
-    }
+	id, err := strconv.ParseInt(c.Param("id"), 10, 64)
+	if err != nil {
+		c.JSON(400, gin.H{
+			"error": err.Error(),
+		})
+		return
+	}
 
-    err = ctl.client.Author.
-        DeleteOneID(int(id)).
-        Exec(context.Background())
-    if err != nil {
-        c.JSON(404, gin.H{
-            "error": err.Error(),
-        })
-        return
-    }
+	err = ctl.client.Author.
+		DeleteOneID(int(id)).
+		Exec(context.Background())
+	if err != nil {
+		c.JSON(404, gin.H{
+			"error": err.Error(),
+		})
+		return
+	}
 
-    c.JSON(200, gin.H{"result": fmt.Sprintf("ok deleted %v", id)})
+	c.JSON(200, gin.H{"result": fmt.Sprintf("ok deleted %v", id)})
 }
 
 // UpdateAuthor handles PUT requests to update a author entity
@@ -174,52 +173,52 @@ func (ctl *AuthorController) DeleteAuthor(c *gin.Context) {
 // @Failure 500 {object} gin.H
 // @Router /Authors/{id} [put]
 func (ctl *AuthorController) UpdateAuthor(c *gin.Context) {
-    id, err := strconv.ParseInt(c.Param("id"), 10, 64)
-    if err != nil {
-        c.JSON(400, gin.H{
-            "error": err.Error(),
-        })
-        return
-    }
+	id, err := strconv.ParseInt(c.Param("id"), 10, 64)
+	if err != nil {
+		c.JSON(400, gin.H{
+			"error": err.Error(),
+		})
+		return
+	}
 
-    obj := ent.Author{}
-    if err := c.ShouldBind(&obj); err != nil {
-        c.JSON(400, gin.H{
-            "error": "Author binding failed",
-        })
-        return
-    }
-    obj.ID = int(id)
-    a, err := ctl.client.Author.
-        UpdateOne(&obj).
-        Save(context.Background())
-    if err != nil {
-        c.JSON(400, gin.H{"error": "update failed"})
-        return
-    }
+	obj := ent.Author{}
+	if err := c.ShouldBind(&obj); err != nil {
+		c.JSON(400, gin.H{
+			"error": "Author binding failed",
+		})
+		return
+	}
+	obj.ID = int(id)
+	a, err := ctl.client.Author.
+		UpdateOne(&obj).
+		Save(context.Background())
+	if err != nil {
+		c.JSON(400, gin.H{"error": "update failed"})
+		return
+	}
 
-    c.JSON(200, a)
+	c.JSON(200, a)
 }
 
 // NewAuthorController creates and registers handles for the author controller
 func NewAuthorController(router gin.IRouter, client *ent.Client) *AuthorController {
-    ac := &AuthorController{
-        client: client,
-        router: router,
-    }
-    ac.register()
-    return ac
+	ac := &AuthorController{
+		client: client,
+		router: router,
+	}
+	ac.register()
+	return ac
 }
 
 // InitAuthorController registers routes to the main engine
 func (ctl *AuthorController) register() {
-    Authors := ctl.router.Group("/Authors")
+	Authors := ctl.router.Group("/Authors")
 
-    Authors.GET("", ctl.ListAuthor)
+	Authors.GET("", ctl.ListAuthor)
 
-    // CRUD
-    Authors.POST("", ctl.CreateAuthor)
-    Authors.GET(":id", ctl.GetAuthor)
-    Authors.PUT(":id", ctl.UpdateAuthor)
-    Authors.DELETE(":id", ctl.DeleteAuthor)
+	// CRUD
+	Authors.POST("", ctl.CreateAuthor)
+	Authors.GET(":id", ctl.GetAuthor)
+	Authors.PUT(":id", ctl.UpdateAuthor)
+	Authors.DELETE(":id", ctl.DeleteAuthor)
 }

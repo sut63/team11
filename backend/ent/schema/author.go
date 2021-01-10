@@ -18,8 +18,6 @@ func (Author) Fields() []ent.Field {
         field.String("Name").
             NotEmpty().
             Unique(),
-        field.String("Position").
-            NotEmpty(),
     }
 
 }

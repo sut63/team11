@@ -17,7 +17,7 @@ const (
 	// EdgeUser holds the string denoting the user edge name in mutations.
 	EdgeUser = "user"
 	// EdgeStatus holds the string denoting the status edge name in mutations.
-	EdgeStatus = "Status"
+	EdgeStatus = "status"
 	// EdgeBooklist holds the string denoting the booklist edge name in mutations.
 	EdgeBooklist = "booklist"
 
@@ -44,12 +44,12 @@ const (
 	UserInverseTable = "users"
 	// UserColumn is the table column denoting the user relation/edge.
 	UserColumn = "USER_ID"
-	// StatusTable is the table the holds the Status relation/edge.
+	// StatusTable is the table the holds the status relation/edge.
 	StatusTable = "books"
 	// StatusInverseTable is the table name for the Status entity.
 	// It exists in this package in order to avoid circular dependency with the "status" package.
 	StatusInverseTable = "status"
-	// StatusColumn is the table column denoting the Status relation/edge.
+	// StatusColumn is the table column denoting the status relation/edge.
 	StatusColumn = "STATUS_ID"
 	// BooklistTable is the table the holds the booklist relation/edge.
 	BooklistTable = "bookborrows"

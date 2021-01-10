@@ -9,8 +9,6 @@ const (
 	FieldID = "id"
 	// FieldName holds the string denoting the name field in the database.
 	FieldName = "name"
-	// FieldPosition holds the string denoting the position field in the database.
-	FieldPosition = "position"
 
 	// EdgeOwner holds the string denoting the owner edge name in mutations.
 	EdgeOwner = "owner"
@@ -39,12 +37,9 @@ const (
 var Columns = []string{
 	FieldID,
 	FieldName,
-	FieldPosition,
 }
 
 var (
 	// NameValidator is a validator for the "Name" field. It is called by the builders before save.
 	NameValidator func(string) error
-	// PositionValidator is a validator for the "Position" field. It is called by the builders before save.
-	PositionValidator func(string) error
 )

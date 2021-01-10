@@ -470,7 +470,7 @@ func (c *BookClient) QueryUser(b *Book) *UserQuery {
 	return query
 }
 
-// QueryStatus queries the Status edge of a Book.
+// QueryStatus queries the status edge of a Book.
 func (c *BookClient) QueryStatus(b *Book) *StatusQuery {
 	query := &StatusQuery{config: c.config}
 	query.path = func(ctx context.Context) (fromV *sql.Selector, _ error) {

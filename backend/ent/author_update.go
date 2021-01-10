@@ -35,12 +35,6 @@ func (au *AuthorUpdate) SetName(s string) *AuthorUpdate {
 	return au
 }
 
-// SetPosition sets the Position field.
-func (au *AuthorUpdate) SetPosition(s string) *AuthorUpdate {
-	au.mutation.SetPosition(s)
-	return au
-}
-
 // AddOwnerIDs adds the owner edge to Research by ids.
 func (au *AuthorUpdate) AddOwnerIDs(ids ...int) *AuthorUpdate {
 	au.mutation.AddOwnerIDs(ids...)
@@ -111,11 +105,6 @@ func (au *AuthorUpdate) Save(ctx context.Context) (int, error) {
 	if v, ok := au.mutation.Name(); ok {
 		if err := author.NameValidator(v); err != nil {
 			return 0, &ValidationError{Name: "Name", err: fmt.Errorf("ent: validator failed for field \"Name\": %w", err)}
-		}
-	}
-	if v, ok := au.mutation.Position(); ok {
-		if err := author.PositionValidator(v); err != nil {
-			return 0, &ValidationError{Name: "Position", err: fmt.Errorf("ent: validator failed for field \"Position\": %w", err)}
 		}
 	}
 
@@ -191,13 +180,6 @@ func (au *AuthorUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Type:   field.TypeString,
 			Value:  value,
 			Column: author.FieldName,
-		})
-	}
-	if value, ok := au.mutation.Position(); ok {
-		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeString,
-			Value:  value,
-			Column: author.FieldPosition,
 		})
 	}
 	if nodes := au.mutation.RemovedOwnerIDs(); len(nodes) > 0 {
@@ -300,12 +282,6 @@ func (auo *AuthorUpdateOne) SetName(s string) *AuthorUpdateOne {
 	return auo
 }
 
-// SetPosition sets the Position field.
-func (auo *AuthorUpdateOne) SetPosition(s string) *AuthorUpdateOne {
-	auo.mutation.SetPosition(s)
-	return auo
-}
-
 // AddOwnerIDs adds the owner edge to Research by ids.
 func (auo *AuthorUpdateOne) AddOwnerIDs(ids ...int) *AuthorUpdateOne {
 	auo.mutation.AddOwnerIDs(ids...)
@@ -376,11 +352,6 @@ func (auo *AuthorUpdateOne) Save(ctx context.Context) (*Author, error) {
 	if v, ok := auo.mutation.Name(); ok {
 		if err := author.NameValidator(v); err != nil {
 			return nil, &ValidationError{Name: "Name", err: fmt.Errorf("ent: validator failed for field \"Name\": %w", err)}
-		}
-	}
-	if v, ok := auo.mutation.Position(); ok {
-		if err := author.PositionValidator(v); err != nil {
-			return nil, &ValidationError{Name: "Position", err: fmt.Errorf("ent: validator failed for field \"Position\": %w", err)}
 		}
 	}
 
@@ -454,13 +425,6 @@ func (auo *AuthorUpdateOne) sqlSave(ctx context.Context) (a *Author, err error) 
 			Type:   field.TypeString,
 			Value:  value,
 			Column: author.FieldName,
-		})
-	}
-	if value, ok := auo.mutation.Position(); ok {
-		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeString,
-			Value:  value,
-			Column: author.FieldPosition,
 		})
 	}
 	if nodes := auo.mutation.RemovedOwnerIDs(); len(nodes) > 0 {
