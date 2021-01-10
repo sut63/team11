@@ -16,6 +16,7 @@ import (
 	"github.com/team11/app/ent/status"
 )
 
+
 //User struct
 type User struct {
 	Name     string
@@ -24,6 +25,10 @@ type User struct {
 	Role     int
 }
 
+//Location struct
+type Location struct {
+	Name  string
+}
 //ServicePoint struct
 type ServicePoint struct {
 	CounterNumber	string
@@ -44,16 +49,27 @@ type Book struct {
 	Status   int
 }
 
-//ServicePoint struct
-type ServicePoint struct {
-	BuildingName  string
-	CounterNumber string
+// Author struct
+type Author struct {
+	NameAuthor string
 }
 
-//Location struct
-type Location struct {
-	Name string
+// Researchtype struct
+type Researchtype struct {
+	NameResearchtype string
 }
+
+//Researchs struct
+type Researchs struct {
+	Research []Research
+}
+
+//Research struct
+type Research struct {
+	NameResearch    string
+}
+
+
 
 // @title SUT SA Example API Playlist Vidoe
 // @version 1.0
@@ -202,8 +218,7 @@ func main() {
 
 	ServicePoint := []ServicePoint{
 		{"เค้าเตอร์ 1"},
-		{"เค้าเตอร์ 2"}
-	}
+		{"เค้าเตอร์ 2"}}
 	for _, se := range ServicePoint {
 		client.ServicePoint.
 			Create().
@@ -212,10 +227,18 @@ func main() {
 	}
 
 	Author := []string{"โยชิฮิโระ โทงาชิ", "เออิจิโร โอดะ"}
-	for _, au := range Author {
+	for _, a := range Author {
 		client.Author.
 			Create().
-			SetName(au).
+			SetName(a).
+			Save(context.Background())
+	}
+
+	Researchtype := []string{"การวิจัยเชิงประวัติศาสตร์", "การวิจัยเชิงบรรยาย", "การวิจัยเชิงทดลอง", "การวิจัยเชิงปริมาณ", "การวิจัยพื้นฐาน", "การวิจัยประยุกต์", ""}
+	for _, rt := range Researchtype {
+		client.Researchtype.
+			Create().
+			SetTYPENAME(rt).
 			Save(context.Background())
 	}
 
