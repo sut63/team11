@@ -25,15 +25,13 @@ type User struct {
 	Role     int
 }
 
-<<<<<<< HEAD
 //Location struct
 type Location struct {
 	Name  string
-=======
+}
 //ServicePoint struct
 type ServicePoint struct {
 	CounterNumber	string
->>>>>>> 1153b7f6f258f440d51960a903bc5a6572fcbb78
 }
 
 //ClientEntity struct
@@ -51,7 +49,6 @@ type Book struct {
 	Status   int
 }
 
-<<<<<<< HEAD
 // Author struct
 type Author struct {
 	NameAuthor string
@@ -70,18 +67,8 @@ type Researchs struct {
 //Research struct
 type Research struct {
 	NameResearch    string
-=======
-//ServicePoint struct
-type ServicePoint struct {
-	BuildingName  string
-	CounterNumber string
 }
 
-//Location struct
-type Location struct {
-	Name string
->>>>>>> 1153b7f6f258f440d51960a903bc5a6572fcbb78
-}
 
 
 // @title SUT SA Example API Playlist Vidoe
@@ -231,8 +218,7 @@ func main() {
 
 	ServicePoint := []ServicePoint{
 		{"เค้าเตอร์ 1"},
-		{"เค้าเตอร์ 2"}
-	}
+		{"เค้าเตอร์ 2"}}
 	for _, se := range ServicePoint {
 		client.ServicePoint.
 			Create().
@@ -249,10 +235,10 @@ func main() {
 	}
 
 	Researchtype := []string{"การวิจัยเชิงประวัติศาสตร์", "การวิจัยเชิงบรรยาย", "การวิจัยเชิงทดลอง", "การวิจัยเชิงปริมาณ", "การวิจัยพื้นฐาน", "การวิจัยประยุกต์", ""}
-	for _, a := range Researchtype {
+	for _, rt := range Researchtype {
 		client.Researchtype.
 			Create().
-			SetTYPENAME(a).
+			SetTYPENAME(rt).
 			Save(context.Background())
 	}
 
