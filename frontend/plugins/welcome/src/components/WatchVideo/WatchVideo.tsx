@@ -168,7 +168,7 @@ const WatchVideo: FC<{}> = () => {
           <Grid container spacing={3}>
             <Grid item xs={12}></Grid>
             <Grid item xs={3}>
-              <div className={classes.paper}>วีดีโอ</div>
+              <div className="{classes.paper}">วีดีโอ</div>
             </Grid>
             <Grid item xs={9}>
               <FormControl variant="outlined" className={classes.formControl}>

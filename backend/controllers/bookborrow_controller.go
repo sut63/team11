@@ -33,7 +33,7 @@ type Bookborrow struct {
 // @Accept   json
 // @Produce  json
 // @Param bookborrow body Bookborrow true "Bookborrow entity"
-// @Success 200 {object} bookborrow
+// @Success 200 {object} ent.Bookborrow
 // @Failure 400 {object} gin.H
 // @Failure 500 {object} gin.H
 // @Router /bookborrows [post]
@@ -216,7 +216,7 @@ func (ctl *BookborrowController) DeleteBookborrow(c *gin.Context) {
 // @Produce  json
 // @Param id path int true "Bookborrow ID"
 // @Param bookborrow body ent.Bookborrow true "Bookborrow entity"
-// @Success 200 {object} ent.BookBorrow
+// @Success 200 {object} ent.Bookborrow
 // @Failure 400 {object} gin.H
 // @Failure 500 {object} gin.H
 // @Router /bookborrows/{id} [put]
