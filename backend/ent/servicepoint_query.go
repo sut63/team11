@@ -301,12 +301,12 @@ func (spq *ServicePointQuery) WithServicepoint(opts ...func(*BookingQuery)) *Ser
 // Example:
 //
 //	var v []struct {
-//		BUILDINGNAME string `json:"BUILDING_NAME,omitempty"`
+//		COUNTERNUMBER string `json:"COUNTER_NUMBER,omitempty"`
 //		Count int `json:"count,omitempty"`
 //	}
 //
 //	client.ServicePoint.Query().
-//		GroupBy(servicepoint.FieldBUILDINGNAME).
+//		GroupBy(servicepoint.FieldCOUNTERNUMBER).
 //		Aggregate(ent.Count()).
 //		Scan(ctx, &v)
 //
@@ -327,11 +327,11 @@ func (spq *ServicePointQuery) GroupBy(field string, fields ...string) *ServicePo
 // Example:
 //
 //	var v []struct {
-//		BUILDINGNAME string `json:"BUILDING_NAME,omitempty"`
+//		COUNTERNUMBER string `json:"COUNTER_NUMBER,omitempty"`
 //	}
 //
 //	client.ServicePoint.Query().
-//		Select(servicepoint.FieldBUILDINGNAME).
+//		Select(servicepoint.FieldCOUNTERNUMBER).
 //		Scan(ctx, &v)
 //
 func (spq *ServicePointQuery) Select(field string, fields ...string) *ServicePointSelect {

@@ -15,8 +15,6 @@ type ServicePoint struct {
 	config `json:"-"`
 	// ID of the ent.
 	ID int `json:"id,omitempty"`
-	// BUILDINGNAME holds the value of the "BUILDING_NAME" field.
-	BUILDINGNAME string `json:"BUILDING_NAME,omitempty"`
 	// COUNTERNUMBER holds the value of the "COUNTER_NUMBER" field.
 	COUNTERNUMBER string `json:"COUNTER_NUMBER,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
@@ -57,7 +55,6 @@ func (e ServicePointEdges) ServicepointOrErr() ([]*Booking, error) {
 func (*ServicePoint) scanValues() []interface{} {
 	return []interface{}{
 		&sql.NullInt64{},  // id
-		&sql.NullString{}, // BUILDING_NAME
 		&sql.NullString{}, // COUNTER_NUMBER
 	}
 }
@@ -75,12 +72,7 @@ func (sp *ServicePoint) assignValues(values ...interface{}) error {
 	sp.ID = int(value.Int64)
 	values = values[1:]
 	if value, ok := values[0].(*sql.NullString); !ok {
-		return fmt.Errorf("unexpected type %T for field BUILDING_NAME", values[0])
-	} else if value.Valid {
-		sp.BUILDINGNAME = value.String
-	}
-	if value, ok := values[1].(*sql.NullString); !ok {
-		return fmt.Errorf("unexpected type %T for field COUNTER_NUMBER", values[1])
+		return fmt.Errorf("unexpected type %T for field COUNTER_NUMBER", values[0])
 	} else if value.Valid {
 		sp.COUNTERNUMBER = value.String
 	}
@@ -120,8 +112,6 @@ func (sp *ServicePoint) String() string {
 	var builder strings.Builder
 	builder.WriteString("ServicePoint(")
 	builder.WriteString(fmt.Sprintf("id=%v", sp.ID))
-	builder.WriteString(", BUILDING_NAME=")
-	builder.WriteString(sp.BUILDINGNAME)
 	builder.WriteString(", COUNTER_NUMBER=")
 	builder.WriteString(sp.COUNTERNUMBER)
 	builder.WriteByte(')')

@@ -352,7 +352,6 @@ var (
 	// ServicePointsColumns holds the columns for the "service_points" table.
 	ServicePointsColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt, Increment: true},
-		{Name: "building_name", Type: field.TypeString},
 		{Name: "counter_number", Type: field.TypeString, Unique: true},
 	}
 	// ServicePointsTable holds the schema information for the "service_points" table.

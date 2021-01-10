@@ -38,7 +38,6 @@ func (ctl *ServicePointController) CreateServicePoint(c *gin.Context) {
 
 	sp, err := ctl.client.ServicePoint.
 		Create().
-		SetBUILDINGNAME(obj.BUILDINGNAME).
 		SetCOUNTERNUMBER(obj.COUNTERNUMBER).
 		Save(context.Background())
 	if err != nil {

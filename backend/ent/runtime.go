@@ -117,12 +117,8 @@ func init() {
 	roominfo.RoomStatusValidator = roominfoDescRoomStatus.Validators[0].(func(string) error)
 	servicepointFields := schema.ServicePoint{}.Fields()
 	_ = servicepointFields
-	// servicepointDescBUILDINGNAME is the schema descriptor for BUILDING_NAME field.
-	servicepointDescBUILDINGNAME := servicepointFields[0].Descriptor()
-	// servicepoint.BUILDINGNAMEValidator is a validator for the "BUILDING_NAME" field. It is called by the builders before save.
-	servicepoint.BUILDINGNAMEValidator = servicepointDescBUILDINGNAME.Validators[0].(func(string) error)
 	// servicepointDescCOUNTERNUMBER is the schema descriptor for COUNTER_NUMBER field.
-	servicepointDescCOUNTERNUMBER := servicepointFields[1].Descriptor()
+	servicepointDescCOUNTERNUMBER := servicepointFields[0].Descriptor()
 	// servicepoint.COUNTERNUMBERValidator is a validator for the "COUNTER_NUMBER" field. It is called by the builders before save.
 	servicepoint.COUNTERNUMBERValidator = servicepointDescCOUNTERNUMBER.Validators[0].(func(string) error)
 	statusFields := schema.Status{}.Fields()

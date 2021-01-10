@@ -29,12 +29,6 @@ func (spu *ServicePointUpdate) Where(ps ...predicate.ServicePoint) *ServicePoint
 	return spu
 }
 
-// SetBUILDINGNAME sets the BUILDING_NAME field.
-func (spu *ServicePointUpdate) SetBUILDINGNAME(s string) *ServicePointUpdate {
-	spu.mutation.SetBUILDINGNAME(s)
-	return spu
-}
-
 // SetCOUNTERNUMBER sets the COUNTER_NUMBER field.
 func (spu *ServicePointUpdate) SetCOUNTERNUMBER(s string) *ServicePointUpdate {
 	spu.mutation.SetCOUNTERNUMBER(s)
@@ -108,11 +102,6 @@ func (spu *ServicePointUpdate) RemoveServicepoint(b ...*Booking) *ServicePointUp
 
 // Save executes the query and returns the number of rows/vertices matched by this operation.
 func (spu *ServicePointUpdate) Save(ctx context.Context) (int, error) {
-	if v, ok := spu.mutation.BUILDINGNAME(); ok {
-		if err := servicepoint.BUILDINGNAMEValidator(v); err != nil {
-			return 0, &ValidationError{Name: "BUILDING_NAME", err: fmt.Errorf("ent: validator failed for field \"BUILDING_NAME\": %w", err)}
-		}
-	}
 	if v, ok := spu.mutation.COUNTERNUMBER(); ok {
 		if err := servicepoint.COUNTERNUMBERValidator(v); err != nil {
 			return 0, &ValidationError{Name: "COUNTER_NUMBER", err: fmt.Errorf("ent: validator failed for field \"COUNTER_NUMBER\": %w", err)}
@@ -185,13 +174,6 @@ func (spu *ServicePointUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				ps[i](selector)
 			}
 		}
-	}
-	if value, ok := spu.mutation.BUILDINGNAME(); ok {
-		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeString,
-			Value:  value,
-			Column: servicepoint.FieldBUILDINGNAME,
-		})
 	}
 	if value, ok := spu.mutation.COUNTERNUMBER(); ok {
 		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
@@ -294,12 +276,6 @@ type ServicePointUpdateOne struct {
 	mutation *ServicePointMutation
 }
 
-// SetBUILDINGNAME sets the BUILDING_NAME field.
-func (spuo *ServicePointUpdateOne) SetBUILDINGNAME(s string) *ServicePointUpdateOne {
-	spuo.mutation.SetBUILDINGNAME(s)
-	return spuo
-}
-
 // SetCOUNTERNUMBER sets the COUNTER_NUMBER field.
 func (spuo *ServicePointUpdateOne) SetCOUNTERNUMBER(s string) *ServicePointUpdateOne {
 	spuo.mutation.SetCOUNTERNUMBER(s)
@@ -373,11 +349,6 @@ func (spuo *ServicePointUpdateOne) RemoveServicepoint(b ...*Booking) *ServicePoi
 
 // Save executes the query and returns the updated entity.
 func (spuo *ServicePointUpdateOne) Save(ctx context.Context) (*ServicePoint, error) {
-	if v, ok := spuo.mutation.BUILDINGNAME(); ok {
-		if err := servicepoint.BUILDINGNAMEValidator(v); err != nil {
-			return nil, &ValidationError{Name: "BUILDING_NAME", err: fmt.Errorf("ent: validator failed for field \"BUILDING_NAME\": %w", err)}
-		}
-	}
 	if v, ok := spuo.mutation.COUNTERNUMBER(); ok {
 		if err := servicepoint.COUNTERNUMBERValidator(v); err != nil {
 			return nil, &ValidationError{Name: "COUNTER_NUMBER", err: fmt.Errorf("ent: validator failed for field \"COUNTER_NUMBER\": %w", err)}
@@ -449,13 +420,6 @@ func (spuo *ServicePointUpdateOne) sqlSave(ctx context.Context) (sp *ServicePoin
 		return nil, &ValidationError{Name: "ID", err: fmt.Errorf("missing ServicePoint.ID for update")}
 	}
 	_spec.Node.ID.Value = id
-	if value, ok := spuo.mutation.BUILDINGNAME(); ok {
-		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeString,
-			Value:  value,
-			Column: servicepoint.FieldBUILDINGNAME,
-		})
-	}
 	if value, ok := spuo.mutation.COUNTERNUMBER(); ok {
 		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
 			Type:   field.TypeString,

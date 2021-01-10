@@ -24,6 +24,11 @@ type User struct {
 	Role     int
 }
 
+//ServicePoint struct
+type ServicePoint struct {
+	CounterNumber	string
+}
+
 //ClientEntity struct
 type ClientEntity struct {
 	Name  string
@@ -181,6 +186,17 @@ func main() {
 			Create().
 			SetCLIENTNAME(cl.Name).
 			SetState(s).
+			Save(context.Background())
+	}
+
+	ServicePoint := []ServicePoint{
+		{"เค้าเตอร์ 1"},
+		{"เค้าเตอร์ 2"}
+	}
+	for _, se := range ServicePoint {
+		client.ServicePoint.
+			Create().
+			SetCOUNTERNUMBER(se.CounterNumber).
 			Save(context.Background())
 	}
 

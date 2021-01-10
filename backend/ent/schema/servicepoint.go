@@ -14,8 +14,6 @@ type ServicePoint struct {
 // Fields of the ServicePoint.
 func (ServicePoint) Fields() []ent.Field {
 	return []ent.Field{
-		field.String("BUILDING_NAME").
-			NotEmpty(),
 		field.String("COUNTER_NUMBER").
 			Unique().
 			NotEmpty(),
