@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"strconv"
+	"time"
 
 	"github.com/gin-gonic/gin"
 	"github.com/team11/app/ent"
@@ -24,6 +25,7 @@ type Bookborrow struct {
 	UserID         int
 	BookID         int
 	ServicePointID int
+	BorrowDate     string
 }
 
 // CreateBookborrow handles POST requests for adding bookborrow entities
@@ -81,12 +83,14 @@ func (ctl *BookborrowController) CreateBookborrow(c *gin.Context) {
 		})
 		return
 	}
+	times, err := time.Parse(time.RFC3339, obj.BorrowDate)
 
 	bb, err := ctl.client.Bookborrow.
 		Create().
 		SetBOOK(bk).
 		SetUSER(u).
 		SetSERVICEPOINT(sp).
+		SetBORROWDATE(times).
 		Save(context.Background())
 	if err != nil {
 		c.JSON(400, gin.H{
