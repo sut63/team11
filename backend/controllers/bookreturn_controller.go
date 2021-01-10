@@ -101,7 +101,7 @@ func (ctl *BookreturnController) CreateBookreturn(c *gin.Context) {
 		SetUser(u).
 		SetLocation(l).
 		SetMustreturn(b).
-		SetReturnDeadline(times).
+		SetDEADLINE(times).
 		Save(context.Background())
 
 	if err != nil {

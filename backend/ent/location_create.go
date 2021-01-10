@@ -20,9 +20,9 @@ type LocationCreate struct {
 	hooks    []Hook
 }
 
-// SetLocationName sets the location_name field.
-func (lc *LocationCreate) SetLocationName(s string) *LocationCreate {
-	lc.mutation.SetLocationName(s)
+// SetLOCATIONNAME sets the LOCATION_NAME field.
+func (lc *LocationCreate) SetLOCATIONNAME(s string) *LocationCreate {
+	lc.mutation.SetLOCATIONNAME(s)
 	return lc
 }
 
@@ -48,12 +48,12 @@ func (lc *LocationCreate) Mutation() *LocationMutation {
 
 // Save creates the Location in the database.
 func (lc *LocationCreate) Save(ctx context.Context) (*Location, error) {
-	if _, ok := lc.mutation.LocationName(); !ok {
-		return nil, &ValidationError{Name: "location_name", err: errors.New("ent: missing required field \"location_name\"")}
+	if _, ok := lc.mutation.LOCATIONNAME(); !ok {
+		return nil, &ValidationError{Name: "LOCATION_NAME", err: errors.New("ent: missing required field \"LOCATION_NAME\"")}
 	}
-	if v, ok := lc.mutation.LocationName(); ok {
-		if err := location.LocationNameValidator(v); err != nil {
-			return nil, &ValidationError{Name: "location_name", err: fmt.Errorf("ent: validator failed for field \"location_name\": %w", err)}
+	if v, ok := lc.mutation.LOCATIONNAME(); ok {
+		if err := location.LOCATIONNAMEValidator(v); err != nil {
+			return nil, &ValidationError{Name: "LOCATION_NAME", err: fmt.Errorf("ent: validator failed for field \"LOCATION_NAME\": %w", err)}
 		}
 	}
 	var (
@@ -116,13 +116,13 @@ func (lc *LocationCreate) createSpec() (*Location, *sqlgraph.CreateSpec) {
 			},
 		}
 	)
-	if value, ok := lc.mutation.LocationName(); ok {
+	if value, ok := lc.mutation.LOCATIONNAME(); ok {
 		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
 			Type:   field.TypeString,
 			Value:  value,
-			Column: location.FieldLocationName,
+			Column: location.FieldLOCATIONNAME,
 		})
-		l.LocationName = value
+		l.LOCATIONNAME = value
 	}
 	if nodes := lc.mutation.ReturnfromIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
