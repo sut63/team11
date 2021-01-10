@@ -7,8 +7,8 @@ const (
 	Label = "location"
 	// FieldID holds the string denoting the id field in the database.
 	FieldID = "id"
-	// FieldLocationName holds the string denoting the location_name field in the database.
-	FieldLocationName = "location_name"
+	// FieldLOCATIONNAME holds the string denoting the location_name field in the database.
+	FieldLOCATIONNAME = "location_name"
 
 	// EdgeReturnfrom holds the string denoting the returnfrom edge name in mutations.
 	EdgeReturnfrom = "returnfrom"
@@ -21,16 +21,16 @@ const (
 	// It exists in this package in order to avoid circular dependency with the "bookreturn" package.
 	ReturnfromInverseTable = "bookreturns"
 	// ReturnfromColumn is the table column denoting the returnfrom relation/edge.
-	ReturnfromColumn = "location_id"
+	ReturnfromColumn = "LOCATION_NAME"
 )
 
 // Columns holds all SQL columns for location fields.
 var Columns = []string{
 	FieldID,
-	FieldLocationName,
+	FieldLOCATIONNAME,
 }
 
 var (
-	// LocationNameValidator is a validator for the "location_name" field. It is called by the builders before save.
-	LocationNameValidator func(string) error
+	// LOCATIONNAMEValidator is a validator for the "LOCATION_NAME" field. It is called by the builders before save.
+	LOCATIONNAMEValidator func(string) error
 )

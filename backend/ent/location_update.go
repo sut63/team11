@@ -28,9 +28,9 @@ func (lu *LocationUpdate) Where(ps ...predicate.Location) *LocationUpdate {
 	return lu
 }
 
-// SetLocationName sets the location_name field.
-func (lu *LocationUpdate) SetLocationName(s string) *LocationUpdate {
-	lu.mutation.SetLocationName(s)
+// SetLOCATIONNAME sets the LOCATION_NAME field.
+func (lu *LocationUpdate) SetLOCATIONNAME(s string) *LocationUpdate {
+	lu.mutation.SetLOCATIONNAME(s)
 	return lu
 }
 
@@ -71,9 +71,9 @@ func (lu *LocationUpdate) RemoveReturnfrom(b ...*Bookreturn) *LocationUpdate {
 
 // Save executes the query and returns the number of rows/vertices matched by this operation.
 func (lu *LocationUpdate) Save(ctx context.Context) (int, error) {
-	if v, ok := lu.mutation.LocationName(); ok {
-		if err := location.LocationNameValidator(v); err != nil {
-			return 0, &ValidationError{Name: "location_name", err: fmt.Errorf("ent: validator failed for field \"location_name\": %w", err)}
+	if v, ok := lu.mutation.LOCATIONNAME(); ok {
+		if err := location.LOCATIONNAMEValidator(v); err != nil {
+			return 0, &ValidationError{Name: "LOCATION_NAME", err: fmt.Errorf("ent: validator failed for field \"LOCATION_NAME\": %w", err)}
 		}
 	}
 
@@ -144,11 +144,11 @@ func (lu *LocationUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			}
 		}
 	}
-	if value, ok := lu.mutation.LocationName(); ok {
+	if value, ok := lu.mutation.LOCATIONNAME(); ok {
 		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
 			Type:   field.TypeString,
 			Value:  value,
-			Column: location.FieldLocationName,
+			Column: location.FieldLOCATIONNAME,
 		})
 	}
 	if nodes := lu.mutation.RemovedReturnfromIDs(); len(nodes) > 0 {
@@ -207,9 +207,9 @@ type LocationUpdateOne struct {
 	mutation *LocationMutation
 }
 
-// SetLocationName sets the location_name field.
-func (luo *LocationUpdateOne) SetLocationName(s string) *LocationUpdateOne {
-	luo.mutation.SetLocationName(s)
+// SetLOCATIONNAME sets the LOCATION_NAME field.
+func (luo *LocationUpdateOne) SetLOCATIONNAME(s string) *LocationUpdateOne {
+	luo.mutation.SetLOCATIONNAME(s)
 	return luo
 }
 
@@ -250,9 +250,9 @@ func (luo *LocationUpdateOne) RemoveReturnfrom(b ...*Bookreturn) *LocationUpdate
 
 // Save executes the query and returns the updated entity.
 func (luo *LocationUpdateOne) Save(ctx context.Context) (*Location, error) {
-	if v, ok := luo.mutation.LocationName(); ok {
-		if err := location.LocationNameValidator(v); err != nil {
-			return nil, &ValidationError{Name: "location_name", err: fmt.Errorf("ent: validator failed for field \"location_name\": %w", err)}
+	if v, ok := luo.mutation.LOCATIONNAME(); ok {
+		if err := location.LOCATIONNAMEValidator(v); err != nil {
+			return nil, &ValidationError{Name: "LOCATION_NAME", err: fmt.Errorf("ent: validator failed for field \"LOCATION_NAME\": %w", err)}
 		}
 	}
 
@@ -321,11 +321,11 @@ func (luo *LocationUpdateOne) sqlSave(ctx context.Context) (l *Location, err err
 		return nil, &ValidationError{Name: "ID", err: fmt.Errorf("missing Location.ID for update")}
 	}
 	_spec.Node.ID.Value = id
-	if value, ok := luo.mutation.LocationName(); ok {
+	if value, ok := luo.mutation.LOCATIONNAME(); ok {
 		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
 			Type:   field.TypeString,
 			Value:  value,
-			Column: location.FieldLocationName,
+			Column: location.FieldLOCATIONNAME,
 		})
 	}
 	if nodes := luo.mutation.RemovedReturnfromIDs(); len(nodes) > 0 {

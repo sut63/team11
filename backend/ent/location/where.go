@@ -91,29 +91,29 @@ func IDLTE(id int) predicate.Location {
 	})
 }
 
-// LocationName applies equality check predicate on the "location_name" field. It's identical to LocationNameEQ.
-func LocationName(v string) predicate.Location {
+// LOCATIONNAME applies equality check predicate on the "LOCATION_NAME" field. It's identical to LOCATIONNAMEEQ.
+func LOCATIONNAME(v string) predicate.Location {
 	return predicate.Location(func(s *sql.Selector) {
-		s.Where(sql.EQ(s.C(FieldLocationName), v))
+		s.Where(sql.EQ(s.C(FieldLOCATIONNAME), v))
 	})
 }
 
-// LocationNameEQ applies the EQ predicate on the "location_name" field.
-func LocationNameEQ(v string) predicate.Location {
+// LOCATIONNAMEEQ applies the EQ predicate on the "LOCATION_NAME" field.
+func LOCATIONNAMEEQ(v string) predicate.Location {
 	return predicate.Location(func(s *sql.Selector) {
-		s.Where(sql.EQ(s.C(FieldLocationName), v))
+		s.Where(sql.EQ(s.C(FieldLOCATIONNAME), v))
 	})
 }
 
-// LocationNameNEQ applies the NEQ predicate on the "location_name" field.
-func LocationNameNEQ(v string) predicate.Location {
+// LOCATIONNAMENEQ applies the NEQ predicate on the "LOCATION_NAME" field.
+func LOCATIONNAMENEQ(v string) predicate.Location {
 	return predicate.Location(func(s *sql.Selector) {
-		s.Where(sql.NEQ(s.C(FieldLocationName), v))
+		s.Where(sql.NEQ(s.C(FieldLOCATIONNAME), v))
 	})
 }
 
-// LocationNameIn applies the In predicate on the "location_name" field.
-func LocationNameIn(vs ...string) predicate.Location {
+// LOCATIONNAMEIn applies the In predicate on the "LOCATION_NAME" field.
+func LOCATIONNAMEIn(vs ...string) predicate.Location {
 	v := make([]interface{}, len(vs))
 	for i := range v {
 		v[i] = vs[i]
@@ -125,12 +125,12 @@ func LocationNameIn(vs ...string) predicate.Location {
 			s.Where(sql.False())
 			return
 		}
-		s.Where(sql.In(s.C(FieldLocationName), v...))
+		s.Where(sql.In(s.C(FieldLOCATIONNAME), v...))
 	})
 }
 
-// LocationNameNotIn applies the NotIn predicate on the "location_name" field.
-func LocationNameNotIn(vs ...string) predicate.Location {
+// LOCATIONNAMENotIn applies the NotIn predicate on the "LOCATION_NAME" field.
+func LOCATIONNAMENotIn(vs ...string) predicate.Location {
 	v := make([]interface{}, len(vs))
 	for i := range v {
 		v[i] = vs[i]
@@ -142,70 +142,70 @@ func LocationNameNotIn(vs ...string) predicate.Location {
 			s.Where(sql.False())
 			return
 		}
-		s.Where(sql.NotIn(s.C(FieldLocationName), v...))
+		s.Where(sql.NotIn(s.C(FieldLOCATIONNAME), v...))
 	})
 }
 
-// LocationNameGT applies the GT predicate on the "location_name" field.
-func LocationNameGT(v string) predicate.Location {
+// LOCATIONNAMEGT applies the GT predicate on the "LOCATION_NAME" field.
+func LOCATIONNAMEGT(v string) predicate.Location {
 	return predicate.Location(func(s *sql.Selector) {
-		s.Where(sql.GT(s.C(FieldLocationName), v))
+		s.Where(sql.GT(s.C(FieldLOCATIONNAME), v))
 	})
 }
 
-// LocationNameGTE applies the GTE predicate on the "location_name" field.
-func LocationNameGTE(v string) predicate.Location {
+// LOCATIONNAMEGTE applies the GTE predicate on the "LOCATION_NAME" field.
+func LOCATIONNAMEGTE(v string) predicate.Location {
 	return predicate.Location(func(s *sql.Selector) {
-		s.Where(sql.GTE(s.C(FieldLocationName), v))
+		s.Where(sql.GTE(s.C(FieldLOCATIONNAME), v))
 	})
 }
 
-// LocationNameLT applies the LT predicate on the "location_name" field.
-func LocationNameLT(v string) predicate.Location {
+// LOCATIONNAMELT applies the LT predicate on the "LOCATION_NAME" field.
+func LOCATIONNAMELT(v string) predicate.Location {
 	return predicate.Location(func(s *sql.Selector) {
-		s.Where(sql.LT(s.C(FieldLocationName), v))
+		s.Where(sql.LT(s.C(FieldLOCATIONNAME), v))
 	})
 }
 
-// LocationNameLTE applies the LTE predicate on the "location_name" field.
-func LocationNameLTE(v string) predicate.Location {
+// LOCATIONNAMELTE applies the LTE predicate on the "LOCATION_NAME" field.
+func LOCATIONNAMELTE(v string) predicate.Location {
 	return predicate.Location(func(s *sql.Selector) {
-		s.Where(sql.LTE(s.C(FieldLocationName), v))
+		s.Where(sql.LTE(s.C(FieldLOCATIONNAME), v))
 	})
 }
 
-// LocationNameContains applies the Contains predicate on the "location_name" field.
-func LocationNameContains(v string) predicate.Location {
+// LOCATIONNAMEContains applies the Contains predicate on the "LOCATION_NAME" field.
+func LOCATIONNAMEContains(v string) predicate.Location {
 	return predicate.Location(func(s *sql.Selector) {
-		s.Where(sql.Contains(s.C(FieldLocationName), v))
+		s.Where(sql.Contains(s.C(FieldLOCATIONNAME), v))
 	})
 }
 
-// LocationNameHasPrefix applies the HasPrefix predicate on the "location_name" field.
-func LocationNameHasPrefix(v string) predicate.Location {
+// LOCATIONNAMEHasPrefix applies the HasPrefix predicate on the "LOCATION_NAME" field.
+func LOCATIONNAMEHasPrefix(v string) predicate.Location {
 	return predicate.Location(func(s *sql.Selector) {
-		s.Where(sql.HasPrefix(s.C(FieldLocationName), v))
+		s.Where(sql.HasPrefix(s.C(FieldLOCATIONNAME), v))
 	})
 }
 
-// LocationNameHasSuffix applies the HasSuffix predicate on the "location_name" field.
-func LocationNameHasSuffix(v string) predicate.Location {
+// LOCATIONNAMEHasSuffix applies the HasSuffix predicate on the "LOCATION_NAME" field.
+func LOCATIONNAMEHasSuffix(v string) predicate.Location {
 	return predicate.Location(func(s *sql.Selector) {
-		s.Where(sql.HasSuffix(s.C(FieldLocationName), v))
+		s.Where(sql.HasSuffix(s.C(FieldLOCATIONNAME), v))
 	})
 }
 
-// LocationNameEqualFold applies the EqualFold predicate on the "location_name" field.
-func LocationNameEqualFold(v string) predicate.Location {
+// LOCATIONNAMEEqualFold applies the EqualFold predicate on the "LOCATION_NAME" field.
+func LOCATIONNAMEEqualFold(v string) predicate.Location {
 	return predicate.Location(func(s *sql.Selector) {
-		s.Where(sql.EqualFold(s.C(FieldLocationName), v))
+		s.Where(sql.EqualFold(s.C(FieldLOCATIONNAME), v))
 	})
 }
 
-// LocationNameContainsFold applies the ContainsFold predicate on the "location_name" field.
-func LocationNameContainsFold(v string) predicate.Location {
+// LOCATIONNAMEContainsFold applies the ContainsFold predicate on the "LOCATION_NAME" field.
+func LOCATIONNAMEContainsFold(v string) predicate.Location {
 	return predicate.Location(func(s *sql.Selector) {
-		s.Where(sql.ContainsFold(s.C(FieldLocationName), v))
+		s.Where(sql.ContainsFold(s.C(FieldLOCATIONNAME), v))
 	})
 }
 
