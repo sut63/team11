@@ -7,8 +7,8 @@ const (
 	Label = "bookreturn"
 	// FieldID holds the string denoting the id field in the database.
 	FieldID = "id"
-	// FieldReturnDeadline holds the string denoting the return_deadline field in the database.
-	FieldReturnDeadline = "return_deadline"
+	// FieldDEADLINE holds the string denoting the deadline field in the database.
+	FieldDEADLINE = "deadline"
 
 	// EdgeUser holds the string denoting the user edge name in mutations.
 	EdgeUser = "user"
@@ -32,7 +32,7 @@ const (
 	// It exists in this package in order to avoid circular dependency with the "location" package.
 	LocationInverseTable = "locations"
 	// LocationColumn is the table column denoting the location relation/edge.
-	LocationColumn = "location_id"
+	LocationColumn = "LOCATION_NAME"
 	// MustreturnTable is the table the holds the mustreturn relation/edge.
 	MustreturnTable = "bookreturns"
 	// MustreturnInverseTable is the table name for the Bookborrow entity.
@@ -45,12 +45,12 @@ const (
 // Columns holds all SQL columns for bookreturn fields.
 var Columns = []string{
 	FieldID,
-	FieldReturnDeadline,
+	FieldDEADLINE,
 }
 
 // ForeignKeys holds the SQL foreign-keys that are owned by the Bookreturn type.
 var ForeignKeys = []string{
 	"CLIENT_ID",
-	"location_id",
+	"LOCATION_NAME",
 	"USER_ID",
 }

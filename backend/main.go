@@ -16,12 +16,18 @@ import (
 	"github.com/team11/app/ent/status"
 )
 
+
 //User struct
 type User struct {
 	Name     string
 	Email    string
 	Password string
 	Role     int
+}
+
+//Location struct
+type Location struct {
+	Name  string
 }
 
 //ClientEntity struct
@@ -39,19 +45,9 @@ type Book struct {
 	Status   int
 }
 
-// Authors struct
-type Authors struct {
-	Author []Author
-}
-
 // Author struct
 type Author struct {
 	NameAuthor string
-}
-
-// Researchtypes struct
-type Researchtypes struct {
-	Researchtype []Researchtype
 }
 
 // Researchtype struct
@@ -68,6 +64,7 @@ type Researchs struct {
 type Research struct {
 	NameResearch    string
 }
+
 
 // @title SUT SA Example API Playlist Vidoe
 // @version 1.0
@@ -214,17 +211,19 @@ func main() {
 			Save(context.Background())
 	}
 
-	Authors := Authors{
-		Author: []Author{
-			Author{"โยชิฮิโระ โทงาชิ"},
-			Author{"เออิจิโร โอดะ"},
-		},
-	}
-
-	for _, a := range Authors.Author {
+	Author := []string{"โยชิฮิโระ โทงาชิ", "เออิจิโร โอดะ"}
+	for _, a := range Author {
 		client.Author.
 			Create().
-			SetName(a.NameAuthor).
+			SetName(a).
+			Save(context.Background())
+	}
+
+	Researchtype := []string{"การวิจัยเชิงประวัติศาสตร์", "การวิจัยเชิงบรรยาย", "การวิจัยเชิงทดลอง", "การวิจัยเชิงปริมาณ", "การวิจัยพื้นฐาน", "การวิจัยประยุกต์", ""}
+	for _, a := range Researchtype {
+		client.Researchtype.
+			Create().
+			SetTYPENAME(a).
 			Save(context.Background())
 	}
 
@@ -236,22 +235,11 @@ func main() {
 			Save(context.Background())
 	}
 
-	Researchtypes := Researchtypes{
-		Researchtype: []Researchtype{
-			Researchtype{"การวิจัยเชิงประวัติศาสตร์"},
-			Researchtype{"การวิจัยเชิงบรรยาย"},
-			Researchtype{"การวิจัยเชิงทดลอง"},
-			Researchtype{"การวิจัยเชิงปริมาณ"},
-			Researchtype{"การวิจัยพื้นฐาน"},
-			Researchtype{"การวิจัยประยุกต์"},
-			Researchtype{"การวิจัยเชิงปฏิบัติ"},
-		},
-	}
-
-	for _, rt := range Researchtypes.Researchtype {
-		client.Researchtype.
+	Location := []string{"Building A", "Building B", "Building C"}
+	for _, l := range Location {
+		client.Location.
 			Create().
-			SetTYPENAME(rt.NameResearchtype).
+			SetLOCATIONNAME(l).
 			Save(context.Background())
 	}
 

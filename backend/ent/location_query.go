@@ -270,12 +270,12 @@ func (lq *LocationQuery) WithReturnfrom(opts ...func(*BookreturnQuery)) *Locatio
 // Example:
 //
 //	var v []struct {
-//		LocationName string `json:"location_name,omitempty"`
+//		LOCATIONNAME string `json:"LOCATION_NAME,omitempty"`
 //		Count int `json:"count,omitempty"`
 //	}
 //
 //	client.Location.Query().
-//		GroupBy(location.FieldLocationName).
+//		GroupBy(location.FieldLOCATIONNAME).
 //		Aggregate(ent.Count()).
 //		Scan(ctx, &v)
 //
@@ -296,11 +296,11 @@ func (lq *LocationQuery) GroupBy(field string, fields ...string) *LocationGroupB
 // Example:
 //
 //	var v []struct {
-//		LocationName string `json:"location_name,omitempty"`
+//		LOCATIONNAME string `json:"LOCATION_NAME,omitempty"`
 //	}
 //
 //	client.Location.Query().
-//		Select(location.FieldLocationName).
+//		Select(location.FieldLOCATIONNAME).
 //		Scan(ctx, &v)
 //
 func (lq *LocationQuery) Select(field string, fields ...string) *LocationSelect {
@@ -371,13 +371,13 @@ func (lq *LocationQuery) sqlAll(ctx context.Context) ([]*Location, error) {
 			return nil, err
 		}
 		for _, n := range neighbors {
-			fk := n.location_id
+			fk := n.LOCATION_NAME
 			if fk == nil {
-				return nil, fmt.Errorf(`foreign-key "location_id" is nil for node %v`, n.ID)
+				return nil, fmt.Errorf(`foreign-key "LOCATION_NAME" is nil for node %v`, n.ID)
 			}
 			node, ok := nodeids[*fk]
 			if !ok {
-				return nil, fmt.Errorf(`unexpected foreign-key "location_id" returned %v for node %v`, *fk, n.ID)
+				return nil, fmt.Errorf(`unexpected foreign-key "LOCATION_NAME" returned %v for node %v`, *fk, n.ID)
 			}
 			node.Edges.Returnfrom = append(node.Edges.Returnfrom, n)
 		}

@@ -19,14 +19,14 @@ type Bookreturn struct {
 	config `json:"-"`
 	// ID of the ent.
 	ID int `json:"id,omitempty"`
-	// ReturnDeadline holds the value of the "return_deadline" field.
-	ReturnDeadline time.Time `json:"return_deadline,omitempty"`
+	// DEADLINE holds the value of the "DEADLINE" field.
+	DEADLINE time.Time `json:"DEADLINE,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the BookreturnQuery when eager-loading is set.
-	Edges       BookreturnEdges `json:"edges"`
-	CLIENT_ID   *int
-	location_id *int
-	USER_ID     *int
+	Edges         BookreturnEdges `json:"edges"`
+	CLIENT_ID     *int
+	LOCATION_NAME *int
+	USER_ID       *int
 }
 
 // BookreturnEdges holds the relations/edges for other nodes in the graph.
@@ -88,7 +88,7 @@ func (e BookreturnEdges) MustreturnOrErr() (*Bookborrow, error) {
 func (*Bookreturn) scanValues() []interface{} {
 	return []interface{}{
 		&sql.NullInt64{}, // id
-		&sql.NullTime{},  // return_deadline
+		&sql.NullTime{},  // DEADLINE
 	}
 }
 
@@ -96,7 +96,7 @@ func (*Bookreturn) scanValues() []interface{} {
 func (*Bookreturn) fkValues() []interface{} {
 	return []interface{}{
 		&sql.NullInt64{}, // CLIENT_ID
-		&sql.NullInt64{}, // location_id
+		&sql.NullInt64{}, // LOCATION_NAME
 		&sql.NullInt64{}, // USER_ID
 	}
 }
@@ -114,9 +114,9 @@ func (b *Bookreturn) assignValues(values ...interface{}) error {
 	b.ID = int(value.Int64)
 	values = values[1:]
 	if value, ok := values[0].(*sql.NullTime); !ok {
-		return fmt.Errorf("unexpected type %T for field return_deadline", values[0])
+		return fmt.Errorf("unexpected type %T for field DEADLINE", values[0])
 	} else if value.Valid {
-		b.ReturnDeadline = value.Time
+		b.DEADLINE = value.Time
 	}
 	values = values[1:]
 	if len(values) == len(bookreturn.ForeignKeys) {
@@ -127,10 +127,10 @@ func (b *Bookreturn) assignValues(values ...interface{}) error {
 			*b.CLIENT_ID = int(value.Int64)
 		}
 		if value, ok := values[1].(*sql.NullInt64); !ok {
-			return fmt.Errorf("unexpected type %T for edge-field location_id", value)
+			return fmt.Errorf("unexpected type %T for edge-field LOCATION_NAME", value)
 		} else if value.Valid {
-			b.location_id = new(int)
-			*b.location_id = int(value.Int64)
+			b.LOCATION_NAME = new(int)
+			*b.LOCATION_NAME = int(value.Int64)
 		}
 		if value, ok := values[2].(*sql.NullInt64); !ok {
 			return fmt.Errorf("unexpected type %T for edge-field USER_ID", value)
@@ -180,8 +180,8 @@ func (b *Bookreturn) String() string {
 	var builder strings.Builder
 	builder.WriteString("Bookreturn(")
 	builder.WriteString(fmt.Sprintf("id=%v", b.ID))
-	builder.WriteString(", return_deadline=")
-	builder.WriteString(b.ReturnDeadline.Format(time.ANSIC))
+	builder.WriteString(", DEADLINE=")
+	builder.WriteString(b.DEADLINE.Format(time.ANSIC))
 	builder.WriteByte(')')
 	return builder.String()
 }

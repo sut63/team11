@@ -3820,6 +3820,10 @@ var doc = `{
         "ent.Bookreturn": {
             "type": "object",
             "properties": {
+                "DEADLINE": {
+                    "description": "DEADLINE holds the value of the \"DEADLINE\" field.",
+                    "type": "string"
+                },
                 "client_ID": {
                     "type": "integer"
                 },
@@ -3832,9 +3836,8 @@ var doc = `{
                     "description": "ID of the ent.",
                     "type": "integer"
                 },
-                "return_deadline": {
-                    "description": "ReturnDeadline holds the value of the \"return_deadline\" field.",
-                    "type": "string"
+                "location_NAME": {
+                    "type": "integer"
                 },
                 "user_ID": {
                     "type": "integer"
@@ -3932,6 +3935,10 @@ var doc = `{
         "ent.Location": {
             "type": "object",
             "properties": {
+                "LOCATION_NAME": {
+                    "description": "LOCATIONNAME holds the value of the \"LOCATION_NAME\" field.",
+                    "type": "string"
+                },
                 "edges": {
                     "description": "Edges holds the relations/edges for other nodes in the graph.\nThe values are being populated by the LocationQuery when eager-loading is set.",
                     "type": "object",
@@ -3940,10 +3947,6 @@ var doc = `{
                 "id": {
                     "description": "ID of the ent.",
                     "type": "integer"
-                },
-                "location_name": {
-                    "description": "LocationName holds the value of the \"location_name\" field.",
-                    "type": "string"
                 }
             }
         },

@@ -65,10 +65,10 @@ func init() {
 	cliententity.CLIENTNAMEValidator = cliententityDescCLIENTNAME.Validators[0].(func(string) error)
 	locationFields := schema.Location{}.Fields()
 	_ = locationFields
-	// locationDescLocationName is the schema descriptor for location_name field.
-	locationDescLocationName := locationFields[0].Descriptor()
-	// location.LocationNameValidator is a validator for the "location_name" field. It is called by the builders before save.
-	location.LocationNameValidator = locationDescLocationName.Validators[0].(func(string) error)
+	// locationDescLOCATIONNAME is the schema descriptor for LOCATION_NAME field.
+	locationDescLOCATIONNAME := locationFields[0].Descriptor()
+	// location.LOCATIONNAMEValidator is a validator for the "LOCATION_NAME" field. It is called by the builders before save.
+	location.LOCATIONNAMEValidator = locationDescLOCATIONNAME.Validators[0].(func(string) error)
 	preemptionFields := schema.Preemption{}.Fields()
 	_ = preemptionFields
 	// preemptionDescPreemptTime is the schema descriptor for PreemptTime field.
