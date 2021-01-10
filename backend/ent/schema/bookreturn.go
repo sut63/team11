@@ -14,7 +14,7 @@ type Bookreturn struct {
 // Fields of the Bookreturn.
 func (Bookreturn) Fields() []ent.Field {
 	return []ent.Field{
-		field.Time("return_deadline"),
+		field.Time("DEADLINE"),
     }
 }
 
@@ -23,6 +23,6 @@ func (Bookreturn) Edges() []ent.Edge {
 	return []ent.Edge{
 		edge.From("user",User.Type).Ref("return").Unique(),
 		edge.From("location",Location.Type).Ref("returnfrom").Unique(),
-		edge.From("mustreturn", Bookborrow.Type).Ref("borrowed").Unique(),
+		edge.From("mustreturn", Bookborrow.Type).Ref("borrowed").Unique(),	
 	}
 }
