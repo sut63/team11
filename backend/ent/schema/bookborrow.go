@@ -35,5 +35,6 @@ func (Bookborrow) Edges() []ent.Edge {
 		
 		edge.To("borrowed", Bookreturn.Type).
 			StorageKey(edge.Column("CLIENT_ID")),
+
 	}
 }

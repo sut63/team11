@@ -14,8 +14,6 @@ import (
 	"github.com/team11/app/ent"
 	"github.com/team11/app/ent/role"
 	"github.com/team11/app/ent/status"
-
-	"github.com/team11/app/ent/location"
 )
 
 //User struct
