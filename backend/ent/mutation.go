@@ -6531,7 +6531,6 @@ type ServicePointMutation struct {
 	op                  Op
 	typ                 string
 	id                  *int
-	_BUILDING_NAME      *string
 	_COUNTER_NUMBER     *string
 	clearedFields       map[string]struct{}
 	from                map[int]struct{}
@@ -6619,43 +6618,6 @@ func (m *ServicePointMutation) ID() (id int, exists bool) {
 		return
 	}
 	return *m.id, true
-}
-
-// SetBUILDINGNAME sets the BUILDING_NAME field.
-func (m *ServicePointMutation) SetBUILDINGNAME(s string) {
-	m._BUILDING_NAME = &s
-}
-
-// BUILDINGNAME returns the BUILDING_NAME value in the mutation.
-func (m *ServicePointMutation) BUILDINGNAME() (r string, exists bool) {
-	v := m._BUILDING_NAME
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// OldBUILDINGNAME returns the old BUILDING_NAME value of the ServicePoint.
-// If the ServicePoint object wasn't provided to the builder, the object is fetched
-// from the database.
-// An error is returned if the mutation operation is not UpdateOne, or database query fails.
-func (m *ServicePointMutation) OldBUILDINGNAME(ctx context.Context) (v string, err error) {
-	if !m.op.Is(OpUpdateOne) {
-		return v, fmt.Errorf("OldBUILDINGNAME is allowed only on UpdateOne operations")
-	}
-	if m.id == nil || m.oldValue == nil {
-		return v, fmt.Errorf("OldBUILDINGNAME requires an ID field in the mutation")
-	}
-	oldValue, err := m.oldValue(ctx)
-	if err != nil {
-		return v, fmt.Errorf("querying old value for OldBUILDINGNAME: %w", err)
-	}
-	return oldValue.BUILDINGNAME, nil
-}
-
-// ResetBUILDINGNAME reset all changes of the "BUILDING_NAME" field.
-func (m *ServicePointMutation) ResetBUILDINGNAME() {
-	m._BUILDING_NAME = nil
 }
 
 // SetCOUNTERNUMBER sets the COUNTER_NUMBER field.
@@ -6793,10 +6755,7 @@ func (m *ServicePointMutation) Type() string {
 // this mutation. Note that, in order to get all numeric
 // fields that were in/decremented, call AddedFields().
 func (m *ServicePointMutation) Fields() []string {
-	fields := make([]string, 0, 2)
-	if m._BUILDING_NAME != nil {
-		fields = append(fields, servicepoint.FieldBUILDINGNAME)
-	}
+	fields := make([]string, 0, 1)
 	if m._COUNTER_NUMBER != nil {
 		fields = append(fields, servicepoint.FieldCOUNTERNUMBER)
 	}
@@ -6808,8 +6767,6 @@ func (m *ServicePointMutation) Fields() []string {
 // not set, or was not define in the schema.
 func (m *ServicePointMutation) Field(name string) (ent.Value, bool) {
 	switch name {
-	case servicepoint.FieldBUILDINGNAME:
-		return m.BUILDINGNAME()
 	case servicepoint.FieldCOUNTERNUMBER:
 		return m.COUNTERNUMBER()
 	}
@@ -6821,8 +6778,6 @@ func (m *ServicePointMutation) Field(name string) (ent.Value, bool) {
 // or the query to the database was failed.
 func (m *ServicePointMutation) OldField(ctx context.Context, name string) (ent.Value, error) {
 	switch name {
-	case servicepoint.FieldBUILDINGNAME:
-		return m.OldBUILDINGNAME(ctx)
 	case servicepoint.FieldCOUNTERNUMBER:
 		return m.OldCOUNTERNUMBER(ctx)
 	}
@@ -6834,13 +6789,6 @@ func (m *ServicePointMutation) OldField(ctx context.Context, name string) (ent.V
 // type mismatch the field type.
 func (m *ServicePointMutation) SetField(name string, value ent.Value) error {
 	switch name {
-	case servicepoint.FieldBUILDINGNAME:
-		v, ok := value.(string)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.SetBUILDINGNAME(v)
-		return nil
 	case servicepoint.FieldCOUNTERNUMBER:
 		v, ok := value.(string)
 		if !ok {
@@ -6898,9 +6846,6 @@ func (m *ServicePointMutation) ClearField(name string) error {
 // defined in the schema.
 func (m *ServicePointMutation) ResetField(name string) error {
 	switch name {
-	case servicepoint.FieldBUILDINGNAME:
-		m.ResetBUILDINGNAME()
-		return nil
 	case servicepoint.FieldCOUNTERNUMBER:
 		m.ResetCOUNTERNUMBER()
 		return nil

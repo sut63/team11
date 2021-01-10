@@ -21,12 +21,6 @@ type ServicePointCreate struct {
 	hooks    []Hook
 }
 
-// SetBUILDINGNAME sets the BUILDING_NAME field.
-func (spc *ServicePointCreate) SetBUILDINGNAME(s string) *ServicePointCreate {
-	spc.mutation.SetBUILDINGNAME(s)
-	return spc
-}
-
 // SetCOUNTERNUMBER sets the COUNTER_NUMBER field.
 func (spc *ServicePointCreate) SetCOUNTERNUMBER(s string) *ServicePointCreate {
 	spc.mutation.SetCOUNTERNUMBER(s)
@@ -70,14 +64,6 @@ func (spc *ServicePointCreate) Mutation() *ServicePointMutation {
 
 // Save creates the ServicePoint in the database.
 func (spc *ServicePointCreate) Save(ctx context.Context) (*ServicePoint, error) {
-	if _, ok := spc.mutation.BUILDINGNAME(); !ok {
-		return nil, &ValidationError{Name: "BUILDING_NAME", err: errors.New("ent: missing required field \"BUILDING_NAME\"")}
-	}
-	if v, ok := spc.mutation.BUILDINGNAME(); ok {
-		if err := servicepoint.BUILDINGNAMEValidator(v); err != nil {
-			return nil, &ValidationError{Name: "BUILDING_NAME", err: fmt.Errorf("ent: validator failed for field \"BUILDING_NAME\": %w", err)}
-		}
-	}
 	if _, ok := spc.mutation.COUNTERNUMBER(); !ok {
 		return nil, &ValidationError{Name: "COUNTER_NUMBER", err: errors.New("ent: missing required field \"COUNTER_NUMBER\"")}
 	}
@@ -146,14 +132,6 @@ func (spc *ServicePointCreate) createSpec() (*ServicePoint, *sqlgraph.CreateSpec
 			},
 		}
 	)
-	if value, ok := spc.mutation.BUILDINGNAME(); ok {
-		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
-			Type:   field.TypeString,
-			Value:  value,
-			Column: servicepoint.FieldBUILDINGNAME,
-		})
-		sp.BUILDINGNAME = value
-	}
 	if value, ok := spc.mutation.COUNTERNUMBER(); ok {
 		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
 			Type:   field.TypeString,
