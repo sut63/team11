@@ -2264,7 +2264,7 @@ var doc = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/ent.Research"
+                            "$ref": "#/definitions/controllers.Research"
                         }
                     }
                 ],
@@ -3589,6 +3589,26 @@ var doc = `{
                     "type": "integer"
                 },
                 "user": {
+                    "type": "integer"
+                }
+            }
+        },
+        "controllers.Research": {
+            "type": "object",
+            "properties": {
+                "date": {
+                    "type": "string"
+                },
+                "docType": {
+                    "type": "integer"
+                },
+                "docname": {
+                    "type": "string"
+                },
+                "myDoc": {
+                    "type": "integer"
+                },
+                "register": {
                     "type": "integer"
                 }
             }

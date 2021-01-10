@@ -35,7 +35,7 @@ type Research struct {
 // @ID create-research
 // @Accept   json
 // @Produce  json
-// @Param research body ent.Research true "Research entity"
+// @Param research body Research true "Research entity"
 // @Success 200 {object} ent.Research
 // @Failure 400 {object} gin.H
 // @Failure 500 {object} gin.H

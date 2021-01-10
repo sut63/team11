@@ -49,6 +49,19 @@ definitions:
       user:
         type: integer
     type: object
+  controllers.Research:
+    properties:
+      date:
+        type: string
+      docType:
+        type: integer
+      docname:
+        type: string
+      myDoc:
+        type: integer
+      register:
+        type: integer
+    type: object
   ent.Author:
     properties:
       Name:
@@ -2117,7 +2130,7 @@ paths:
         name: research
         required: true
         schema:
-          $ref: '#/definitions/ent.Research'
+          $ref: '#/definitions/controllers.Research'
       produces:
       - application/json
       responses:

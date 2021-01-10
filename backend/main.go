@@ -39,6 +39,36 @@ type Book struct {
 	Status   int
 }
 
+// Authors struct
+type Authors struct {
+	Author []Author
+}
+
+// Author struct
+type Author struct {
+	NameAuthor string
+}
+
+// Researchtypes struct
+type Researchtypes struct {
+	Researchtype []Researchtype
+}
+
+// Researchtype struct
+type Researchtype struct {
+	NameResearchtype string
+}
+
+//Researchs struct
+type Researchs struct {
+	Research []Research
+}
+
+//Research struct
+type Research struct {
+	NameResearch    string
+}
+
 // @title SUT SA Example API Playlist Vidoe
 // @version 1.0
 // @description This is a sample server for SUT SE 2563
@@ -184,11 +214,17 @@ func main() {
 			Save(context.Background())
 	}
 
-	Author := []string{"โยชิฮิโระ โทงาชิ", "เออิจิโร โอดะ"}
-	for _, au := range Author {
+	Authors := Authors{
+		Author: []Author{
+			Author{"โยชิฮิโระ โทงาชิ"},
+			Author{"เออิจิโร โอดะ"},
+		},
+	}
+
+	for _, a := range Authors.Author {
 		client.Author.
 			Create().
-			SetName(au).
+			SetName(a.NameAuthor).
 			Save(context.Background())
 	}
 
@@ -197,6 +233,25 @@ func main() {
 		client.Category.
 			Create().
 			SetCategoryName(ca).
+			Save(context.Background())
+	}
+
+	Researchtypes := Researchtypes{
+		Researchtype: []Researchtype{
+			Researchtype{"การวิจัยเชิงประวัติศาสตร์"},
+			Researchtype{"การวิจัยเชิงบรรยาย"},
+			Researchtype{"การวิจัยเชิงทดลอง"},
+			Researchtype{"การวิจัยเชิงปริมาณ"},
+			Researchtype{"การวิจัยพื้นฐาน"},
+			Researchtype{"การวิจัยประยุกต์"},
+			Researchtype{"การวิจัยเชิงปฏิบัติ"},
+		},
+	}
+
+	for _, rt := range Researchtypes.Researchtype {
+		client.Researchtype.
+			Create().
+			SetTYPENAME(rt.NameResearchtype).
 			Save(context.Background())
 	}
 
