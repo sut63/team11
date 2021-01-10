@@ -14,13 +14,14 @@ type Location struct {
 // Fields of the Location.
 func (Location) Fields() []ent.Field {
 	return []ent.Field{
-		field.String("location_name").NotEmpty(),
+		field.String("LOCATION_NAME").NotEmpty(),
    }
 }
 
 // Edges of the Location.
 func (Location) Edges() []ent.Edge {
 	return []ent.Edge{
-        edge.To("returnfrom",Bookreturn.Type).StorageKey(edge.Column("location_id")),
+		edge.To("returnfrom",Bookreturn.Type).StorageKey(edge.Column("LOCATION_NAME")	
+		
     }
 }
