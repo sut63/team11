@@ -55,7 +55,7 @@ export interface EntBookreturn {
      * @type {number}
      * @memberof EntBookreturn
      */
-    locationNAME?: number;
+    locationID?: number;
     /**
      * 
      * @type {number}
@@ -78,7 +78,7 @@ export function EntBookreturnFromJSONTyped(json: any, ignoreDiscriminator: boole
         'clientID': !exists(json, 'client_ID') ? undefined : json['client_ID'],
         'edges': !exists(json, 'edges') ? undefined : EntBookreturnEdgesFromJSON(json['edges']),
         'id': !exists(json, 'id') ? undefined : json['id'],
-        'locationNAME': !exists(json, 'location_NAME') ? undefined : json['location_NAME'],
+        'locationID': !exists(json, 'location_ID') ? undefined : json['location_ID'],
         'userID': !exists(json, 'user_ID') ? undefined : json['user_ID'],
     };
 }
@@ -96,7 +96,7 @@ export function EntBookreturnToJSON(value?: EntBookreturn | null): any {
         'client_ID': value.clientID,
         'edges': EntBookreturnEdgesToJSON(value.edges),
         'id': value.id,
-        'location_NAME': value.locationNAME,
+        'location_ID': value.locationID,
         'user_ID': value.userID,
     };
 }

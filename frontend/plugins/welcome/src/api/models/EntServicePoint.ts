@@ -27,12 +27,6 @@ import {
  */
 export interface EntServicePoint {
     /**
-     * BUILDINGNAME holds the value of the "BUILDING_NAME" field.
-     * @type {string}
-     * @memberof EntServicePoint
-     */
-    bUILDINGNAME?: string;
-    /**
      * COUNTERNUMBER holds the value of the "COUNTER_NUMBER" field.
      * @type {string}
      * @memberof EntServicePoint
@@ -62,7 +56,6 @@ export function EntServicePointFromJSONTyped(json: any, ignoreDiscriminator: boo
     }
     return {
         
-        'bUILDINGNAME': !exists(json, 'BUILDING_NAME') ? undefined : json['BUILDING_NAME'],
         'cOUNTERNUMBER': !exists(json, 'COUNTER_NUMBER') ? undefined : json['COUNTER_NUMBER'],
         'edges': !exists(json, 'edges') ? undefined : EntServicePointEdgesFromJSON(json['edges']),
         'id': !exists(json, 'id') ? undefined : json['id'],
@@ -78,7 +71,6 @@ export function EntServicePointToJSON(value?: EntServicePoint | null): any {
     }
     return {
         
-        'BUILDING_NAME': value.bUILDINGNAME,
         'COUNTER_NUMBER': value.cOUNTERNUMBER,
         'edges': EntServicePointEdgesToJSON(value.edges),
         'id': value.id,

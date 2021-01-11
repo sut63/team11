@@ -30,6 +30,9 @@ import {
     ControllersPreemption,
     ControllersPreemptionFromJSON,
     ControllersPreemptionToJSON,
+    ControllersResearch,
+    ControllersResearchFromJSON,
+    ControllersResearchToJSON,
     EntAuthor,
     EntAuthorFromJSON,
     EntAuthorToJSON,
@@ -120,7 +123,7 @@ export interface CreatePreemptionRequest {
 }
 
 export interface CreateResearchRequest {
-    research: EntResearch;
+    research: ControllersResearch;
 }
 
 export interface CreateResearchtypeRequest {
@@ -762,7 +765,7 @@ export class DefaultApi extends runtime.BaseAPI {
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: EntResearchToJSON(requestParameters.research),
+            body: ControllersResearchToJSON(requestParameters.research),
         });
 
         return new runtime.JSONApiResponse(response, (jsonValue) => EntResearchFromJSON(jsonValue));
