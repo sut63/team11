@@ -19,8 +19,8 @@ type Bookreturn struct {
 	config `json:"-"`
 	// ID of the ent.
 	ID int `json:"id,omitempty"`
-	// DEADLINE holds the value of the "DEADLINE" field.
-	DEADLINE time.Time `json:"DEADLINE,omitempty"`
+	// RETURNTIME holds the value of the "RETURN_TIME" field.
+	RETURNTIME time.Time `json:"RETURN_TIME,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the BookreturnQuery when eager-loading is set.
 	Edges       BookreturnEdges `json:"edges"`
@@ -88,7 +88,7 @@ func (e BookreturnEdges) MustreturnOrErr() (*Bookborrow, error) {
 func (*Bookreturn) scanValues() []interface{} {
 	return []interface{}{
 		&sql.NullInt64{}, // id
-		&sql.NullTime{},  // DEADLINE
+		&sql.NullTime{},  // RETURN_TIME
 	}
 }
 
@@ -114,9 +114,9 @@ func (b *Bookreturn) assignValues(values ...interface{}) error {
 	b.ID = int(value.Int64)
 	values = values[1:]
 	if value, ok := values[0].(*sql.NullTime); !ok {
-		return fmt.Errorf("unexpected type %T for field DEADLINE", values[0])
+		return fmt.Errorf("unexpected type %T for field RETURN_TIME", values[0])
 	} else if value.Valid {
-		b.DEADLINE = value.Time
+		b.RETURNTIME = value.Time
 	}
 	values = values[1:]
 	if len(values) == len(bookreturn.ForeignKeys) {
@@ -180,8 +180,8 @@ func (b *Bookreturn) String() string {
 	var builder strings.Builder
 	builder.WriteString("Bookreturn(")
 	builder.WriteString(fmt.Sprintf("id=%v", b.ID))
-	builder.WriteString(", DEADLINE=")
-	builder.WriteString(b.DEADLINE.Format(time.ANSIC))
+	builder.WriteString(", RETURN_TIME=")
+	builder.WriteString(b.RETURNTIME.Format(time.ANSIC))
 	builder.WriteByte(')')
 	return builder.String()
 }

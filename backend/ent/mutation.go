@@ -2236,7 +2236,7 @@ type BookreturnMutation struct {
 	op                Op
 	typ               string
 	id                *int
-	_DEADLINE         *time.Time
+	_RETURN_TIME      *time.Time
 	clearedFields     map[string]struct{}
 	user              *int
 	cleareduser       bool
@@ -2327,41 +2327,41 @@ func (m *BookreturnMutation) ID() (id int, exists bool) {
 	return *m.id, true
 }
 
-// SetDEADLINE sets the DEADLINE field.
-func (m *BookreturnMutation) SetDEADLINE(t time.Time) {
-	m._DEADLINE = &t
+// SetRETURNTIME sets the RETURN_TIME field.
+func (m *BookreturnMutation) SetRETURNTIME(t time.Time) {
+	m._RETURN_TIME = &t
 }
 
-// DEADLINE returns the DEADLINE value in the mutation.
-func (m *BookreturnMutation) DEADLINE() (r time.Time, exists bool) {
-	v := m._DEADLINE
+// RETURNTIME returns the RETURN_TIME value in the mutation.
+func (m *BookreturnMutation) RETURNTIME() (r time.Time, exists bool) {
+	v := m._RETURN_TIME
 	if v == nil {
 		return
 	}
 	return *v, true
 }
 
-// OldDEADLINE returns the old DEADLINE value of the Bookreturn.
+// OldRETURNTIME returns the old RETURN_TIME value of the Bookreturn.
 // If the Bookreturn object wasn't provided to the builder, the object is fetched
 // from the database.
 // An error is returned if the mutation operation is not UpdateOne, or database query fails.
-func (m *BookreturnMutation) OldDEADLINE(ctx context.Context) (v time.Time, err error) {
+func (m *BookreturnMutation) OldRETURNTIME(ctx context.Context) (v time.Time, err error) {
 	if !m.op.Is(OpUpdateOne) {
-		return v, fmt.Errorf("OldDEADLINE is allowed only on UpdateOne operations")
+		return v, fmt.Errorf("OldRETURNTIME is allowed only on UpdateOne operations")
 	}
 	if m.id == nil || m.oldValue == nil {
-		return v, fmt.Errorf("OldDEADLINE requires an ID field in the mutation")
+		return v, fmt.Errorf("OldRETURNTIME requires an ID field in the mutation")
 	}
 	oldValue, err := m.oldValue(ctx)
 	if err != nil {
-		return v, fmt.Errorf("querying old value for OldDEADLINE: %w", err)
+		return v, fmt.Errorf("querying old value for OldRETURNTIME: %w", err)
 	}
-	return oldValue.DEADLINE, nil
+	return oldValue.RETURNTIME, nil
 }
 
-// ResetDEADLINE reset all changes of the "DEADLINE" field.
-func (m *BookreturnMutation) ResetDEADLINE() {
-	m._DEADLINE = nil
+// ResetRETURNTIME reset all changes of the "RETURN_TIME" field.
+func (m *BookreturnMutation) ResetRETURNTIME() {
+	m._RETURN_TIME = nil
 }
 
 // SetUserID sets the user edge to User by id.
@@ -2496,8 +2496,8 @@ func (m *BookreturnMutation) Type() string {
 // fields that were in/decremented, call AddedFields().
 func (m *BookreturnMutation) Fields() []string {
 	fields := make([]string, 0, 1)
-	if m._DEADLINE != nil {
-		fields = append(fields, bookreturn.FieldDEADLINE)
+	if m._RETURN_TIME != nil {
+		fields = append(fields, bookreturn.FieldRETURNTIME)
 	}
 	return fields
 }
@@ -2507,8 +2507,8 @@ func (m *BookreturnMutation) Fields() []string {
 // not set, or was not define in the schema.
 func (m *BookreturnMutation) Field(name string) (ent.Value, bool) {
 	switch name {
-	case bookreturn.FieldDEADLINE:
-		return m.DEADLINE()
+	case bookreturn.FieldRETURNTIME:
+		return m.RETURNTIME()
 	}
 	return nil, false
 }
@@ -2518,8 +2518,8 @@ func (m *BookreturnMutation) Field(name string) (ent.Value, bool) {
 // or the query to the database was failed.
 func (m *BookreturnMutation) OldField(ctx context.Context, name string) (ent.Value, error) {
 	switch name {
-	case bookreturn.FieldDEADLINE:
-		return m.OldDEADLINE(ctx)
+	case bookreturn.FieldRETURNTIME:
+		return m.OldRETURNTIME(ctx)
 	}
 	return nil, fmt.Errorf("unknown Bookreturn field %s", name)
 }
@@ -2529,12 +2529,12 @@ func (m *BookreturnMutation) OldField(ctx context.Context, name string) (ent.Val
 // type mismatch the field type.
 func (m *BookreturnMutation) SetField(name string, value ent.Value) error {
 	switch name {
-	case bookreturn.FieldDEADLINE:
+	case bookreturn.FieldRETURNTIME:
 		v, ok := value.(time.Time)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
-		m.SetDEADLINE(v)
+		m.SetRETURNTIME(v)
 		return nil
 	}
 	return fmt.Errorf("unknown Bookreturn field %s", name)
@@ -2586,8 +2586,8 @@ func (m *BookreturnMutation) ClearField(name string) error {
 // defined in the schema.
 func (m *BookreturnMutation) ResetField(name string) error {
 	switch name {
-	case bookreturn.FieldDEADLINE:
-		m.ResetDEADLINE()
+	case bookreturn.FieldRETURNTIME:
+		m.ResetRETURNTIME()
 		return nil
 	}
 	return fmt.Errorf("unknown Bookreturn field %s", name)

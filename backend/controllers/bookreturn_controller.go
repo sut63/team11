@@ -24,7 +24,7 @@ type Bookreturn struct {
 	UserID       int
 	LocationID   int
 	BookborrowID int
-	Deadline     string
+	ReturnTime     string
 }
 
 // CreateBookreturn handles POST requests for adding bookreturn entities
@@ -78,30 +78,19 @@ func (ctl *BookreturnController) CreateBookreturn(c *gin.Context) {
 
 	if err != nil {
 		c.JSON(400, gin.H{
-			"error": "user not found",
+			"error": "bookborrow not found",
 		})
 		return
 	}
 
-	now := time.Now()
-	then := time.Date(2021, 1, 8, 15, 37, 0, 0, time.UTC)
-	after := time.Date(2021, 1, 15, 15, 37, 0, 0, time.UTC)
-	diff := after.Sub(then)
-	times := now.Add(diff)
-
-	if err != nil {
-		c.JSON(400, gin.H{
-			"error": "user not found",
-		})
-		return
-	}
+	times, err := time.Parse(time.RFC3339, obj.ReturnTime)
 
 	br, err := ctl.client.Bookreturn.
 		Create().
 		SetUser(u).
 		SetLocation(l).
 		SetMustreturn(b).
-		SetDEADLINE(times).
+		SetRETURNTIME(times).
 		Save(context.Background())
 
 	if err != nil {

@@ -7,8 +7,8 @@ const (
 	Label = "bookreturn"
 	// FieldID holds the string denoting the id field in the database.
 	FieldID = "id"
-	// FieldDEADLINE holds the string denoting the deadline field in the database.
-	FieldDEADLINE = "deadline"
+	// FieldRETURNTIME holds the string denoting the return_time field in the database.
+	FieldRETURNTIME = "return_time"
 
 	// EdgeUser holds the string denoting the user edge name in mutations.
 	EdgeUser = "user"
@@ -45,7 +45,7 @@ const (
 // Columns holds all SQL columns for bookreturn fields.
 var Columns = []string{
 	FieldID,
-	FieldDEADLINE,
+	FieldRETURNTIME,
 }
 
 // ForeignKeys holds the SQL foreign-keys that are owned by the Bookreturn type.

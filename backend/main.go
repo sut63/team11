@@ -79,6 +79,30 @@ type Bookborrow struct {
 	ServicePointID int
 }
 
+// Roominfos for struct
+type Roominfos struct {
+	Roominfo []Roominfo
+}
+
+// Roominfo for struct
+type Roominfo struct {
+	RoomID     string
+	RoomNo     string
+	RoomType   string
+	RoomTime   string
+	RoomStatus string
+}
+
+// Purposes for struct
+type Purposes struct {
+	Purpose []Purpose
+}
+
+// Purpose for struct
+type Purpose struct {
+	PurposeName string
+}
+
 // @title SUT SA Example API Playlist Vidoe
 // @version 1.0
 // @description This is a sample server for SUT SE 2563
@@ -317,6 +341,95 @@ func main() {
 			Save(context.Background())
 	}
 
+<<<<<<< HEAD
+=======
+	Bookborrow := []Bookborrow{
+		{1, 2, 1, "2021-01-10 23:48:00+07:00"},
+		{2, 1, 2, "2021-01-10 23:48:00+07:00"}}
+	for _, bb := range Bookborrow {
+
+		b, err := client.Book.
+			Query().
+			Where(book.IDEQ(int(bb.BookID))).
+			Only(context.Background())
+		if err != nil {
+			fmt.Println(err.Error())
+			return
+		}
+
+		u, err := client.User.
+			Query().
+			Where(user.IDEQ(int(bb.UserID))).
+			Only(context.Background())
+		if err != nil {
+			fmt.Println(err.Error())
+			return
+		}
+
+		sp, err := client.ServicePoint.
+			Query().
+			Where(servicepoint.IDEQ(int(bb.ServicePointID))).
+			Only(context.Background())
+		if err != nil {
+			fmt.Println(err.Error())
+			return
+		}
+
+		times, err := time.Parse(time.RFC3339, bb.BorrowDate)
+
+		client.Bookborrow.
+			Create().
+			SetBOOK(b).
+			SetUSER(u).
+			SetSERVICEPOINT(sp).
+			SetBORROWDATE(times).
+			Save(context.Background())
+	}
+
+	// Set Purposes Data
+	purposes := Purposes{
+		Purpose: []Purpose{
+			Purpose{"อ่านทบทวน"},
+			Purpose{"ติวหนังสือ"},
+			Purpose{"ทำวิจัย"},
+			Purpose{"เพื่อความบันเทิง"},
+		},
+	}
+
+	for _, p := range purposes.Purpose {
+		client.Purpose.
+			Create().
+			SetPurposeName(p.PurposeName).
+			Save(context.Background())
+	}
+
+	// Set Roominfos Data
+	roominfos := Roominfos{
+		Roominfo: []Roominfo{
+			Roominfo{"RS108", "RS01", "ห้องเดี่ยว", "08.00 AM - 08.50 AM", "ว่าง"},
+			Roominfo{"RS109", "RS01", "ห้องเดี่ยว", "09.00 AM - 09.50 AM", "ว่าง"},
+			Roominfo{"RS110", "RS01", "ห้องเดี่ยว", "10.00 AM - 10.50 AM", "ว่าง"},
+			Roominfo{"RS208", "RS02", "ห้องเดี่ยว", "08.00 AM - 08.50 AM", "ว่าง"},
+			Roominfo{"RS209", "RS02", "ห้องเดี่ยว", "09.00 AM - 09.50 AM", "ว่าง"},
+			Roominfo{"RS210", "RS02", "ห้องเดี่ยว", "10.00 AM - 10.50 AM", "ว่าง"},
+			Roominfo{"RG208", "RS02", "ห้องกลุ่ม", "08.00 AM - 08.50 AM", "ว่าง"},
+			Roominfo{"RG209", "RS02", "ห้องกลุ่ม", "09.00 AM - 09.50 AM", "ว่าง"},
+			Roominfo{"RG210", "RS02", "ห้องกลุ่ม", "10.00 AM - 10.50 AM", "ว่าง"},
+		},
+	}
+
+	for _, r := range roominfos.Roominfo {
+		client.Roominfo.
+			Create().
+			SetRoomID(r.RoomID).
+			SetRoomNo(r.RoomNo).
+			SetRoomType(r.RoomType).
+			SetRoomTime(r.RoomTime).
+			SetRoomStatus(r.RoomStatus).
+			Save(context.Background())
+	}
+	
+>>>>>>> d30dcc2bc8cba77031735a748ef2ae487421763d
 	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 	router.Run()
 }

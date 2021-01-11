@@ -332,12 +332,12 @@ func (bq *BookreturnQuery) WithMustreturn(opts ...func(*BookborrowQuery)) *Bookr
 // Example:
 //
 //	var v []struct {
-//		DEADLINE time.Time `json:"DEADLINE,omitempty"`
+//		RETURNTIME time.Time `json:"RETURN_TIME,omitempty"`
 //		Count int `json:"count,omitempty"`
 //	}
 //
 //	client.Bookreturn.Query().
-//		GroupBy(bookreturn.FieldDEADLINE).
+//		GroupBy(bookreturn.FieldRETURNTIME).
 //		Aggregate(ent.Count()).
 //		Scan(ctx, &v)
 //
@@ -358,11 +358,11 @@ func (bq *BookreturnQuery) GroupBy(field string, fields ...string) *BookreturnGr
 // Example:
 //
 //	var v []struct {
-//		DEADLINE time.Time `json:"DEADLINE,omitempty"`
+//		RETURNTIME time.Time `json:"RETURN_TIME,omitempty"`
 //	}
 //
 //	client.Bookreturn.Query().
-//		Select(bookreturn.FieldDEADLINE).
+//		Select(bookreturn.FieldRETURNTIME).
 //		Scan(ctx, &v)
 //
 func (bq *BookreturnQuery) Select(field string, fields ...string) *BookreturnSelect {
