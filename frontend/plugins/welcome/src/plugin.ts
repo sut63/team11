@@ -16,5 +16,7 @@ export const plugin = createPlugin({
     router.registerRoute('/playlist_video', SignIn);
     router.registerRoute('/Bookborrow', Bookborrow);
     router.registerRoute('/Bookreturn', Bookreturn);
+    // router.registerRoute('/researchcreate', ResearchCreate);
+    router.registerRoute('/VideoOnDemand', Booking);
   },
 });

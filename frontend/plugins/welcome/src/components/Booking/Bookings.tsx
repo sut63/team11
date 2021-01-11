@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import ComponanceTable from '../TableClient';
 import { Link as RouterLink } from 'react-router-dom';
 import {
   Content, Header, Page, pageTheme, ContentHeader,
@@ -18,7 +17,7 @@ import { Alert } from '@material-ui/lab';
 import { DefaultApi } from '../../api/apis';
 import {
   EntClientEntity,
-  EntServicePoint
+  EntServicePoint,
   EntUser,
 } from '../../api/models/';
 
@@ -57,7 +56,7 @@ export default function Create() {
   const [alert, setAlert] = useState(true);
   const [clients, setClients] = useState<EntClientEntity[]>(Array);
   const [users, setUsers] = useState<EntUser[]>(Array);
-  const [bookingtypes, setBookingtypes] = useState<EntBookingtype[]>(Array);
+  const [servicepoint, setServicePoint] = useState<EntServicePoint[]>(Array);
   useEffect(() => {
     const getCliententity = async () => {
       const res = await api.listCliententity({ limit: 10, offset: 0 });
@@ -73,12 +72,12 @@ export default function Create() {
     };
     getUsers();
 
-    const getBookingtype = async () => {
+    const getServicePoint = async () => {
       const res = await api.listServicepoint({ limit: 10, offset: 0 });
       setLoading(false);
-      setBookingtypes(res);
+      setServicePoint(res);
     };
-    getBookingtype();
+    getServicePoint();
 
 
 
@@ -89,11 +88,11 @@ export default function Create() {
     setBookingdate(event.target.value as string);
   };
 
-  const BookingIDhandleChange = (event: React.ChangeEvent<{ value: unknown }>) => {
-    setBookingtypeID(event.target.value as number);
+  const ServicePointIDhandleChange = (event: React.ChangeEvent<{ value: unknown }>) => {
+    setServicePointID(event.target.value as number);
   };
 
-  const clientIDhandleChange = (event: React.ChangeEvent<{ value: unknown }>) => {
+  const ClientIDhandleChange = (event: React.ChangeEvent<{ value: unknown }>) => {
     setClientID(event.target.value as number);
   };
 
@@ -109,7 +108,7 @@ export default function Create() {
 
   const [bookingdate, setBookingdate] = useState(String);
   const [timeleft, setTimeleft] = useState(String);
-  const [bookingtypeID, setBookingtypeID] = useState(Number);
+  const [servicepointID, setServicePointID] = useState(Number);
   const [clientID, setClientID] = useState(Number);
   const [userID, setUserID] = useState(Number);
  
@@ -117,7 +116,7 @@ export default function Create() {
     setOpen(false);
     const res = await api.getUser({ id: userID });
     setUsername(res);
-    pname?=username?.uSERNAME;
+    pname= username?.uSERNAME;
   };
   const handleClose2 = () => {
     setOpen(false);
@@ -128,7 +127,7 @@ export default function Create() {
     const booking = {
       bookingDate: bookingdate+":00+07:00",
       timeLeft: String("2020-01-01T03:00:00+07:00"),
-      bookingtype: bookingtypeID,
+      servicePoint: servicepointID,
       client: clientID,
       user: userID,
     };
@@ -171,7 +170,7 @@ export default function Create() {
 
           
         </ContentHeader>
-        <ComponanceTable></ComponanceTable>
+
         <div className={classes.root}>
           <form noValidate autoComplete="off">
             <table>
@@ -186,7 +185,7 @@ export default function Create() {
                   labelId="client-label"
                   id="client"
                   value={clientID}
-                  onChange={clientIDhandleChange}
+                  onChange={ClientIDhandleChange}
                   style={{ width: 400 }}
                 >
                   {clients.map((item: EntClientEntity) => (
@@ -217,21 +216,21 @@ export default function Create() {
               </FormControl>
               </td>
               </tr>
-              <tr><td>เลือกประเภทของผู้ใช้งาน</td><td>
+              <tr><td>เลือกจุดที่จะเข้าไปยืนยันการจอง</td><td>
               <FormControl
                 className={classes.margin}
                 variant="outlined"
               >
-                <InputLabel id="bookingType"></InputLabel>
+                <InputLabel id="ServicePoint"></InputLabel>
                 <Select
-                  labelId="bookingType"
-                  id="bookingType"
-                  value={bookingtypeID}
-                  onChange={BookingIDhandleChange}
+                  labelId="servicepoint"
+                  id="servicepoint"
+                  value={servicepointID}
+                  onChange={ServicePointIDhandleChange}
                   style={{ width: 200 }}
                 >
-                  {bookingtypes.map((item: EntServicePoint) => (
-                    <MenuItem value={item.id}>{item.bOOKTYPENAME}</MenuItem>
+                  {servicepoint.map((item: EntServicePoint) => (
+                    <MenuItem value={item.id}>{item.cOUNTERNUMBER}</MenuItem>
                   ))}
                 </Select>
               </FormControl>
