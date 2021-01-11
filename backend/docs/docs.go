@@ -4199,10 +4199,6 @@ var doc = `{
         "ent.ServicePoint": {
             "type": "object",
             "properties": {
-                "BUILDING_NAME": {
-                    "description": "BUILDINGNAME holds the value of the \"BUILDING_NAME\" field.",
-                    "type": "string"
-                },
                 "COUNTER_NUMBER": {
                     "description": "COUNTERNUMBER holds the value of the \"COUNTER_NUMBER\" field.",
                     "type": "string"
