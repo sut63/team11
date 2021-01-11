@@ -711,6 +711,54 @@ var doc = `{
                 }
             }
         },
+        "/bookborrowusers/{id}": {
+            "get": {
+                "description": "get bookborrowuser by ID",
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "Get a bookborrowuser entity by ID",
+                "operationId": "get-bookborrowuser",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "bookborrowuser ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/ent.Bookborrow"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/gin.H"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/gin.H"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/gin.H"
+                        }
+                    }
+                }
+            }
+        },
         "/bookings": {
             "get": {
                 "description": "list booking entities",
@@ -3557,11 +3605,11 @@ var doc = `{
                 "bookborrowID": {
                     "type": "integer"
                 },
-                "deadline": {
-                    "type": "string"
-                },
                 "locationID": {
                     "type": "integer"
+                },
+                "returnTime": {
+                    "type": "string"
                 },
                 "userID": {
                     "type": "integer"
@@ -3824,8 +3872,8 @@ var doc = `{
         "ent.Bookreturn": {
             "type": "object",
             "properties": {
-                "DEADLINE": {
-                    "description": "DEADLINE holds the value of the \"DEADLINE\" field.",
+                "RETURN_TIME": {
+                    "description": "RETURNTIME holds the value of the \"RETURN_TIME\" field.",
                     "type": "string"
                 },
                 "client_ID": {

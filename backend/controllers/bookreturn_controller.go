@@ -11,6 +11,7 @@ import (
 	"github.com/team11/app/ent/bookborrow"
 	"github.com/team11/app/ent/location"
 	"github.com/team11/app/ent/user"
+	"github.com/team11/app/ent/book"
 )
 
 // BookreturnController defines the struct for the bookreturn controller
@@ -83,14 +84,15 @@ func (ctl *BookreturnController) CreateBookreturn(c *gin.Context) {
 		return
 	}
 
-	times, err := time.Parse(time.RFC3339, obj.ReturnTime)
+	settime := time.Now().Format("2006-01-02T15:04:05Z07:00")
+	time, err := time.Parse(time.RFC3339, settime)
 
 	br, err := ctl.client.Bookreturn.
 		Create().
 		SetUser(u).
 		SetLocation(l).
 		SetMustreturn(b).
-		SetRETURNTIME(times).
+		SetRETURNTIME(time).
 		Save(context.Background())
 
 	if err != nil {
@@ -99,6 +101,31 @@ func (ctl *BookreturnController) CreateBookreturn(c *gin.Context) {
 		})
 		return
 	}
+
+	bb, err := ctl.client.Book.
+		Query().
+		Where(book.IDEQ(int(obj.BookborrowID))).
+		Only(context.Background())
+
+	if err != nil {
+		c.JSON(400, gin.H{
+			"error": "book not found",
+		})
+		return
+	}
+
+	bk, err := ctl.client.Book.
+		UpdateOne(bb).
+		SetStatusID(1).
+		Save(context.Background())
+
+		if err != nil {
+			c.JSON(400, gin.H{
+				"error": "Update status book error",
+			})
+			return
+		}
+	fmt.Print(bk)
 
 	c.JSON(200, br)
 }

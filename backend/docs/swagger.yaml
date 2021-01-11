@@ -26,10 +26,10 @@ definitions:
     properties:
       bookborrowID:
         type: integer
-      deadline:
-        type: string
       locationID:
         type: integer
+      returnTime:
+        type: string
       userID:
         type: integer
     type: object
@@ -222,8 +222,8 @@ definitions:
     type: object
   ent.Bookreturn:
     properties:
-      DEADLINE:
-        description: DEADLINE holds the value of the "DEADLINE" field.
+      RETURN_TIME:
+        description: RETURNTIME holds the value of the "RETURN_TIME" field.
         type: string
       client_ID:
         type: integer
@@ -1096,6 +1096,38 @@ paths:
           schema:
             $ref: '#/definitions/gin.H'
       summary: Update a bookborrow entity by ID
+  /bookborrowusers/{id}:
+    get:
+      description: get bookborrowuser by ID
+      operationId: get-bookborrowuser
+      parameters:
+      - description: bookborrowuser ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/ent.Bookborrow'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/gin.H'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/gin.H'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/gin.H'
+      summary: Get a bookborrowuser entity by ID
   /bookings:
     get:
       description: list booking entities
