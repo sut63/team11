@@ -21,7 +21,7 @@ const (
 	// It exists in this package in order to avoid circular dependency with the "bookreturn" package.
 	ReturnfromInverseTable = "bookreturns"
 	// ReturnfromColumn is the table column denoting the returnfrom relation/edge.
-	ReturnfromColumn = "LOCATION_NAME"
+	ReturnfromColumn = "LOCATION_ID"
 )
 
 // Columns holds all SQL columns for location fields.
