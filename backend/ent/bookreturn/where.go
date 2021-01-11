@@ -93,29 +93,29 @@ func IDLTE(id int) predicate.Bookreturn {
 	})
 }
 
-// DEADLINE applies equality check predicate on the "DEADLINE" field. It's identical to DEADLINEEQ.
-func DEADLINE(v time.Time) predicate.Bookreturn {
+// RETURNTIME applies equality check predicate on the "RETURN_TIME" field. It's identical to RETURNTIMEEQ.
+func RETURNTIME(v time.Time) predicate.Bookreturn {
 	return predicate.Bookreturn(func(s *sql.Selector) {
-		s.Where(sql.EQ(s.C(FieldDEADLINE), v))
+		s.Where(sql.EQ(s.C(FieldRETURNTIME), v))
 	})
 }
 
-// DEADLINEEQ applies the EQ predicate on the "DEADLINE" field.
-func DEADLINEEQ(v time.Time) predicate.Bookreturn {
+// RETURNTIMEEQ applies the EQ predicate on the "RETURN_TIME" field.
+func RETURNTIMEEQ(v time.Time) predicate.Bookreturn {
 	return predicate.Bookreturn(func(s *sql.Selector) {
-		s.Where(sql.EQ(s.C(FieldDEADLINE), v))
+		s.Where(sql.EQ(s.C(FieldRETURNTIME), v))
 	})
 }
 
-// DEADLINENEQ applies the NEQ predicate on the "DEADLINE" field.
-func DEADLINENEQ(v time.Time) predicate.Bookreturn {
+// RETURNTIMENEQ applies the NEQ predicate on the "RETURN_TIME" field.
+func RETURNTIMENEQ(v time.Time) predicate.Bookreturn {
 	return predicate.Bookreturn(func(s *sql.Selector) {
-		s.Where(sql.NEQ(s.C(FieldDEADLINE), v))
+		s.Where(sql.NEQ(s.C(FieldRETURNTIME), v))
 	})
 }
 
-// DEADLINEIn applies the In predicate on the "DEADLINE" field.
-func DEADLINEIn(vs ...time.Time) predicate.Bookreturn {
+// RETURNTIMEIn applies the In predicate on the "RETURN_TIME" field.
+func RETURNTIMEIn(vs ...time.Time) predicate.Bookreturn {
 	v := make([]interface{}, len(vs))
 	for i := range v {
 		v[i] = vs[i]
@@ -127,12 +127,12 @@ func DEADLINEIn(vs ...time.Time) predicate.Bookreturn {
 			s.Where(sql.False())
 			return
 		}
-		s.Where(sql.In(s.C(FieldDEADLINE), v...))
+		s.Where(sql.In(s.C(FieldRETURNTIME), v...))
 	})
 }
 
-// DEADLINENotIn applies the NotIn predicate on the "DEADLINE" field.
-func DEADLINENotIn(vs ...time.Time) predicate.Bookreturn {
+// RETURNTIMENotIn applies the NotIn predicate on the "RETURN_TIME" field.
+func RETURNTIMENotIn(vs ...time.Time) predicate.Bookreturn {
 	v := make([]interface{}, len(vs))
 	for i := range v {
 		v[i] = vs[i]
@@ -144,35 +144,35 @@ func DEADLINENotIn(vs ...time.Time) predicate.Bookreturn {
 			s.Where(sql.False())
 			return
 		}
-		s.Where(sql.NotIn(s.C(FieldDEADLINE), v...))
+		s.Where(sql.NotIn(s.C(FieldRETURNTIME), v...))
 	})
 }
 
-// DEADLINEGT applies the GT predicate on the "DEADLINE" field.
-func DEADLINEGT(v time.Time) predicate.Bookreturn {
+// RETURNTIMEGT applies the GT predicate on the "RETURN_TIME" field.
+func RETURNTIMEGT(v time.Time) predicate.Bookreturn {
 	return predicate.Bookreturn(func(s *sql.Selector) {
-		s.Where(sql.GT(s.C(FieldDEADLINE), v))
+		s.Where(sql.GT(s.C(FieldRETURNTIME), v))
 	})
 }
 
-// DEADLINEGTE applies the GTE predicate on the "DEADLINE" field.
-func DEADLINEGTE(v time.Time) predicate.Bookreturn {
+// RETURNTIMEGTE applies the GTE predicate on the "RETURN_TIME" field.
+func RETURNTIMEGTE(v time.Time) predicate.Bookreturn {
 	return predicate.Bookreturn(func(s *sql.Selector) {
-		s.Where(sql.GTE(s.C(FieldDEADLINE), v))
+		s.Where(sql.GTE(s.C(FieldRETURNTIME), v))
 	})
 }
 
-// DEADLINELT applies the LT predicate on the "DEADLINE" field.
-func DEADLINELT(v time.Time) predicate.Bookreturn {
+// RETURNTIMELT applies the LT predicate on the "RETURN_TIME" field.
+func RETURNTIMELT(v time.Time) predicate.Bookreturn {
 	return predicate.Bookreturn(func(s *sql.Selector) {
-		s.Where(sql.LT(s.C(FieldDEADLINE), v))
+		s.Where(sql.LT(s.C(FieldRETURNTIME), v))
 	})
 }
 
-// DEADLINELTE applies the LTE predicate on the "DEADLINE" field.
-func DEADLINELTE(v time.Time) predicate.Bookreturn {
+// RETURNTIMELTE applies the LTE predicate on the "RETURN_TIME" field.
+func RETURNTIMELTE(v time.Time) predicate.Bookreturn {
 	return predicate.Bookreturn(func(s *sql.Selector) {
-		s.Where(sql.LTE(s.C(FieldDEADLINE), v))
+		s.Where(sql.LTE(s.C(FieldRETURNTIME), v))
 	})
 }
 

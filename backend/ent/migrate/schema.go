@@ -143,9 +143,9 @@ var (
 	// BookreturnsColumns holds the columns for the "bookreturns" table.
 	BookreturnsColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt, Increment: true},
-		{Name: "deadline", Type: field.TypeTime},
+		{Name: "return_time", Type: field.TypeTime},
 		{Name: "CLIENT_ID", Type: field.TypeInt, Nullable: true},
-		{Name: "LOCATION_NAME", Type: field.TypeInt, Nullable: true},
+		{Name: "LOCATION_ID", Type: field.TypeInt, Nullable: true},
 		{Name: "USER_ID", Type: field.TypeInt, Nullable: true},
 	}
 	// BookreturnsTable holds the schema information for the "bookreturns" table.
@@ -213,7 +213,7 @@ var (
 	// LocationsColumns holds the columns for the "locations" table.
 	LocationsColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt, Increment: true},
-		{Name: "location_name", Type: field.TypeString},
+		{Name: "location_name", Type: field.TypeString, Unique: true},
 	}
 	// LocationsTable holds the schema information for the "locations" table.
 	LocationsTable = &schema.Table{

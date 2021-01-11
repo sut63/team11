@@ -14,7 +14,7 @@ type Location struct {
 // Fields of the Location.
 func (Location) Fields() []ent.Field {
 	return []ent.Field{
-		field.String("LOCATION_NAME").NotEmpty(),
+		field.String("LOCATION_NAME").NotEmpty().Unique(),
    }
 }
 
