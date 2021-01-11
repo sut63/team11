@@ -272,6 +272,43 @@ func (ctl *BookborrowController) UpdateBookborrow(c *gin.Context) {
 	c.JSON(200, bb)
 }
 
+// GetBookborrowUser handles GET requests to retrieve a bookborrowuser entity
+// @Summary Get a bookborrowuser entity by ID
+// @Description get bookborrowuser by ID
+// @ID get-bookborrowuser
+// @Produce  json
+// @Param id path int true "bookborrowuser ID"
+// @Success 200 {array} ent.Bookborrow
+// @Failure 400 {object} gin.H
+// @Failure 404 {object} gin.H
+// @Failure 500 {object} gin.H
+// @Router /bookborrowusers/{id} [get]
+func (ctl *BookborrowController) GetBookborrowUser(c *gin.Context) {
+	id, err := strconv.ParseInt(c.Param("id"), 10, 64)
+	if err != nil {
+		c.JSON(400, gin.H{
+			"error": err.Error(),
+		})
+		return
+	}
+
+	i, err := ctl.client.Bookborrow.
+		Query().
+		WithUSER().
+		WithBOOK().
+		WithSERVICEPOINT().
+		Where(bookborrow.HasUSERWith(user.IDEQ(int(id)))).
+		All(context.Background())
+	if err != nil {
+		c.JSON(404, gin.H{
+			"error": err.Error(),
+		})
+		return
+	}
+
+	c.JSON(200, i)
+}
+
 // NewBookborrowController creates and registers handles for the bookborrow controller
 func NewBookborrowController(router gin.IRouter, client *ent.Client) *BookborrowController {
 	bb := &BookborrowController{
@@ -285,10 +322,11 @@ func NewBookborrowController(router gin.IRouter, client *ent.Client) *Bookborrow
 // InitBookborrowController registers routes to the main engine
 func (ctl *BookborrowController) register() {
 	bookborrows := ctl.router.Group("/bookborrows")
-
+	bookborrowusers := ctl.router.Group("/bookborrowusers")
 	bookborrows.GET("", ctl.ListBookborrow)
 
 	// CRUD
+	bookborrowusers.GET(":id", ctl.GetBookborrowUser)
 	bookborrows.POST("", ctl.CreateBookborrow)
 	bookborrows.GET(":id", ctl.GetBookborrow)
 	bookborrows.PUT(":id", ctl.UpdateBookborrow)
