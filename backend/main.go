@@ -4,7 +4,6 @@ import (
 	"context"
 	"fmt"
 	"log"
-	"time"
 
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
@@ -14,10 +13,8 @@ import (
 	"github.com/team11/app/controllers"
 	"github.com/team11/app/ent"
 	"github.com/team11/app/ent/author"
-	"github.com/team11/app/ent/book"
 	"github.com/team11/app/ent/category"
 	"github.com/team11/app/ent/role"
-	"github.com/team11/app/ent/servicepoint"
 	"github.com/team11/app/ent/status"
 	"github.com/team11/app/ent/user"
 )
@@ -80,7 +77,6 @@ type Bookborrow struct {
 	UserID         int
 	BookID         int
 	ServicePointID int
-	BorrowDate     string
 }
 
 // Roominfos for struct
@@ -345,6 +341,8 @@ func main() {
 			Save(context.Background())
 	}
 
+<<<<<<< HEAD
+=======
 	Bookborrow := []Bookborrow{
 		{1, 2, 1, "2021-01-10 23:48:00+07:00"},
 		{2, 1, 2, "2021-01-10 23:48:00+07:00"}}
@@ -431,6 +429,7 @@ func main() {
 			Save(context.Background())
 	}
 	
+>>>>>>> d30dcc2bc8cba77031735a748ef2ae487421763d
 	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 	router.Run()
 }

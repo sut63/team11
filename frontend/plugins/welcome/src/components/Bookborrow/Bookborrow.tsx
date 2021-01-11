@@ -1,272 +1,231 @@
-import React, { FC, useEffect } from 'react';
-import { makeStyles } from '@material-ui/core/styles';
-import { Content, Header, Page, pageTheme } from '@backstage/core';
-import SaveIcon from '@material-ui/icons/Save'; // icon save
-import Swal from 'sweetalert2'; // alert
-
+import React, { useState, useEffect } from 'react';
+import { Link as RouterLink } from 'react-router-dom';
 import {
-  Container,
-  Grid,
-  FormControl,
-  Select,
-  InputLabel,
-  MenuItem,
-  TextField,
-  Avatar,
-  Button,
+  Content, Header, Page, pageTheme, ContentHeader,
+} from '@backstage/core';
+import {
+  Typography, TextField, Button, makeStyles,
+  Theme, FormControl, InputLabel, MenuItem,
+  Select, createStyles,
 } from '@material-ui/core';
-import { DefaultApi } from '../../api/apis'; // Api Gennerate From Command
+import { Alert } from '@material-ui/lab';
+import { DefaultApi } from '../../api/apis';
 import {
-    EntBook,
-    EntServicePoint,
-    EntUser,
-  } from '../../api/models/';
-
-// header css
-const HeaderCustom = {
-  minHeight: '50px',
-};
-
-// css style
-const useStyles = makeStyles(theme => ({
-  root: {
-    flexGrow: 1,
-  },
-  paper: {
-    marginTop: theme.spacing(2),
-    marginBottom: theme.spacing(2),
-  },
-  formControl: {
-    width: 300,
-  },
-  selectEmpty: {
-    marginTop: theme.spacing(2),
-  },
-  container: {
-    display: 'flex',
-    flexWrap: 'wrap',
-  },
-  textField: {
-    width: 300,
-  },
-}));
-
-interface Bookborrow {
-  book: number;
-  user: number;
-  servicepoint: number;
-  added: Date;
-  // create_by: number;
-}
-
-const Bookborrow: FC<{}> = () => {
-  const classes = useStyles();
-  const http = new DefaultApi();
-
-  const [bookborrow, setBookborrow] = React.useState<
-    Partial<Bookborrow>
-  >({});
-
-  const [users, setUsers] = React.useState<EntUser[]>([]);
-  const [books, setBooks] = React.useState<EntBook[]>([]);
-  const [servicepoints, setServicepoints] = React.useState<EntServicePoint[]>([]);
-  
-
-  // alert setting
-  const Toast = Swal.mixin({
-    toast: true,
-    position: 'top-end',
-    showConfirmButton: false,
-    timer: 3000,
-    timerProgressBar: true,
-    didOpen: toast => {
-      toast.addEventListener('mouseenter', Swal.stopTimer);
-      toast.addEventListener('mouseleave', Swal.resumeTimer);
+  EntBook,
+  EntServicePoint,
+  EntUser,
+} from '../../api/models/';
+const useStyles = makeStyles((theme: Theme) =>
+  createStyles({
+    root: {
+      display: 'flex',
+      flexWrap: 'wrap',
+      justifyContent: 'center',
     },
-  });
-
-  const getUsers = async () => {
-    const res = await http.listUser({ limit: 10, offset: 0 });
-    setUsers(res);
-  };
-
-  const getBook = async () => {
-    const res = await http.listBook({ limit: 10, offset: 0 });
-    setBooks(res);
-  };
-
-  const getServicepoint = async () => {
-    const res = await http.listServicepoint({ limit: 10, offset: 0 });
-    setServicepoints(res);
-  };
-
-
-
-  // Lifecycle Hooks
+    margin: {
+      margin: theme.spacing(3),
+    },
+    withoutLabel: {
+      marginTop: theme.spacing(3),
+    },
+    textField: {
+      width: '50ch',
+    },
+  }),
+);
+const username = { givenuser: 'Manuschanok Srikhrueadong' };
+export default function Create() {
+  const profile = { givenName: 'ยินดีต้อนรับสู่ ระบบห้องสมุด' };
+  const classes = useStyles();
+  const api = new DefaultApi();
+  const [loading, setLoading] = useState(true);
+  const [status, setStatus] = useState(false);
+  const [alert, setAlert] = useState(true);
+  const [books, setBooks] = useState<EntBook[]>(Array);
+  const [users, setUsers] = useState<EntUser[]>(Array);
+  const [servicepoints, setServicepoints] = useState<EntServicePoint[]>(Array);
   useEffect(() => {
-    getUsers();
-    getBook();
-    getServicepoint();
-  }, []);
+    const getUser = async () => {
+      const res = await api.listUser({ limit: 10, offset: 0 });
+      setLoading(false);
+      setUsers(res);
+    };
+    getUser();
 
-  // set data to object playlist_video
-  const handleChange = (
-    event: React.ChangeEvent<{ name?: string; value: unknown }>,
-  ) => {
-    const name = event.target.name as keyof typeof Bookborrow;
-    const { value } = event.target;
-    setBookborrow({ ...bookborrow, [name]: value });
-    console.log(bookborrow);
+    const getBooks = async () => {
+      const res = await api.listBook({ limit: 10, offset: 0 });
+      setLoading(false);
+      setBooks(res);
+    };
+    getBooks();
+
+    const getServicepoints = async () => {
+      const res = await api.listServicepoint({ limit: 10, offset: 0 });
+      setLoading(false);
+      setServicepoints(res);
+    };
+    getServicepoints();
+  }, [loading]);
+
+
+  const ServicepointIDhandleChange = (event: React.ChangeEvent<{ value: unknown }>) => {
+    setServicepointID(event.target.value as number);
+  };
+  const bookIDhandleChange = (event: React.ChangeEvent<{ value: unknown }>) => {
+    setBookID(event.target.value as number);
+  };
+  const UserIDhandleChange = (event: React.ChangeEvent<{ value: unknown }>) => {
+    setUserID(event.target.value as number);
   };
 
-  // clear input form
-  function clear() {
-    setBookborrow({});
-  }
-
-  // function save data
-  function save() {
-    const apiUrl = 'http://localhost:8080/api/v1/bookborrow';
-    const requestOptions = {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(bookborrow),
+ 
+  const [bookID, setBookID] = useState(Number);
+  const [servicePointID, setServicepointID] = useState(Number);
+  const [userID, setUserID] = useState(Number);
+  const createBookBorrow = async () => {
+    const bookBorrow = {
+      bookID : bookID,
+      servicePointID: servicePointID,
+      userID : userID,
     };
-
-    console.log(bookborrow); // log ดูข้อมูล สามารถ Inspect ดูข้อมูลได้ F12 เลือก Tab Console
-
-    fetch(apiUrl, requestOptions)
-      .then(response => response.json())
-      .then(data => {
-        console.log(data);
-        if (data.status === true) {
-          clear();
-          Toast.fire({
-            icon: 'success',
-            title: 'บันทึกข้อมูลสำเร็จ',
-          });
-        } else {
-          Toast.fire({
-            icon: 'error',
-            title: 'บันทึกข้อมูลไม่สำเร็จ',
-          });
-        }
-      });
-  }
-
+    console.log(bookBorrow);
+    const res: any = await api.createBookborrow({ bookborrow: bookBorrow });
+    setStatus(true);
+    if (res.id != '') {
+      setAlert(true);
+    } else {
+      setAlert(false);
+    }
+  };
   return (
     <Page theme={pageTheme.home}>
-      <Header style={HeaderCustom} title={`Borrow Book`}>
-        <Avatar alt="Remy Sharp" src="../../image/account.jpg" />
-        <div style={{ marginLeft: 10 }}>Manuschanok Srikhrueadong</div>
+      <Header
+        title={"ระบบยืมหนังสือ"}
+      >
+        <Button
+          component={RouterLink}
+          to="/login"
+          variant="contained"
+          color="primary">
+          ออกจากระบบ
+        </Button>
       </Header>
       <Content>
-        <Container maxWidth="sm">
-          <Grid container spacing={3}>
-            <Grid item xs={12}></Grid>
-            <Grid item xs={3}>
-              <div className="{classes.paper}">หนังสือ</div>
-            </Grid>
-            <Grid item xs={9}>
-              <FormControl variant="outlined" className={classes.formControl}>
-                <InputLabel>เลือกหนังสือ</InputLabel>
-                <Select
-                  name="book"
-                  value={bookborrow.book || ''} // (undefined || '') = ''
-                  onChange={handleChange}
+        <ContentHeader title="เพิ่มข้อมูลการยืมหนังสือ">
+          <div>
+
+          </div>
+          {status ? (
+            <div>
+              {alert ? (
+                <Alert severity="success">
+                  This is a success alert — check it out!
+                </Alert>
+              ) : (
+                  <Alert severity="warning" style={{ marginTop: 20 }}>
+                    This is a warning alert — check it out!
+                  </Alert>
+                )}
+            </div>
+          ) : null}
+        </ContentHeader>
+
+
+        <div className={classes.root}>
+          <form noValidate autoComplete="off">
+            <table align="center">
+              <tr><td>หนังสือ</td><td>
+                <FormControl
+                  className={classes.margin}
+                  variant="outlined"
                 >
-                  {books.map(item => {
-                    return (
-                      <MenuItem key={item.id} value={item.id}>
-                        {item.bookName}
-                      </MenuItem>
-                    );
-                  })}
-                </Select>
-              </FormControl>
-            </Grid>
+                  <InputLabel id="book-label"><font size='5'>หนังสือ</font></InputLabel>
+                  <Select
+                    labelId="book-label"
+                    id="book"
+                    value={bookID}
+                    onChange={bookIDhandleChange}
+                    style={{ width: 400, height: '7vh' }}
+                  >
+                    {books.map((item: EntBook) => (
+                      <MenuItem value={item.id}>{item.bookName}</MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
 
-            <Grid item xs={3}>
-              <div className={classes.paper}>ผู้ยืม</div>
-            </Grid>
-            <Grid item xs={9}>
-              <FormControl variant="outlined" className={classes.formControl}>
-                <InputLabel>เลือกผู้ยืม</InputLabel>
-                <Select
-                  name="user"
-                  value={bookborrow.user || ''} // (undefined || '') = ''
-                  onChange={handleChange}
-                >
-                  {users.map(item => {
-                    return (
-                      <MenuItem key={item.id} value={item.id}>
-                        {item.uSERNAME}
-                      </MenuItem>
-                    );
-                  })}
-                </Select>
-              </FormControl>
-            </Grid>
+              </td>
+              </tr>
+              <tr><td>
+                สมาชิกห้องสมุด
+            </td><td>
+                  <div>
+                    <FormControl
+                      className={classes.margin}
+                      variant="outlined"
+                    >
+                      <InputLabel id="user-label"><font size='5'>สมาชิกห้องสมุด</font></InputLabel>
+                      <Select
+                        labelId="user-label"
+                        id="user"
+                        value={userID}
+                        onChange={UserIDhandleChange}
+                        style={{ width: 400, height: '7vh' }}
+                      >
+                        {users.map((item: EntUser) => (
+                          <MenuItem value={item.id}>{item.uSERNAME}</MenuItem>
+                        ))}
+                      </Select>
+                    </FormControl>
+                  </div>
+                </td>
+              </tr>
+              <tr><td>
+                จุดบริการ
+            </td><td>
+                  <FormControl
+                    className={classes.margin}
+                    variant="outlined"
+                  >
+                    <InputLabel id="servicepoint"><font size='5'>จุดบริการ</font></InputLabel>
+                    <Select
+                      labelId="servicepoint"
+                      id="servicepoint"
+                      value={servicePointID}
+                      onChange={ServicepointIDhandleChange}
+                      style={{ width: 400, height: '7vh' }}
+                    >
+                      {servicepoints.map((item: EntServicePoint) => (
+                        <MenuItem value={item.id}>{item.cOUNTERNUMBER}</MenuItem>
+                      ))}
+                    </Select>
+                  </FormControl>
+                </td>
+              </tr>
 
-            <Grid item xs={3}>
-              <div className={classes.paper}>จุดบริการ</div>
-            </Grid>
-            <Grid item xs={9}>
-              <FormControl variant="outlined" className={classes.formControl}>
-                <InputLabel>เลือกจุดบริการ</InputLabel>
-                <Select
-                  name="servicepoint"
-                  value={bookborrow.servicepoint || ''} // (undefined || '') = ''
-                  onChange={handleChange}
-                >
-                  {servicepoints.map(item => {
-                    return (
-                      <MenuItem key={item.id} value={item.id}>
-                        {item.cOUNTERNUMBER}
-                      </MenuItem>
-                    );
-                  })}
-                </Select>
-              </FormControl>
-            </Grid>
+              <td></td><td>
+                <div className={classes.margin}>
+                  <Button
+                    onClick={() => {
+                      createBookBorrow();
+                    }}
+                    variant="contained"
+                    color="primary"
+                  >
+                    [บันทึกการยืม]
+           </Button>
+                  <Button
+                    style={{ marginLeft: 20 }}
+                    component={RouterLink}
+                    to="/welcome"
+                    variant="contained"
+                  >
+                    กลับ
+           </Button>
+                </div>
+          </form></td></table>
+        </div>
 
-
-            <Grid item xs={3}>
-              <div className={classes.paper}>เวลา</div>
-            </Grid>
-            <Grid item xs={9}>
-              <form className={classes.container} noValidate>
-                <TextField
-                  label="เลือกเวลา"
-                  name="added"
-                  type="date"
-                  value={bookborrow.added || ''} // (undefined || '') = ''
-                  className={classes.textField}
-                  InputLabelProps={{
-                    shrink: true,
-                  }}
-                  onChange={handleChange}
-                />
-              </form>
-            </Grid>
-
-            <Grid item xs={3}></Grid>
-            <Grid item xs={9}>
-              <Button
-                variant="contained"
-                color="primary"
-                size="large"
-                startIcon={<SaveIcon />}
-                onClick={save}
-              >
-                บันทึกการดู
-              </Button>
-            </Grid>
-          </Grid>
-        </Container>
       </Content>
     </Page>
   );
-};
-
-export default Bookborrow;
+}

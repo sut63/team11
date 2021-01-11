@@ -46,6 +46,12 @@ func (bu *BookborrowUpdate) SetNillableBORROWDATE(t *time.Time) *BookborrowUpdat
 	return bu
 }
 
+// SetRETURNDATE sets the RETURN_DATE field.
+func (bu *BookborrowUpdate) SetRETURNDATE(t time.Time) *BookborrowUpdate {
+	bu.mutation.SetRETURNDATE(t)
+	return bu
+}
+
 // SetUSERID sets the USER edge to User by id.
 func (bu *BookborrowUpdate) SetUSERID(id int) *BookborrowUpdate {
 	bu.mutation.SetUSERID(id)
@@ -233,6 +239,13 @@ func (bu *BookborrowUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Column: bookborrow.FieldBORROWDATE,
 		})
 	}
+	if value, ok := bu.mutation.RETURNDATE(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeTime,
+			Value:  value,
+			Column: bookborrow.FieldRETURNDATE,
+		})
+	}
 	if bu.mutation.USERCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
@@ -405,6 +418,12 @@ func (buo *BookborrowUpdateOne) SetNillableBORROWDATE(t *time.Time) *BookborrowU
 	if t != nil {
 		buo.SetBORROWDATE(*t)
 	}
+	return buo
+}
+
+// SetRETURNDATE sets the RETURN_DATE field.
+func (buo *BookborrowUpdateOne) SetRETURNDATE(t time.Time) *BookborrowUpdateOne {
+	buo.mutation.SetRETURNDATE(t)
 	return buo
 }
 
@@ -591,6 +610,13 @@ func (buo *BookborrowUpdateOne) sqlSave(ctx context.Context) (b *Bookborrow, err
 			Type:   field.TypeTime,
 			Value:  value,
 			Column: bookborrow.FieldBORROWDATE,
+		})
+	}
+	if value, ok := buo.mutation.RETURNDATE(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeTime,
+			Value:  value,
+			Column: bookborrow.FieldRETURNDATE,
 		})
 	}
 	if buo.mutation.USERCleared() {

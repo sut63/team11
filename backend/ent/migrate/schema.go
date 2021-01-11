@@ -69,6 +69,7 @@ var (
 	BookborrowsColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt, Increment: true},
 		{Name: "borrow_date", Type: field.TypeTime},
+		{Name: "return_date", Type: field.TypeTime},
 		{Name: "BOOK_ID", Type: field.TypeInt, Nullable: true},
 		{Name: "SERVICEPOINT_ID", Type: field.TypeInt, Nullable: true},
 		{Name: "USER_ID", Type: field.TypeInt, Nullable: true},
@@ -81,21 +82,21 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:  "bookborrows_books_booklist",
-				Columns: []*schema.Column{BookborrowsColumns[2]},
+				Columns: []*schema.Column{BookborrowsColumns[3]},
 
 				RefColumns: []*schema.Column{BooksColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:  "bookborrows_service_points_from",
-				Columns: []*schema.Column{BookborrowsColumns[3]},
+				Columns: []*schema.Column{BookborrowsColumns[4]},
 
 				RefColumns: []*schema.Column{ServicePointsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:  "bookborrows_users_borrow",
-				Columns: []*schema.Column{BookborrowsColumns[4]},
+				Columns: []*schema.Column{BookborrowsColumns[5]},
 
 				RefColumns: []*schema.Column{UsersColumns[0]},
 				OnDelete:   schema.SetNull,

@@ -21,6 +21,8 @@ type Bookborrow struct {
 	ID int `json:"id,omitempty"`
 	// BORROWDATE holds the value of the "BORROW_DATE" field.
 	BORROWDATE time.Time `json:"BORROW_DATE,omitempty"`
+	// RETURNDATE holds the value of the "RETURN_DATE" field.
+	RETURNDATE time.Time `json:"RETURN_DATE,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the BookborrowQuery when eager-loading is set.
 	Edges           BookborrowEdges `json:"edges"`
@@ -100,6 +102,7 @@ func (*Bookborrow) scanValues() []interface{} {
 	return []interface{}{
 		&sql.NullInt64{}, // id
 		&sql.NullTime{},  // BORROW_DATE
+		&sql.NullTime{},  // RETURN_DATE
 	}
 }
 
@@ -129,7 +132,12 @@ func (b *Bookborrow) assignValues(values ...interface{}) error {
 	} else if value.Valid {
 		b.BORROWDATE = value.Time
 	}
-	values = values[1:]
+	if value, ok := values[1].(*sql.NullTime); !ok {
+		return fmt.Errorf("unexpected type %T for field RETURN_DATE", values[1])
+	} else if value.Valid {
+		b.RETURNDATE = value.Time
+	}
+	values = values[2:]
 	if len(values) == len(bookborrow.ForeignKeys) {
 		if value, ok := values[0].(*sql.NullInt64); !ok {
 			return fmt.Errorf("unexpected type %T for edge-field BOOK_ID", value)
@@ -198,6 +206,8 @@ func (b *Bookborrow) String() string {
 	builder.WriteString(fmt.Sprintf("id=%v", b.ID))
 	builder.WriteString(", BORROW_DATE=")
 	builder.WriteString(b.BORROWDATE.Format(time.ANSIC))
+	builder.WriteString(", RETURN_DATE=")
+	builder.WriteString(b.RETURNDATE.Format(time.ANSIC))
 	builder.WriteByte(')')
 	return builder.String()
 }

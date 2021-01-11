@@ -33,6 +33,12 @@ export interface EntBookborrow {
      */
     bORROWDATE?: string;
     /**
+     * RETURNDATE holds the value of the "RETURN_DATE" field.
+     * @type {string}
+     * @memberof EntBookborrow
+     */
+    rETURNDATE?: string;
+    /**
      * 
      * @type {number}
      * @memberof EntBookborrow
@@ -75,6 +81,7 @@ export function EntBookborrowFromJSONTyped(json: any, ignoreDiscriminator: boole
     return {
         
         'bORROWDATE': !exists(json, 'BORROW_DATE') ? undefined : json['BORROW_DATE'],
+        'rETURNDATE': !exists(json, 'RETURN_DATE') ? undefined : json['RETURN_DATE'],
         'bookID': !exists(json, 'book_ID') ? undefined : json['book_ID'],
         'edges': !exists(json, 'edges') ? undefined : EntBookborrowEdgesFromJSON(json['edges']),
         'id': !exists(json, 'id') ? undefined : json['id'],
@@ -93,6 +100,7 @@ export function EntBookborrowToJSON(value?: EntBookborrow | null): any {
     return {
         
         'BORROW_DATE': value.bORROWDATE,
+        'RETURN_DATE': value.rETURNDATE,
         'book_ID': value.bookID,
         'edges': EntBookborrowEdgesToJSON(value.edges),
         'id': value.id,

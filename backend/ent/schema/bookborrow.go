@@ -16,6 +16,7 @@ type Bookborrow struct {
 func (Bookborrow) Fields() []ent.Field {
 	return []ent.Field{
 		field.Time("BORROW_DATE").Default(time.Now),
+		field.Time("RETURN_DATE"),
     }
 }
 

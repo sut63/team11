@@ -27,12 +27,6 @@ export interface ControllersBookborrow {
     bookID?: number;
     /**
      * 
-     * @type {string}
-     * @memberof ControllersBookborrow
-     */
-    borrowDate?: string;
-    /**
-     * 
      * @type {number}
      * @memberof ControllersBookborrow
      */
@@ -56,7 +50,6 @@ export function ControllersBookborrowFromJSONTyped(json: any, ignoreDiscriminato
     return {
         
         'bookID': !exists(json, 'bookID') ? undefined : json['bookID'],
-        'borrowDate': !exists(json, 'borrowDate') ? undefined : json['borrowDate'],
         'servicePointID': !exists(json, 'servicePointID') ? undefined : json['servicePointID'],
         'userID': !exists(json, 'userID') ? undefined : json['userID'],
     };
@@ -72,7 +65,6 @@ export function ControllersBookborrowToJSON(value?: ControllersBookborrow | null
     return {
         
         'bookID': value.bookID,
-        'borrowDate': value.borrowDate,
         'servicePointID': value.servicePointID,
         'userID': value.userID,
     };
