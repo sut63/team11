@@ -5,7 +5,7 @@ import SignIn from './components/SignIn'
 import Booking from './components/Booking'
 import Bookborrow from './components/Bookborrow'
 import Bookreturn from './components/Bookreturn'
-
+import Room from './components/Room'
 
 export const plugin = createPlugin({
   id: 'welcome',
@@ -18,5 +18,6 @@ export const plugin = createPlugin({
     router.registerRoute('/Bookreturn', Bookreturn);
     // router.registerRoute('/researchcreate', ResearchCreate);
     router.registerRoute('/VideoOnDemand', Booking);
+    router.registerRoute('/Room', Room);
   },
 });
