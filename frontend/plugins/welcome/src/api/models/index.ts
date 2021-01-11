@@ -3,6 +3,7 @@ export * from './ControllersBooking';
 export * from './ControllersBookreturn';
 export * from './ControllersClientEntity';
 export * from './ControllersPreemption';
+export * from './ControllersResearch';
 export * from './EntAuthor';
 export * from './EntAuthorEdges';
 export * from './EntBook';
