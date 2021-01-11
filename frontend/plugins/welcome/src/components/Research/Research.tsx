@@ -80,21 +80,21 @@ export default function Create() {
  useEffect(() => {
     //-------
     const getAuthor = async () => {
-      const res = await api.listAuthor({ limit:10, offset :0});
+      const res = await api.listAuthor({offset :0});
       setLoading(false);
-      setAuthor(res);
+      setAuthors(res);
       console.log(res);
     };
     getAuthor();
 
 
-   const getResearchtype = async () => {
-     const res = await api.listResearchtype({offset :0});
-     setLoading(false);
-     setResearchtype(res);
-     console.log(res);
-   };
-   getResearchtype();
+    const getResearchtype = async () => {
+      const res = await api.listResearchtype({offset :0});
+      setLoading(false);
+      setResearchtypes(res);
+      console.log(res);
+    };
+    getResearchtype();
 
    const getUser = async () => {
     const res = await api.listUser();
@@ -117,9 +117,9 @@ const handleTitleChange = (event: any) => {
   setAuthor(event.target.value as number);
 };
 
- const handleResearchtypechange = (event: React.ChangeEvent<{value: unknown}>) => {
-   setResearchtype(event.target.value as number);
- };
+const handleResearchtypechange = (event: React.ChangeEvent<{value: unknown}>) => {
+  setResearchtype(event.target.value as number);
+};
 
  const handleUserchange = (event: React.ChangeEvent<{value: unknown}>) => {
   setUser(event.target.value as number);
@@ -128,13 +128,13 @@ const handleTitleChange = (event: any) => {
  const CreateResearch = async ()=>{
    const research ={
      userID: userid,
-     authorId: authorid,
+     authorID: authorid,
      researchtypeID: researchtypeid,
      title: title,
      datetime: datetime + ":00+07:00",
    };
    console.log(research);
-   const res: any = await api.createResearch({research : research});
+   const res: any = await api.CreateResearch({research : research});
    setStatus(true);
    if(res.id != ''){
      setAlert(true);
@@ -202,7 +202,7 @@ const handleTitleChange = (event: any) => {
                 style={{ width: 400 }}
               >
                 {authors.map((item: EntAuthor) => (
-                  <MenuItem value={item.id}>{item.author}</MenuItem>
+                  <MenuItem value={item.id}>{item.name}</MenuItem>
                 ))}
               </Select>
             </FormControl>
@@ -223,7 +223,7 @@ const handleTitleChange = (event: any) => {
                 style={{ width: 400 }}
               >
                 {researchtypes.map((item: EntResearchtype) => (
-                  <MenuItem value={item.id}>{item.researchtype}</MenuItem>
+                  <MenuItem value={item.id}>{item.tYPENAME}</MenuItem>
                 ))}
               </Select>
             </FormControl>
