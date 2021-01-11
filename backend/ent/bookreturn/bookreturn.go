@@ -32,7 +32,7 @@ const (
 	// It exists in this package in order to avoid circular dependency with the "location" package.
 	LocationInverseTable = "locations"
 	// LocationColumn is the table column denoting the location relation/edge.
-	LocationColumn = "LOCATION_NAME"
+	LocationColumn = "LOCATION_ID"
 	// MustreturnTable is the table the holds the mustreturn relation/edge.
 	MustreturnTable = "bookreturns"
 	// MustreturnInverseTable is the table name for the Bookborrow entity.
@@ -51,6 +51,6 @@ var Columns = []string{
 // ForeignKeys holds the SQL foreign-keys that are owned by the Bookreturn type.
 var ForeignKeys = []string{
 	"CLIENT_ID",
-	"LOCATION_NAME",
+	"LOCATION_ID",
 	"USER_ID",
 }

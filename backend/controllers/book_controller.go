@@ -8,6 +8,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/team11/app/ent"
 	"github.com/team11/app/ent/book"
+	"github.com/team11/app/ent/status"
 )
 
 // BookController defines the struct for the book controller
@@ -116,6 +117,7 @@ func (ctl *BookController) ListBook(c *gin.Context) {
 
 	books, err := ctl.client.Book.
 		Query().
+		Where(book.HasStatusWith(status.STATUSNAMEEQ("Available"))).
 		Limit(limit).
 		Offset(offset).
 		All(context.Background())

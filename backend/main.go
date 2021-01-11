@@ -4,7 +4,6 @@ import (
 	"context"
 	"fmt"
 	"log"
-	"time"
 
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
@@ -14,10 +13,8 @@ import (
 	"github.com/team11/app/controllers"
 	"github.com/team11/app/ent"
 	"github.com/team11/app/ent/author"
-	"github.com/team11/app/ent/book"
 	"github.com/team11/app/ent/category"
 	"github.com/team11/app/ent/role"
-	"github.com/team11/app/ent/servicepoint"
 	"github.com/team11/app/ent/status"
 	"github.com/team11/app/ent/user"
 )
@@ -80,7 +77,6 @@ type Bookborrow struct {
 	UserID         int
 	BookID         int
 	ServicePointID int
-	BorrowDate     string
 }
 
 // @title SUT SA Example API Playlist Vidoe
@@ -318,49 +314,6 @@ func main() {
 			SetAuthor(au).
 			SetUser(us).
 			SetStatus(st).
-			Save(context.Background())
-	}
-
-	Bookborrow := []Bookborrow{
-		{1, 2, 1, "2021-01-10 23:48:00+07:00"},
-		{2, 1, 2, "2021-01-10 23:48:00+07:00"}}
-	for _, bb := range Bookborrow {
-
-		b, err := client.Book.
-			Query().
-			Where(book.IDEQ(int(bb.BookID))).
-			Only(context.Background())
-		if err != nil {
-			fmt.Println(err.Error())
-			return
-		}
-
-		u, err := client.User.
-			Query().
-			Where(user.IDEQ(int(bb.UserID))).
-			Only(context.Background())
-		if err != nil {
-			fmt.Println(err.Error())
-			return
-		}
-
-		sp, err := client.ServicePoint.
-			Query().
-			Where(servicepoint.IDEQ(int(bb.ServicePointID))).
-			Only(context.Background())
-		if err != nil {
-			fmt.Println(err.Error())
-			return
-		}
-
-		times, err := time.Parse(time.RFC3339, bb.BorrowDate)
-
-		client.Bookborrow.
-			Create().
-			SetBOOK(b).
-			SetUSER(u).
-			SetSERVICEPOINT(sp).
-			SetBORROWDATE(times).
 			Save(context.Background())
 	}
 

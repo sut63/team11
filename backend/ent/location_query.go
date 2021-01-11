@@ -371,13 +371,13 @@ func (lq *LocationQuery) sqlAll(ctx context.Context) ([]*Location, error) {
 			return nil, err
 		}
 		for _, n := range neighbors {
-			fk := n.LOCATION_NAME
+			fk := n.LOCATION_ID
 			if fk == nil {
-				return nil, fmt.Errorf(`foreign-key "LOCATION_NAME" is nil for node %v`, n.ID)
+				return nil, fmt.Errorf(`foreign-key "LOCATION_ID" is nil for node %v`, n.ID)
 			}
 			node, ok := nodeids[*fk]
 			if !ok {
-				return nil, fmt.Errorf(`unexpected foreign-key "LOCATION_NAME" returned %v for node %v`, *fk, n.ID)
+				return nil, fmt.Errorf(`unexpected foreign-key "LOCATION_ID" returned %v for node %v`, *fk, n.ID)
 			}
 			node.Edges.Returnfrom = append(node.Edges.Returnfrom, n)
 		}

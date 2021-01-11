@@ -100,6 +100,13 @@ func BORROWDATE(v time.Time) predicate.Bookborrow {
 	})
 }
 
+// RETURNDATE applies equality check predicate on the "RETURN_DATE" field. It's identical to RETURNDATEEQ.
+func RETURNDATE(v time.Time) predicate.Bookborrow {
+	return predicate.Bookborrow(func(s *sql.Selector) {
+		s.Where(sql.EQ(s.C(FieldRETURNDATE), v))
+	})
+}
+
 // BORROWDATEEQ applies the EQ predicate on the "BORROW_DATE" field.
 func BORROWDATEEQ(v time.Time) predicate.Bookborrow {
 	return predicate.Bookborrow(func(s *sql.Selector) {
@@ -173,6 +180,82 @@ func BORROWDATELT(v time.Time) predicate.Bookborrow {
 func BORROWDATELTE(v time.Time) predicate.Bookborrow {
 	return predicate.Bookborrow(func(s *sql.Selector) {
 		s.Where(sql.LTE(s.C(FieldBORROWDATE), v))
+	})
+}
+
+// RETURNDATEEQ applies the EQ predicate on the "RETURN_DATE" field.
+func RETURNDATEEQ(v time.Time) predicate.Bookborrow {
+	return predicate.Bookborrow(func(s *sql.Selector) {
+		s.Where(sql.EQ(s.C(FieldRETURNDATE), v))
+	})
+}
+
+// RETURNDATENEQ applies the NEQ predicate on the "RETURN_DATE" field.
+func RETURNDATENEQ(v time.Time) predicate.Bookborrow {
+	return predicate.Bookborrow(func(s *sql.Selector) {
+		s.Where(sql.NEQ(s.C(FieldRETURNDATE), v))
+	})
+}
+
+// RETURNDATEIn applies the In predicate on the "RETURN_DATE" field.
+func RETURNDATEIn(vs ...time.Time) predicate.Bookborrow {
+	v := make([]interface{}, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.Bookborrow(func(s *sql.Selector) {
+		// if not arguments were provided, append the FALSE constants,
+		// since we can't apply "IN ()". This will make this predicate falsy.
+		if len(v) == 0 {
+			s.Where(sql.False())
+			return
+		}
+		s.Where(sql.In(s.C(FieldRETURNDATE), v...))
+	})
+}
+
+// RETURNDATENotIn applies the NotIn predicate on the "RETURN_DATE" field.
+func RETURNDATENotIn(vs ...time.Time) predicate.Bookborrow {
+	v := make([]interface{}, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.Bookborrow(func(s *sql.Selector) {
+		// if not arguments were provided, append the FALSE constants,
+		// since we can't apply "IN ()". This will make this predicate falsy.
+		if len(v) == 0 {
+			s.Where(sql.False())
+			return
+		}
+		s.Where(sql.NotIn(s.C(FieldRETURNDATE), v...))
+	})
+}
+
+// RETURNDATEGT applies the GT predicate on the "RETURN_DATE" field.
+func RETURNDATEGT(v time.Time) predicate.Bookborrow {
+	return predicate.Bookborrow(func(s *sql.Selector) {
+		s.Where(sql.GT(s.C(FieldRETURNDATE), v))
+	})
+}
+
+// RETURNDATEGTE applies the GTE predicate on the "RETURN_DATE" field.
+func RETURNDATEGTE(v time.Time) predicate.Bookborrow {
+	return predicate.Bookborrow(func(s *sql.Selector) {
+		s.Where(sql.GTE(s.C(FieldRETURNDATE), v))
+	})
+}
+
+// RETURNDATELT applies the LT predicate on the "RETURN_DATE" field.
+func RETURNDATELT(v time.Time) predicate.Bookborrow {
+	return predicate.Bookborrow(func(s *sql.Selector) {
+		s.Where(sql.LT(s.C(FieldRETURNDATE), v))
+	})
+}
+
+// RETURNDATELTE applies the LTE predicate on the "RETURN_DATE" field.
+func RETURNDATELTE(v time.Time) predicate.Bookborrow {
+	return predicate.Bookborrow(func(s *sql.Selector) {
+		s.Where(sql.LTE(s.C(FieldRETURNDATE), v))
 	})
 }
 

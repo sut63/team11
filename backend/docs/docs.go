@@ -3523,9 +3523,6 @@ var doc = `{
                 "bookID": {
                     "type": "integer"
                 },
-                "borrowDate": {
-                    "type": "string"
-                },
                 "servicePointID": {
                     "type": "integer"
                 },
@@ -3722,6 +3719,10 @@ var doc = `{
                     "description": "BORROWDATE holds the value of the \"BORROW_DATE\" field.",
                     "type": "string"
                 },
+                "RETURN_DATE": {
+                    "description": "RETURNDATE holds the value of the \"RETURN_DATE\" field.",
+                    "type": "string"
+                },
                 "book_ID": {
                     "type": "integer"
                 },
@@ -3839,7 +3840,7 @@ var doc = `{
                     "description": "ID of the ent.",
                     "type": "integer"
                 },
-                "location_NAME": {
+                "location_ID": {
                     "type": "integer"
                 },
                 "user_ID": {

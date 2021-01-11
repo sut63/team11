@@ -1102,6 +1102,7 @@ type BookborrowMutation struct {
 	typ                  string
 	id                   *int
 	_BORROW_DATE         *time.Time
+	_RETURN_DATE         *time.Time
 	clearedFields        map[string]struct{}
 	_USER                *int
 	cleared_USER         bool
@@ -1229,6 +1230,43 @@ func (m *BookborrowMutation) OldBORROWDATE(ctx context.Context) (v time.Time, er
 // ResetBORROWDATE reset all changes of the "BORROW_DATE" field.
 func (m *BookborrowMutation) ResetBORROWDATE() {
 	m._BORROW_DATE = nil
+}
+
+// SetRETURNDATE sets the RETURN_DATE field.
+func (m *BookborrowMutation) SetRETURNDATE(t time.Time) {
+	m._RETURN_DATE = &t
+}
+
+// RETURNDATE returns the RETURN_DATE value in the mutation.
+func (m *BookborrowMutation) RETURNDATE() (r time.Time, exists bool) {
+	v := m._RETURN_DATE
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldRETURNDATE returns the old RETURN_DATE value of the Bookborrow.
+// If the Bookborrow object wasn't provided to the builder, the object is fetched
+// from the database.
+// An error is returned if the mutation operation is not UpdateOne, or database query fails.
+func (m *BookborrowMutation) OldRETURNDATE(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, fmt.Errorf("OldRETURNDATE is allowed only on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, fmt.Errorf("OldRETURNDATE requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldRETURNDATE: %w", err)
+	}
+	return oldValue.RETURNDATE, nil
+}
+
+// ResetRETURNDATE reset all changes of the "RETURN_DATE" field.
+func (m *BookborrowMutation) ResetRETURNDATE() {
+	m._RETURN_DATE = nil
 }
 
 // SetUSERID sets the USER edge to User by id.
@@ -1404,9 +1442,12 @@ func (m *BookborrowMutation) Type() string {
 // this mutation. Note that, in order to get all numeric
 // fields that were in/decremented, call AddedFields().
 func (m *BookborrowMutation) Fields() []string {
-	fields := make([]string, 0, 1)
+	fields := make([]string, 0, 2)
 	if m._BORROW_DATE != nil {
 		fields = append(fields, bookborrow.FieldBORROWDATE)
+	}
+	if m._RETURN_DATE != nil {
+		fields = append(fields, bookborrow.FieldRETURNDATE)
 	}
 	return fields
 }
@@ -1418,6 +1459,8 @@ func (m *BookborrowMutation) Field(name string) (ent.Value, bool) {
 	switch name {
 	case bookborrow.FieldBORROWDATE:
 		return m.BORROWDATE()
+	case bookborrow.FieldRETURNDATE:
+		return m.RETURNDATE()
 	}
 	return nil, false
 }
@@ -1429,6 +1472,8 @@ func (m *BookborrowMutation) OldField(ctx context.Context, name string) (ent.Val
 	switch name {
 	case bookborrow.FieldBORROWDATE:
 		return m.OldBORROWDATE(ctx)
+	case bookborrow.FieldRETURNDATE:
+		return m.OldRETURNDATE(ctx)
 	}
 	return nil, fmt.Errorf("unknown Bookborrow field %s", name)
 }
@@ -1444,6 +1489,13 @@ func (m *BookborrowMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetBORROWDATE(v)
+		return nil
+	case bookborrow.FieldRETURNDATE:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetRETURNDATE(v)
 		return nil
 	}
 	return fmt.Errorf("unknown Bookborrow field %s", name)
@@ -1497,6 +1549,9 @@ func (m *BookborrowMutation) ResetField(name string) error {
 	switch name {
 	case bookborrow.FieldBORROWDATE:
 		m.ResetBORROWDATE()
+		return nil
+	case bookborrow.FieldRETURNDATE:
+		m.ResetRETURNDATE()
 		return nil
 	}
 	return fmt.Errorf("unknown Bookborrow field %s", name)

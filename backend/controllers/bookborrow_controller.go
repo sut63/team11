@@ -25,7 +25,6 @@ type Bookborrow struct {
 	UserID         int
 	BookID         int
 	ServicePointID int
-	BorrowDate     string
 }
 
 // CreateBookborrow handles POST requests for adding bookborrow entities
@@ -83,7 +82,14 @@ func (ctl *BookborrowController) CreateBookborrow(c *gin.Context) {
 		})
 		return
 	}
-	times, err := time.Parse(time.RFC3339, obj.BorrowDate)
+
+	times := time.Now().Local()
+
+	now := time.Now()
+	then := time.Date(2021, 1, 8, 15, 37, 0, 0, time.UTC)
+	after := time.Date(2021, 1, 15, 15, 37, 0, 0, time.UTC)
+	diff := after.Sub(then)
+	times2 := now.Add(diff)
 
 	bb, err := ctl.client.Bookborrow.
 		Create().
@@ -91,6 +97,7 @@ func (ctl *BookborrowController) CreateBookborrow(c *gin.Context) {
 		SetUSER(u).
 		SetSERVICEPOINT(sp).
 		SetBORROWDATE(times).
+		SetRETURNDATE(times2).
 		Save(context.Background())
 	if err != nil {
 		c.JSON(400, gin.H{
@@ -98,6 +105,19 @@ func (ctl *BookborrowController) CreateBookborrow(c *gin.Context) {
 		})
 		return
 	}
+
+	book, err := ctl.client.Book.
+		UpdateOne(bk).
+		SetStatusID(4).
+		Save(context.Background())
+
+		if err != nil {
+			c.JSON(400, gin.H{
+				"error": "Update status Book error",
+			})
+			return
+		}
+	fmt.Print(book)
 
 	c.JSON(200, bb)
 }

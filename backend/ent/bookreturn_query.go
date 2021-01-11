@@ -458,7 +458,7 @@ func (bq *BookreturnQuery) sqlAll(ctx context.Context) ([]*Bookreturn, error) {
 		ids := make([]int, 0, len(nodes))
 		nodeids := make(map[int][]*Bookreturn)
 		for i := range nodes {
-			if fk := nodes[i].LOCATION_NAME; fk != nil {
+			if fk := nodes[i].LOCATION_ID; fk != nil {
 				ids = append(ids, *fk)
 				nodeids[*fk] = append(nodeids[*fk], nodes[i])
 			}
@@ -471,7 +471,7 @@ func (bq *BookreturnQuery) sqlAll(ctx context.Context) ([]*Bookreturn, error) {
 		for _, n := range neighbors {
 			nodes, ok := nodeids[n.ID]
 			if !ok {
-				return nil, fmt.Errorf(`unexpected foreign-key "LOCATION_NAME" returned %v`, n.ID)
+				return nil, fmt.Errorf(`unexpected foreign-key "LOCATION_ID" returned %v`, n.ID)
 			}
 			for i := range nodes {
 				nodes[i].Edges.Location = n

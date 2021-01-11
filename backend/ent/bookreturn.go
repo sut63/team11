@@ -23,10 +23,10 @@ type Bookreturn struct {
 	DEADLINE time.Time `json:"DEADLINE,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the BookreturnQuery when eager-loading is set.
-	Edges         BookreturnEdges `json:"edges"`
-	CLIENT_ID     *int
-	LOCATION_NAME *int
-	USER_ID       *int
+	Edges       BookreturnEdges `json:"edges"`
+	CLIENT_ID   *int
+	LOCATION_ID *int
+	USER_ID     *int
 }
 
 // BookreturnEdges holds the relations/edges for other nodes in the graph.
@@ -96,7 +96,7 @@ func (*Bookreturn) scanValues() []interface{} {
 func (*Bookreturn) fkValues() []interface{} {
 	return []interface{}{
 		&sql.NullInt64{}, // CLIENT_ID
-		&sql.NullInt64{}, // LOCATION_NAME
+		&sql.NullInt64{}, // LOCATION_ID
 		&sql.NullInt64{}, // USER_ID
 	}
 }
@@ -127,10 +127,10 @@ func (b *Bookreturn) assignValues(values ...interface{}) error {
 			*b.CLIENT_ID = int(value.Int64)
 		}
 		if value, ok := values[1].(*sql.NullInt64); !ok {
-			return fmt.Errorf("unexpected type %T for edge-field LOCATION_NAME", value)
+			return fmt.Errorf("unexpected type %T for edge-field LOCATION_ID", value)
 		} else if value.Valid {
-			b.LOCATION_NAME = new(int)
-			*b.LOCATION_NAME = int(value.Int64)
+			b.LOCATION_ID = new(int)
+			*b.LOCATION_ID = int(value.Int64)
 		}
 		if value, ok := values[2].(*sql.NullInt64); !ok {
 			return fmt.Errorf("unexpected type %T for edge-field USER_ID", value)
