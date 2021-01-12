@@ -218,6 +218,10 @@ export interface GetBookborrowRequest {
     id: number;
 }
 
+export interface GetBookborrowuserRequest {
+    id: number;
+}
+
 export interface GetBookingRequest {
     id: number;
 }
@@ -1528,6 +1532,38 @@ export class DefaultApi extends runtime.BaseAPI {
      */
     async getBookborrow(requestParameters: GetBookborrowRequest): Promise<EntBookborrow> {
         const response = await this.getBookborrowRaw(requestParameters);
+        return await response.value();
+    }
+
+    /**
+     * get bookborrowuser by ID
+     * Get a bookborrowuser entity by ID
+     */
+    async getBookborrowuserRaw(requestParameters: GetBookborrowuserRequest): Promise<runtime.ApiResponse<Array<EntBookborrow>>> {
+        if (requestParameters.id === null || requestParameters.id === undefined) {
+            throw new runtime.RequiredError('id','Required parameter requestParameters.id was null or undefined when calling getBookborrowuser.');
+        }
+
+        const queryParameters: runtime.HTTPQuery = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        const response = await this.request({
+            path: `/bookborrowusers/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters.id))),
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        });
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => jsonValue.map(EntBookborrowFromJSON));
+    }
+
+    /**
+     * get bookborrowuser by ID
+     * Get a bookborrowuser entity by ID
+     */
+    async getBookborrowuser(requestParameters: GetBookborrowuserRequest): Promise<Array<EntBookborrow>> {
+        const response = await this.getBookborrowuserRaw(requestParameters);
         return await response.value();
     }
 
