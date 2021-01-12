@@ -125,25 +125,29 @@ const handleResearchtypechange = (event: React.ChangeEvent<{value: unknown}>) =>
   setUser(event.target.value as number);
 };
 
- const CreateResearch = async ()=>{
+
+ const createResearch = async ()=>{
    const research ={
-     userID: userid,
-     authorID: authorid,
-     researchtypeID: researchtypeid,
-     title: title,
-     datetime: datetime + ":00+07:00",
+    register: 1,
+    myDoc: authorid,
+     docType: researchtypeid,
+     docname: title,
+     date: datetime + ":00+07:00",
    };
    console.log(research);
-   const res: any = await api.CreateResearch({research : research});
+   const res: any = await api.createResearch({research : research});
    setStatus(true);
-   if(res.id != ''){
-     setAlert(true);
-   }else{
-     setAlert(false);
-   }
-   //const timer = setTimeout(()=>{
-  //   setStatus(false);
-  // },1000);
+        if(res.id != ''){
+            setAlert(true);
+            window.location.reload(false);
+            
+        }else{
+            setAlert(false);
+            setStatus(true);
+        }
+        const timer = setTimeout(() => {
+            setStatus(false);
+        }, 1000);
  };
  
  return (
