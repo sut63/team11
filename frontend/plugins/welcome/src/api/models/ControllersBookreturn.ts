@@ -27,16 +27,16 @@ export interface ControllersBookreturn {
     bookborrowID?: number;
     /**
      * 
-     * @type {string}
-     * @memberof ControllersBookreturn
-     */
-    deadline?: string;
-    /**
-     * 
      * @type {number}
      * @memberof ControllersBookreturn
      */
     locationID?: number;
+    /**
+     * 
+     * @type {string}
+     * @memberof ControllersBookreturn
+     */
+    returnTime?: string;
     /**
      * 
      * @type {number}
@@ -56,8 +56,8 @@ export function ControllersBookreturnFromJSONTyped(json: any, ignoreDiscriminato
     return {
         
         'bookborrowID': !exists(json, 'bookborrowID') ? undefined : json['bookborrowID'],
-        'deadline': !exists(json, 'deadline') ? undefined : json['deadline'],
         'locationID': !exists(json, 'locationID') ? undefined : json['locationID'],
+        'returnTime': !exists(json, 'returnTime') ? undefined : json['returnTime'],
         'userID': !exists(json, 'userID') ? undefined : json['userID'],
     };
 }
@@ -72,8 +72,8 @@ export function ControllersBookreturnToJSON(value?: ControllersBookreturn | null
     return {
         
         'bookborrowID': value.bookborrowID,
-        'deadline': value.deadline,
         'locationID': value.locationID,
+        'returnTime': value.returnTime,
         'userID': value.userID,
     };
 }

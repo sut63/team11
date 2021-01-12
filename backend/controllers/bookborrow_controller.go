@@ -25,6 +25,8 @@ type Bookborrow struct {
 	UserID         int
 	BookID         int
 	ServicePointID int
+	BorrowDate	string
+	ReturnDate	string
 }
 
 // CreateBookborrow handles POST requests for adding bookborrow entities
@@ -188,6 +190,9 @@ func (ctl *BookborrowController) ListBookborrow(c *gin.Context) {
 
 	bookborrows, err := ctl.client.Bookborrow.
 		Query().
+		WithUSER().
+		WithBOOK().
+		WithSERVICEPOINT().
 		Limit(limit).
 		Offset(offset).
 		All(context.Background())
