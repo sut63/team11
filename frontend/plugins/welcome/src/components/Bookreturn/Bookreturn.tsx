@@ -67,6 +67,7 @@ export default function Create() {
       setLocations(res);
     };
     getLocations();
+    
   }, [loading]);
 
   const UserIDhandleChange = (event: React.ChangeEvent<{ value: any }>) => {
