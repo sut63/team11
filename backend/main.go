@@ -12,11 +12,8 @@ import (
 	ginSwagger "github.com/swaggo/gin-swagger"
 	"github.com/team11/app/controllers"
 	"github.com/team11/app/ent"
-	"github.com/team11/app/ent/author"
-	"github.com/team11/app/ent/category"
 	"github.com/team11/app/ent/role"
 	"github.com/team11/app/ent/status"
-	"github.com/team11/app/ent/user"
 )
 
 //User struct
@@ -287,57 +284,6 @@ func main() {
 		client.Location.
 			Create().
 			SetLOCATIONNAME(l).
-			Save(context.Background())
-	}
-
-	Book := []Book{
-		{"หนูน้อยผจญภัยในโลกไดโนเสาร์", 3, 1, 1, 1},
-		{"lord of the ring", 1, 3, 1, 1}}
-	for _, b := range Book {
-
-		ca, err := client.Category.
-			Query().
-			Where(category.IDEQ(int(b.Category))).
-			Only(context.Background())
-		if err != nil {
-			fmt.Println(err.Error())
-			return
-		}
-
-		au, err := client.Author.
-			Query().
-			Where(author.IDEQ(int(b.Author))).
-			Only(context.Background())
-		if err != nil {
-			fmt.Println(err.Error())
-			return
-		}
-
-		us, err := client.User.
-			Query().
-			Where(user.IDEQ(int(b.User))).
-			Only(context.Background())
-		if err != nil {
-			fmt.Println(err.Error())
-			return
-		}
-
-		st, err := client.Status.
-			Query().
-			Where(status.IDEQ(int(b.Status))).
-			Only(context.Background())
-		if err != nil {
-			fmt.Println(err.Error())
-			return
-		}
-
-		client.Book.
-			Create().
-			SetBookName(b.BookName).
-			SetCategory(ca).
-			SetAuthor(au).
-			SetUser(us).
-			SetStatus(st).
 			Save(context.Background())
 	}
 

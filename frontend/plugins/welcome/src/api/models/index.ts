@@ -1,3 +1,4 @@
+export * from './ControllersBook';
 export * from './ControllersBookborrow';
 export * from './ControllersBooking';
 export * from './ControllersBookreturn';

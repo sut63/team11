@@ -1,5 +1,16 @@
 basePath: /api/v1
 definitions:
+  controllers.Book:
+    properties:
+      author:
+        type: integer
+      bookname:
+        type: string
+      category:
+        type: integer
+      userid:
+        type: integer
+    type: object
   controllers.Bookborrow:
     properties:
       bookID:
@@ -1410,7 +1421,7 @@ paths:
         name: book
         required: true
         schema:
-          $ref: '#/definitions/ent.Book'
+          $ref: '#/definitions/controllers.Book'
       produces:
       - application/json
       responses:
@@ -3015,7 +3026,6 @@ securityDefinitions:
     tokenUrl: https://example.com/oauth/token
     type: oauth2
   OAuth2Application:
-    authorizationUrl: ""
     flow: application
     scopes:
       admin: ' Grants read and write access to administrative information'
@@ -3030,7 +3040,6 @@ securityDefinitions:
       write: ' Grants write access'
     type: oauth2
   OAuth2Password:
-    authorizationUrl: ""
     flow: password
     scopes:
       admin: ' Grants read and write access to administrative information'
