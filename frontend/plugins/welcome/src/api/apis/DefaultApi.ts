@@ -15,6 +15,9 @@
 
 import * as runtime from '../runtime';
 import {
+    ControllersBook,
+    ControllersBookFromJSON,
+    ControllersBookToJSON,
     ControllersBookborrow,
     ControllersBookborrowFromJSON,
     ControllersBookborrowToJSON,
@@ -91,7 +94,7 @@ export interface CreateAuthorRequest {
 }
 
 export interface CreateBookRequest {
-    book: EntBook;
+    book: ControllersBook;
 }
 
 export interface CreateBookborrowRequest {
@@ -489,7 +492,7 @@ export class DefaultApi extends runtime.BaseAPI {
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: EntBookToJSON(requestParameters.book),
+            body: ControllersBookToJSON(requestParameters.book),
         });
 
         return new runtime.JSONApiResponse(response, (jsonValue) => EntBookFromJSON(jsonValue));

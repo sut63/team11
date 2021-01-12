@@ -1182,7 +1182,7 @@ var doc = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/ent.Book"
+                            "$ref": "#/definitions/controllers.Book"
                         }
                     }
                 ],
@@ -3565,6 +3565,23 @@ var doc = `{
         }
     },
     "definitions": {
+        "controllers.Book": {
+            "type": "object",
+            "properties": {
+                "author": {
+                    "type": "integer"
+                },
+                "bookname": {
+                    "type": "string"
+                },
+                "category": {
+                    "type": "integer"
+                },
+                "userid": {
+                    "type": "integer"
+                }
+            }
+        },
         "controllers.Bookborrow": {
             "type": "object",
             "properties": {
@@ -4429,7 +4446,6 @@ var doc = `{
         "OAuth2Application": {
             "type": "oauth2",
             "flow": "application",
-            "authorizationUrl": "",
             "tokenUrl": "https://example.com/oauth/token",
             "scopes": {
                 "admin": " Grants read and write access to administrative information",
@@ -4448,7 +4464,6 @@ var doc = `{
         "OAuth2Password": {
             "type": "oauth2",
             "flow": "password",
-            "authorizationUrl": "",
             "tokenUrl": "https://example.com/oauth/token",
             "scopes": {
                 "admin": " Grants read and write access to administrative information",
