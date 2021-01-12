@@ -127,6 +127,7 @@ const handleResearchtypechange = (event: React.ChangeEvent<{value: unknown}>) =>
 
 
  const createResearch = async ()=>{
+  if ((title != null) && (title != "") && (datetime!= null) && (datetime != "") && (authorid != null) && (researchtypeid != null) ) {
    const research ={
     register: 1,
     myDoc: authorid,
@@ -140,14 +141,14 @@ const handleResearchtypechange = (event: React.ChangeEvent<{value: unknown}>) =>
         if(res.id != ''){
             setAlert(true);
             window.location.reload(false);
-            
+        }
         }else{
             setAlert(false);
             setStatus(true);
         }
         const timer = setTimeout(() => {
             setStatus(false);
-        }, 1000);
+        }, 3000);
  };
  
  return (
