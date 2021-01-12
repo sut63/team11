@@ -3588,6 +3588,12 @@ var doc = `{
                 "bookID": {
                     "type": "integer"
                 },
+                "borrowDate": {
+                    "type": "string"
+                },
+                "returnDate": {
+                    "type": "string"
+                },
                 "servicePointID": {
                     "type": "integer"
                 },
