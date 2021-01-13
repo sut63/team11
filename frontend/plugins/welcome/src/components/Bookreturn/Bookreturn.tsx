@@ -41,25 +41,18 @@ export default function Create() {
   const [loading, setLoading] = useState(true);
   const [status, setStatus] = useState(false);
   const [alert, setAlert] = useState(true);
-  const [iduser,setIduser] = React.useState<number>(0)
+  
   const [users, setUsers] = React.useState<EntUser[]>(Array);
   const [bookborrows, setBookborrows] = React.useState<EntBookborrow[]>([]);
   const [locations, setLocations] = React.useState<EntLocation[]>(Array);
   useEffect(() => {
     const getUser = async () => {
-      const res = await api.listUser({ limit: 10, offset: 0 });
+      const res = await api.listUser();
       setLoading(false);
       setUsers(res);
+      console.log("users => "+users);
     };
     getUser();
-
-    const getBookborrows = async () => {
-      const res = await api.getBookborrowuser({id:1});
-      setLoading(false);
-      setBookborrows(res);
-      console.log("bookborrows => "+bookborrows);
-    };
-    getBookborrows();
 
     const getLocations = async () => {
       const res = await api.listLocation({ limit: 10, offset: 0 });
@@ -72,7 +65,12 @@ export default function Create() {
 
   const UserIDhandleChange = (event: React.ChangeEvent<{ value: any }>) => {
     setUserID(event.target.value as number);
-    setIduser(event.target.value as number)
+    const getBookborrows = async () => {
+      const res = await api.getBookborrowuser({id:event.target.value as number});
+      setBookborrows(res);
+      console.log("bookborrows => "+bookborrows);
+    };
+    getBookborrows();
   };
   const BookborrowIDhandleChange = (event: React.ChangeEvent<{ value: unknown }>) => {
     setBookborrowID(event.target.value as number);
@@ -81,13 +79,14 @@ export default function Create() {
   const LocationIDhandleChange = (event: React.ChangeEvent<{ value: unknown }>) => {
     setLocationID(event.target.value as number);
   };
-
+  
 
   const [userID, setUserID] = useState(Number);
   const [bookborrowID, setBookborrowID] = useState(Number);
   const [locationID, setLocationID] = useState(Number);
   
   const createBookreturn = async () => {
+    if ( (userID != "") && (bookborrowID != "") && (locationID != "") ){
     const bookreturn = {
       userID : userID,
       bookborrowID : bookborrowID,
@@ -98,9 +97,15 @@ export default function Create() {
     setStatus(true);
     if (res.id != '') {
       setAlert(true);
+      window.location.reload(false);
+    }
     } else {
       setAlert(false);
+      setStatus(true);
     }
+    const timer = setTimeout(() => {
+      setStatus(false);
+  }, 3000);
   };
   return (
     <Page theme={pageTheme.home}>
