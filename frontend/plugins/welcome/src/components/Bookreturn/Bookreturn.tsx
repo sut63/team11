@@ -41,32 +41,12 @@ export default function Create() {
   const [loading, setLoading] = useState(true);
   const [status, setStatus] = useState(false);
   const [alert, setAlert] = useState(true);
-<<<<<<< HEAD
-  const [iduser,setIduser] = React.useState<number>(0)
-=======
   
->>>>>>> 7a01a0a75785e4aa3a74f4bf2b3c889adcb492c7
   const [users, setUsers] = React.useState<EntUser[]>(Array);
   const [bookborrows, setBookborrows] = React.useState<EntBookborrow[]>([]);
   const [locations, setLocations] = React.useState<EntLocation[]>(Array);
   useEffect(() => {
     const getUser = async () => {
-<<<<<<< HEAD
-      const res = await api.listUser({ limit: 10, offset: 0 });
-      setLoading(false);
-      setUsers(res);
-    };
-    getUser();
-
-    const getBookborrows = async () => {
-      const res = await api.getBookborrowuser({id:1});
-      setLoading(false);
-      setBookborrows(res);
-      console.log("bookborrows => "+bookborrows);
-    };
-    getBookborrows();
-
-=======
       const res = await api.listUser();
       setLoading(false);
       setUsers(res);
@@ -74,27 +54,17 @@ export default function Create() {
     };
     getUser();
 
->>>>>>> 7a01a0a75785e4aa3a74f4bf2b3c889adcb492c7
     const getLocations = async () => {
       const res = await api.listLocation({ limit: 10, offset: 0 });
       setLoading(false);
       setLocations(res);
     };
     getLocations();
-<<<<<<< HEAD
-=======
     
->>>>>>> 7a01a0a75785e4aa3a74f4bf2b3c889adcb492c7
   }, [loading]);
 
   const UserIDhandleChange = (event: React.ChangeEvent<{ value: any }>) => {
     setUserID(event.target.value as number);
-<<<<<<< HEAD
-    setIduser(event.target.value as number)
-  };
-  const BookborrowIDhandleChange = (event: React.ChangeEvent<{ value: unknown }>) => {
-    setBookborrowID(event.target.value as number);
-=======
     const getBookborrows = async () => {
       const res = await api.getBookborrowuser({id:event.target.value as number});
       setBookborrows(res);
@@ -108,36 +78,9 @@ export default function Create() {
 
   const LocationIDhandleChange = (event: React.ChangeEvent<{ value: unknown }>) => {
     setLocationID(event.target.value as number);
->>>>>>> 7a01a0a75785e4aa3a74f4bf2b3c889adcb492c7
   };
   
 
-<<<<<<< HEAD
-  const LocationIDhandleChange = (event: React.ChangeEvent<{ value: unknown }>) => {
-    setLocationID(event.target.value as number);
-  };
-
-
-  const [userID, setUserID] = useState(Number);
-  const [bookborrowID, setBookborrowID] = useState(Number);
-  const [locationID, setLocationID] = useState(Number);
-  
-  const createBookreturn = async () => {
-    const bookreturn = {
-      userID : userID,
-      bookborrowID : bookborrowID,
-      locationID: locationID,
-    };
-    console.log(bookreturn);
-    const res: any = await api.createBookreturn({ bookreturn: bookreturn });
-    setStatus(true);
-    if (res.id != '') {
-      setAlert(true);
-    } else {
-      setAlert(false);
-    }
-  };
-=======
   const [userID, setUserID] = useState(Number);
   const [bookborrowID, setBookborrowID] = useState(Number);
   const [locationID, setLocationID] = useState(Number);
@@ -164,7 +107,6 @@ export default function Create() {
       setStatus(false);
   }, 3000);
   };
->>>>>>> 7a01a0a75785e4aa3a74f4bf2b3c889adcb492c7
   return (
     <Page theme={pageTheme.home}>
       <Header
