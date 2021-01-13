@@ -262,7 +262,7 @@ func NewResearchController(router gin.IRouter, client *ent.Client) *ResearchCont
 
 // InitResearchController registers routes to the main engine
 func (ctl *ResearchController) register() {
-    researches := ctl.router.Group("/Research")
+    researches := ctl.router.Group("/researches")
 
     researches.GET("", ctl.ListResearch)
 

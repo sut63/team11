@@ -22,8 +22,8 @@ import Select from '@material-ui/core/Select';
 //import { EntCarservice } from '../../api/models/EntCarservice';
 import { EntUser } from '../../api/models/EntUser';
 import { EntAuthor } from '../../api/models/EntAuthor'; //-------
-import { EntResearchtype } from '../../api/models/EntResearchtype'; //-------
-import { EntResearch } from '../../api/models/EntResearch'; //-------
+import { EntCategory } from '../../api/models/EntCategory'; //-------
+import { EntBook } from '../../api/models/EntBook'; //-------
 
 const useStyles = makeStyles((theme: Theme) =>
 createStyles({
@@ -55,22 +55,21 @@ createStyles({
 
 export default function Create() {
  const classes = useStyles();
- const profile = {thisName: 'ระบบงานวิจัยและฐานข้อมูลออนไลน์' };
+ const profile = {thisName: 'ระบบเพิ่มข้อมูลหนังสือ' };
  const api = new DefaultApi();
  
  const [users, setUsers] = useState<EntUser[]>([]);
  //-------
  const [authors, setAuthors] = useState<EntAuthor[]>([]);
- const [researchtypes, setResearchtypes] = useState<EntResearchtype[]>([]);
+ const [categorys, setCategorys] = useState<EntCategory[]>([]);
 
 
  const [userid, setUser] = useState(Number);
   //-------
  const [authorid, setAuthor] = useState(Number);
- const [researchtypeid, setResearchtype] = useState(Number);
+ const [categoryid, setCategory] = useState(Number);
 
-  
- const [datetime, setdatetime] = useState(String);
+
  const [loading, setLoading] = useState(true);
  const [status, setStatus] = useState(false);
  const [alert, setAlert] = useState(true);
@@ -88,16 +87,16 @@ export default function Create() {
     getAuthor();
 
 
-    const getResearchtype = async () => {
-      const res = await api.listResearchtype({offset :0});
+    const getCategory = async () => {
+      const res = await api.listCategory({offset :0});
       setLoading(false);
-      setResearchtypes(res);
+      setCategorys(res);
       console.log(res);
     };
-    getResearchtype();
+    getCategory();
 
    const getUser = async () => {
-    const res = await api.listUser();
+    const res = await api.listUser({offset :0});
     setLoading(false);
     setUsers(res);
    };
@@ -109,16 +108,13 @@ const handleTitleChange = (event: any) => {
   setTitle(event.target.value as string);
  };
 
- const handledatetimeChange = (event: any) => {
-   setdatetime(event.target.value as string);
- }; 
  //----------------
  const handleAuthorchange = (event: React.ChangeEvent<{value: unknown}>) => {
   setAuthor(event.target.value as number);
 };
 
-const handleResearchtypechange = (event: React.ChangeEvent<{value: unknown}>) => {
-  setResearchtype(event.target.value as number);
+const handleCategorychange = (event: React.ChangeEvent<{value: unknown}>) => {
+  setCategory(event.target.value as number);
 };
 
  const handleUserchange = (event: React.ChangeEvent<{value: unknown}>) => {
@@ -126,17 +122,16 @@ const handleResearchtypechange = (event: React.ChangeEvent<{value: unknown}>) =>
 };
 
 
- const createResearch = async ()=>{
-  if ((title != null) && (title != "") && (datetime!= null) && (datetime != "") && (authorid != null) && (researchtypeid != null) ) {
-   const research ={
-    register: 1,
-    myDoc: authorid,
-     docType: researchtypeid,
-     docname: title,
-     date: datetime + ":00+07:00",
+ const createBook = async ()=>{
+  if ((title != null) && (title != "") && (authorid != null) && (categoryid != null) ) {
+   const book ={
+    userid: 1,
+    author: authorid,
+    category: categoryid,
+    bookname: title,
    };
-   console.log(research);
-   const res: any = await api.createResearch({research : research});
+   console.log(book);
+   const res: any = await api.createBook({book : book});
    setStatus(true);
         if(res.id != ''){
             setAlert(true);
@@ -155,11 +150,11 @@ const handleResearchtypechange = (event: React.ChangeEvent<{value: unknown}>) =>
     <Page theme={pageTheme.home}>
      <Header
        title={`${profile.thisName}`}
-       subtitle="Online research system and database"
+       subtitle="กรอกข้อมูลหนังสือ"
      ></Header>
 
      <Content>
-       <ContentHeader title="เพิ่มข้อมูลงานวิจัยและฐานข้อมูลออนไลน์">
+       <ContentHeader title="ระบบเพิ่มข้อมูลหนังสือ">
        
          {status ? (
            <div>
@@ -182,7 +177,7 @@ const handleResearchtypechange = (event: React.ChangeEvent<{value: unknown}>) =>
             <div className={classes.paper}><strong>ชื่อหนังสือ</strong></div>
             <TextField className={classes.textField}
             style={{ width: 400 ,marginLeft:20,marginRight:-10}}
-              id="title"
+              id="BookName"
               label=""
               variant="standard"
               color="secondary"
@@ -218,42 +213,27 @@ const handleResearchtypechange = (event: React.ChangeEvent<{value: unknown}>) =>
               className={classes.margin}
               variant="outlined"
             >
-              <div className={classes.paper}><strong>ชื่อประเภทงานวิจัย</strong></div>
-              <InputLabel id="researchtype-label"></InputLabel>
+              <div className={classes.paper}><strong>ชื่อหมวดหนังสือ</strong></div>
+              <InputLabel id="category-label"></InputLabel>
               <Select
-                labelId="researchtype-label"
-                id="ประเภทงานวิจัย"
-                value={researchtypeid}
-                onChange={handleResearchtypechange}
+                labelId="category-label"
+                id="หมวดหนังสือ"
+                value={categoryid}
+                onChange={handleCategorychange}
                 style={{ width: 400 }}
               >
-                {researchtypes.map((item: EntResearchtype) => (
-                  <MenuItem value={item.id}>{item.tYPENAME}</MenuItem>
+                {categorys.map((item: EntCategory) => (
+                  <MenuItem value={item.id}>{item.categoryName}</MenuItem>
                 ))}
               </Select>
             </FormControl>
             </div>
 
-            <FormControl className={classes.margin} >
-                <TextField
-                 id="Datetime"
-                  label="วัน-เวลา"
-                  type="datetime-local"
-                  value={datetime}
-                  onChange={handledatetimeChange}
-                  className={classes.textField}
-                  InputLabelProps={{
-                   shrink: true,
-                 }}
-                 style={{ width: 250 }}
-        
-                />
-                </FormControl>   
                         
            <div className={classes.margin}>
              <Button
                onClick={() => {
-                createResearch();
+                createBook();
                }}
                variant="contained"
                color="primary"

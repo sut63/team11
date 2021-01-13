@@ -1,5 +1,16 @@
 basePath: /api/v1
 definitions:
+  controllers.Book:
+    properties:
+      author:
+        type: integer
+      bookname:
+        type: string
+      category:
+        type: integer
+      userid:
+        type: integer
+    type: object
   controllers.Bookborrow:
     properties:
       bookID:
@@ -1414,7 +1425,7 @@ paths:
         name: book
         required: true
         schema:
-          $ref: '#/definitions/ent.Book'
+          $ref: '#/definitions/controllers.Book'
       produces:
       - application/json
       responses:
@@ -2857,15 +2868,6 @@ paths:
     get:
       description: list user entities
       operationId: list-user
-      parameters:
-      - description: Limit
-        in: query
-        name: limit
-        type: integer
-      - description: Offset
-        in: query
-        name: offset
-        type: integer
       produces:
       - application/json
       responses:

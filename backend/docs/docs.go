@@ -1182,7 +1182,7 @@ var doc = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/ent.Book"
+                            "$ref": "#/definitions/controllers.Book"
                         }
                     }
                 ],
@@ -3345,20 +3345,6 @@ var doc = `{
                 ],
                 "summary": "List user entities",
                 "operationId": "list-user",
-                "parameters": [
-                    {
-                        "type": "integer",
-                        "description": "Limit",
-                        "name": "limit",
-                        "in": "query"
-                    },
-                    {
-                        "type": "integer",
-                        "description": "Offset",
-                        "name": "offset",
-                        "in": "query"
-                    }
-                ],
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -3565,6 +3551,23 @@ var doc = `{
         }
     },
     "definitions": {
+        "controllers.Book": {
+            "type": "object",
+            "properties": {
+                "author": {
+                    "type": "integer"
+                },
+                "bookname": {
+                    "type": "string"
+                },
+                "category": {
+                    "type": "integer"
+                },
+                "userid": {
+                    "type": "integer"
+                }
+            }
+        },
         "controllers.Bookborrow": {
             "type": "object",
             "properties": {
