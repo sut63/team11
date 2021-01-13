@@ -357,11 +357,6 @@ export interface ListStatusRequest {
     offset?: number;
 }
 
-export interface ListUserRequest {
-    limit?: number;
-    offset?: number;
-}
-
 export interface UpdateAuthorRequest {
     id: number;
     author: EntAuthor;
@@ -2566,16 +2561,8 @@ export class DefaultApi extends runtime.BaseAPI {
      * list user entities
      * List user entities
      */
-    async listUserRaw(requestParameters: ListUserRequest): Promise<runtime.ApiResponse<Array<EntUser>>> {
+    async listUserRaw(): Promise<runtime.ApiResponse<Array<EntUser>>> {
         const queryParameters: runtime.HTTPQuery = {};
-
-        if (requestParameters.limit !== undefined) {
-            queryParameters['limit'] = requestParameters.limit;
-        }
-
-        if (requestParameters.offset !== undefined) {
-            queryParameters['offset'] = requestParameters.offset;
-        }
 
         const headerParameters: runtime.HTTPHeaders = {};
 
@@ -2593,8 +2580,8 @@ export class DefaultApi extends runtime.BaseAPI {
      * list user entities
      * List user entities
      */
-    async listUser(requestParameters: ListUserRequest): Promise<Array<EntUser>> {
-        const response = await this.listUserRaw(requestParameters);
+    async listUser(): Promise<Array<EntUser>> {
+        const response = await this.listUserRaw();
         return await response.value();
     }
 

@@ -7,7 +7,6 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/team11/app/ent"
-	"github.com/team11/app/ent/role"
 	"github.com/team11/app/ent/user"
 )
 
@@ -98,41 +97,19 @@ func (ctl *UserController) GetUser(c *gin.Context) {
 // @Description list user entities
 // @ID list-user
 // @Produce json
-// @Param limit  query int false "Limit"
-// @Param offset query int false "Offset"
 // @Success 200 {array} ent.User
 // @Failure 400 {object} gin.H
 // @Failure 500 {object} gin.H
 // @Router /users [get]
 func (ctl *UserController) ListUser(c *gin.Context) {
-	limitQuery := c.Query("limit")
-	limit := 10
-	if limitQuery != "" {
-		limit64, err := strconv.ParseInt(limitQuery, 10, 64)
-		if err == nil {
-			limit = int(limit64)
-		}
-	}
-
-	offsetQuery := c.Query("offset")
-	offset := 0
-	if offsetQuery != "" {
-		offset64, err := strconv.ParseInt(offsetQuery, 10, 64)
-		if err == nil {
-			offset = int(offset64)
-		}
-	}
 	users, err := ctl.client.User.
 		Query().
-		Where(user.HasPositionWith(role.IDEQ(1))).
-		Limit(limit).
-		Offset(offset).
+		WithPosition().
 		All(context.Background())
 	if err != nil {
 		c.JSON(400, gin.H{"error": err.Error()})
 		return
 	}
-
 	c.JSON(200, users)
 }
 

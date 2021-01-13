@@ -1,7 +1,5 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import HomeIcon from '@material-ui/icons/Home';
-import CreateComponentIcon from '@material-ui/icons/AddCircleOutline';
-import YouTube from '@material-ui/icons/YouTube';
 import SignOut from '@material-ui/icons/Settings';
 import Book from '@material-ui/icons/MenuBook';
 import VideoOnDemand from '@material-ui/icons/DesktopWindows';
@@ -15,29 +13,21 @@ import {
   SidebarItem,
   SidebarDivider,
   SidebarSpace,
-  SidebarUserSettings,
-  SidebarThemeToggle,
   SidebarPinButton,
 } from '@backstage/core';
 
-export const AppSidebar = () => (
+
+export const AppSidebar =  () => {
+  const [loading, setLoading] = useState(true);
+  useEffect(() => {
+
+  }, [loading]);
+  return(
   <Sidebar>
     <SidebarDivider />
     {/* Global nav, not org-specific */}
     <SidebarItem icon={HomeIcon} to="" text="Home" />
-    {/* <SidebarItem icon={CreateComponentIcon} to="create" text="Create..." />
-    <SidebarItem icon={CreateComponentIcon} to="welcome" text="Welcome" /> */}
-    <SidebarItem
-      icon={YouTube}
-      to="playlist_video"
-      text="Playlist Video"
-    />
-    <SidebarItem
-      icon={CreateComponentIcon}
-      to="watch_video"
-      text="Watch Video"
-    />
-
+    {}
     <SidebarItem
       icon={Book}
       to="Book"
@@ -82,4 +72,5 @@ export const AppSidebar = () => (
     {/* <SidebarUserSettings  /> */}
     <SidebarPinButton />
   </Sidebar>
-);
+  )
+};
