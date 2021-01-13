@@ -1,20 +1,25 @@
 import React, { useState, useEffect } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 import {
-  Content, Header, Page, pageTheme, ContentHeader,
+  Content,
+  Header,
+  Page,
+  pageTheme,
+  ContentHeader,
 } from '@backstage/core';
-import {
-  Typography, TextField, Button, makeStyles,
-  Theme, FormControl, InputLabel, MenuItem,
-  Select, createStyles,
-} from '@material-ui/core';
-import { Alert } from '@material-ui/lab';
+import { makeStyles, Theme, createStyles } from '@material-ui/core/styles';
+import Button from '@material-ui/core/Button';
+import FormControl from '@material-ui/core/FormControl';
+import Swal from 'sweetalert2';
 import { DefaultApi } from '../../api/apis';
-import {
-  EntBook,
-  EntServicePoint,
-  EntUser,
-} from '../../api/models/';
+import InputLabel from '@material-ui/core/InputLabel';
+import MenuItem from '@material-ui/core/MenuItem';
+import Select from '@material-ui/core/Select';
+import { EntUser } from '../../api/models/EntUser';
+import { EntBook } from '../../api/models/EntBook'; 
+import { EntServicePoint } from '../../api/models/EntServicePoint'; 
+
+
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
@@ -25,206 +30,231 @@ const useStyles = makeStyles((theme: Theme) =>
     margin: {
       margin: theme.spacing(3),
     },
+
     withoutLabel: {
       marginTop: theme.spacing(3),
     },
     textField: {
-      width: '50ch',
+      width: '25ch',
+    },
+    paper: {
+      marginTop: theme.spacing(1),
+      marginBottom: theme.spacing(1),
+      marginLeft: theme.spacing(1),
+    },
+    formControl: {
+      width: 400,
     },
   }),
 );
-const username = { givenuser: 'Manuschanok Srikhrueadong' };
+
+const Toast = Swal.mixin({
+  toast: true,
+  position: 'top-end',
+  width: '400px',
+  padding: '100px',
+  showConfirmButton: false,
+  timer: 3000,
+  timerProgressBar: true,
+  didOpen: toast => {
+    toast.addEventListener('mouseenter', Swal.stopTimer);
+    toast.addEventListener('mouseleave', Swal.resumeTimer);
+  },
+});
+
 export default function Create() {
-  const profile = { givenName: 'ยินดีต้อนรับสู่ ระบบห้องสมุด' };
   const classes = useStyles();
   const api = new DefaultApi();
+
+  const [users, setUsers] = useState<EntUser[]>([]);
+  //-------
+  const [books, setBooks] = useState<EntBook[]>([]);
+  const [servicepoints, setServicepoints] = useState<EntServicePoint[]>([]);
+
+  //-------
+  const [userID, setUser] = useState(Number);
+  const [bookID, setBook] = useState(Number);
+  const [servicePointID, setServicepoint] = useState(Number);
+
+
   const [loading, setLoading] = useState(true);
-  const [status, setStatus] = useState(false);
-  const [alert, setAlert] = useState(true);
-  const [books, setBooks] = useState<EntBook[]>(Array);
-  const [users, setUsers] = useState<EntUser[]>(Array);
-  const [servicepoints, setServicepoints] = useState<EntServicePoint[]>(Array);
+
+
   useEffect(() => {
+    //-------
+    const getBook = async () => {
+      const res = await api.listBook({ limit: 10, offset: 0 });
+      setLoading(false);
+      setBooks(res);
+      console.log(res);
+    };
+    getBook();
+
+
+    const getServicepoint = async () => {
+      const res = await api.listServicepoint({ limit: 10, offset: 0 });
+      setLoading(false);
+      setServicepoints(res);
+      console.log(res);
+    };
+    getServicepoint();
+
     const getUser = async () => {
       const res = await api.listUser({ limit: 10, offset: 0 });
       setLoading(false);
       setUsers(res);
+      console.log(res);
     };
     getUser();
 
-    const getBooks = async () => {
-      const res = await api.listBook({ limit: 10, offset: 0 });
-      setLoading(false);
-      setBooks(res);
-    };
-    getBooks();
-
-    const getServicepoints = async () => {
-      const res = await api.listServicepoint({ limit: 10, offset: 0 });
-      setLoading(false);
-      setServicepoints(res);
-    };
-    getServicepoints();
   }, [loading]);
 
-
-  const ServicepointIDhandleChange = (event: React.ChangeEvent<{ value: unknown }>) => {
-    setServicepointID(event.target.value as number);
-  };
-  const bookIDhandleChange = (event: React.ChangeEvent<{ value: unknown }>) => {
-    setBookID(event.target.value as number);
-  };
-  const UserIDhandleChange = (event: React.ChangeEvent<{ value: unknown }>) => {
-    setUserID(event.target.value as number);
+  //----------------
+  const handleBookchange = (event: React.ChangeEvent<{ value: unknown }>) => {
+    setBook(event.target.value as number);
   };
 
- 
-  const [bookID, setBookID] = useState(Number);
-  const [servicePointID, setServicepointID] = useState(Number);
-  const [userID, setUserID] = useState(Number);
-  const createBookBorrow = async () => {
-    const bookBorrow = {
-      bookID : bookID,
-      servicePointID: servicePointID,
-      userID : userID,
-    };
-    console.log(bookBorrow);
-    const res: any = await api.createBookborrow({ bookborrow: bookBorrow });
-    setStatus(true);
-    if (res.id != '') {
-      setAlert(true);
-    } else {
-      setAlert(false);
-    }
+  const handleServicepointchange = (event: React.ChangeEvent<{ value: unknown }>) => {
+    setServicepoint(event.target.value as number);
   };
+
+  const handleUserchange = (event: React.ChangeEvent<{ value: unknown }>) => {
+    setUser(event.target.value as number);
+  };
+
+      const bookBorrow = {
+        bookID: bookID,
+        servicePointID: servicePointID,
+        userID: userID,
+      };
+      console.log(bookBorrow);
+      function save() {
+        const apiUrl = 'http://localhost:8080/api/v1/bookborrows';
+        const requestOptions = {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(bookBorrow),
+        };
+
+        console.log(bookBorrow); // log ดูข้อมูล สามารถ Inspect ดูข้อมูลได้ F12 เลือก Tab Console
+
+        fetch(apiUrl, requestOptions)
+          .then(response => response.json())
+          .then(data => {
+            console.log(data);
+            if (data.id != null) {
+              //clear();
+              Toast.fire({
+                icon: 'success',
+                title: 'บันทึกข้อมูลสำเร็จ',
+              });
+            } else {
+              Toast.fire({
+                icon: 'error',
+                title: '<br><h5>กรุณากรอกข้อมูลใหม่</h5></br>',
+              });
+            }
+          });
+      }
   return (
     <Page theme={pageTheme.home}>
       <Header
-        title={"ระบบยืมหนังสือ"}
-      >
-        <Button
-          component={RouterLink}
-          to="/login"
-          variant="contained"
-          color="primary">
-          ออกจากระบบ
-        </Button>
-      </Header>
+        title={`ระบบยืมหนังสือ`}
+        subtitle="กรุณากรอกข้อมูล"
+      ></Header>
+
       <Content>
         <ContentHeader title="เพิ่มข้อมูลการยืมหนังสือ">
-          <div>
 
-          </div>
-          {status ? (
-            <div>
-              {alert ? (
-                <Alert severity="success">
-                  This is a success alert — check it out!
-                </Alert>
-              ) : (
-                  <Alert severity="warning" style={{ marginTop: 20 }}>
-                    This is a warning alert — check it out!
-                  </Alert>
-                )}
-            </div>
-          ) : null}
         </ContentHeader>
-
 
         <div className={classes.root}>
           <form noValidate autoComplete="off">
-            <table align="center">
-              <tr><td>หนังสือ</td><td>
-                <FormControl
-                  className={classes.margin}
-                  variant="outlined"
+
+            <div>
+              <FormControl
+                className={classes.margin}
+                variant="outlined"
+              >
+                <div className={classes.paper}><strong>หนังสือ</strong></div>
+                <InputLabel id="author-label"></InputLabel>
+                <Select
+                  labelId="ชื่อหนังสือ"
+                  id="bookID"
+                  value={bookID}
+                  onChange={handleBookchange}
+                  style={{ width: 400 }}
                 >
-                  <InputLabel id="book-label"><font size='5'>หนังสือ</font></InputLabel>
-                  <Select
-                    labelId="book-label"
-                    id="book"
-                    value={bookID}
-                    onChange={bookIDhandleChange}
-                    style={{ width: 400, height: '7vh' }}
-                  >
-                    {books.map((item: EntBook) => (
-                      <MenuItem value={item.id}>{item.bookName}</MenuItem>
-                    ))}
-                  </Select>
-                </FormControl>
+                  {books.map((item: EntBook) => (
+                    <MenuItem value={item.id}>{item.bookName}</MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+            </div>
 
-              </td>
-              </tr>
-              <tr><td>
-                สมาชิกห้องสมุด
-            </td><td>
-                  <div>
-                    <FormControl
-                      className={classes.margin}
-                      variant="outlined"
-                    >
-                      <InputLabel id="user-label"><font size='5'>สมาชิกห้องสมุด</font></InputLabel>
-                      <Select
-                        labelId="user-label"
-                        id="user"
-                        value={userID}
-                        onChange={UserIDhandleChange}
-                        style={{ width: 400, height: '7vh' }}
-                      >
-                        {users.map((item: EntUser) => (
-                          <MenuItem value={item.id}>{item.uSERNAME}</MenuItem>
-                        ))}
-                      </Select>
-                    </FormControl>
-                  </div>
-                </td>
-              </tr>
-              <tr><td>
-                จุดบริการ
-            </td><td>
-                  <FormControl
-                    className={classes.margin}
-                    variant="outlined"
-                  >
-                    <InputLabel id="servicepoint"><font size='5'>จุดบริการ</font></InputLabel>
-                    <Select
-                      labelId="servicepoint"
-                      id="servicepoint"
-                      value={servicePointID}
-                      onChange={ServicepointIDhandleChange}
-                      style={{ width: 400, height: '7vh' }}
-                    >
-                      {servicepoints.map((item: EntServicePoint) => (
-                        <MenuItem value={item.id}>{item.cOUNTERNUMBER}</MenuItem>
-                      ))}
-                    </Select>
-                  </FormControl>
-                </td>
-              </tr>
+            <div>
+              <FormControl
+                className={classes.margin}
+                variant="outlined"
+              >
+                <div className={classes.paper}><strong>ผู้ยืม</strong></div>
+                <InputLabel id="author-label"></InputLabel>
+                <Select
+                  labelId="ผู้ยืม"
+                  id="userID"
+                  value={userID}
+                  onChange={handleUserchange}
+                  style={{ width: 400 }}
+                >
+                  {users.map((item: EntUser) => (
+                    <MenuItem value={item.id}>{item.uSERNAME}</MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+            </div>
 
-              <td></td><td>
-                <div className={classes.margin}>
-                  <Button
-                    onClick={() => {
-                      createBookBorrow();
-                    }}
-                    variant="contained"
-                    color="primary"
-                  >
-                    [บันทึกการยืม]
-           </Button>
-                  <Button
-                    style={{ marginLeft: 20 }}
-                    component={RouterLink}
-                    to="/welcome"
-                    variant="contained"
-                  >
-                    กลับ
-           </Button>
-                </div>
-          </form></td></table>
+            <div>
+              <FormControl
+                className={classes.margin}
+                variant="outlined"
+              >
+                <div className={classes.paper}><strong>จุดบริการ</strong></div>
+                <InputLabel id="researchtype-label"></InputLabel>
+                <Select
+                  labelId="จุดบริการที่ยืมหนังสือ"
+                  id="servicepointID"
+                  value={servicePointID}
+                  onChange={handleServicepointchange}
+                  style={{ width: 400 }}
+                >
+                  {servicepoints.map((item: EntServicePoint) => (
+                    <MenuItem value={item.id}>{item.cOUNTERNUMBER}</MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+            </div>
+
+            <div className={classes.margin}>
+              <Button
+                onClick={() => {
+                  save();
+                }}
+                variant="contained"
+                color="primary"
+              >
+                ยืนยันการบันทึก
+             </Button>
+              <Button
+                style={{ marginLeft: 20 }}
+                component={RouterLink}
+                to="/"
+                variant="contained"
+              >
+                ย้อนกลับ
+             </Button>
+            </div>
+          </form>
         </div>
-
       </Content>
     </Page>
   );
