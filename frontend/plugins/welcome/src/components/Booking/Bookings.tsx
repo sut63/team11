@@ -4,10 +4,8 @@ import {
   Content, Header, Page, pageTheme, ContentHeader,
 } from '@backstage/core';
 import {
-  Table, TableBody, TableCell, TableRow, Typography,
-  TextField, Button, withStyles, makeStyles,
-  Theme, FormControl, InputLabel, MenuItem,
-  FormHelperText, Select, createStyles,
+  Typography, TextField, Button, makeStyles,
+  Theme, FormControl, InputLabel, MenuItem,Select, createStyles,
   Dialog,DialogActions,DialogContent,DialogContentText,
   DialogTitle,useMediaQuery,useTheme
 } from '@material-ui/core';
@@ -57,6 +55,7 @@ export default function Create() {
   const [clients, setClients] = useState<EntClientEntity[]>(Array);
   const [users, setUsers] = useState<EntUser[]>(Array);
   const [servicepoint, setServicePoint] = useState<EntServicePoint[]>(Array);
+
   useEffect(() => {
     const getCliententity = async () => {
       const res = await api.listCliententity({ limit: 10, offset: 0 });
@@ -66,7 +65,7 @@ export default function Create() {
     getCliententity();
 
     const getUsers = async () => {
-      const res = await api.listUser({ limit: 10, offset: 0 });
+      const res = await api.listUser();
       setLoading(false);
       setUsers(res);
     };
@@ -112,17 +111,6 @@ export default function Create() {
   const [clientID, setClientID] = useState(Number);
   const [userID, setUserID] = useState(Number);
  
-  const handleClose = async () => {
-    setOpen(false);
-    const res = await api.getUser({ id: userID });
-    setUsername(res);
-    pname= username?.uSERNAME;
-  };
-  const handleClose2 = () => {
-    setOpen(false);
-    setUserID(0);
-    pname="";
-  };
   const CreateBooking = async () => {
     const booking = {
       bookingDate: bookingdate+":00+07:00",
@@ -163,7 +151,7 @@ export default function Create() {
         เข้าสู่ระบบ
       </Button>
       &nbsp;&nbsp;&nbsp;
-            <Button variant="contained" color="primary" onClick={handleClose2}>
+            <Button variant="contained" color="primary" >
               ออกจากระบบ
        </Button>
           </div>
@@ -197,7 +185,7 @@ export default function Create() {
               </tr>
               <tr><td>สมาชิกห้องสมุด</td><td>
               <FormControl
-              disabled
+              
                 className={classes.margin}
                 variant="outlined"
               >
@@ -293,74 +281,6 @@ export default function Create() {
            </tr>
           </form>
         </div>
-
-        <div>
-      
-      <Dialog
-        fullScreen={fullScreen}
-        open={open}
-        onClose={handleClose}
-        aria-labelledby="responsive-dialog-title"
-      >
-        <DialogTitle id="responsive-dialog-title">{"กรุณาเลือก Email เพื่อเข้าสู่ระบบ"}</DialogTitle>
-        <DialogContent>
-          <DialogContentText>
-          <table>
-              <tr><td width="100">อีเมลผู้ใช้</td><td>
-              <FormControl
-                className={classes.margin}
-                variant="outlined"
-              >
-                <InputLabel id="email-label"></InputLabel>
-                <Select
-                  labelId="email-label"
-                  id="email"
-                  value={userID}
-
-                  onChange={UserIDhandleChange}
-                  style={{ width: 400 }}
-                ><option value="">None</option>
-                  {users.map((item: EntUser) => (
-                    <MenuItem value={item.id} >{item.uSEREMAIL}</MenuItem>
-                  ))}
-                </Select>
-              </FormControl>
-              </td>
-              </tr>
-              <tr><td>ชื่อผู้ใช้</td><td>
-              <FormControl
-                disabled
-                className={classes.margin}
-                variant="outlined"
-              >
-                <InputLabel id="user-label"></InputLabel>
-                <Select
-                  labelId="user-label"
-                  id="user"
-                  value={userID}
-                  onChange={UserIDhandleChange}
-                  style={{ width: 400 }}
-                >
-                  {users.map((item: EntUser) => (
-                    <MenuItem value={item.id}>{item.uSERNAME}</MenuItem>
-                  ))}
-                </Select>
-              </FormControl>
-              </td>
-              </tr>
-            </table>
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button autoFocus onClick={handleClose2} color="primary">
-            ยกเลิก
-          </Button>
-          <Button onClick={handleClose} color="primary" autoFocus>
-            เข้าสู่ระบบ
-          </Button>
-        </DialogActions>
-      </Dialog>
-    </div>
 
       </Content>
     </Page>
