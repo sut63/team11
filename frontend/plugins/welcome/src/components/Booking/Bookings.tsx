@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import SaveAltIcon from '@material-ui/icons/SaveAlt';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
+import ComponanceTable from './Table/TablesClient';
 import {
   Content,
   InfoCard,
@@ -293,8 +294,8 @@ export default function Create() {
             </InfoCard>
           </Grid>
           <Grid item xs={12} md={6}>
-          <InfoCard title="ตารางเครื่องที่ว่าง">
-
+          <InfoCard title="ตารางเครื่องรับชม VideoOnDemand">
+              <ComponanceTable></ComponanceTable>
             </InfoCard>
           </Grid>
         </Grid>
