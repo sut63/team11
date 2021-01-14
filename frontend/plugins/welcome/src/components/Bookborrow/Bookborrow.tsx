@@ -10,7 +10,7 @@ import {
 import { makeStyles, Theme, createStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import FormControl from '@material-ui/core/FormControl';
-import Swal from 'sweetalert2';
+import { Alert } from '@material-ui/lab';
 import { DefaultApi } from '../../api/apis';
 import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
@@ -48,20 +48,6 @@ const useStyles = makeStyles((theme: Theme) =>
   }),
 );
 
-const Toast = Swal.mixin({
-  toast: true,
-  position: 'top-end',
-  width: '400px',
-  padding: '100px',
-  showConfirmButton: false,
-  timer: 3000,
-  timerProgressBar: true,
-  didOpen: toast => {
-    toast.addEventListener('mouseenter', Swal.stopTimer);
-    toast.addEventListener('mouseleave', Swal.resumeTimer);
-  },
-});
-
 export default function Create() {
   const classes = useStyles();
   const api = new DefaultApi();
@@ -76,12 +62,12 @@ export default function Create() {
   const [bookID, setBook] = useState(Number);
   const [servicePointID, setServicepoint] = useState(Number);
 
-
+  const [status, setStatus] = useState(false);
+  const [alert, setAlert] = useState(true);
   const [loading, setLoading] = useState(true);
 
 
   useEffect(() => {
-    //-------
     const getBook = async () => {
       const res = await api.listBook({ limit: 10, offset: 0 });
       setLoading(false);
@@ -121,51 +107,49 @@ export default function Create() {
   const handleUserchange = (event: React.ChangeEvent<{ value: unknown }>) => {
     setUser(event.target.value as number);
   };
-
+  const createBookBorrow = async ()=>{
+    if ((userID != "") && (bookID!= "") && (servicePointID!= "")) {  
       const bookBorrow = {
         bookID: bookID,
         servicePointID: servicePointID,
         userID: userID,
       };
       console.log(bookBorrow);
-      function save() {
-        const apiUrl = 'http://localhost:8080/api/v1/bookborrows';
-        const requestOptions = {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(bookBorrow),
-        };
-
-        console.log(bookBorrow); // log ดูข้อมูล สามารถ Inspect ดูข้อมูลได้ F12 เลือก Tab Console
-
-        fetch(apiUrl, requestOptions)
-          .then(response => response.json())
-          .then(data => {
-            console.log(data);
-            if (data.id != null) {
-              //clear();
-              Toast.fire({
-                icon: 'success',
-                title: 'บันทึกข้อมูลสำเร็จ',
-              });
-            } else {
-              Toast.fire({
-                icon: 'error',
-                title: '<br><h5>กรุณากรอกข้อมูลใหม่</h5></br>',
-              });
-            }
-          });
-      }
+      const res: any = await api.createBookborrow({ bookborrow: bookBorrow });
+      setStatus(true);
+        if(res.id != ''){
+            setAlert(true);
+            window.location.reload(false);
+        }
+        }else{
+            setAlert(false);
+            setStatus(true);
+        }
+        const timer = setTimeout(() => {
+            setStatus(false);
+        }, 4000);
+    }
   return (
     <Page theme={pageTheme.home}>
       <Header
-        title={`ระบบยืมหนังสือ`}
-        subtitle="กรุณากรอกข้อมูล"
-      ></Header>
-
+        title={`ระบบยืมหนังสือ`}>
+        </Header>
+        
       <Content>
         <ContentHeader title="เพิ่มข้อมูลการยืมหนังสือ">
-
+        {status ? (
+           <div>
+             {alert ? (
+               <Alert severity="success">
+                 เพิ่มบันทึกเรียบร้อย!
+               </Alert>
+             ) : (
+               <Alert severity="warning" style={{ marginTop: 20 }}>
+                 บันทึกไม่สำเร็จ กรุณากรอกข้อมูลใหม่
+               </Alert>
+             )}
+           </div>
+         ) : null}
         </ContentHeader>
 
         <div className={classes.root}>
@@ -177,7 +161,7 @@ export default function Create() {
                 variant="outlined"
               >
                 <div className={classes.paper}><strong>หนังสือ</strong></div>
-                <InputLabel id="author-label"></InputLabel>
+                <InputLabel id="book-label"></InputLabel>
                 <Select
                   labelId="ชื่อหนังสือ"
                   id="bookID"
@@ -198,7 +182,7 @@ export default function Create() {
                 variant="outlined"
               >
                 <div className={classes.paper}><strong>ผู้ยืม</strong></div>
-                <InputLabel id="author-label"></InputLabel>
+                <InputLabel id="user-label"></InputLabel>
                 <Select
                   labelId="ผู้ยืม"
                   id="userID"
@@ -219,7 +203,7 @@ export default function Create() {
                 variant="outlined"
               >
                 <div className={classes.paper}><strong>จุดบริการ</strong></div>
-                <InputLabel id="researchtype-label"></InputLabel>
+                <InputLabel id="servicepoint-label"></InputLabel>
                 <Select
                   labelId="จุดบริการที่ยืมหนังสือ"
                   id="servicepointID"
@@ -237,7 +221,7 @@ export default function Create() {
             <div className={classes.margin}>
               <Button
                 onClick={() => {
-                  save();
+                  createBookBorrow();
                 }}
                 variant="contained"
                 color="primary"
