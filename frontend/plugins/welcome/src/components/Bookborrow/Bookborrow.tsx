@@ -18,7 +18,7 @@ import Select from '@material-ui/core/Select';
 import { EntUser } from '../../api/models/EntUser';
 import { EntBook } from '../../api/models/EntBook'; 
 import { EntServicePoint } from '../../api/models/EntServicePoint'; 
-
+import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -45,19 +45,25 @@ const useStyles = makeStyles((theme: Theme) =>
     formControl: {
       width: 400,
     },
+    selectEmpty: {
+      marginTop: theme.spacing(2),
+    },
+    button: {
+      margin: theme.spacing(1),
+    },
   }),
 );
 
 export default function Create() {
+  const name = JSON.parse(String(localStorage.getItem("userName")));
+  const userName ="ยินดีต้อนรับ "+name
   const classes = useStyles();
   const api = new DefaultApi();
 
   const [users, setUsers] = useState<EntUser[]>([]);
-  //-------
   const [books, setBooks] = useState<EntBook[]>([]);
   const [servicepoints, setServicepoints] = useState<EntServicePoint[]>([]);
 
-  //-------
   const [userID, setUser] = useState(Number);
   const [bookID, setBook] = useState(Number);
   const [servicePointID, setServicepoint] = useState(Number);
@@ -66,13 +72,14 @@ export default function Create() {
   const [alert, setAlert] = useState(true);
   const [loading, setLoading] = useState(true);
 
+  const idString = JSON.parse(String(localStorage.getItem("userID")));
+  const idInt = parseInt(idString);
 
   useEffect(() => {
     const getBook = async () => {
       const res = await api.listBook({ limit: 10, offset: 0 });
       setLoading(false);
       setBooks(res);
-      console.log(res);
     };
     getBook();
 
@@ -81,17 +88,17 @@ export default function Create() {
       const res = await api.listServicepoint({ limit: 10, offset: 0 });
       setLoading(false);
       setServicepoints(res);
-      console.log(res);
     };
     getServicepoint();
 
     const getUser = async () => {
-      const res = await api.listUser({ limit: 10, offset: 0 });
+      const res = await api.listUser();
       setLoading(false);
       setUsers(res);
-      console.log(res);
     };
     getUser();
+
+    setUser(idInt);
 
   }, [loading]);
 
@@ -108,7 +115,7 @@ export default function Create() {
     setUser(event.target.value as number);
   };
   const createBookBorrow = async ()=>{
-    if ((userID != "") && (bookID!= "") && (servicePointID!= "")) {  
+    if ((userID != 0) && (bookID!= 0) && (servicePointID!= 0)) {  
       const bookBorrow = {
         bookID: bookID,
         servicePointID: servicePointID,
@@ -119,7 +126,6 @@ export default function Create() {
       setStatus(true);
         if(res.id != ''){
             setAlert(true);
-            window.location.reload(false);
         }
         }else{
             setAlert(false);
@@ -127,16 +133,39 @@ export default function Create() {
         }
         const timer = setTimeout(() => {
             setStatus(false);
-        }, 4000);
+            window.location.reload(false);
+        }, 5000);
+    };
+
+    const resetLocalStorage = async () => {
+      localStorage.setItem("userID", JSON.stringify(null))
+      localStorage.setItem("role", JSON.stringify(null))
+      localStorage.setItem("valid", JSON.stringify(null))
+      localStorage.setItem("userName", JSON.stringify(null))
+      window.location.href = "/"
     }
+
   return (
     <Page theme={pageTheme.home}>
       <Header
-        title={`ระบบยืมหนังสือ`}>
+        title={`Welcome to BookBorrow System`}
+        subtitle="ระบบยืมหนังสือ"
+        >
+           <Button
+            // disabled={LogoutBtn}
+            variant="contained"
+            color="secondary"
+            className={classes.button}
+            startIcon={<LockOutlinedIcon />}
+            onClick={() => {
+              resetLocalStorage();
+            }}>
+            ล็อกเอ้าท์
+          </Button>
         </Header>
         
       <Content>
-        <ContentHeader title="เพิ่มข้อมูลการยืมหนังสือ">
+        <ContentHeader title={userName}>
         {status ? (
            <div>
              {alert ? (
@@ -150,6 +179,7 @@ export default function Create() {
              )}
            </div>
          ) : null}
+         
         </ContentHeader>
 
         <div className={classes.root}>
@@ -184,10 +214,11 @@ export default function Create() {
                 <div className={classes.paper}><strong>ผู้ยืม</strong></div>
                 <InputLabel id="user-label"></InputLabel>
                 <Select
+                  disabled = {true}
                   labelId="ผู้ยืม"
                   id="userID"
                   value={userID}
-                  onChange={handleUserchange}
+                  className={classes.selectEmpty}
                   style={{ width: 400 }}
                 >
                   {users.map((item: EntUser) => (
