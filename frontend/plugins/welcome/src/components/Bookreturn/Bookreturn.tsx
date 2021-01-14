@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { Link as RouterLink } from 'react-router-dom';
+//import SaveAltIcon from '@material-ui/icons/SaveAlt';
+import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
+//import { Link as RouterLink } from 'react-router-dom';
 import {
   Content, Header, Page, pageTheme, ContentHeader,
 } from '@backstage/core';
@@ -33,9 +35,7 @@ const useStyles = makeStyles((theme: Theme) =>
     },
   }),
 );
-const username = { givenuser: 'Ton' };
 export default function Create() {
-  const profile = { givenName: 'ยินดีต้อนรับสู่ ระบบห้องสมุด' };
   const classes = useStyles();
   const api = new DefaultApi();
   const [loading, setLoading] = useState(true);
@@ -45,6 +45,9 @@ export default function Create() {
   const [users, setUsers] = React.useState<EntUser[]>(Array);
   const [bookborrows, setBookborrows] = React.useState<EntBookborrow[]>([]);
   const [locations, setLocations] = React.useState<EntLocation[]>(Array);
+
+  const idString = JSON.parse(String(localStorage.getItem("userID")));
+  const idInt = parseInt(idString);
   useEffect(() => {
     const getUser = async () => {
       const res = await api.listUser();
@@ -53,6 +56,15 @@ export default function Create() {
       console.log("users => "+users);
     };
     getUser();
+
+    setUserID(idInt);
+
+    const getBookborrows = async () => {
+      const res = await api.getBookborrowuser({id:idInt});
+      setBookborrows(res);
+      console.log("bookborrows => "+bookborrows);
+    };
+    getBookborrows();
 
     const getLocations = async () => {
       const res = await api.listLocation({ limit: 10, offset: 0 });
@@ -63,15 +75,9 @@ export default function Create() {
     
   }, [loading]);
 
-  const UserIDhandleChange = (event: React.ChangeEvent<{ value: any }>) => {
+  /*const UserIDhandleChange = (event: React.ChangeEvent<{ value: any }>) => {
     setUserID(event.target.value as number);
-    const getBookborrows = async () => {
-      const res = await api.getBookborrowuser({id:event.target.value as number});
-      setBookborrows(res);
-      console.log("bookborrows => "+bookborrows);
-    };
-    getBookborrows();
-  };
+  };*/
   const BookborrowIDhandleChange = (event: React.ChangeEvent<{ value: unknown }>) => {
     setBookborrowID(event.target.value as number);
   };
@@ -86,7 +92,7 @@ export default function Create() {
   const [locationID, setLocationID] = useState(Number);
   
   const createBookreturn = async () => {
-    if ( (userID != "") && (bookborrowID != "") && (locationID != "") ){
+    if ( (userID != 0) && (bookborrowID != 0) && (locationID != 0) ){
     const bookreturn = {
       userID : userID,
       bookborrowID : bookborrowID,
@@ -96,8 +102,8 @@ export default function Create() {
     const res: any = await api.createBookreturn({ bookreturn: bookreturn });
     setStatus(true);
     if (res.id != '') {
+      //await api.deleteBookborrow({id:bookborrowID})
       setAlert(true);
-      window.location.reload(false);
     }
     } else {
       setAlert(false);
@@ -105,39 +111,39 @@ export default function Create() {
     }
     const timer = setTimeout(() => {
       setStatus(false);
-  }, 3000);
+      window.location.reload(false);
+  }, 5000);
   };
+
+  const resetLocalStorage = async () => {
+    localStorage.setItem("userID", JSON.stringify(null))
+    localStorage.setItem("role", JSON.stringify(null))
+    localStorage.setItem("valid", JSON.stringify(null))
+    localStorage.setItem("userName", JSON.stringify(null))
+    window.location.href = "/"
+  }
+
   return (
     <Page theme={pageTheme.home}>
       <Header
         title={"ระบบคืนหนังสือ"}
       >
-        <Button
-          component={RouterLink}
-          to="/login"
-          variant="contained"
-          color="primary">
-          ออกจากระบบ
-        </Button>
+
       </Header>
       <Content>
         <ContentHeader title="เพิ่มข้อมูลการคืนหนังสือ">
-          <div>
-
-          </div>
-          {status ? (
-            <div>
-              {alert ? (
-                <Alert severity="success">
-                  This is a success alert — check it out!
-                </Alert>
-              ) : (
-                  <Alert severity="warning" style={{ marginTop: 20 }}>
-                    This is a warning alert — check it out!
-                  </Alert>
-                )}
-            </div>
-          ) : null}
+        <Button
+            // disabled={LogoutBtn}
+            variant="contained"
+            color="primary"
+            className={classes.button}
+            startIcon={<LockOutlinedIcon />}
+            onClick={() => {
+              resetLocalStorage();
+            }}>
+            ล็อกเอ้าท์
+          </Button>
+          
         </ContentHeader>
 
 
@@ -158,7 +164,7 @@ export default function Create() {
                         labelId="user-label"
                         id="user"
                         value={userID}
-                        onChange={UserIDhandleChange}
+                        //onChange={UserIDhandleChange}
                         style={{ width: 400, height: '7vh' }}
                       >
                         {users.map((item: EntUser) => (
@@ -175,7 +181,7 @@ export default function Create() {
                   className={classes.margin}
                   variant="outlined"
                 >
-                  <InputLabel id="bookborrow-label"><font size='5'>หนังสือ</font></InputLabel>
+                  <InputLabel id="bookborrow-label"><font size='5'>รายการยืมหนังสือ</font></InputLabel>
                   <Select
                     labelId="bookborrow-label"
                     id="bookborrow"
@@ -225,16 +231,32 @@ export default function Create() {
                     variant="contained"
                     color="primary"
                   >
-                    บันทึกการยืม
+                    บันทึกการคืน
            </Button>
+           
                   <Button
                     style={{ marginLeft: 20 }}
-                    component={RouterLink}
-                    to="/welcome"
                     variant="contained"
+            onClick={() => {
+              resetLocalStorage();
+            }}
                   >
                     กลับ
            </Button>
+
+           {status ? (
+            <div>
+              {alert ? (
+                <Alert severity="success">
+                   บันทึกการคืนสำเร็จ
+                </Alert>
+              ) : (
+                  <Alert severity="warning" style={{ marginTop: 20 }}>
+                    บันทึกการคืนไม่สำเร็จ
+                  </Alert>
+                )}
+            </div>
+          ) : null}
            </div></td>
            </table></form>
         </div>
