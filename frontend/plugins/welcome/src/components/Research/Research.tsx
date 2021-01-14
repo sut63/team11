@@ -342,6 +342,7 @@ const handleResearchtypechange = (event: React.ChangeEvent<{value: unknown}>) =>
                 }, 5000);
               };
               
+              
               const resetLocalStorage = async () => {
                 localStorage.setItem("userID", JSON.stringify(null))
                 localStorage.setItem("role", JSON.stringify(null))
