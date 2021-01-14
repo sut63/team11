@@ -42,7 +42,7 @@ import { EntUser } from '../../api/models/EntUser'; // import interface User
 import { EntPreemption } from '../../api/models/EntPreemption'; // import interface Preemption
 import { EntPurpose } from '../../api/models/EntPurpose'; // import interface Purpose
 import ComponanceTable from '../RoomTable';
-
+import Swal from 'sweetalert2';
 
 const useStyles = makeStyles((theme: Theme) =>
  createStyles({
@@ -77,7 +77,18 @@ const useStyles = makeStyles((theme: Theme) =>
 );
  
 
-
+// alert setting
+const Toast = Swal.mixin({
+  toast: true,
+  position: 'top-end',
+  showConfirmButton: false,
+  timer: 3000,
+  timerProgressBar: true,
+  didOpen: toast => {
+    toast.addEventListener('mouseenter', Swal.stopTimer);
+    toast.addEventListener('mouseleave', Swal.resumeTimer);
+  },
+});
 
 
 
@@ -137,7 +148,7 @@ const TimehandleChange = (event: React.ChangeEvent<{ value: unknown }>) => {
   setpreempttime(event.target.value as string);
 };
 
-const Createpreempt = async () => { 
+/*const Createpreempt = async () => { 
 const preemption = {
   user: 1,
   roominfo: roomid,
@@ -164,8 +175,49 @@ setStatus(true);
    }
    
  };
-
-
+*/
+const Createpreempt = async () => {
+  const preemption = {
+    user: 1,
+    roominfo: roomid,
+    purpose: purposeid,
+  
+    added: preempttime + ":00+07:00"
+  
+  };
+  const roon = {
+    
+    roomStatus: "ไม่ว่าง",
+    
+  
+  };
+  
+  const apiUrl = 'http://localhost:8080/api/v1/preemptions'; 
+  const requestOptions = { 
+    method: 'POST', 
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(preemption),
+};
+  const ros = await api.updateRoominfo({id:roomid,user:roon});
+  console.log(preemption); 
+  fetch(apiUrl, requestOptions) 
+    .then(response => response.json())
+    .then(data => {
+      console.log(data);
+      if (data.status === true) { 
+        
+        Toast.fire({
+          icon: 'success',
+          title: 'จองสำเร็จ',
+        });
+      } else {
+        Toast.fire({
+          icon: 'error',
+          title: 'จองไม่สำเร็จกรอกข้อมูลให้ครบ',
+        });
+      }
+    });
+}
 
 
  

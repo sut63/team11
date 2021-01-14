@@ -287,6 +287,49 @@ func main() {
 			Save(context.Background())
 	}
 
+	// Set Purposes Data
+	purposes := Purposes{
+		Purpose: []Purpose{
+			Purpose{"อ่านทบทวน"},
+			Purpose{"ติวหนังสือ"},
+			Purpose{"ทำวิจัย"},
+			Purpose{"เพื่อความบันเทิง"},
+		},
+	}
+
+	for _, p := range purposes.Purpose {
+		client.Purpose.
+			Create().
+			SetPurposeName(p.PurposeName).
+			Save(context.Background())
+	}
+
+	// Set Roominfos Data
+	roominfos := Roominfos{
+		Roominfo: []Roominfo{
+			Roominfo{"RS108", "RS01", "ห้องเดี่ยว", "08.00 AM - 08.50 AM", "ว่าง"},
+			Roominfo{"RS109", "RS01", "ห้องเดี่ยว", "09.00 AM - 09.50 AM", "ว่าง"},
+			Roominfo{"RS110", "RS01", "ห้องเดี่ยว", "10.00 AM - 10.50 AM", "ว่าง"},
+			Roominfo{"RS208", "RS02", "ห้องเดี่ยว", "08.00 AM - 08.50 AM", "ว่าง"},
+			Roominfo{"RS209", "RS02", "ห้องเดี่ยว", "09.00 AM - 09.50 AM", "ว่าง"},
+			Roominfo{"RS210", "RS02", "ห้องเดี่ยว", "10.00 AM - 10.50 AM", "ว่าง"},
+			Roominfo{"RG208", "RS02", "ห้องกลุ่ม", "08.00 AM - 08.50 AM", "ว่าง"},
+			Roominfo{"RG209", "RS02", "ห้องกลุ่ม", "09.00 AM - 09.50 AM", "ว่าง"},
+			Roominfo{"RG210", "RS02", "ห้องกลุ่ม", "10.00 AM - 10.50 AM", "ว่าง"},
+		},
+	}
+
+	for _, r := range roominfos.Roominfo {
+		client.Roominfo.
+			Create().
+			SetRoomID(r.RoomID).
+			SetRoomNo(r.RoomNo).
+			SetRoomType(r.RoomType).
+			SetRoomTime(r.RoomTime).
+			SetRoomStatus(r.RoomStatus).
+			Save(context.Background())
+	}
+	
 	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 	router.Run()
 }
