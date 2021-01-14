@@ -99,7 +99,10 @@ func (ctl *PreemptionController) CreatePreemption(c *gin.Context) {
 		return
 	}
 
-	c.JSON(200, prm)
+	c.JSON(200, gin.H{
+		"status": true,
+		"data":   prm,
+	})
 }
 
 // ListPreemption handles request to get a list of preemption entities
