@@ -21,12 +21,6 @@ import { exists, mapValues } from '../runtime';
 export interface ControllersBooking {
     /**
      * 
-     * @type {string}
-     * @memberof ControllersBooking
-     */
-    bookingDate?: string;
-    /**
-     * 
      * @type {number}
      * @memberof ControllersBooking
      */
@@ -37,12 +31,6 @@ export interface ControllersBooking {
      * @memberof ControllersBooking
      */
     servicePoint?: number;
-    /**
-     * 
-     * @type {string}
-     * @memberof ControllersBooking
-     */
-    timeLeft?: string;
     /**
      * 
      * @type {number}
@@ -61,10 +49,8 @@ export function ControllersBookingFromJSONTyped(json: any, ignoreDiscriminator: 
     }
     return {
         
-        'bookingDate': !exists(json, 'bookingDate') ? undefined : json['bookingDate'],
         'client': !exists(json, 'client') ? undefined : json['client'],
         'servicePoint': !exists(json, 'servicePoint') ? undefined : json['servicePoint'],
-        'timeLeft': !exists(json, 'timeLeft') ? undefined : json['timeLeft'],
         'user': !exists(json, 'user') ? undefined : json['user'],
     };
 }
@@ -78,10 +64,8 @@ export function ControllersBookingToJSON(value?: ControllersBooking | null): any
     }
     return {
         
-        'bookingDate': value.bookingDate,
         'client': value.client,
         'servicePoint': value.servicePoint,
-        'timeLeft': value.timeLeft,
         'user': value.user,
     };
 }

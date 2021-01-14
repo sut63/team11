@@ -307,11 +307,6 @@ export interface ListCategoryRequest {
     offset?: number;
 }
 
-export interface ListCliententityRequest {
-    limit?: number;
-    offset?: number;
-}
-
 export interface ListLocationRequest {
     limit?: number;
     offset?: number;
@@ -2201,16 +2196,8 @@ export class DefaultApi extends runtime.BaseAPI {
      * list cliententity entities
      * List cliententity entities
      */
-    async listCliententityRaw(requestParameters: ListCliententityRequest): Promise<runtime.ApiResponse<Array<EntClientEntity>>> {
+    async listCliententityRaw(): Promise<runtime.ApiResponse<Array<EntClientEntity>>> {
         const queryParameters: runtime.HTTPQuery = {};
-
-        if (requestParameters.limit !== undefined) {
-            queryParameters['limit'] = requestParameters.limit;
-        }
-
-        if (requestParameters.offset !== undefined) {
-            queryParameters['offset'] = requestParameters.offset;
-        }
 
         const headerParameters: runtime.HTTPHeaders = {};
 
@@ -2228,8 +2215,8 @@ export class DefaultApi extends runtime.BaseAPI {
      * list cliententity entities
      * List cliententity entities
      */
-    async listCliententity(requestParameters: ListCliententityRequest): Promise<Array<EntClientEntity>> {
-        const response = await this.listCliententityRaw(requestParameters);
+    async listCliententity(): Promise<Array<EntClientEntity>> {
+        const response = await this.listCliententityRaw();
         return await response.value();
     }
 

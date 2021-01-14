@@ -1579,20 +1579,6 @@ var doc = `{
                 ],
                 "summary": "List cliententity entities",
                 "operationId": "list-cliententity",
-                "parameters": [
-                    {
-                        "type": "integer",
-                        "description": "Limit",
-                        "name": "limit",
-                        "in": "query"
-                    },
-                    {
-                        "type": "integer",
-                        "description": "Offset",
-                        "name": "offset",
-                        "in": "query"
-                    }
-                ],
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -3591,17 +3577,11 @@ var doc = `{
         "controllers.Booking": {
             "type": "object",
             "properties": {
-                "bookingDate": {
-                    "type": "string"
-                },
                 "client": {
                     "type": "integer"
                 },
                 "servicePoint": {
                     "type": "integer"
-                },
-                "timeLeft": {
-                    "type": "string"
                 },
                 "user": {
                     "type": "integer"

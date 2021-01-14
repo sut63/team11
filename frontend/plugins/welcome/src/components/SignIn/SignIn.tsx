@@ -80,6 +80,7 @@ const SignIn: FC<{}> = () => {
       setLoading(false);
       localStorage.setItem("userID", JSON.stringify(null));
       localStorage.setItem("role", JSON.stringify(null));
+      localStorage.setItem("userName", JSON.stringify(null));
     }
     resetLocalStorage();
 
@@ -87,19 +88,22 @@ const SignIn: FC<{}> = () => {
 
   const CheckUser = async () => {
     users.map((item: any) => {
+      
       if ((item.uSEREMAIL == email) && (item.pASSWORD == password)) {
+
+        localStorage.setItem("userName", JSON.stringify(item.uSERNAME));
         localStorage.setItem("userID", JSON.stringify(item.id));
         localStorage.setItem("role", JSON.stringify(item.edges.position.rOLENAME));
         localStorage.setItem("valid", JSON.stringify(null));
         if ((item.edges.position.rOLENAME === value) && (value === "Librarian")){
-          window.location.href = "/VideoOnDemand"
-          setPath("/VideoOnDemand")
+          window.location.href = "/"
+          setPath("/")
         } else if((item.edges.position.rOLENAME === value) && (value === "Library Member")){
-          window.location.href = "/Welcome"
-          setPath("/Welcome")
+          window.location.href = "/"
+          setPath("/")
         }
         else {
-          setPath("/")
+          setPath("/SignIn")
           localStorage.setItem("valid", JSON.stringify("Invalid Username or Password"));
           setInvalid(''+localStorage.getItem("valid"))
         }
@@ -185,23 +189,10 @@ const SignIn: FC<{}> = () => {
           >
             Sign In
           </Button>
-          {/* <Grid container>
-            <Grid item xs>
-              <Link href="#" variant="body2">
-                Forgot password?
-              </Link>
-            </Grid>
-            <Grid item>
-              <Link href="#" variant="body2">
-                {"Don't have an account? Sign Up"}
-              </Link>
-            </Grid>
-          </Grid> */}
+
         </form>
       </div>
-      {/* <Box mt={8}>
-        <Copyright />
-      </Box> */}
+
     </Container>
   );
 };
