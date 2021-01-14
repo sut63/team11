@@ -711,6 +711,54 @@ var doc = `{
                 }
             }
         },
+        "/bookborrowusers/{id}": {
+            "get": {
+                "description": "get bookborrowuser by ID",
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "Get a bookborrowuser entity by ID",
+                "operationId": "get-bookborrowuser",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "bookborrowuser ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/ent.Bookborrow"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/gin.H"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/gin.H"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/gin.H"
+                        }
+                    }
+                }
+            }
+        },
         "/bookings": {
             "get": {
                 "description": "list booking entities",
@@ -1134,7 +1182,7 @@ var doc = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/ent.Book"
+                            "$ref": "#/definitions/controllers.Book"
                         }
                     }
                 ],
@@ -1531,20 +1579,6 @@ var doc = `{
                 ],
                 "summary": "List cliententity entities",
                 "operationId": "list-cliententity",
-                "parameters": [
-                    {
-                        "type": "integer",
-                        "description": "Limit",
-                        "name": "limit",
-                        "in": "query"
-                    },
-                    {
-                        "type": "integer",
-                        "description": "Offset",
-                        "name": "offset",
-                        "in": "query"
-                    }
-                ],
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -3297,20 +3331,6 @@ var doc = `{
                 ],
                 "summary": "List user entities",
                 "operationId": "list-user",
-                "parameters": [
-                    {
-                        "type": "integer",
-                        "description": "Limit",
-                        "name": "limit",
-                        "in": "query"
-                    },
-                    {
-                        "type": "integer",
-                        "description": "Offset",
-                        "name": "offset",
-                        "in": "query"
-                    }
-                ],
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -3517,6 +3537,23 @@ var doc = `{
         }
     },
     "definitions": {
+        "controllers.Book": {
+            "type": "object",
+            "properties": {
+                "author": {
+                    "type": "integer"
+                },
+                "bookname": {
+                    "type": "string"
+                },
+                "category": {
+                    "type": "integer"
+                },
+                "userid": {
+                    "type": "integer"
+                }
+            }
+        },
         "controllers.Bookborrow": {
             "type": "object",
             "properties": {
@@ -3524,6 +3561,9 @@ var doc = `{
                     "type": "integer"
                 },
                 "borrowDate": {
+                    "type": "string"
+                },
+                "returnDate": {
                     "type": "string"
                 },
                 "servicePointID": {
@@ -3537,17 +3577,11 @@ var doc = `{
         "controllers.Booking": {
             "type": "object",
             "properties": {
-                "bookingDate": {
-                    "type": "string"
-                },
                 "client": {
                     "type": "integer"
                 },
                 "servicePoint": {
                     "type": "integer"
-                },
-                "timeLeft": {
-                    "type": "string"
                 },
                 "user": {
                     "type": "integer"
@@ -3560,11 +3594,11 @@ var doc = `{
                 "bookborrowID": {
                     "type": "integer"
                 },
-                "deadline": {
-                    "type": "string"
-                },
                 "locationID": {
                     "type": "integer"
+                },
+                "returnTime": {
+                    "type": "string"
                 },
                 "userID": {
                     "type": "integer"
@@ -3722,6 +3756,10 @@ var doc = `{
                     "description": "BORROWDATE holds the value of the \"BORROW_DATE\" field.",
                     "type": "string"
                 },
+                "RETURN_DATE": {
+                    "description": "RETURNDATE holds the value of the \"RETURN_DATE\" field.",
+                    "type": "string"
+                },
                 "book_ID": {
                     "type": "integer"
                 },
@@ -3823,8 +3861,8 @@ var doc = `{
         "ent.Bookreturn": {
             "type": "object",
             "properties": {
-                "DEADLINE": {
-                    "description": "DEADLINE holds the value of the \"DEADLINE\" field.",
+                "RETURN_TIME": {
+                    "description": "RETURNTIME holds the value of the \"RETURN_TIME\" field.",
                     "type": "string"
                 },
                 "client_ID": {
@@ -3839,7 +3877,7 @@ var doc = `{
                     "description": "ID of the ent.",
                     "type": "integer"
                 },
-                "location_NAME": {
+                "location_ID": {
                     "type": "integer"
                 },
                 "user_ID": {
@@ -4380,7 +4418,6 @@ var doc = `{
         "OAuth2Application": {
             "type": "oauth2",
             "flow": "application",
-            "authorizationUrl": "",
             "tokenUrl": "https://example.com/oauth/token",
             "scopes": {
                 "admin": " Grants read and write access to administrative information",
@@ -4399,7 +4436,6 @@ var doc = `{
         "OAuth2Password": {
             "type": "oauth2",
             "flow": "password",
-            "authorizationUrl": "",
             "tokenUrl": "https://example.com/oauth/token",
             "scopes": {
                 "admin": " Grants read and write access to administrative information",

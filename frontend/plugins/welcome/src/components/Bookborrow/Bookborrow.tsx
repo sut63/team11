@@ -1,272 +1,276 @@
-import React, { FC, useEffect } from 'react';
-import { makeStyles } from '@material-ui/core/styles';
-import { Content, Header, Page, pageTheme } from '@backstage/core';
-import SaveIcon from '@material-ui/icons/Save'; // icon save
-import Swal from 'sweetalert2'; // alert
-
+import React, { useState, useEffect } from 'react';
+import { Link as RouterLink } from 'react-router-dom';
 import {
-  Container,
-  Grid,
-  FormControl,
-  Select,
-  InputLabel,
-  MenuItem,
-  TextField,
-  Avatar,
-  Button,
-} from '@material-ui/core';
-import { DefaultApi } from '../../api/apis'; // Api Gennerate From Command
-import {
-    EntBook,
-    EntServicePoint,
-    EntUser,
-  } from '../../api/models/';
+  Content,
+  Header,
+  Page,
+  pageTheme,
+  ContentHeader,
+} from '@backstage/core';
+import { makeStyles, Theme, createStyles } from '@material-ui/core/styles';
+import Button from '@material-ui/core/Button';
+import FormControl from '@material-ui/core/FormControl';
+import { Alert } from '@material-ui/lab';
+import { DefaultApi } from '../../api/apis';
+import InputLabel from '@material-ui/core/InputLabel';
+import MenuItem from '@material-ui/core/MenuItem';
+import Select from '@material-ui/core/Select';
+import { EntUser } from '../../api/models/EntUser';
+import { EntBook } from '../../api/models/EntBook'; 
+import { EntServicePoint } from '../../api/models/EntServicePoint'; 
+import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 
-// header css
-const HeaderCustom = {
-  minHeight: '50px',
-};
-
-// css style
-const useStyles = makeStyles(theme => ({
-  root: {
-    flexGrow: 1,
-  },
-  paper: {
-    marginTop: theme.spacing(2),
-    marginBottom: theme.spacing(2),
-  },
-  formControl: {
-    width: 300,
-  },
-  selectEmpty: {
-    marginTop: theme.spacing(2),
-  },
-  container: {
-    display: 'flex',
-    flexWrap: 'wrap',
-  },
-  textField: {
-    width: 300,
-  },
-}));
-
-interface Bookborrow {
-  book: number;
-  user: number;
-  servicepoint: number;
-  added: Date;
-  // create_by: number;
-}
-
-const Bookborrow: FC<{}> = () => {
-  const classes = useStyles();
-  const http = new DefaultApi();
-
-  const [bookborrow, setBookborrow] = React.useState<
-    Partial<Bookborrow>
-  >({});
-
-  const [users, setUsers] = React.useState<EntUser[]>([]);
-  const [books, setBooks] = React.useState<EntBook[]>([]);
-  const [servicepoints, setServicepoints] = React.useState<EntServicePoint[]>([]);
-  
-
-  // alert setting
-  const Toast = Swal.mixin({
-    toast: true,
-    position: 'top-end',
-    showConfirmButton: false,
-    timer: 3000,
-    timerProgressBar: true,
-    didOpen: toast => {
-      toast.addEventListener('mouseenter', Swal.stopTimer);
-      toast.addEventListener('mouseleave', Swal.resumeTimer);
+const useStyles = makeStyles((theme: Theme) =>
+  createStyles({
+    root: {
+      display: 'flex',
+      flexWrap: 'wrap',
+      justifyContent: 'center',
     },
-  });
+    margin: {
+      margin: theme.spacing(3),
+    },
 
-  const getUsers = async () => {
-    const res = await http.listUser({ limit: 10, offset: 0 });
-    setUsers(res);
-  };
+    withoutLabel: {
+      marginTop: theme.spacing(3),
+    },
+    textField: {
+      width: '25ch',
+    },
+    paper: {
+      marginTop: theme.spacing(1),
+      marginBottom: theme.spacing(1),
+      marginLeft: theme.spacing(1),
+    },
+    formControl: {
+      width: 400,
+    },
+    selectEmpty: {
+      marginTop: theme.spacing(2),
+    },
+    button: {
+      margin: theme.spacing(1),
+    },
+  }),
+);
 
-  const getBook = async () => {
-    const res = await http.listBook({ limit: 10, offset: 0 });
-    setBooks(res);
-  };
+export default function Create() {
+  const name = JSON.parse(String(localStorage.getItem("userName")));
+  const userName ="ยินดีต้อนรับ "+name
+  const classes = useStyles();
+  const api = new DefaultApi();
 
-  const getServicepoint = async () => {
-    const res = await http.listServicepoint({ limit: 10, offset: 0 });
-    setServicepoints(res);
-  };
+  const [users, setUsers] = useState<EntUser[]>([]);
+  const [books, setBooks] = useState<EntBook[]>([]);
+  const [servicepoints, setServicepoints] = useState<EntServicePoint[]>([]);
 
+  const [userID, setUser] = useState(Number);
+  const [bookID, setBook] = useState(Number);
+  const [servicePointID, setServicepoint] = useState(Number);
 
+  const [status, setStatus] = useState(false);
+  const [alert, setAlert] = useState(true);
+  const [loading, setLoading] = useState(true);
 
-  // Lifecycle Hooks
+  const idString = JSON.parse(String(localStorage.getItem("userID")));
+  const idInt = parseInt(idString);
+
   useEffect(() => {
-    getUsers();
+    const getBook = async () => {
+      const res = await api.listBook({ limit: 10, offset: 0 });
+      setLoading(false);
+      setBooks(res);
+    };
     getBook();
-    getServicepoint();
-  }, []);
 
-  // set data to object playlist_video
-  const handleChange = (
-    event: React.ChangeEvent<{ name?: string; value: unknown }>,
-  ) => {
-    const name = event.target.name as keyof typeof Bookborrow;
-    const { value } = event.target;
-    setBookborrow({ ...bookborrow, [name]: value });
-    console.log(bookborrow);
+
+    const getServicepoint = async () => {
+      const res = await api.listServicepoint({ limit: 10, offset: 0 });
+      setLoading(false);
+      setServicepoints(res);
+    };
+    getServicepoint();
+
+    const getUser = async () => {
+      const res = await api.listUser();
+      setLoading(false);
+      setUsers(res);
+    };
+    getUser();
+
+    setUser(idInt);
+
+  }, [loading]);
+
+  //----------------
+  const handleBookchange = (event: React.ChangeEvent<{ value: unknown }>) => {
+    setBook(event.target.value as number);
   };
 
-  // clear input form
-  function clear() {
-    setBookborrow({});
-  }
+  const handleServicepointchange = (event: React.ChangeEvent<{ value: unknown }>) => {
+    setServicepoint(event.target.value as number);
+  };
 
-  // function save data
-  function save() {
-    const apiUrl = 'http://localhost:8080/api/v1/bookborrow';
-    const requestOptions = {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(bookborrow),
+  const handleUserchange = (event: React.ChangeEvent<{ value: unknown }>) => {
+    setUser(event.target.value as number);
+  };
+  const createBookBorrow = async ()=>{
+    if ((userID != 0) && (bookID!= 0) && (servicePointID!= 0)) {  
+      const bookBorrow = {
+        bookID: bookID,
+        servicePointID: servicePointID,
+        userID: userID,
+      };
+      console.log(bookBorrow);
+      const res: any = await api.createBookborrow({ bookborrow: bookBorrow });
+      setStatus(true);
+        if(res.id != ''){
+            setAlert(true);
+        }
+        }else{
+            setAlert(false);
+            setStatus(true);
+        }
+        const timer = setTimeout(() => {
+            setStatus(false);
+            window.location.reload(false);
+        }, 5000);
     };
 
-    console.log(bookborrow); // log ดูข้อมูล สามารถ Inspect ดูข้อมูลได้ F12 เลือก Tab Console
-
-    fetch(apiUrl, requestOptions)
-      .then(response => response.json())
-      .then(data => {
-        console.log(data);
-        if (data.status === true) {
-          clear();
-          Toast.fire({
-            icon: 'success',
-            title: 'บันทึกข้อมูลสำเร็จ',
-          });
-        } else {
-          Toast.fire({
-            icon: 'error',
-            title: 'บันทึกข้อมูลไม่สำเร็จ',
-          });
-        }
-      });
-  }
+    const resetLocalStorage = async () => {
+      localStorage.setItem("userID", JSON.stringify(null))
+      localStorage.setItem("role", JSON.stringify(null))
+      localStorage.setItem("valid", JSON.stringify(null))
+      localStorage.setItem("userName", JSON.stringify(null))
+      window.location.href = "/"
+    }
 
   return (
     <Page theme={pageTheme.home}>
-      <Header style={HeaderCustom} title={`Borrow Book`}>
-        <Avatar alt="Remy Sharp" src="../../image/account.jpg" />
-        <div style={{ marginLeft: 10 }}>Manuschanok Srikhrueadong</div>
-      </Header>
+      <Header
+        title={`Welcome to BookBorrow System`}
+        subtitle="ระบบยืมหนังสือ"
+        >
+           <Button
+            // disabled={LogoutBtn}
+            variant="contained"
+            color="secondary"
+            className={classes.button}
+            startIcon={<LockOutlinedIcon />}
+            onClick={() => {
+              resetLocalStorage();
+            }}>
+            ล็อกเอ้าท์
+          </Button>
+        </Header>
+        
       <Content>
-        <Container maxWidth="sm">
-          <Grid container spacing={3}>
-            <Grid item xs={12}></Grid>
-            <Grid item xs={3}>
-              <div className="{classes.paper}">หนังสือ</div>
-            </Grid>
-            <Grid item xs={9}>
-              <FormControl variant="outlined" className={classes.formControl}>
-                <InputLabel>เลือกหนังสือ</InputLabel>
+        <ContentHeader title={userName}>
+        {status ? (
+           <div>
+             {alert ? (
+               <Alert severity="success">
+                 เพิ่มบันทึกเรียบร้อย!
+               </Alert>
+             ) : (
+               <Alert severity="warning" style={{ marginTop: 20 }}>
+                 บันทึกไม่สำเร็จ กรุณากรอกข้อมูลใหม่
+               </Alert>
+             )}
+           </div>
+         ) : null}
+         
+        </ContentHeader>
+
+        <div className={classes.root}>
+          <form noValidate autoComplete="off">
+
+            <div>
+              <FormControl
+                className={classes.margin}
+                variant="outlined"
+              >
+                <div className={classes.paper}><strong>หนังสือ</strong></div>
+                <InputLabel id="book-label"></InputLabel>
                 <Select
-                  name="book"
-                  value={bookborrow.book || ''} // (undefined || '') = ''
-                  onChange={handleChange}
+                  labelId="ชื่อหนังสือ"
+                  id="bookID"
+                  value={bookID}
+                  onChange={handleBookchange}
+                  style={{ width: 400 }}
                 >
-                  {books.map(item => {
-                    return (
-                      <MenuItem key={item.id} value={item.id}>
-                        {item.bookName}
-                      </MenuItem>
-                    );
-                  })}
+                  {books.map((item: EntBook) => (
+                    <MenuItem value={item.id}>{item.bookName}</MenuItem>
+                  ))}
                 </Select>
               </FormControl>
-            </Grid>
+            </div>
 
-            <Grid item xs={3}>
-              <div className={classes.paper}>ผู้ยืม</div>
-            </Grid>
-            <Grid item xs={9}>
-              <FormControl variant="outlined" className={classes.formControl}>
-                <InputLabel>เลือกผู้ยืม</InputLabel>
+            <div>
+              <FormControl
+                className={classes.margin}
+                variant="outlined"
+              >
+                <div className={classes.paper}><strong>ผู้ยืม</strong></div>
+                <InputLabel id="user-label"></InputLabel>
                 <Select
-                  name="user"
-                  value={bookborrow.user || ''} // (undefined || '') = ''
-                  onChange={handleChange}
+                  disabled = {true}
+                  labelId="ผู้ยืม"
+                  id="userID"
+                  value={userID}
+                  className={classes.selectEmpty}
+                  style={{ width: 400 }}
                 >
-                  {users.map(item => {
-                    return (
-                      <MenuItem key={item.id} value={item.id}>
-                        {item.uSERNAME}
-                      </MenuItem>
-                    );
-                  })}
+                  {users.map((item: EntUser) => (
+                    <MenuItem value={item.id}>{item.uSERNAME}</MenuItem>
+                  ))}
                 </Select>
               </FormControl>
-            </Grid>
+            </div>
 
-            <Grid item xs={3}>
-              <div className={classes.paper}>จุดบริการ</div>
-            </Grid>
-            <Grid item xs={9}>
-              <FormControl variant="outlined" className={classes.formControl}>
-                <InputLabel>เลือกจุดบริการ</InputLabel>
+            <div>
+              <FormControl
+                className={classes.margin}
+                variant="outlined"
+              >
+                <div className={classes.paper}><strong>จุดบริการ</strong></div>
+                <InputLabel id="servicepoint-label"></InputLabel>
                 <Select
-                  name="servicepoint"
-                  value={bookborrow.servicepoint || ''} // (undefined || '') = ''
-                  onChange={handleChange}
+                  labelId="จุดบริการที่ยืมหนังสือ"
+                  id="servicepointID"
+                  value={servicePointID}
+                  onChange={handleServicepointchange}
+                  style={{ width: 400 }}
                 >
-                  {servicepoints.map(item => {
-                    return (
-                      <MenuItem key={item.id} value={item.id}>
-                        {item.cOUNTERNUMBER}
-                      </MenuItem>
-                    );
-                  })}
+                  {servicepoints.map((item: EntServicePoint) => (
+                    <MenuItem value={item.id}>{item.cOUNTERNUMBER}</MenuItem>
+                  ))}
                 </Select>
               </FormControl>
-            </Grid>
+            </div>
 
-
-            <Grid item xs={3}>
-              <div className={classes.paper}>เวลา</div>
-            </Grid>
-            <Grid item xs={9}>
-              <form className={classes.container} noValidate>
-                <TextField
-                  label="เลือกเวลา"
-                  name="added"
-                  type="date"
-                  value={bookborrow.added || ''} // (undefined || '') = ''
-                  className={classes.textField}
-                  InputLabelProps={{
-                    shrink: true,
-                  }}
-                  onChange={handleChange}
-                />
-              </form>
-            </Grid>
-
-            <Grid item xs={3}></Grid>
-            <Grid item xs={9}>
+            <div className={classes.margin}>
               <Button
+                onClick={() => {
+                  createBookBorrow();
+                }}
                 variant="contained"
                 color="primary"
-                size="large"
-                startIcon={<SaveIcon />}
-                onClick={save}
               >
-                บันทึกการดู
-              </Button>
-            </Grid>
-          </Grid>
-        </Container>
+                ยืนยันการบันทึก
+             </Button>
+              <Button
+                style={{ marginLeft: 20 }}
+                component={RouterLink}
+                to="/"
+                variant="contained"
+              >
+                ย้อนกลับ
+             </Button>
+            </div>
+          </form>
+        </div>
       </Content>
     </Page>
   );
-};
-
-export default Bookborrow;
+}

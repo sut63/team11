@@ -11,6 +11,7 @@ import (
 	"github.com/team11/app/ent/bookborrow"
 	"github.com/team11/app/ent/location"
 	"github.com/team11/app/ent/user"
+	"github.com/team11/app/ent/book"
 )
 
 // BookreturnController defines the struct for the bookreturn controller
@@ -24,7 +25,7 @@ type Bookreturn struct {
 	UserID       int
 	LocationID   int
 	BookborrowID int
-	Deadline     string
+	ReturnTime     string
 }
 
 // CreateBookreturn handles POST requests for adding bookreturn entities
@@ -78,30 +79,20 @@ func (ctl *BookreturnController) CreateBookreturn(c *gin.Context) {
 
 	if err != nil {
 		c.JSON(400, gin.H{
-			"error": "user not found",
+			"error": "bookborrow not found",
 		})
 		return
 	}
 
-	now := time.Now()
-	then := time.Date(2021, 1, 8, 15, 37, 0, 0, time.UTC)
-	after := time.Date(2021, 1, 15, 15, 37, 0, 0, time.UTC)
-	diff := after.Sub(then)
-	times := now.Add(diff)
-
-	if err != nil {
-		c.JSON(400, gin.H{
-			"error": "user not found",
-		})
-		return
-	}
+	settime := time.Now().Format("2006-01-02T15:04:05Z07:00")
+	time, err := time.Parse(time.RFC3339, settime)
 
 	br, err := ctl.client.Bookreturn.
 		Create().
 		SetUser(u).
 		SetLocation(l).
 		SetMustreturn(b).
-		SetDEADLINE(times).
+		SetRETURNTIME(time).
 		Save(context.Background())
 
 	if err != nil {
@@ -110,6 +101,31 @@ func (ctl *BookreturnController) CreateBookreturn(c *gin.Context) {
 		})
 		return
 	}
+
+	bb, err := ctl.client.Book.
+		Query().
+		Where(book.IDEQ(int(obj.BookborrowID))).
+		Only(context.Background())
+
+	if err != nil {
+		c.JSON(400, gin.H{
+			"error": "book not found",
+		})
+		return
+	}
+
+	bk, err := ctl.client.Book.
+		UpdateOne(bb).
+		SetStatusID(1).
+		Save(context.Background())
+
+		if err != nil {
+			c.JSON(400, gin.H{
+				"error": "Update status book error",
+			})
+			return
+		}
+	fmt.Print(bk)
 
 	c.JSON(200, br)
 }

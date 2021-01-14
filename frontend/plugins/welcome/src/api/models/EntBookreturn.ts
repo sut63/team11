@@ -27,11 +27,11 @@ import {
  */
 export interface EntBookreturn {
     /**
-     * DEADLINE holds the value of the "DEADLINE" field.
+     * RETURNTIME holds the value of the "RETURN_TIME" field.
      * @type {string}
      * @memberof EntBookreturn
      */
-    dEADLINE?: string;
+    rETURNTIME?: string;
     /**
      * 
      * @type {number}
@@ -74,7 +74,7 @@ export function EntBookreturnFromJSONTyped(json: any, ignoreDiscriminator: boole
     }
     return {
         
-        'dEADLINE': !exists(json, 'DEADLINE') ? undefined : json['DEADLINE'],
+        'rETURNTIME': !exists(json, 'RETURN_TIME') ? undefined : json['RETURN_TIME'],
         'clientID': !exists(json, 'client_ID') ? undefined : json['client_ID'],
         'edges': !exists(json, 'edges') ? undefined : EntBookreturnEdgesFromJSON(json['edges']),
         'id': !exists(json, 'id') ? undefined : json['id'],
@@ -92,7 +92,7 @@ export function EntBookreturnToJSON(value?: EntBookreturn | null): any {
     }
     return {
         
-        'DEADLINE': value.dEADLINE,
+        'RETURN_TIME': value.rETURNTIME,
         'client_ID': value.clientID,
         'edges': EntBookreturnEdgesToJSON(value.edges),
         'id': value.id,

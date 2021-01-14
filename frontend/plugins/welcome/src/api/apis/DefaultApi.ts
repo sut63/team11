@@ -15,6 +15,9 @@
 
 import * as runtime from '../runtime';
 import {
+    ControllersBook,
+    ControllersBookFromJSON,
+    ControllersBookToJSON,
     ControllersBookborrow,
     ControllersBookborrowFromJSON,
     ControllersBookborrowToJSON,
@@ -91,7 +94,7 @@ export interface CreateAuthorRequest {
 }
 
 export interface CreateBookRequest {
-    book: EntBook;
+    book: ControllersBook;
 }
 
 export interface CreateBookborrowRequest {
@@ -218,6 +221,10 @@ export interface GetBookborrowRequest {
     id: number;
 }
 
+export interface GetBookborrowuserRequest {
+    id: number;
+}
+
 export interface GetBookingRequest {
     id: number;
 }
@@ -300,11 +307,6 @@ export interface ListCategoryRequest {
     offset?: number;
 }
 
-export interface ListCliententityRequest {
-    limit?: number;
-    offset?: number;
-}
-
 export interface ListLocationRequest {
     limit?: number;
     offset?: number;
@@ -346,11 +348,6 @@ export interface ListServicepointRequest {
 }
 
 export interface ListStatusRequest {
-    limit?: number;
-    offset?: number;
-}
-
-export interface ListUserRequest {
     limit?: number;
     offset?: number;
 }
@@ -485,7 +482,7 @@ export class DefaultApi extends runtime.BaseAPI {
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: EntBookToJSON(requestParameters.book),
+            body: ControllersBookToJSON(requestParameters.book),
         });
 
         return new runtime.JSONApiResponse(response, (jsonValue) => EntBookFromJSON(jsonValue));
@@ -1532,6 +1529,38 @@ export class DefaultApi extends runtime.BaseAPI {
     }
 
     /**
+     * get bookborrowuser by ID
+     * Get a bookborrowuser entity by ID
+     */
+    async getBookborrowuserRaw(requestParameters: GetBookborrowuserRequest): Promise<runtime.ApiResponse<Array<EntBookborrow>>> {
+        if (requestParameters.id === null || requestParameters.id === undefined) {
+            throw new runtime.RequiredError('id','Required parameter requestParameters.id was null or undefined when calling getBookborrowuser.');
+        }
+
+        const queryParameters: runtime.HTTPQuery = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        const response = await this.request({
+            path: `/bookborrowusers/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters.id))),
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        });
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => jsonValue.map(EntBookborrowFromJSON));
+    }
+
+    /**
+     * get bookborrowuser by ID
+     * Get a bookborrowuser entity by ID
+     */
+    async getBookborrowuser(requestParameters: GetBookborrowuserRequest): Promise<Array<EntBookborrow>> {
+        const response = await this.getBookborrowuserRaw(requestParameters);
+        return await response.value();
+    }
+
+    /**
      * get booking by ID
      * Get a booking entity by ID
      */
@@ -2167,16 +2196,8 @@ export class DefaultApi extends runtime.BaseAPI {
      * list cliententity entities
      * List cliententity entities
      */
-    async listCliententityRaw(requestParameters: ListCliententityRequest): Promise<runtime.ApiResponse<Array<EntClientEntity>>> {
+    async listCliententityRaw(): Promise<runtime.ApiResponse<Array<EntClientEntity>>> {
         const queryParameters: runtime.HTTPQuery = {};
-
-        if (requestParameters.limit !== undefined) {
-            queryParameters['limit'] = requestParameters.limit;
-        }
-
-        if (requestParameters.offset !== undefined) {
-            queryParameters['offset'] = requestParameters.offset;
-        }
 
         const headerParameters: runtime.HTTPHeaders = {};
 
@@ -2194,8 +2215,8 @@ export class DefaultApi extends runtime.BaseAPI {
      * list cliententity entities
      * List cliententity entities
      */
-    async listCliententity(requestParameters: ListCliententityRequest): Promise<Array<EntClientEntity>> {
-        const response = await this.listCliententityRaw(requestParameters);
+    async listCliententity(): Promise<Array<EntClientEntity>> {
+        const response = await this.listCliententityRaw();
         return await response.value();
     }
 
@@ -2527,16 +2548,8 @@ export class DefaultApi extends runtime.BaseAPI {
      * list user entities
      * List user entities
      */
-    async listUserRaw(requestParameters: ListUserRequest): Promise<runtime.ApiResponse<Array<EntUser>>> {
+    async listUserRaw(): Promise<runtime.ApiResponse<Array<EntUser>>> {
         const queryParameters: runtime.HTTPQuery = {};
-
-        if (requestParameters.limit !== undefined) {
-            queryParameters['limit'] = requestParameters.limit;
-        }
-
-        if (requestParameters.offset !== undefined) {
-            queryParameters['offset'] = requestParameters.offset;
-        }
 
         const headerParameters: runtime.HTTPHeaders = {};
 
@@ -2554,8 +2567,8 @@ export class DefaultApi extends runtime.BaseAPI {
      * list user entities
      * List user entities
      */
-    async listUser(requestParameters: ListUserRequest): Promise<Array<EntUser>> {
-        const response = await this.listUserRaw(requestParameters);
+    async listUser(): Promise<Array<EntUser>> {
+        const response = await this.listUserRaw();
         return await response.value();
     }
 

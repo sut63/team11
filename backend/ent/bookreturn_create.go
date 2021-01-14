@@ -23,9 +23,9 @@ type BookreturnCreate struct {
 	hooks    []Hook
 }
 
-// SetDEADLINE sets the DEADLINE field.
-func (bc *BookreturnCreate) SetDEADLINE(t time.Time) *BookreturnCreate {
-	bc.mutation.SetDEADLINE(t)
+// SetRETURNTIME sets the RETURN_TIME field.
+func (bc *BookreturnCreate) SetRETURNTIME(t time.Time) *BookreturnCreate {
+	bc.mutation.SetRETURNTIME(t)
 	return bc
 }
 
@@ -93,8 +93,8 @@ func (bc *BookreturnCreate) Mutation() *BookreturnMutation {
 
 // Save creates the Bookreturn in the database.
 func (bc *BookreturnCreate) Save(ctx context.Context) (*Bookreturn, error) {
-	if _, ok := bc.mutation.DEADLINE(); !ok {
-		return nil, &ValidationError{Name: "DEADLINE", err: errors.New("ent: missing required field \"DEADLINE\"")}
+	if _, ok := bc.mutation.RETURNTIME(); !ok {
+		return nil, &ValidationError{Name: "RETURN_TIME", err: errors.New("ent: missing required field \"RETURN_TIME\"")}
 	}
 	var (
 		err  error
@@ -156,13 +156,13 @@ func (bc *BookreturnCreate) createSpec() (*Bookreturn, *sqlgraph.CreateSpec) {
 			},
 		}
 	)
-	if value, ok := bc.mutation.DEADLINE(); ok {
+	if value, ok := bc.mutation.RETURNTIME(); ok {
 		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
 			Type:   field.TypeTime,
 			Value:  value,
-			Column: bookreturn.FieldDEADLINE,
+			Column: bookreturn.FieldRETURNTIME,
 		})
-		b.DEADLINE = value
+		b.RETURNTIME = value
 	}
 	if nodes := bc.mutation.UserIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{

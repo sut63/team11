@@ -7,7 +7,11 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/team11/app/ent"
+	"github.com/team11/app/ent/author"
 	"github.com/team11/app/ent/book"
+	"github.com/team11/app/ent/category"
+	"github.com/team11/app/ent/status"
+	"github.com/team11/app/ent/user"
 )
 
 // BookController defines the struct for the book controller
@@ -16,29 +20,83 @@ type BookController struct {
 	router gin.IRouter
 }
 
+//Book struct
+type Book struct {
+	Userid   int
+	Author   int
+	Category int
+	Bookname string
+}
+
 // CreateBook handles POST requests for adding book entities
 // @Summary Create book
 // @Description Create book
 // @ID create-book
 // @Accept   json
 // @Produce  json
-// @Param book body ent.Book true "Book entity"
+// @Param book body Book true "Book entity"
 // @Success 200 {object} ent.Book
 // @Failure 400 {object} gin.H
 // @Failure 500 {object} gin.H
 // @Router /books [post]
 func (ctl *BookController) CreateBook(c *gin.Context) {
-	obj := ent.Book{}
+	obj := Book{}
 	if err := c.ShouldBind(&obj); err != nil {
 		c.JSON(400, gin.H{
 			"error": "book binding failed",
 		})
 		return
 	}
+	u, err := ctl.client.User.
+		Query().
+		Where(user.IDEQ(int(obj.Userid))).
+		Only(context.Background())
+	if err != nil {
+		c.JSON(404, gin.H{
+			"error": err.Error(),
+		})
+		return
+	}
 
-	u, err := ctl.client.Book.
+	a, err := ctl.client.Author.
+		Query().
+		Where(author.IDEQ(int(obj.Author))).
+		Only(context.Background())
+	if err != nil {
+		c.JSON(404, gin.H{
+			"error": err.Error(),
+		})
+		return
+	}
+
+	ca, err := ctl.client.Category.
+		Query().
+		Where(category.IDEQ(int(obj.Category))).
+		Only(context.Background())
+	if err != nil {
+		c.JSON(404, gin.H{
+			"error": err.Error(),
+		})
+		return
+	}
+	s, err := ctl.client.Status.
+		Query().
+		Where(status.IDEQ(int(1))).
+		Only(context.Background())
+	if err != nil {
+		c.JSON(404, gin.H{
+			"error": err.Error(),
+		})
+		return
+	}
+
+	b, err := ctl.client.Book.
 		Create().
-		SetBookName(obj.BookName).
+		SetBookName(obj.Bookname).
+		SetAuthor(a).
+		SetCategory(ca).
+		SetUser(u).
+		SetStatus(s).
 		Save(context.Background())
 	if err != nil {
 		c.JSON(400, gin.H{
@@ -47,7 +105,7 @@ func (ctl *BookController) CreateBook(c *gin.Context) {
 		return
 	}
 
-	c.JSON(200, u)
+	c.JSON(200, b)
 }
 
 // GetBook handles GET requests to retrieve a book entity
@@ -116,6 +174,7 @@ func (ctl *BookController) ListBook(c *gin.Context) {
 
 	books, err := ctl.client.Book.
 		Query().
+		Where(book.HasStatusWith(status.STATUSNAMEEQ("Available"))).
 		Limit(limit).
 		Offset(offset).
 		All(context.Background())

@@ -1,18 +1,26 @@
 import React, { useState, useEffect } from 'react';
-import { Link as RouterLink } from 'react-router-dom';
+import SaveAltIcon from '@material-ui/icons/SaveAlt';
+import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
+import ComponanceTable from './Table/TablesClient';
 import {
-  Content, Header, Page, pageTheme, ContentHeader,
+  Content,
+  InfoCard,
+  Header,
+  HomepageTimer,
+  Page,
+  pageTheme,
+  ContentHeader,
 } from '@backstage/core';
 import {
-  Table, TableBody, TableCell, TableRow, Typography,
-  TextField, Button, withStyles, makeStyles,
-  Theme, FormControl, InputLabel, MenuItem,
-  FormHelperText, Select, createStyles,
-  Dialog,DialogActions,DialogContent,DialogContentText,
-  DialogTitle,useMediaQuery,useTheme
+  FormControl, InputLabel, MenuItem,Select,
+  Typography,
+  Grid,
+  makeStyles,
+  Button,
+  FormHelperText,
 } from '@material-ui/core';
 
-import { Alert } from '@material-ui/lab';
+import { Alert, AlertTitle } from '@material-ui/lab';
 
 import { DefaultApi } from '../../api/apis';
 import {
@@ -21,35 +29,56 @@ import {
   EntUser,
 } from '../../api/models/';
 
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    root: {
-      display: 'flex',
-      flexWrap: 'wrap',
-      justifyContent: 'center',
-    },
-    margin: {
-      margin: theme.spacing(3),
-    },
-    withoutLabel: {
-      marginTop: theme.spacing(3),
-    },
-    textField: {
-      width: '35ch',
-    },
-  }),
-);
+const useStyles = makeStyles(theme => ({
+  paper: {
+    marginTop: theme.spacing(8),
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+  },
+  avatar: {
+    margin: theme.spacing(1),
+    backgroundColor: theme.palette.secondary.main,
+  },
+  form: {
+    width: '100%',
+    marginTop: theme.spacing(0),
+  },
+  submit: {
+    margin: theme.spacing(1, 0, 2),
+  },
+  formControl: {
+    margin: theme.spacing(1),
+      minWidth: 120,
+  },
+  button: {
+    margin: theme.spacing(1),
+  },
+  img: {
+    margin: 'auto',
+    display: 'block',
+    maxWidth: '100%',
+    maxHeight: '100%',
+  },
+  root: {
+    flexGrow: 1,
+  },
+  container: {
+    display: 'flex',
+    flexWrap: 'wrap',
+  },
+  selectEmpty: {
+    marginTop: theme.spacing(2),
+  },
+}));
 
 
-var pname = '';
 export default function Create() {
-  const [username, setUsername] = useState<EntUser>();
-  const profile = { givenName: 'ยินดีต้อนรับสู่ ระบบ VideoOnDemand' };
+  const name = JSON.parse(String(localStorage.getItem("userName")));
+  const userName ="ยินดีต้อนรับ "+name
   const classes = useStyles();
   const api = new DefaultApi();
-  const theme = useTheme();
-  const fullScreen = useMediaQuery(theme.breakpoints.down('sm'));
-  const [open, setOpen] = React.useState(false);
+
   const [loading, setLoading] = useState(true);
 
   const [status, setStatus] = useState(false);
@@ -57,20 +86,27 @@ export default function Create() {
   const [clients, setClients] = useState<EntClientEntity[]>(Array);
   const [users, setUsers] = useState<EntUser[]>(Array);
   const [servicepoint, setServicePoint] = useState<EntServicePoint[]>(Array);
+
+  const idString = JSON.parse(String(localStorage.getItem("userID")));
+  const idInt = parseInt(idString);
+
   useEffect(() => {
     const getCliententity = async () => {
-      const res = await api.listCliententity({ limit: 10, offset: 0 });
+      const res = await api.listCliententity();
       setLoading(false);
       setClients(res);
     };
     getCliententity();
 
     const getUsers = async () => {
-      const res = await api.listUser({ limit: 10, offset: 0 });
+      const res = await api.listUser();
       setLoading(false);
       setUsers(res);
     };
     getUsers();
+    
+    
+    setUserID(idInt);
 
     const getServicePoint = async () => {
       const res = await api.listServicepoint({ limit: 10, offset: 0 });
@@ -84,10 +120,6 @@ export default function Create() {
 
   }, [loading]);
 
-  const BookingDatehandleChange = (event: any) => {
-    setBookingdate(event.target.value as string);
-  };
-
   const ServicePointIDhandleChange = (event: React.ChangeEvent<{ value: unknown }>) => {
     setServicePointID(event.target.value as number);
   };
@@ -96,272 +128,177 @@ export default function Create() {
     setClientID(event.target.value as number);
   };
 
-  const UserIDhandleChange = (event: React.ChangeEvent<{ value: unknown }>) => {
-    setUserID(event.target.value as number);
-  };
-
-  const handleClickOpen = () => {
-    setOpen(true);
-  };
-
-
-
-  const [bookingdate, setBookingdate] = useState(String);
-  const [timeleft, setTimeleft] = useState(String);
   const [servicepointID, setServicePointID] = useState(Number);
   const [clientID, setClientID] = useState(Number);
   const [userID, setUserID] = useState(Number);
  
-  const handleClose = async () => {
-    setOpen(false);
-    const res = await api.getUser({ id: userID });
-    setUsername(res);
-    pname= username?.uSERNAME;
-  };
-  const handleClose2 = () => {
-    setOpen(false);
-    setUserID(0);
-    pname="";
-  };
   const CreateBooking = async () => {
-    const booking = {
-      bookingDate: bookingdate+":00+07:00",
-      timeLeft: String("2020-01-01T03:00:00+07:00"),
-      servicePoint: servicepointID,
-      client: clientID,
-      user: userID,
-    };
-    const cliententity = {
-      sid: Number(2)
-    };
-    console.log(booking);
-    const res2: any = await api.updateCliententity({ id: clientID, cliententity: cliententity });
-    const res: any = await api.createBooking({ booking: booking });
-    setStatus(true);
-    if (res.id != '') {
-      setAlert(true);
+
+    if ((servicepointID != 0) && (clientID != 0)) {
+      const resC = await api.listCliententity();
+      setClients(resC);
+      const booking = {
+        servicePoint: servicepointID,
+        client: clientID,
+        user: userID,
+      };
+      const cliententity = {
+        sid: Number(2)
+      };
+
+      const res: any = await api.createBooking({ booking: booking });
+      setStatus(true);
+      if (res.id != '') {
+        await api.updateCliententity({ id: clientID, cliententity: cliententity });
+        setAlert(true);
+      }
     } else {
+      setStatus(true);
       setAlert(false);
     }
     const timer = setTimeout(() => {
       setStatus(false);
-    }, 1000);
+      window.location.reload(false);
+    }, 10000);
   };
+  const resetLocalStorage = async () => {
+    localStorage.setItem("userID", JSON.stringify(null))
+    localStorage.setItem("role", JSON.stringify(null))
+    localStorage.setItem("valid", JSON.stringify(null))
+    localStorage.setItem("userName", JSON.stringify(null))
+    window.location.href = "/"
+  }
+
   return (
+    
     <Page theme={pageTheme.home}>
       <Header
-        title={`${profile.givenName}`}
-      //subtitle="Some quick intro and links."
-      ></Header>
+        title={'Welcome to VideoOnDemand System'}
+        subtitle="The Center for Library Resources and Educational Media"
+      >
+        <HomepageTimer />
+      </Header>
       <Content>
-        <ContentHeader title="เพิ่มข้อมูลการจอง">
-          <Typography align="left" style={{ marginRight: 16, color: "#00eeff" }}>
-            {pname}
-          </Typography>
-          <div>
-          <Button variant="contained" color="primary" onClick={handleClickOpen}>
-        เข้าสู่ระบบ
-      </Button>
-      &nbsp;&nbsp;&nbsp;
-            <Button variant="contained" color="primary" onClick={handleClose2}>
-              ออกจากระบบ
-       </Button>
-          </div>
-
-          
+        <ContentHeader title={userName}>
+          <Button
+            // disabled={LogoutBtn}
+            variant="contained"
+            color="primary"
+            className={classes.button}
+            startIcon={<LockOutlinedIcon />}
+            onClick={() => {
+              resetLocalStorage();
+            }}>
+            ล็อกเอ้าท์
+          </Button>
         </ContentHeader>
+       
+        <Grid container justify="center" >
 
-        <div className={classes.root}>
-          <form noValidate autoComplete="off">
-            <table>
-              <tr><td width="150">เลือกเครื่องรับชม</td><td>
-              <FormControl
-                className={classes.margin}
-                variant="outlined"
-              >
+          <Grid item xs={12} md={6}>
 
-                <InputLabel id="client-label"></InputLabel>
-                <Select
-                  labelId="client-label"
-                  id="client"
-                  value={clientID}
-                  onChange={ClientIDhandleChange}
-                  style={{ width: 400 }}
-                >
-                  {clients.map((item: EntClientEntity) => (
+            <InfoCard title="กรุณากรอกข้อมูลเพื่อจองเครื่องรับชม VideoOnDemand 💻">
+              <Typography variant="body1" gutterBottom>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;🖱 Log off ออกจากเครื่องรับชมเมื่อเลิกใช้งาน และส่งคืนหูฟังที่เคาน์เตอร์
+                (After using the video on demand machines, please log off. Then kindly return the headphone to the staff at the Information Counter.)<br/><br/>
+   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;👨‍💻 ผู้ใช้บริการต้องรับผิดชอบต่ออุปกรณ์ที่ชำรุดเสียหาย (Library users are liable to any damage incurred or lost.)
+              </Typography>
+              <br/><br/>
+              <Grid container alignItems="center" direction="column">
+              <FormControl required className={classes.formControl}>
+              <InputLabel id="demo-simple-select-required-label">Client</InputLabel>
+        <Select
+          labelId="demo-simple-select-required-label"
+          id="demo-simple-select-required"
+          value={clientID}
+          className={classes.selectEmpty}
+          onChange={ClientIDhandleChange}
+          style={{ width: 400 }}
+        >
+          {clients.filter((filter:any) => filter.edges.state.sTATUSNAME == "Available").map((item: EntClientEntity) => (
                     <MenuItem value={item.id}>{item.cLIENTNAME}</MenuItem>
                   ))}
-                </Select>
-              </FormControl>
-              </td>
-              </tr>
-              <tr><td>สมาชิกห้องสมุด</td><td>
-              <FormControl
-              disabled
-                className={classes.margin}
-                variant="outlined"
-              >
-                <InputLabel id="user-label"></InputLabel>
-                <Select
-                  labelId="user-label"
-                  id="user"
-                  value={userID}
-                  onChange={UserIDhandleChange}
-                  style={{ width: 400 }}
-                >
-                  {users.map((item: EntUser) => (
+        </Select>
+        <FormHelperText>Required</FormHelperText>
+      </FormControl>
+      <br/>
+      <FormControl required className={classes.formControl}>
+              <InputLabel id="demo-simple-select-required-label">Library Member</InputLabel>
+        <Select
+          disabled = {true}
+          labelId="demo-simple-select-required-label"
+          id="demo-simple-select-required"
+          value={userID}
+          className={classes.selectEmpty}
+          style={{ width: 400 }}
+        >
+          {users.map((item: EntUser) => (
                     <MenuItem value={item.id}>{item.uSEREMAIL}</MenuItem>
                   ))}
-                </Select>
-              </FormControl>
-              </td>
-              </tr>
-              <tr><td>เลือกจุดที่จะเข้าไปยืนยันการจอง</td><td>
-              <FormControl
-                className={classes.margin}
-                variant="outlined"
-              >
-                <InputLabel id="ServicePoint"></InputLabel>
-                <Select
-                  labelId="servicepoint"
-                  id="servicepoint"
-                  value={servicepointID}
-                  onChange={ServicePointIDhandleChange}
-                  style={{ width: 200 }}
-                >
-                  {servicepoint.map((item: EntServicePoint) => (
+        </Select>
+
+      </FormControl>
+      <br/>
+      <FormControl required className={classes.formControl}>
+              <InputLabel id="demo-simple-select-required-label">Counter</InputLabel>
+        <Select
+          labelId="demo-simple-select-required-label"
+          id="demo-simple-select-required"
+          value={servicepointID}
+          className={classes.selectEmpty}
+          onChange={ServicePointIDhandleChange}
+          style={{ width: 400 }}
+        >
+          {servicepoint.map((item: EntServicePoint) => (
                     <MenuItem value={item.id}>{item.cOUNTERNUMBER}</MenuItem>
                   ))}
-                </Select>
-              </FormControl>
-              </td>
-              </tr>
-              <tr><td>เลือกวันที่และเวลา</td><div>
-              <FormControl
-                className={classes.margin}
-                variant="outlined"
-              >
-                <TextField
-                  id="deathtime"
-                  label=""
-                  type="datetime-local"
-                  value={bookingdate}
-                  onChange={BookingDatehandleChange}
-                  className={classes.textField}
-                  InputLabelProps={{
-                    shrink: true,
-                  }}
-                />
-              </FormControl>
-              </div>
-              </tr>
-
-            </table>
-            <tr><td width="300">
-            <Button
-                onClick={() => {
-                  CreateBooking();
-                  
-                }}
-                
-                variant="contained"
-                color="primary"
-              >
-                [บันทึกการจอง]
-           </Button>
-              <Button
-                style={{ marginLeft: 20 }}
-                component={RouterLink}
-                to="/welcome"
-                variant="contained"
-              >
-                กลับ
-           </Button>
-           </td><td>{status ? (
-            <div>
-              {alert ? (
-                <Alert severity="success">
-                  This is a success alert — check it out!
-                </Alert>
-              ) : (
-                  <Alert severity="warning" style={{ marginTop: 20 }}>
-                    This is a warning alert — check it out!
-                  </Alert>
-                )}
-            </div>
-          ) : null}</td>
-           </tr>
-          </form>
-        </div>
-
-        <div>
-      
-      <Dialog
-        fullScreen={fullScreen}
-        open={open}
-        onClose={handleClose}
-        aria-labelledby="responsive-dialog-title"
-      >
-        <DialogTitle id="responsive-dialog-title">{"กรุณาเลือก Email เพื่อเข้าสู่ระบบ"}</DialogTitle>
-        <DialogContent>
-          <DialogContentText>
-          <table>
-              <tr><td width="100">อีเมลผู้ใช้</td><td>
-              <FormControl
-                className={classes.margin}
-                variant="outlined"
-              >
-                <InputLabel id="email-label"></InputLabel>
-                <Select
-                  labelId="email-label"
-                  id="email"
-                  value={userID}
-
-                  onChange={UserIDhandleChange}
-                  style={{ width: 400 }}
-                ><option value="">None</option>
-                  {users.map((item: EntUser) => (
-                    <MenuItem value={item.id} >{item.uSEREMAIL}</MenuItem>
-                  ))}
-                </Select>
-              </FormControl>
-              </td>
-              </tr>
-              <tr><td>ชื่อผู้ใช้</td><td>
-              <FormControl
-                disabled
-                className={classes.margin}
-                variant="outlined"
-              >
-                <InputLabel id="user-label"></InputLabel>
-                <Select
-                  labelId="user-label"
-                  id="user"
-                  value={userID}
-                  onChange={UserIDhandleChange}
-                  style={{ width: 400 }}
-                >
-                  {users.map((item: EntUser) => (
-                    <MenuItem value={item.id}>{item.uSERNAME}</MenuItem>
-                  ))}
-                </Select>
-              </FormControl>
-              </td>
-              </tr>
-            </table>
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button autoFocus onClick={handleClose2} color="primary">
-            ยกเลิก
-          </Button>
-          <Button onClick={handleClose} color="primary" autoFocus>
-            เข้าสู่ระบบ
-          </Button>
-        </DialogActions>
-      </Dialog>
-    </div>
-
+        </Select>
+        <FormHelperText>Required</FormHelperText>
+      </FormControl>
+                    <Button
+                    variant="contained"
+                    color="secondary"
+                    className={classes.button}
+                    startIcon={<SaveAltIcon />}
+                    onClick={() => {
+                      CreateBooking();
+                      setClientID(0);
+                      setServicePointID(0);
+                    }}
+                  >
+                    บันทึกการจอง
+                  </Button>
+                  <Grid container justify="center" item xs={12}>
+        {status ? (
+           <div>
+             {alert ? (
+               <Alert severity="success" style={{ width: 400 }} onClose={() => { setStatus(false); window.location.reload(false);}}>
+               <AlertTitle>Success</AlertTitle>
+               <div>
+               ทำการบันทึกข้อมูลการจองสำเร็จ — <strong>🎉</strong>
+               </div>
+               <br/>
+             </Alert> 
+             ) : (
+              <Alert severity="error" style={{ width: 400 }} onClose={() => { setStatus(false); window.location.reload(false);}}>
+               <AlertTitle>Error</AlertTitle >
+               <div>
+               บันทึกข้อมูลผิดพลาด — <strong>❌</strong>
+               </div><br/>
+             </Alert>
+             )}
+           </div>
+         ) : null}
+         </Grid>
+      </Grid>
+            </InfoCard>
+          </Grid>
+          <Grid item xs={12} md={6}>
+          <InfoCard title="ตารางเครื่องรับชม VideoOnDemand">
+              <ComponanceTable></ComponanceTable>
+            </InfoCard>
+          </Grid>
+        </Grid>
       </Content>
     </Page>
   );

@@ -4,6 +4,7 @@ package ent
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"time"
 
@@ -34,6 +35,12 @@ func (bc *BookborrowCreate) SetNillableBORROWDATE(t *time.Time) *BookborrowCreat
 	if t != nil {
 		bc.SetBORROWDATE(*t)
 	}
+	return bc
+}
+
+// SetRETURNDATE sets the RETURN_DATE field.
+func (bc *BookborrowCreate) SetRETURNDATE(t time.Time) *BookborrowCreate {
+	bc.mutation.SetRETURNDATE(t)
 	return bc
 }
 
@@ -120,6 +127,9 @@ func (bc *BookborrowCreate) Save(ctx context.Context) (*Bookborrow, error) {
 		v := bookborrow.DefaultBORROWDATE()
 		bc.mutation.SetBORROWDATE(v)
 	}
+	if _, ok := bc.mutation.RETURNDATE(); !ok {
+		return nil, &ValidationError{Name: "RETURN_DATE", err: errors.New("ent: missing required field \"RETURN_DATE\"")}
+	}
 	var (
 		err  error
 		node *Bookborrow
@@ -187,6 +197,14 @@ func (bc *BookborrowCreate) createSpec() (*Bookborrow, *sqlgraph.CreateSpec) {
 			Column: bookborrow.FieldBORROWDATE,
 		})
 		b.BORROWDATE = value
+	}
+	if value, ok := bc.mutation.RETURNDATE(); ok {
+		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
+			Type:   field.TypeTime,
+			Value:  value,
+			Column: bookborrow.FieldRETURNDATE,
+		})
+		b.RETURNDATE = value
 	}
 	if nodes := bc.mutation.USERIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{

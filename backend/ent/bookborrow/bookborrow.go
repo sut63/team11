@@ -13,6 +13,8 @@ const (
 	FieldID = "id"
 	// FieldBORROWDATE holds the string denoting the borrow_date field in the database.
 	FieldBORROWDATE = "borrow_date"
+	// FieldRETURNDATE holds the string denoting the return_date field in the database.
+	FieldRETURNDATE = "return_date"
 
 	// EdgeUSER holds the string denoting the user edge name in mutations.
 	EdgeUSER = "USER"
@@ -59,6 +61,7 @@ const (
 var Columns = []string{
 	FieldID,
 	FieldBORROWDATE,
+	FieldRETURNDATE,
 }
 
 // ForeignKeys holds the SQL foreign-keys that are owned by the Bookborrow type.
