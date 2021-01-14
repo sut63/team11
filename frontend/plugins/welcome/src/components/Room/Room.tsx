@@ -17,20 +17,15 @@ import Button from '@material-ui/core/Button';
 import FormControl from '@material-ui/core/FormControl';
 import { Alert } from '@material-ui/lab';
 import { DefaultApi } from '../../api/apis';
-
+import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
 import FormHelperText from '@material-ui/core/FormHelperText';
 import IconButton from '@material-ui/core/IconButton';
 import Select from '@material-ui/core/Select';
-import AccountCircle from '@material-ui/icons/AccountCircle';
-import AppBar from '@material-ui/core/AppBar';
-import Toolbar from '@material-ui/core/Toolbar';
-import Typography from '@material-ui/core/Typography';
-import MenuIcon from '@material-ui/icons/Menu';
 
 import Grid from '@material-ui/core/Grid';
-
+import Swal from 'sweetalert2';
 import {
   MuiPickersUtilsProvider,
   KeyboardTimePicker,
@@ -42,7 +37,7 @@ import { EntUser } from '../../api/models/EntUser'; // import interface User
 import { EntPreemption } from '../../api/models/EntPreemption'; // import interface Preemption
 import { EntPurpose } from '../../api/models/EntPurpose'; // import interface Purpose
 import ComponanceTable from '../RoomTable';
-import Swal from 'sweetalert2';
+
 
 const useStyles = makeStyles((theme: Theme) =>
  createStyles({
@@ -72,11 +67,13 @@ const useStyles = makeStyles((theme: Theme) =>
     height: theme.spacing(7),
     
   },
+  button: {
+    margin: theme.spacing(1),
+  },
   
  }),
 );
  
-
 // alert setting
 const Toast = Swal.mixin({
   toast: true,
@@ -93,8 +90,11 @@ const Toast = Swal.mixin({
 
 
 
+
  
 export default function Create() {
+  const name = JSON.parse(String(localStorage.getItem("userName")));
+  const userName ="ยินดีต้อนรับ "+name
   const classes = useStyles();
   const [status, setStatus] = useState(false);
   const [alert, setAlert] = useState(true);
@@ -163,20 +163,28 @@ const roon = {
   
 
 };
+
+//const res: any = await api.createPreemption({ preemption: preemption });
+const ros = await api.updateRoominfo({id:roomid,user:roon});
 console.log(preemption);
 console.log(roomid);
-const res: any = await api.createPreemption({ preemption: preemption });
-const ros = await api.updateRoominfo({id:roomid,user:roon});
+
+        
+        
+        
+
 setStatus(true);
-   if (res.id != ''){
-     setAlert(true);
-   } else {
+   if ( res.roominfo = 400){
      setAlert(false);
+   } else {
+     setAlert(true);
    }
-   
- };
-*/
-const Createpreempt = async () => {
+   const timer = setTimeout(() => {
+    setStatus(false);
+  }, 1000);
+ }; */
+
+ const Createpreempt = async () => {
   const preemption = {
     user: 1,
     roominfo: roomid,
@@ -219,7 +227,13 @@ const Createpreempt = async () => {
     });
 }
 
-
+const resetLocalStorage = async () => {
+  localStorage.setItem("userID", JSON.stringify(null))
+  localStorage.setItem("role", JSON.stringify(null))
+  localStorage.setItem("valid", JSON.stringify(null))
+  localStorage.setItem("userName", JSON.stringify(null))
+  window.location.href = "/"
+}
  
 
  return (
@@ -233,10 +247,19 @@ const Createpreempt = async () => {
        
      >
        
+       <Button
+            // disabled={LogoutBtn}
+            variant="contained"
+            color="primary"
+            className={classes.button}
+            startIcon={<LockOutlinedIcon />}
+            onClick={() => {
+              resetLocalStorage();
+            }}>
+            ล็อกเอ้าท์
+          </Button>
 
-       <Button variant="contained" color="secondary">
-        log out
-      </Button>
+       
       <div className={classes.margin}>
       <Link component={RouterLink} to="/user">
       <IconButton>
@@ -246,16 +269,7 @@ const Createpreempt = async () => {
                <AssignmentIcon fontSize="large" /></IconButton></Link>
                
       </div>                    
-            <div>
-              <IconButton>
-                
-                
-              
-                <AccountCircle className={classes.large}  />
-                
-              </IconButton>
-              
-            </div>
+            
          
         
       
@@ -263,7 +277,7 @@ const Createpreempt = async () => {
      <Content>
 
        
-       <ContentHeader title="">
+       <ContentHeader title={userName}>
        
 
          
@@ -364,6 +378,7 @@ const Createpreempt = async () => {
                onClick={() => {
                 Createpreempt()
                }}
+               
                variant="contained"
                color="primary"
              >
