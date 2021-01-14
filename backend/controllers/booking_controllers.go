@@ -25,8 +25,6 @@ type Booking struct {
 	User        	int
 	Client      	int
 	ServicePoint 	int
-	BookingDate 	string
-	TimeLeft    	string
 }
 
 // CreateBooking handles POST requests for adding booking entities
@@ -82,8 +80,12 @@ func (ctl *BookingController) CreateBooking(c *gin.Context) {
 		})
 		return
 	}
-	times, err := time.Parse(time.RFC3339, obj.BookingDate)
-	times2, err := time.Parse(time.RFC3339, obj.TimeLeft)
+	times := time.Now().Local()
+	now := time.Now()
+	then := time.Date(2021, 1, 8, 15, 37, 0, 0, time.UTC)
+	after := time.Date(2021, 1, 8, 18, 37, 0, 0, time.UTC)
+	diff := after.Sub(then)
+	times2 := now.Add(diff)
 	b, err := ctl.client.Booking.
 		Create().
 		SetBOOKINGDATE(times).

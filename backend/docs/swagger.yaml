@@ -26,14 +26,10 @@ definitions:
     type: object
   controllers.Booking:
     properties:
-      bookingDate:
-        type: string
       client:
         type: integer
       servicePoint:
         type: integer
-      timeLeft:
-        type: string
       user:
         type: integer
     type: object
@@ -1689,15 +1685,6 @@ paths:
     get:
       description: list cliententity entities
       operationId: list-cliententity
-      parameters:
-      - description: Limit
-        in: query
-        name: limit
-        type: integer
-      - description: Offset
-        in: query
-        name: offset
-        type: integer
       produces:
       - application/json
       responses:
