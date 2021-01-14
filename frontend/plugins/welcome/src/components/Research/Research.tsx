@@ -18,7 +18,6 @@ import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
 import Select from '@material-ui/core/Select';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
-
 //เรียกentมาใช้
 import { EntUser } from '../../api/models/EntUser';
 import { EntAuthor } from '../../api/models/EntAuthor'; 
@@ -61,7 +60,6 @@ export default function Create() {
   const userName = name
   const profile = { thisName: 'ระบบงานวิจัยและฐานข้อมูลออนไลน์' };
   const api = new DefaultApi();
-
   //-------
   const [users, setUsers] = useState<EntUser[]>([]);
   const [authors, setAuthors] = useState<EntAuthor[]>([]);
@@ -79,7 +77,6 @@ export default function Create() {
   const [title, setTitle] = useState(String);
   const idString = JSON.parse(String(localStorage.getItem("userID")));
   const idInt = parseInt(idString);
-
   //function
   useEffect(() => {
     const getUser = async () => {
