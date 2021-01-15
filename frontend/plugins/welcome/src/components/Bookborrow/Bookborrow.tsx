@@ -134,7 +134,7 @@ export default function Create() {
         const timer = setTimeout(() => {
             setStatus(false);
             window.location.reload(false);
-        }, 5000);
+        }, 10000);
     };
 
     const resetLocalStorage = async () => {
