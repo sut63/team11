@@ -161,6 +161,7 @@ export default function Create() {
                     >
                       <InputLabel id="user-label"><font size='5'>สมาชิกห้องสมุด</font></InputLabel>
                       <Select
+                        disabled = {true}
                         labelId="user-label"
                         id="user"
                         value={userID}
