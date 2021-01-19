@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 //import SaveAltIcon from '@material-ui/icons/SaveAlt';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
-//import { Link as RouterLink } from 'react-router-dom';
+import { Link as RouterLink } from 'react-router-dom';
 import {
   Content, Header, Page, pageTheme, ContentHeader,
 } from '@backstage/core';
@@ -236,12 +236,13 @@ export default function Create() {
            </Button>
            
                   <Button
+                    
                     style={{ marginLeft: 20 }}
+                    component={RouterLink}
+                    to="/"
                     variant="contained"
-            onClick={() => {
-              resetLocalStorage();
-            }}
                   >
+                  
                     กลับ
            </Button>
 
