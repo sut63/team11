@@ -1462,7 +1462,7 @@ export class DefaultApi extends runtime.BaseAPI {
 
     /**
      * get book by ID
-     * Get a book entity by ID
+     * Get a book entity bygo mod  ID
      */
     async getBookRaw(requestParameters: GetBookRequest): Promise<runtime.ApiResponse<EntBook>> {
         if (requestParameters.id === null || requestParameters.id === undefined) {
@@ -1485,7 +1485,7 @@ export class DefaultApi extends runtime.BaseAPI {
 
     /**
      * get book by ID
-     * Get a book entity by ID
+     * Get a book entity bygo mod  ID
      */
     async getBook(requestParameters: GetBookRequest): Promise<EntBook> {
         const response = await this.getBookRaw(requestParameters);

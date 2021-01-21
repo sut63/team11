@@ -30,6 +30,18 @@ export interface ControllersBook {
      * @type {string}
      * @memberof ControllersBook
      */
+    barCode?: string;
+    /**
+     * 
+     * @type {number}
+     * @memberof ControllersBook
+     */
+    bookPage?: number;
+    /**
+     * 
+     * @type {string}
+     * @memberof ControllersBook
+     */
     bookname?: string;
     /**
      * 
@@ -56,6 +68,8 @@ export function ControllersBookFromJSONTyped(json: any, ignoreDiscriminator: boo
     return {
         
         'author': !exists(json, 'author') ? undefined : json['author'],
+        'barCode': !exists(json, 'barCode') ? undefined : json['barCode'],
+        'bookPage': !exists(json, 'bookPage') ? undefined : json['bookPage'],
         'bookname': !exists(json, 'bookname') ? undefined : json['bookname'],
         'category': !exists(json, 'category') ? undefined : json['category'],
         'userid': !exists(json, 'userid') ? undefined : json['userid'],
@@ -72,6 +86,8 @@ export function ControllersBookToJSON(value?: ControllersBook | null): any {
     return {
         
         'author': value.author,
+        'barCode': value.barCode,
+        'bookPage': value.bookPage,
         'bookname': value.bookname,
         'category': value.category,
         'userid': value.userid,

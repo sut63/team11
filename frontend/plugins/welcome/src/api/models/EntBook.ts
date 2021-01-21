@@ -27,11 +27,23 @@ import {
  */
 export interface EntBook {
     /**
+     * Barcode holds the value of the "Barcode" field.
+     * @type {string}
+     * @memberof EntBook
+     */
+    barcode?: string;
+    /**
      * BookName holds the value of the "BookName" field.
      * @type {string}
      * @memberof EntBook
      */
     bookName?: string;
+    /**
+     * BookPage holds the value of the "BookPage" field.
+     * @type {number}
+     * @memberof EntBook
+     */
+    bookPage?: number;
     /**
      * 
      * @type {number}
@@ -80,7 +92,9 @@ export function EntBookFromJSONTyped(json: any, ignoreDiscriminator: boolean): E
     }
     return {
         
+        'barcode': !exists(json, 'Barcode') ? undefined : json['Barcode'],
         'bookName': !exists(json, 'BookName') ? undefined : json['BookName'],
+        'bookPage': !exists(json, 'BookPage') ? undefined : json['BookPage'],
         'authorID': !exists(json, 'author_ID') ? undefined : json['author_ID'],
         'categoryId': !exists(json, 'category_id') ? undefined : json['category_id'],
         'edges': !exists(json, 'edges') ? undefined : EntBookEdgesFromJSON(json['edges']),
@@ -99,7 +113,9 @@ export function EntBookToJSON(value?: EntBook | null): any {
     }
     return {
         
+        'Barcode': value.barcode,
         'BookName': value.bookName,
+        'BookPage': value.bookPage,
         'author_ID': value.authorID,
         'category_id': value.categoryId,
         'edges': EntBookEdgesToJSON(value.edges),
