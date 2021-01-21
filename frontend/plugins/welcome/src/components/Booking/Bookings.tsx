@@ -192,13 +192,13 @@ export default function Create() {
   const checkCaseSaveError = (field: string) => {
     switch(field) {
       case 'PHONE_NUMBER':
-        setAlertMessage("หมายเลขโทรศัพท์จะต้องขึ้นต้นด้วย 06,08,09 และตามด้วยเลข 0-9 อีก 8 ตัว");
+        setAlertMessage("error ข้อมูล field phone_number ผิด");
         return;
       case 'USER_NUMBER':
-        setAlertMessage("จำนวนผู้ใช้ต้อง ตั้งแต่ 1-6 คน");
+        setAlertMessage("error ข้อมูล field user_number ผิด");
         return;
       case 'BORROW_ITEM':
-        setAlertMessage("จำนวน HeadSet ต้อง ตั้งแต่ 1-6 ชิ้น");
+        setAlertMessage("error ข้อมูล field borrow_item ผิด");
         return;
       default:
         setAlertMessage("บันทึกข้อมูลไม่สำเร็จ");
@@ -317,7 +317,7 @@ export default function Create() {
                   <Select
                     disabled={true}
                     labelId="demo-simple-select-required-label"
-                    id="demo-simple-select-required"
+                    id="library_member"
                     value={userID}
                     className={classes.selectEmpty}
                     style={{ width: 300 }}
@@ -387,7 +387,7 @@ export default function Create() {
                         <Alert severity="success" style={{ width: 400 }} onClose={() => { setStatus(false); window.location.reload(false);}  }>
                           <AlertTitle>Success</AlertTitle>
                           <div>
-                            ทำการบันทึกข้อมูลการจองสำเร็จ — <strong>🎉</strong>
+                          บันทึกข้อมูลสำเร็จ — <strong>🎉</strong>
                           </div>
                           <br />
                         </Alert>
