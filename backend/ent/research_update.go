@@ -51,6 +51,32 @@ func (ru *ResearchUpdate) SetNillableDATE(t *time.Time) *ResearchUpdate {
 	return ru
 }
 
+// SetPAGENUMBER sets the PAGE_NUMBER field.
+func (ru *ResearchUpdate) SetPAGENUMBER(i int) *ResearchUpdate {
+	ru.mutation.ResetPAGENUMBER()
+	ru.mutation.SetPAGENUMBER(i)
+	return ru
+}
+
+// AddPAGENUMBER adds i to PAGE_NUMBER.
+func (ru *ResearchUpdate) AddPAGENUMBER(i int) *ResearchUpdate {
+	ru.mutation.AddPAGENUMBER(i)
+	return ru
+}
+
+// SetYEARNUMBER sets the YEAR_NUMBER field.
+func (ru *ResearchUpdate) SetYEARNUMBER(i int) *ResearchUpdate {
+	ru.mutation.ResetYEARNUMBER()
+	ru.mutation.SetYEARNUMBER(i)
+	return ru
+}
+
+// AddYEARNUMBER adds i to YEAR_NUMBER.
+func (ru *ResearchUpdate) AddYEARNUMBER(i int) *ResearchUpdate {
+	ru.mutation.AddYEARNUMBER(i)
+	return ru
+}
+
 // SetRegisterID sets the register edge to User by id.
 func (ru *ResearchUpdate) SetRegisterID(id int) *ResearchUpdate {
 	ru.mutation.SetRegisterID(id)
@@ -138,6 +164,16 @@ func (ru *ResearchUpdate) Save(ctx context.Context) (int, error) {
 			return 0, &ValidationError{Name: "DOC_NAME", err: fmt.Errorf("ent: validator failed for field \"DOC_NAME\": %w", err)}
 		}
 	}
+	if v, ok := ru.mutation.PAGENUMBER(); ok {
+		if err := research.PAGENUMBERValidator(v); err != nil {
+			return 0, &ValidationError{Name: "PAGE_NUMBER", err: fmt.Errorf("ent: validator failed for field \"PAGE_NUMBER\": %w", err)}
+		}
+	}
+	if v, ok := ru.mutation.YEARNUMBER(); ok {
+		if err := research.YEARNUMBERValidator(v); err != nil {
+			return 0, &ValidationError{Name: "YEAR_NUMBER", err: fmt.Errorf("ent: validator failed for field \"YEAR_NUMBER\": %w", err)}
+		}
+	}
 
 	var (
 		err      error
@@ -218,6 +254,34 @@ func (ru *ResearchUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Type:   field.TypeTime,
 			Value:  value,
 			Column: research.FieldDATE,
+		})
+	}
+	if value, ok := ru.mutation.PAGENUMBER(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeInt,
+			Value:  value,
+			Column: research.FieldPAGENUMBER,
+		})
+	}
+	if value, ok := ru.mutation.AddedPAGENUMBER(); ok {
+		_spec.Fields.Add = append(_spec.Fields.Add, &sqlgraph.FieldSpec{
+			Type:   field.TypeInt,
+			Value:  value,
+			Column: research.FieldPAGENUMBER,
+		})
+	}
+	if value, ok := ru.mutation.YEARNUMBER(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeInt,
+			Value:  value,
+			Column: research.FieldYEARNUMBER,
+		})
+	}
+	if value, ok := ru.mutation.AddedYEARNUMBER(); ok {
+		_spec.Fields.Add = append(_spec.Fields.Add, &sqlgraph.FieldSpec{
+			Type:   field.TypeInt,
+			Value:  value,
+			Column: research.FieldYEARNUMBER,
 		})
 	}
 	if ru.mutation.RegisterCleared() {
@@ -363,6 +427,32 @@ func (ruo *ResearchUpdateOne) SetNillableDATE(t *time.Time) *ResearchUpdateOne {
 	return ruo
 }
 
+// SetPAGENUMBER sets the PAGE_NUMBER field.
+func (ruo *ResearchUpdateOne) SetPAGENUMBER(i int) *ResearchUpdateOne {
+	ruo.mutation.ResetPAGENUMBER()
+	ruo.mutation.SetPAGENUMBER(i)
+	return ruo
+}
+
+// AddPAGENUMBER adds i to PAGE_NUMBER.
+func (ruo *ResearchUpdateOne) AddPAGENUMBER(i int) *ResearchUpdateOne {
+	ruo.mutation.AddPAGENUMBER(i)
+	return ruo
+}
+
+// SetYEARNUMBER sets the YEAR_NUMBER field.
+func (ruo *ResearchUpdateOne) SetYEARNUMBER(i int) *ResearchUpdateOne {
+	ruo.mutation.ResetYEARNUMBER()
+	ruo.mutation.SetYEARNUMBER(i)
+	return ruo
+}
+
+// AddYEARNUMBER adds i to YEAR_NUMBER.
+func (ruo *ResearchUpdateOne) AddYEARNUMBER(i int) *ResearchUpdateOne {
+	ruo.mutation.AddYEARNUMBER(i)
+	return ruo
+}
+
 // SetRegisterID sets the register edge to User by id.
 func (ruo *ResearchUpdateOne) SetRegisterID(id int) *ResearchUpdateOne {
 	ruo.mutation.SetRegisterID(id)
@@ -450,6 +540,16 @@ func (ruo *ResearchUpdateOne) Save(ctx context.Context) (*Research, error) {
 			return nil, &ValidationError{Name: "DOC_NAME", err: fmt.Errorf("ent: validator failed for field \"DOC_NAME\": %w", err)}
 		}
 	}
+	if v, ok := ruo.mutation.PAGENUMBER(); ok {
+		if err := research.PAGENUMBERValidator(v); err != nil {
+			return nil, &ValidationError{Name: "PAGE_NUMBER", err: fmt.Errorf("ent: validator failed for field \"PAGE_NUMBER\": %w", err)}
+		}
+	}
+	if v, ok := ruo.mutation.YEARNUMBER(); ok {
+		if err := research.YEARNUMBERValidator(v); err != nil {
+			return nil, &ValidationError{Name: "YEAR_NUMBER", err: fmt.Errorf("ent: validator failed for field \"YEAR_NUMBER\": %w", err)}
+		}
+	}
 
 	var (
 		err  error
@@ -528,6 +628,34 @@ func (ruo *ResearchUpdateOne) sqlSave(ctx context.Context) (r *Research, err err
 			Type:   field.TypeTime,
 			Value:  value,
 			Column: research.FieldDATE,
+		})
+	}
+	if value, ok := ruo.mutation.PAGENUMBER(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeInt,
+			Value:  value,
+			Column: research.FieldPAGENUMBER,
+		})
+	}
+	if value, ok := ruo.mutation.AddedPAGENUMBER(); ok {
+		_spec.Fields.Add = append(_spec.Fields.Add, &sqlgraph.FieldSpec{
+			Type:   field.TypeInt,
+			Value:  value,
+			Column: research.FieldPAGENUMBER,
+		})
+	}
+	if value, ok := ruo.mutation.YEARNUMBER(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeInt,
+			Value:  value,
+			Column: research.FieldYEARNUMBER,
+		})
+	}
+	if value, ok := ruo.mutation.AddedYEARNUMBER(); ok {
+		_spec.Fields.Add = append(_spec.Fields.Add, &sqlgraph.FieldSpec{
+			Type:   field.TypeInt,
+			Value:  value,
+			Column: research.FieldYEARNUMBER,
 		})
 	}
 	if ruo.mutation.RegisterCleared() {

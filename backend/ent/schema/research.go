@@ -1,6 +1,8 @@
 package schema
 
 import (
+	"errors"
+	"regexp"
 	"time"
 
 	"github.com/facebookincubator/ent"
@@ -16,8 +18,18 @@ type Research struct {
 // Fields of the Research.
 func (Research) Fields() []ent.Field {
 	return []ent.Field{
-		field.String("DOC_NAME").NotEmpty(),
+		field.String("DOC_NAME").
+			Validate(func(s string) error {
+				match, _ := regexp.Match("[?+=-_!@#$%^&*<>:;.]", []byte(s))
+				if match {
+					return errors.New("มีตัวเลขหรืออักษรพิเศษ")
+				}
+				return nil
+			}).
+			NotEmpty(),
 		field.Time("DATE").Default(time.Now),
+		field.Int("PAGE_NUMBER").Min(1),
+		field.Int("YEAR_NUMBER").Range(1000, 2999),
 	}
 }
 

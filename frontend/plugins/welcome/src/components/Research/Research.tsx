@@ -1,5 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
+import SaveAltIcon from '@material-ui/icons/SaveAlt';
+
+
 import {
   Content,
   Header,
@@ -12,16 +15,19 @@ import { makeStyles, Theme, createStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import FormControl from '@material-ui/core/FormControl';
-import { Alert } from '@material-ui/lab';
+import { Alert, AlertTitle } from '@material-ui/lab';
 import { DefaultApi } from '../../api/apis';
 import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
 import Select from '@material-ui/core/Select';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 //เรียกentมาใช้
-import { EntUser } from '../../api/models/EntUser';
-import { EntAuthor } from '../../api/models/EntAuthor'; 
-import { EntResearchtype } from '../../api/models/EntResearchtype'; 
+import {
+  EntAuthor,
+  EntResearchtype,
+  EntUser,
+} from '../../api/models/';
+
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -51,8 +57,32 @@ const useStyles = makeStyles((theme: Theme) =>
     button: {
       margin: theme.spacing(1),
     },
+    selectEmpty: {
+      marginTop: theme.spacing(2),
+    },
   }),
 );
+
+interface researchField {
+  /**
+     * 
+     * @type {string}
+     * @memberof researchField
+     */
+    docname?: string;
+  /**
+     * 
+     * @type {number}
+     * @memberof researchField
+     */
+    pagenumber?: number;
+  /**
+     * 
+     * @type {number}
+     * @memberof researchField
+     */
+    yearnumber?: number;
+}
 
 export default function Create() {
   const classes = useStyles();
@@ -70,11 +100,11 @@ export default function Create() {
   const [researchtypeid, setResearchtype] = useState(Number);
 
   const [datetime, setdatetime] = useState(String);
+  const [researchField, setResearch] = useState<Partial<researchField>>({});
   const [loading, setLoading] = useState(true);
   const [status, setStatus] = useState(false);
   const [alert, setAlert] = useState(true);
 
-  const [title, setTitle] = useState(String);
   const idString = JSON.parse(String(localStorage.getItem("userID")));
   const idInt = parseInt(idString);
   //function
@@ -106,54 +136,123 @@ export default function Create() {
 
   }, [loading]);
 
-  const handleTitleChange = (event: any) => {
-    setTitle(event.target.value as string);
+  const [docNameError, setDOCNAMEError] = useState('');
+  const [pageNumberError, setPAGENUMBERError] = useState('');
+  const [yearNumberError, setYEARNUMBERError] = useState('');
+  const [alertMessage, setAlertMessage] = useState('');
+
+  const handleChange = (event: React.ChangeEvent<{ id?: string; value: any }>) => {
+    const id = event.target.id as keyof typeof Create;
+    const { value } = event.target;
+    const validateValue = value.toString()
+    checkPattern(id, validateValue)
+    setResearch({ ...researchField, [id]: value });
   };
+
+  const validateDOCNAME = (val: string) => {
+    return val.match("^[0-9a-zA-Zก-๙]+$");
+  }
+  const validatePAGENUMBER = (val: number) => {
+    return val < 1 ? false : true
+  }
+  const validateYEARNUMBERE = (val: number) => {
+    return val > 2999  ? false : true && val < 1000  ? false : true
+  }
+
+  const checkPattern = (id: string, value: any) => {
+    console.log(value);
+    switch (id) {
+      case 'docname':
+        validateDOCNAME(value) ? setDOCNAMEError('') : setDOCNAMEError('กรุณากรอกชื่อเรื่อง (ชื่อเรื่องห้ามมีตัวอักษรพิเศษ)');
+        return;
+      case 'pagenumber':
+        validatePAGENUMBER(value) ? setPAGENUMBERError('') : setPAGENUMBERError('กรุณากรอกจำนวนหน้า (ห้ามเป็น 0)');
+        return;
+      case 'yearnumber':
+        validateYEARNUMBERE(value) ? setYEARNUMBERError('') : setYEARNUMBERError('กรุณากรอกปีที่พิมพ์ (ให้มากกว่าหรือเท่ากับ 1000 เเต่ไม่เกิน 3000 ปีพ.ศ.)');
+        return;
+      default:
+        return;
+    }
+  }
+
+  const checkCaseSaveError = (field: string) => {
+    switch(field) {
+      case 'DOC_NAME':
+        setAlertMessage("error ข้อมูล field docname ผิด");
+        return;
+      case 'PAGE_NUMBER':
+        setAlertMessage("error ข้อมูล field pagenumber ผิด");
+        return;
+      case 'YEAR_NUMBER':
+        setAlertMessage("error ข้อมูล field yearnumber ผิด");
+        return;
+      default:
+        setAlertMessage("บันทึกข้อมูลไม่สำเร็จ");
+        return;
+    }
+  }
+
+
+
 
   const handledatetimeChange = (event: any) => {
     setdatetime(event.target.value as string);
   };
-  
+
   const handleAuthorchange = (event: React.ChangeEvent<{ value: unknown }>) => {
     setAuthor(event.target.value as number);
   };
 
   const handleResearchtypechange = (event: React.ChangeEvent<{ value: unknown }>) => {
-    setResearchtype(event.target.value as number);  
+    setResearchtype(event.target.value as number);
   };
 
+
   const createResearch = async () => {
-    if ((title != null) && (title != "") &&(datetime != null) && (datetime != "") && (authorid != null) && (researchtypeid != null)) {
-      const research = {
+    
+          const research = {
         register: userid,
         myDoc: authorid,
         docType: researchtypeid,
-        docname: title,
+        docname: String(researchField.docname),
+        pagenumber:Number(researchField.pagenumber),
+        yearnumber:Number(researchField.yearnumber),
         date: datetime + ":00+07:00",
       };
-      console.log(research);
-      const res: any = await api.createResearch({ research: research });
-      setStatus(true);
-      if (res.id != '') {
-        setAlert(true);
-        window.location.reload(false);
-      }
-    } else {
-      setAlert(false);
-      setStatus(true);
+
+      const apiUrl = 'http://localhost:8080/api/v1/researches';
+    const requestOptions = {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(research),
+    };
+
+    fetch(apiUrl, requestOptions)
+      .then(response => response.json())
+      .then(data => {
+        console.log(data);
+        if (data.status === true) {
+          setStatus(true);
+          setAlert(true);
+        } else {
+          setStatus(true);
+          setAlert(false);
+          checkCaseSaveError(data.error.Name)
+        }
+      });
+      const timer = setTimeout(() => {
+        setStatus(false);
+        //window.location.reload(false);
+      }, 1000000000);
+    };
+    const resetLocalStorage = async () => {
+      localStorage.setItem("userID", JSON.stringify(null))
+      localStorage.setItem("role", JSON.stringify(null))
+      localStorage.setItem("valid", JSON.stringify(null))
+      localStorage.setItem("userName", JSON.stringify(null))
+      window.location.href = "/"
     }
-    const timer = setTimeout(() => {
-      setStatus(false);
-    }, 5000);
-  };
-  
-  const resetLocalStorage = async () => {
-    localStorage.setItem("userID", JSON.stringify(null))
-    localStorage.setItem("role", JSON.stringify(null))
-    localStorage.setItem("valid", JSON.stringify(null))
-    localStorage.setItem("userName", JSON.stringify(null))
-    window.location.href = "/"
-  }
 
   return (
     <Page theme={pageTheme.home}>
@@ -175,22 +274,7 @@ export default function Create() {
       </Header>
 
       <Content>
-        <ContentHeader title="เพิ่มข้อมูลงานวิจัยและฐานข้อมูลออนไลน์">
-
-          {status ? (
-            <div>
-              {alert ? (
-                <Alert severity="success">
-                  เพิ่มบันทึกเรียบร้อย!
-                </Alert>
-              ) : (
-                  <Alert severity="warning" style={{ marginTop: 20 }}>
-                    บันทึกไม่สำเร็จกรอกข้อมูลให้ครบ
-                  </Alert>
-                )}
-            </div>
-          ) : null}
-        </ContentHeader>
+        <ContentHeader title="เพิ่มข้อมูลงานวิจัยและฐานข้อมูลออนไลน์">        </ContentHeader>
 
         <div><center>
           <AccountCircle fontSize="large" className={classes.large} /><br></br>
@@ -203,19 +287,52 @@ export default function Create() {
         <div className={classes.root}>
           <form noValidate autoComplete="off">
 
-            <div className={classes.paper}><strong>ชื่อหนังสือ</strong></div>
-            <TextField className={classes.textField}
-              style={{ width: 400, marginLeft: 20, marginRight: -10 }}
-              id="title"
-              label=""
-              variant="standard"
-              color="secondary"
-              type="string"
-              size="medium"
-              value={title}
-              onChange={handleTitleChange}
-            />
+          <div>
+            <FormControl required className={classes.formControl}>
+                <InputLabel id="demo-simple-select-required-label">Library</InputLabel>
+                <Select
+                  disabled={true}
+                  labelId="demo-simple-select-required-label"
+                  id="demo-simple-select-required"
+                  value={userid || ''}
+                  className={classes.selectEmpty}
+                  style={{ width: 200, marginLeft: 30, marginRight: -10 }}
+                >
+                  {users.map((item: EntUser) => (
+                    <MenuItem value={item.id}>{item.uSEREMAIL}</MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+            </div>
 
+            <div className={classes.paper}><strong>ชื่องานวิจัย</strong></div>
+            <FormControl required className={classes.formControl}>
+                  <TextField style={{ width: 300, marginLeft: 30, marginRight: -10 }} error={docNameError ? true : false} id="docname"
+                    helperText={docNameError} onChange={handleChange} label="ชื่องานวิจัย*"
+                    value={researchField.docname || ''} />
+                </FormControl>
+            
+
+            <div className={classes.paper}><strong>จำนวนหน้า</strong></div>
+            <form className={classes.root} noValidate autoComplete="off">
+            <FormControl required className={classes.formControl}>
+                  <TextField style={{ width: 150 }} error={pageNumberError ? true : false} id="pagenumber"
+                    helperText={pageNumberError} type="number" InputProps={{ inputProps: { min: 1, max: 6 } }}
+                    onChange={handleChange} label="จำนวนหน้า"
+                    value={researchField.pagenumber} />
+                </FormControl>
+            </form>
+
+            <div className={classes.paper}><strong>ปีที่พิมพ์</strong></div>
+            <form className={classes.root} noValidate autoComplete="off">
+            <FormControl required className={classes.formControl}>
+                  <TextField style={{ width: 150 }} error={yearNumberError ? true : false} id="yearnumber"
+                    helperText={yearNumberError} type="number" InputProps={{ inputProps: { min: 1, max: 6 } }}
+                    onChange={handleChange} label="ปีที่พิมพ์ (พ.ศ.)"
+                    value={researchField.yearnumber} />
+                </FormControl>
+            </form>
+            
             <div>
               <FormControl
                 className={classes.margin}
@@ -284,14 +401,21 @@ export default function Create() {
               >
                 ยืนยันการบันทึก
              </Button>
-              <Button
-                style={{ marginLeft: 20 }}
-                component={RouterLink}
-                to="/"
-                variant="contained"
-              >
-                ย้อนกลับ
-             </Button>
+             <div>
+             {status ? (
+            <div>
+              {alert ? (
+                <Alert severity="success">
+                  เพิ่มบันทึกเรียบร้อย!
+                </Alert>
+              ) : (
+                  <Alert severity="warning" style={{ marginTop: 20 }}>
+                    {alertMessage}
+                  </Alert>
+                )}
+            </div>
+          ) : null}
+                    </div>
             </div>
           </form>
         </div>

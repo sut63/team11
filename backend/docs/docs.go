@@ -3617,7 +3617,13 @@ var doc = `{
                 "myDoc": {
                     "type": "integer"
                 },
+                "pagenumber": {
+                    "type": "integer"
+                },
                 "register": {
+                    "type": "integer"
+                },
+                "yearnumber": {
                     "type": "integer"
                 }
             }
@@ -4082,6 +4088,14 @@ var doc = `{
                 "DOC_NAME": {
                     "description": "DOCNAME holds the value of the \"DOC_NAME\" field.",
                     "type": "string"
+                },
+                "PAGE_NUMBER": {
+                    "description": "PAGENUMBER holds the value of the \"PAGE_NUMBER\" field.",
+                    "type": "integer"
+                },
+                "YEAR_NUMBER": {
+                    "description": "YEARNUMBER holds the value of the \"YEAR_NUMBER\" field.",
+                    "type": "integer"
                 },
                 "edges": {
                     "description": "Edges holds the relations/edges for other nodes in the graph.\nThe values are being populated by the ResearchQuery when eager-loading is set.",

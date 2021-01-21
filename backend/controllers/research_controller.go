@@ -26,6 +26,8 @@ type Research struct {
     MyDoc    int
     DocType  int
     DOCNAME  string
+    PAGENUMBER int
+    YEARNUMBER int
     DATE     string
 }
 
@@ -88,16 +90,23 @@ func (ctl *ResearchController) CreateResearch(c *gin.Context) {
         SetMyDoc(a).
         SetDocType(rt).
         SetDOCNAME(obj.DOCNAME).
+        SetPAGENUMBER(obj.PAGENUMBER).
+        SetYEARNUMBER(obj.YEARNUMBER).
         SetDATE(time).
         Save(context.Background())
-    if err != nil {
-        c.JSON(400, gin.H{
-            "error": "saving failed",
+        if err != nil {
+            fmt.Println(err)
+            c.JSON(400, gin.H{
+                "status": false,
+                "error":  err,
+            })
+            return
+        }
+    
+        c.JSON(200, gin.H{
+            "status": true,
+            "data":   r,
         })
-        return
-    }
-
-    c.JSON(200, r)
 }
 
 // GetResearch handles GET requests to retrieve a research entity

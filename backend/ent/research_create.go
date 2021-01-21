@@ -43,6 +43,18 @@ func (rc *ResearchCreate) SetNillableDATE(t *time.Time) *ResearchCreate {
 	return rc
 }
 
+// SetPAGENUMBER sets the PAGE_NUMBER field.
+func (rc *ResearchCreate) SetPAGENUMBER(i int) *ResearchCreate {
+	rc.mutation.SetPAGENUMBER(i)
+	return rc
+}
+
+// SetYEARNUMBER sets the YEAR_NUMBER field.
+func (rc *ResearchCreate) SetYEARNUMBER(i int) *ResearchCreate {
+	rc.mutation.SetYEARNUMBER(i)
+	return rc
+}
+
 // SetRegisterID sets the register edge to User by id.
 func (rc *ResearchCreate) SetRegisterID(id int) *ResearchCreate {
 	rc.mutation.SetRegisterID(id)
@@ -119,6 +131,22 @@ func (rc *ResearchCreate) Save(ctx context.Context) (*Research, error) {
 		v := research.DefaultDATE()
 		rc.mutation.SetDATE(v)
 	}
+	if _, ok := rc.mutation.PAGENUMBER(); !ok {
+		return nil, &ValidationError{Name: "PAGE_NUMBER", err: errors.New("ent: missing required field \"PAGE_NUMBER\"")}
+	}
+	if v, ok := rc.mutation.PAGENUMBER(); ok {
+		if err := research.PAGENUMBERValidator(v); err != nil {
+			return nil, &ValidationError{Name: "PAGE_NUMBER", err: fmt.Errorf("ent: validator failed for field \"PAGE_NUMBER\": %w", err)}
+		}
+	}
+	if _, ok := rc.mutation.YEARNUMBER(); !ok {
+		return nil, &ValidationError{Name: "YEAR_NUMBER", err: errors.New("ent: missing required field \"YEAR_NUMBER\"")}
+	}
+	if v, ok := rc.mutation.YEARNUMBER(); ok {
+		if err := research.YEARNUMBERValidator(v); err != nil {
+			return nil, &ValidationError{Name: "YEAR_NUMBER", err: fmt.Errorf("ent: validator failed for field \"YEAR_NUMBER\": %w", err)}
+		}
+	}
 	var (
 		err  error
 		node *Research
@@ -194,6 +222,22 @@ func (rc *ResearchCreate) createSpec() (*Research, *sqlgraph.CreateSpec) {
 			Column: research.FieldDATE,
 		})
 		r.DATE = value
+	}
+	if value, ok := rc.mutation.PAGENUMBER(); ok {
+		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
+			Type:   field.TypeInt,
+			Value:  value,
+			Column: research.FieldPAGENUMBER,
+		})
+		r.PAGENUMBER = value
+	}
+	if value, ok := rc.mutation.YEARNUMBER(); ok {
+		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
+			Type:   field.TypeInt,
+			Value:  value,
+			Column: research.FieldYEARNUMBER,
+		})
+		r.YEARNUMBER = value
 	}
 	if nodes := rc.mutation.RegisterIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{

@@ -23,6 +23,10 @@ type Research struct {
 	DOCNAME string `json:"DOC_NAME,omitempty"`
 	// DATE holds the value of the "DATE" field.
 	DATE time.Time `json:"DATE,omitempty"`
+	// PAGENUMBER holds the value of the "PAGE_NUMBER" field.
+	PAGENUMBER int `json:"PAGE_NUMBER,omitempty"`
+	// YEARNUMBER holds the value of the "YEAR_NUMBER" field.
+	YEARNUMBER int `json:"YEAR_NUMBER,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the ResearchQuery when eager-loading is set.
 	Edges    ResearchEdges `json:"edges"`
@@ -92,6 +96,8 @@ func (*Research) scanValues() []interface{} {
 		&sql.NullInt64{},  // id
 		&sql.NullString{}, // DOC_NAME
 		&sql.NullTime{},   // DATE
+		&sql.NullInt64{},  // PAGE_NUMBER
+		&sql.NullInt64{},  // YEAR_NUMBER
 	}
 }
 
@@ -126,7 +132,17 @@ func (r *Research) assignValues(values ...interface{}) error {
 	} else if value.Valid {
 		r.DATE = value.Time
 	}
-	values = values[2:]
+	if value, ok := values[2].(*sql.NullInt64); !ok {
+		return fmt.Errorf("unexpected type %T for field PAGE_NUMBER", values[2])
+	} else if value.Valid {
+		r.PAGENUMBER = int(value.Int64)
+	}
+	if value, ok := values[3].(*sql.NullInt64); !ok {
+		return fmt.Errorf("unexpected type %T for field YEAR_NUMBER", values[3])
+	} else if value.Valid {
+		r.YEARNUMBER = int(value.Int64)
+	}
+	values = values[4:]
 	if len(values) == len(research.ForeignKeys) {
 		if value, ok := values[0].(*sql.NullInt64); !ok {
 			return fmt.Errorf("unexpected type %T for edge-field OWNER_ID", value)
@@ -192,6 +208,10 @@ func (r *Research) String() string {
 	builder.WriteString(r.DOCNAME)
 	builder.WriteString(", DATE=")
 	builder.WriteString(r.DATE.Format(time.ANSIC))
+	builder.WriteString(", PAGE_NUMBER=")
+	builder.WriteString(fmt.Sprintf("%v", r.PAGENUMBER))
+	builder.WriteString(", YEAR_NUMBER=")
+	builder.WriteString(fmt.Sprintf("%v", r.YEARNUMBER))
 	builder.WriteByte(')')
 	return builder.String()
 }
