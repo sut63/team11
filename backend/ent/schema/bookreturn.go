@@ -19,6 +19,7 @@ func (Bookreturn) Fields() []ent.Field {
 	return []ent.Field{
 		field.Time("RETURN_TIME"),
 		field.Int("DAMAGED_POINT").Range(0, 10),
+		
 		field.String("DAMAGED_POINTNAME").Validate(func(s string) error {
 			match, _ := regexp.MatchString("^[a-zA-Z]+$", s)
 			if !match {
