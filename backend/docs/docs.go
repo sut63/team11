@@ -3566,8 +3566,17 @@ var doc = `{
                 "bookborrowID": {
                     "type": "integer"
                 },
+                "damagedPoint": {
+                    "type": "integer"
+                },
+                "damagedPointName": {
+                    "type": "string"
+                },
                 "locationID": {
                     "type": "integer"
+                },
+                "lost": {
+                    "type": "string"
                 },
                 "returnTime": {
                     "type": "string"
@@ -3859,6 +3868,18 @@ var doc = `{
         "ent.Bookreturn": {
             "type": "object",
             "properties": {
+                "DAMAGED_POINT": {
+                    "description": "DAMAGEDPOINT holds the value of the \"DAMAGED_POINT\" field.",
+                    "type": "integer"
+                },
+                "DAMAGED_POINTNAME": {
+                    "description": "DAMAGEDPOINTNAME holds the value of the \"DAMAGED_POINTNAME\" field.",
+                    "type": "string"
+                },
+                "LOST": {
+                    "description": "LOST holds the value of the \"LOST\" field.",
+                    "type": "string"
+                },
                 "RETURN_TIME": {
                     "description": "RETURNTIME holds the value of the \"RETURN_TIME\" field.",
                     "type": "string"

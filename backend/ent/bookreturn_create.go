@@ -29,6 +29,24 @@ func (bc *BookreturnCreate) SetRETURNTIME(t time.Time) *BookreturnCreate {
 	return bc
 }
 
+// SetDAMAGEDPOINT sets the DAMAGED_POINT field.
+func (bc *BookreturnCreate) SetDAMAGEDPOINT(i int) *BookreturnCreate {
+	bc.mutation.SetDAMAGEDPOINT(i)
+	return bc
+}
+
+// SetDAMAGEDPOINTNAME sets the DAMAGED_POINTNAME field.
+func (bc *BookreturnCreate) SetDAMAGEDPOINTNAME(s string) *BookreturnCreate {
+	bc.mutation.SetDAMAGEDPOINTNAME(s)
+	return bc
+}
+
+// SetLOST sets the LOST field.
+func (bc *BookreturnCreate) SetLOST(s string) *BookreturnCreate {
+	bc.mutation.SetLOST(s)
+	return bc
+}
+
 // SetUserID sets the user edge to User by id.
 func (bc *BookreturnCreate) SetUserID(id int) *BookreturnCreate {
 	bc.mutation.SetUserID(id)
@@ -95,6 +113,30 @@ func (bc *BookreturnCreate) Mutation() *BookreturnMutation {
 func (bc *BookreturnCreate) Save(ctx context.Context) (*Bookreturn, error) {
 	if _, ok := bc.mutation.RETURNTIME(); !ok {
 		return nil, &ValidationError{Name: "RETURN_TIME", err: errors.New("ent: missing required field \"RETURN_TIME\"")}
+	}
+	if _, ok := bc.mutation.DAMAGEDPOINT(); !ok {
+		return nil, &ValidationError{Name: "DAMAGED_POINT", err: errors.New("ent: missing required field \"DAMAGED_POINT\"")}
+	}
+	if v, ok := bc.mutation.DAMAGEDPOINT(); ok {
+		if err := bookreturn.DAMAGEDPOINTValidator(v); err != nil {
+			return nil, &ValidationError{Name: "DAMAGED_POINT", err: fmt.Errorf("ent: validator failed for field \"DAMAGED_POINT\": %w", err)}
+		}
+	}
+	if _, ok := bc.mutation.DAMAGEDPOINTNAME(); !ok {
+		return nil, &ValidationError{Name: "DAMAGED_POINTNAME", err: errors.New("ent: missing required field \"DAMAGED_POINTNAME\"")}
+	}
+	if v, ok := bc.mutation.DAMAGEDPOINTNAME(); ok {
+		if err := bookreturn.DAMAGEDPOINTNAMEValidator(v); err != nil {
+			return nil, &ValidationError{Name: "DAMAGED_POINTNAME", err: fmt.Errorf("ent: validator failed for field \"DAMAGED_POINTNAME\": %w", err)}
+		}
+	}
+	if _, ok := bc.mutation.LOST(); !ok {
+		return nil, &ValidationError{Name: "LOST", err: errors.New("ent: missing required field \"LOST\"")}
+	}
+	if v, ok := bc.mutation.LOST(); ok {
+		if err := bookreturn.LOSTValidator(v); err != nil {
+			return nil, &ValidationError{Name: "LOST", err: fmt.Errorf("ent: validator failed for field \"LOST\": %w", err)}
+		}
 	}
 	var (
 		err  error
@@ -163,6 +205,30 @@ func (bc *BookreturnCreate) createSpec() (*Bookreturn, *sqlgraph.CreateSpec) {
 			Column: bookreturn.FieldRETURNTIME,
 		})
 		b.RETURNTIME = value
+	}
+	if value, ok := bc.mutation.DAMAGEDPOINT(); ok {
+		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
+			Type:   field.TypeInt,
+			Value:  value,
+			Column: bookreturn.FieldDAMAGEDPOINT,
+		})
+		b.DAMAGEDPOINT = value
+	}
+	if value, ok := bc.mutation.DAMAGEDPOINTNAME(); ok {
+		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Value:  value,
+			Column: bookreturn.FieldDAMAGEDPOINTNAME,
+		})
+		b.DAMAGEDPOINTNAME = value
+	}
+	if value, ok := bc.mutation.LOST(); ok {
+		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Value:  value,
+			Column: bookreturn.FieldLOST,
+		})
+		b.LOST = value
 	}
 	if nodes := bc.mutation.UserIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{

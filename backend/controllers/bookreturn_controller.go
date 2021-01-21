@@ -8,10 +8,10 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/team11/app/ent"
+	"github.com/team11/app/ent/book"
 	"github.com/team11/app/ent/bookborrow"
 	"github.com/team11/app/ent/location"
 	"github.com/team11/app/ent/user"
-	"github.com/team11/app/ent/book"
 )
 
 // BookreturnController defines the struct for the bookreturn controller
@@ -22,10 +22,13 @@ type BookreturnController struct {
 
 // Bookreturn defines the struct for the bookreturn
 type Bookreturn struct {
-	UserID       int
-	LocationID   int
-	BookborrowID int
-	ReturnTime     string
+	UserID           int
+	LocationID       int
+	BookborrowID     int
+	DamagedPoint     int
+	DamagedPointName string
+	Lost             string
+	ReturnTime       string
 }
 
 // CreateBookreturn handles POST requests for adding bookreturn entities
@@ -92,15 +95,24 @@ func (ctl *BookreturnController) CreateBookreturn(c *gin.Context) {
 		SetUser(u).
 		SetLocation(l).
 		SetMustreturn(b).
+		SetDAMAGEDPOINT(obj.DamagedPoint).
+		SetDAMAGEDPOINTNAME(obj.DamagedPointName).
+		SetLOST(obj.Lost).
 		SetRETURNTIME(time).
 		Save(context.Background())
 
 	if err != nil {
+		fmt.Print(err)
 		c.JSON(400, gin.H{
-			"error": "saving failed",
+			"status": false,
+			"error":  err,
 		})
 		return
 	}
+	c.JSON(200, gin.H{
+		"status": true,
+		"data":   br,
+	})
 
 	bb, err := ctl.client.Book.
 		Query().
@@ -119,15 +131,14 @@ func (ctl *BookreturnController) CreateBookreturn(c *gin.Context) {
 		SetStatusID(1).
 		Save(context.Background())
 
-		if err != nil {
-			c.JSON(400, gin.H{
-				"error": "Update status book error",
-			})
-			return
-		}
+	if err != nil {
+		c.JSON(400, gin.H{
+			"error": "Update status book error",
+		})
+		return
+	}
 	fmt.Print(bk)
 
-	c.JSON(200, br)
 }
 
 // ListBookreturn handles request to get a list of bookreturn entities
