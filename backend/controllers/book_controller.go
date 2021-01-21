@@ -26,6 +26,8 @@ type Book struct {
 	Author   int
 	Category int
 	Bookname string
+	BarCode  string
+	BookPage int
 }
 
 // CreateBook handles POST requests for adding book entities
@@ -97,19 +99,26 @@ func (ctl *BookController) CreateBook(c *gin.Context) {
 		SetCategory(ca).
 		SetUser(u).
 		SetStatus(s).
+		SetBarcode(obj.BarCode).
+		SetBookPage(obj.BookPage).
 		Save(context.Background())
 	if err != nil {
+		fmt.Println(err)
 		c.JSON(400, gin.H{
-			"error": "saving failed",
+			"status": false,
+			"error":  err,
 		})
 		return
 	}
 
-	c.JSON(200, b)
+	c.JSON(200, gin.H{
+		"status": true,
+		"data":   b,
+	})
 }
 
 // GetBook handles GET requests to retrieve a book entity
-// @Summary Get a book entity by ID
+// @Summary Get a book entity bygo mod  ID
 // @Description get book by ID
 // @ID get-book
 // @Produce  json

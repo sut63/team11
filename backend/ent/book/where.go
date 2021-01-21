@@ -98,6 +98,20 @@ func BookName(v string) predicate.Book {
 	})
 }
 
+// Barcode applies equality check predicate on the "Barcode" field. It's identical to BarcodeEQ.
+func Barcode(v string) predicate.Book {
+	return predicate.Book(func(s *sql.Selector) {
+		s.Where(sql.EQ(s.C(FieldBarcode), v))
+	})
+}
+
+// BookPage applies equality check predicate on the "BookPage" field. It's identical to BookPageEQ.
+func BookPage(v int) predicate.Book {
+	return predicate.Book(func(s *sql.Selector) {
+		s.Where(sql.EQ(s.C(FieldBookPage), v))
+	})
+}
+
 // BookNameEQ applies the EQ predicate on the "BookName" field.
 func BookNameEQ(v string) predicate.Book {
 	return predicate.Book(func(s *sql.Selector) {
@@ -206,6 +220,193 @@ func BookNameEqualFold(v string) predicate.Book {
 func BookNameContainsFold(v string) predicate.Book {
 	return predicate.Book(func(s *sql.Selector) {
 		s.Where(sql.ContainsFold(s.C(FieldBookName), v))
+	})
+}
+
+// BarcodeEQ applies the EQ predicate on the "Barcode" field.
+func BarcodeEQ(v string) predicate.Book {
+	return predicate.Book(func(s *sql.Selector) {
+		s.Where(sql.EQ(s.C(FieldBarcode), v))
+	})
+}
+
+// BarcodeNEQ applies the NEQ predicate on the "Barcode" field.
+func BarcodeNEQ(v string) predicate.Book {
+	return predicate.Book(func(s *sql.Selector) {
+		s.Where(sql.NEQ(s.C(FieldBarcode), v))
+	})
+}
+
+// BarcodeIn applies the In predicate on the "Barcode" field.
+func BarcodeIn(vs ...string) predicate.Book {
+	v := make([]interface{}, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.Book(func(s *sql.Selector) {
+		// if not arguments were provided, append the FALSE constants,
+		// since we can't apply "IN ()". This will make this predicate falsy.
+		if len(v) == 0 {
+			s.Where(sql.False())
+			return
+		}
+		s.Where(sql.In(s.C(FieldBarcode), v...))
+	})
+}
+
+// BarcodeNotIn applies the NotIn predicate on the "Barcode" field.
+func BarcodeNotIn(vs ...string) predicate.Book {
+	v := make([]interface{}, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.Book(func(s *sql.Selector) {
+		// if not arguments were provided, append the FALSE constants,
+		// since we can't apply "IN ()". This will make this predicate falsy.
+		if len(v) == 0 {
+			s.Where(sql.False())
+			return
+		}
+		s.Where(sql.NotIn(s.C(FieldBarcode), v...))
+	})
+}
+
+// BarcodeGT applies the GT predicate on the "Barcode" field.
+func BarcodeGT(v string) predicate.Book {
+	return predicate.Book(func(s *sql.Selector) {
+		s.Where(sql.GT(s.C(FieldBarcode), v))
+	})
+}
+
+// BarcodeGTE applies the GTE predicate on the "Barcode" field.
+func BarcodeGTE(v string) predicate.Book {
+	return predicate.Book(func(s *sql.Selector) {
+		s.Where(sql.GTE(s.C(FieldBarcode), v))
+	})
+}
+
+// BarcodeLT applies the LT predicate on the "Barcode" field.
+func BarcodeLT(v string) predicate.Book {
+	return predicate.Book(func(s *sql.Selector) {
+		s.Where(sql.LT(s.C(FieldBarcode), v))
+	})
+}
+
+// BarcodeLTE applies the LTE predicate on the "Barcode" field.
+func BarcodeLTE(v string) predicate.Book {
+	return predicate.Book(func(s *sql.Selector) {
+		s.Where(sql.LTE(s.C(FieldBarcode), v))
+	})
+}
+
+// BarcodeContains applies the Contains predicate on the "Barcode" field.
+func BarcodeContains(v string) predicate.Book {
+	return predicate.Book(func(s *sql.Selector) {
+		s.Where(sql.Contains(s.C(FieldBarcode), v))
+	})
+}
+
+// BarcodeHasPrefix applies the HasPrefix predicate on the "Barcode" field.
+func BarcodeHasPrefix(v string) predicate.Book {
+	return predicate.Book(func(s *sql.Selector) {
+		s.Where(sql.HasPrefix(s.C(FieldBarcode), v))
+	})
+}
+
+// BarcodeHasSuffix applies the HasSuffix predicate on the "Barcode" field.
+func BarcodeHasSuffix(v string) predicate.Book {
+	return predicate.Book(func(s *sql.Selector) {
+		s.Where(sql.HasSuffix(s.C(FieldBarcode), v))
+	})
+}
+
+// BarcodeEqualFold applies the EqualFold predicate on the "Barcode" field.
+func BarcodeEqualFold(v string) predicate.Book {
+	return predicate.Book(func(s *sql.Selector) {
+		s.Where(sql.EqualFold(s.C(FieldBarcode), v))
+	})
+}
+
+// BarcodeContainsFold applies the ContainsFold predicate on the "Barcode" field.
+func BarcodeContainsFold(v string) predicate.Book {
+	return predicate.Book(func(s *sql.Selector) {
+		s.Where(sql.ContainsFold(s.C(FieldBarcode), v))
+	})
+}
+
+// BookPageEQ applies the EQ predicate on the "BookPage" field.
+func BookPageEQ(v int) predicate.Book {
+	return predicate.Book(func(s *sql.Selector) {
+		s.Where(sql.EQ(s.C(FieldBookPage), v))
+	})
+}
+
+// BookPageNEQ applies the NEQ predicate on the "BookPage" field.
+func BookPageNEQ(v int) predicate.Book {
+	return predicate.Book(func(s *sql.Selector) {
+		s.Where(sql.NEQ(s.C(FieldBookPage), v))
+	})
+}
+
+// BookPageIn applies the In predicate on the "BookPage" field.
+func BookPageIn(vs ...int) predicate.Book {
+	v := make([]interface{}, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.Book(func(s *sql.Selector) {
+		// if not arguments were provided, append the FALSE constants,
+		// since we can't apply "IN ()". This will make this predicate falsy.
+		if len(v) == 0 {
+			s.Where(sql.False())
+			return
+		}
+		s.Where(sql.In(s.C(FieldBookPage), v...))
+	})
+}
+
+// BookPageNotIn applies the NotIn predicate on the "BookPage" field.
+func BookPageNotIn(vs ...int) predicate.Book {
+	v := make([]interface{}, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.Book(func(s *sql.Selector) {
+		// if not arguments were provided, append the FALSE constants,
+		// since we can't apply "IN ()". This will make this predicate falsy.
+		if len(v) == 0 {
+			s.Where(sql.False())
+			return
+		}
+		s.Where(sql.NotIn(s.C(FieldBookPage), v...))
+	})
+}
+
+// BookPageGT applies the GT predicate on the "BookPage" field.
+func BookPageGT(v int) predicate.Book {
+	return predicate.Book(func(s *sql.Selector) {
+		s.Where(sql.GT(s.C(FieldBookPage), v))
+	})
+}
+
+// BookPageGTE applies the GTE predicate on the "BookPage" field.
+func BookPageGTE(v int) predicate.Book {
+	return predicate.Book(func(s *sql.Selector) {
+		s.Where(sql.GTE(s.C(FieldBookPage), v))
+	})
+}
+
+// BookPageLT applies the LT predicate on the "BookPage" field.
+func BookPageLT(v int) predicate.Book {
+	return predicate.Book(func(s *sql.Selector) {
+		s.Where(sql.LT(s.C(FieldBookPage), v))
+	})
+}
+
+// BookPageLTE applies the LTE predicate on the "BookPage" field.
+func BookPageLTE(v int) predicate.Book {
+	return predicate.Book(func(s *sql.Selector) {
+		s.Where(sql.LTE(s.C(FieldBookPage), v))
 	})
 }
 

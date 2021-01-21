@@ -4,6 +4,10 @@ definitions:
     properties:
       author:
         type: integer
+      barCode:
+        type: string
+      bookPage:
+        type: integer
       bookname:
         type: string
       category:
@@ -123,9 +127,15 @@ definitions:
     type: object
   ent.Book:
     properties:
+      Barcode:
+        description: Barcode holds the value of the "Barcode" field.
+        type: string
       BookName:
         description: BookName holds the value of the "BookName" field.
         type: string
+      BookPage:
+        description: BookPage holds the value of the "BookPage" field.
+        type: integer
       author_ID:
         type: integer
       category_id:
@@ -1517,7 +1527,7 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/gin.H'
-      summary: Get a book entity by ID
+      summary: Get a book entity bygo mod  ID
     put:
       consumes:
       - application/json
@@ -3029,7 +3039,6 @@ securityDefinitions:
     tokenUrl: https://example.com/oauth/token
     type: oauth2
   OAuth2Application:
-    authorizationUrl: ""
     flow: application
     scopes:
       admin: ' Grants read and write access to administrative information'
@@ -3044,7 +3053,6 @@ securityDefinitions:
       write: ' Grants write access'
     type: oauth2
   OAuth2Password:
-    authorizationUrl: ""
     flow: password
     scopes:
       admin: ' Grants read and write access to administrative information'

@@ -23,7 +23,6 @@ import Select from '@material-ui/core/Select';
 import { EntUser } from '../../api/models/EntUser';
 import { EntAuthor } from '../../api/models/EntAuthor'; //-------
 import { EntCategory } from '../../api/models/EntCategory'; //-------
-import { EntBook } from '../../api/models/EntBook'; //-------
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -59,15 +58,18 @@ const useStyles = makeStyles((theme: Theme) =>
     },
   }),
 );
-
+interface addBook{
+  
+  bar_code?:  string;
+  book_page?: number;
+  book_name?: string;
+}
 export default function Create() {
   const name = JSON.parse(String(localStorage.getItem("userName")));
   const userName ="ยินดีต้อนรับ "+name
 
   const classes = useStyles();
   const api = new DefaultApi();
-
-  const [users, setUsers] = useState<EntUser[]>([]);
   //-------
   const [authors, setAuthors] = useState<EntAuthor[]>([]);
   const [categorys, setCategorys] = useState<EntCategory[]>([]);
@@ -83,7 +85,6 @@ export default function Create() {
   const [status, setStatus] = useState(false);
   const [alert, setAlert] = useState(true);
 
-  const [title, setTitle] = useState(String);
 
   const idString = JSON.parse(String(localStorage.getItem("userID")));
   const idInt = parseInt(idString);
@@ -107,20 +108,10 @@ export default function Create() {
     };
     getCategory();
 
-    const getUser = async () => {
-      const res = await api.listUser();
-      setLoading(false);
-      setUsers(res);
-    };
-    getUser();
-
     setUser(idInt);
 
   }, [loading]);
 
-  const handleTitleChange = (event: any) => {
-    setTitle(event.target.value as string);
-  };
 
   //----------------
   const handleAuthorchange = (event: React.ChangeEvent<{ value: unknown }>) => {
@@ -130,34 +121,94 @@ export default function Create() {
   const handleCategorychange = (event: React.ChangeEvent<{ value: unknown }>) => {
     setCategory(event.target.value as number);
   };
+  const [bookNameError, setBookNameError] = useState('');
+  const [barCodeError, setBarCodeError] = useState('');
+  const [bookPageError, setBookPageError] = useState('');
+  const [alertMessage, setAlertMessage] = useState('');
+  const [addBook, setAddBook] = useState<Partial<addBook>>({});
 
-  const handleUserchange = (event: React.ChangeEvent<{ value: unknown }>) => {
-    setUser(event.target.value as number);
+  const handleChange = (event: React.ChangeEvent<{ id?: string; value: any }>) => {
+    const id = event.target.id as keyof typeof Create;
+    const { value } = event.target;
+    const validateValue = value.toString()
+    checkPattern(id, validateValue)
+    setAddBook({ ...addBook, [id]: value });
   };
-
-
+  const validateBookName = (val: string) => {
+    return val.length == 0 ? false : true;
+  }
+  const validateBookPage = (val: number) => {
+    return val == 0 ? false : true
+  }
+  const validateBarCode = (val: string) => {
+    return val.match("\\d{10}") && val.length == 10;
+  }
+  const checkPattern = (id: string, value: any) => {
+    switch (id) {
+      case 'book_name':
+        validateBookName(value) ? setBookNameError('') : setBookNameError('โปรดใส่ชื่อหนังสือ');
+        return;
+      case 'book_page':
+        validateBookPage(value) ? setBookPageError('') : setBookPageError('จำนวนหน้าหนังสือต้องมากกว่า 1 หน้า');
+        return;
+      case 'bar_code':
+        validateBarCode(value) ? setBarCodeError('') : setBarCodeError('Barcode ต้องเป็นตัวเลขทั้งหมด 10 ตัว');
+        return;
+      default:
+        return;
+    }
+  }
+  const checkCaseSaveError = (field: string) => {
+    switch(field) {
+      case 'BookName':
+        setAlertMessage("error ข้อมูล field BookName ผิด");
+        return;
+      case 'Barcode':
+        setAlertMessage("error ข้อมูล field Barcode ผิด");
+        return;
+      case 'BookPage':
+        setAlertMessage("error ข้อมูล field BookPage ผิด");
+        return;
+      default:
+        setAlertMessage("บันทึกข้อมูลไม่สำเร็จ");
+        return;
+    }
+  }
   const createBook = async () => {
-    if ((title != null) && (title != "") && (authorid != null) && (categoryid != null)) {
       const book = {
         userid: userid,
         author: authorid,
         category: categoryid,
-        bookname: title,
+        bookname: addBook.book_name,
+        bookPage: Number(addBook.book_page),
+        barCode: addBook.bar_code
+
       };
-      console.log(book);
-      const res: any = await api.createBook({ book: book });
-      setStatus(true);
-      if (res.id != '') {
-        setAlert(true);
-        window.location.reload(false);
-      }
-    } else {
-      setAlert(false);
-      setStatus(true);
-    }
+      console.log(addBook)
+      console.log(book)
+      const apiUrl = 'http://localhost:8080/api/v1/books';
+    const requestOptions = {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(book),
+    };
+
+    fetch(apiUrl, requestOptions)
+      .then(response => response.json())
+      .then(data => {
+        console.log(data);
+        if (data.status === true) {
+          setStatus(true);
+          setAlert(true);
+        } else {
+          setStatus(true);
+          setAlert(false);
+          checkCaseSaveError(data.error.Name)
+        }
+      });
     const timer = setTimeout(() => {
       setStatus(false);
-    }, 4000);
+    }, 10000);
   };
 
   const resetLocalStorage = async () => {
@@ -199,7 +250,7 @@ export default function Create() {
                 </Alert>
               ) : (
                   <Alert severity="warning" style={{ marginTop: 20 }}>
-                    บันทึกไม่สำเร็จกรอกข้อมูลให้ครบ
+                    {alertMessage}
                   </Alert>
                 )}
             </div>
@@ -212,14 +263,45 @@ export default function Create() {
             <div className={classes.paper}><strong>ชื่อหนังสือ</strong></div>
             <TextField className={classes.textField}
               style={{ width: 400, marginLeft: 20, marginRight: -10 }}
-              id="BookName"
+              id="book_name"
               label=""
               variant="standard"
               color="secondary"
               type="string"
               size="medium"
-              value={title}
-              onChange={handleTitleChange}
+              error={bookNameError ? true : false}
+              helperText={bookNameError}
+              value={addBook.book_name || ''}
+              onChange={handleChange}
+            />
+            <div className={classes.paper}><strong>จำนวนหน้าหนังสือ</strong></div>
+            <TextField className={classes.textField}
+              style={{ width: 400, marginLeft: 20, marginRight: -10 }}
+              id="book_page"
+              label=""
+              variant="standard"
+              color="secondary"
+              size="medium"
+              type="number" 
+              InputProps={{ inputProps: { min: 1, max: 6 } }}
+              error={bookPageError ? true : false}
+              helperText={bookPageError}
+              value={addBook.book_page}
+              onChange={handleChange}
+            />
+            <div className={classes.paper}><strong>รหัส Barcode บนหนังสือ</strong></div>
+            <TextField className={classes.textField}
+              style={{ width: 400, marginLeft: 20, marginRight: -10 }}
+              id="bar_code"
+              label=""
+              variant="standard"
+              color="secondary"
+              type="string"
+              size="medium"
+              error={barCodeError ? true : false}
+              helperText={barCodeError}
+              value={addBook.bar_code}
+              onChange={handleChange}
             />
 
             <div>
@@ -231,7 +313,7 @@ export default function Create() {
                 <InputLabel id="author-label"></InputLabel>
                 <Select
                   labelId="author-label"
-                  id="ผู้เเต่ง"
+                  id="author"
                   value={authorid}
                   onChange={handleAuthorchange}
                   style={{ width: 400 }}
@@ -252,7 +334,7 @@ export default function Create() {
                 <InputLabel id="category-label"></InputLabel>
                 <Select
                   labelId="category-label"
-                  id="หมวดหนังสือ"
+                  id="category"
                   value={categoryid}
                   onChange={handleCategorychange}
                   style={{ width: 400 }}

@@ -30,6 +30,18 @@ func (bc *BookCreate) SetBookName(s string) *BookCreate {
 	return bc
 }
 
+// SetBarcode sets the Barcode field.
+func (bc *BookCreate) SetBarcode(s string) *BookCreate {
+	bc.mutation.SetBarcode(s)
+	return bc
+}
+
+// SetBookPage sets the BookPage field.
+func (bc *BookCreate) SetBookPage(i int) *BookCreate {
+	bc.mutation.SetBookPage(i)
+	return bc
+}
+
 // SetCategoryID sets the category edge to Category by id.
 func (bc *BookCreate) SetCategoryID(id int) *BookCreate {
 	bc.mutation.SetCategoryID(id)
@@ -136,6 +148,22 @@ func (bc *BookCreate) Save(ctx context.Context) (*Book, error) {
 			return nil, &ValidationError{Name: "BookName", err: fmt.Errorf("ent: validator failed for field \"BookName\": %w", err)}
 		}
 	}
+	if _, ok := bc.mutation.Barcode(); !ok {
+		return nil, &ValidationError{Name: "Barcode", err: errors.New("ent: missing required field \"Barcode\"")}
+	}
+	if v, ok := bc.mutation.Barcode(); ok {
+		if err := book.BarcodeValidator(v); err != nil {
+			return nil, &ValidationError{Name: "Barcode", err: fmt.Errorf("ent: validator failed for field \"Barcode\": %w", err)}
+		}
+	}
+	if _, ok := bc.mutation.BookPage(); !ok {
+		return nil, &ValidationError{Name: "BookPage", err: errors.New("ent: missing required field \"BookPage\"")}
+	}
+	if v, ok := bc.mutation.BookPage(); ok {
+		if err := book.BookPageValidator(v); err != nil {
+			return nil, &ValidationError{Name: "BookPage", err: fmt.Errorf("ent: validator failed for field \"BookPage\": %w", err)}
+		}
+	}
 	var (
 		err  error
 		node *Book
@@ -203,6 +231,22 @@ func (bc *BookCreate) createSpec() (*Book, *sqlgraph.CreateSpec) {
 			Column: book.FieldBookName,
 		})
 		b.BookName = value
+	}
+	if value, ok := bc.mutation.Barcode(); ok {
+		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Value:  value,
+			Column: book.FieldBarcode,
+		})
+		b.Barcode = value
+	}
+	if value, ok := bc.mutation.BookPage(); ok {
+		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
+			Type:   field.TypeInt,
+			Value:  value,
+			Column: book.FieldBookPage,
+		})
+		b.BookPage = value
 	}
 	if nodes := bc.mutation.CategoryIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
