@@ -152,6 +152,9 @@ var (
 	BookreturnsColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt, Increment: true},
 		{Name: "return_time", Type: field.TypeTime},
+		{Name: "damaged_point", Type: field.TypeInt},
+		{Name: "damaged_pointname", Type: field.TypeString},
+		{Name: "lost", Type: field.TypeString, Size: 5},
 		{Name: "CLIENT_ID", Type: field.TypeInt, Nullable: true},
 		{Name: "LOCATION_ID", Type: field.TypeInt, Nullable: true},
 		{Name: "USER_ID", Type: field.TypeInt, Nullable: true},
@@ -164,21 +167,21 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:  "bookreturns_bookborrows_borrowed",
-				Columns: []*schema.Column{BookreturnsColumns[2]},
+				Columns: []*schema.Column{BookreturnsColumns[5]},
 
 				RefColumns: []*schema.Column{BookborrowsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:  "bookreturns_locations_returnfrom",
-				Columns: []*schema.Column{BookreturnsColumns[3]},
+				Columns: []*schema.Column{BookreturnsColumns[6]},
 
 				RefColumns: []*schema.Column{LocationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:  "bookreturns_users_return",
-				Columns: []*schema.Column{BookreturnsColumns[4]},
+				Columns: []*schema.Column{BookreturnsColumns[7]},
 
 				RefColumns: []*schema.Column{UsersColumns[0]},
 				OnDelete:   schema.SetNull,

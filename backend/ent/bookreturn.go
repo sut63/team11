@@ -21,6 +21,12 @@ type Bookreturn struct {
 	ID int `json:"id,omitempty"`
 	// RETURNTIME holds the value of the "RETURN_TIME" field.
 	RETURNTIME time.Time `json:"RETURN_TIME,omitempty"`
+	// DAMAGEDPOINT holds the value of the "DAMAGED_POINT" field.
+	DAMAGEDPOINT int `json:"DAMAGED_POINT,omitempty"`
+	// DAMAGEDPOINTNAME holds the value of the "DAMAGED_POINTNAME" field.
+	DAMAGEDPOINTNAME string `json:"DAMAGED_POINTNAME,omitempty"`
+	// LOST holds the value of the "LOST" field.
+	LOST string `json:"LOST,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the BookreturnQuery when eager-loading is set.
 	Edges       BookreturnEdges `json:"edges"`
@@ -87,8 +93,11 @@ func (e BookreturnEdges) MustreturnOrErr() (*Bookborrow, error) {
 // scanValues returns the types for scanning values from sql.Rows.
 func (*Bookreturn) scanValues() []interface{} {
 	return []interface{}{
-		&sql.NullInt64{}, // id
-		&sql.NullTime{},  // RETURN_TIME
+		&sql.NullInt64{},  // id
+		&sql.NullTime{},   // RETURN_TIME
+		&sql.NullInt64{},  // DAMAGED_POINT
+		&sql.NullString{}, // DAMAGED_POINTNAME
+		&sql.NullString{}, // LOST
 	}
 }
 
@@ -118,7 +127,22 @@ func (b *Bookreturn) assignValues(values ...interface{}) error {
 	} else if value.Valid {
 		b.RETURNTIME = value.Time
 	}
-	values = values[1:]
+	if value, ok := values[1].(*sql.NullInt64); !ok {
+		return fmt.Errorf("unexpected type %T for field DAMAGED_POINT", values[1])
+	} else if value.Valid {
+		b.DAMAGEDPOINT = int(value.Int64)
+	}
+	if value, ok := values[2].(*sql.NullString); !ok {
+		return fmt.Errorf("unexpected type %T for field DAMAGED_POINTNAME", values[2])
+	} else if value.Valid {
+		b.DAMAGEDPOINTNAME = value.String
+	}
+	if value, ok := values[3].(*sql.NullString); !ok {
+		return fmt.Errorf("unexpected type %T for field LOST", values[3])
+	} else if value.Valid {
+		b.LOST = value.String
+	}
+	values = values[4:]
 	if len(values) == len(bookreturn.ForeignKeys) {
 		if value, ok := values[0].(*sql.NullInt64); !ok {
 			return fmt.Errorf("unexpected type %T for edge-field CLIENT_ID", value)
@@ -182,6 +206,12 @@ func (b *Bookreturn) String() string {
 	builder.WriteString(fmt.Sprintf("id=%v", b.ID))
 	builder.WriteString(", RETURN_TIME=")
 	builder.WriteString(b.RETURNTIME.Format(time.ANSIC))
+	builder.WriteString(", DAMAGED_POINT=")
+	builder.WriteString(fmt.Sprintf("%v", b.DAMAGEDPOINT))
+	builder.WriteString(", DAMAGED_POINTNAME=")
+	builder.WriteString(b.DAMAGEDPOINTNAME)
+	builder.WriteString(", LOST=")
+	builder.WriteString(b.LOST)
 	builder.WriteByte(')')
 	return builder.String()
 }

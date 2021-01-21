@@ -37,6 +37,31 @@ func (bu *BookreturnUpdate) SetRETURNTIME(t time.Time) *BookreturnUpdate {
 	return bu
 }
 
+// SetDAMAGEDPOINT sets the DAMAGED_POINT field.
+func (bu *BookreturnUpdate) SetDAMAGEDPOINT(i int) *BookreturnUpdate {
+	bu.mutation.ResetDAMAGEDPOINT()
+	bu.mutation.SetDAMAGEDPOINT(i)
+	return bu
+}
+
+// AddDAMAGEDPOINT adds i to DAMAGED_POINT.
+func (bu *BookreturnUpdate) AddDAMAGEDPOINT(i int) *BookreturnUpdate {
+	bu.mutation.AddDAMAGEDPOINT(i)
+	return bu
+}
+
+// SetDAMAGEDPOINTNAME sets the DAMAGED_POINTNAME field.
+func (bu *BookreturnUpdate) SetDAMAGEDPOINTNAME(s string) *BookreturnUpdate {
+	bu.mutation.SetDAMAGEDPOINTNAME(s)
+	return bu
+}
+
+// SetLOST sets the LOST field.
+func (bu *BookreturnUpdate) SetLOST(s string) *BookreturnUpdate {
+	bu.mutation.SetLOST(s)
+	return bu
+}
+
 // SetUserID sets the user edge to User by id.
 func (bu *BookreturnUpdate) SetUserID(id int) *BookreturnUpdate {
 	bu.mutation.SetUserID(id)
@@ -119,6 +144,21 @@ func (bu *BookreturnUpdate) ClearMustreturn() *BookreturnUpdate {
 
 // Save executes the query and returns the number of rows/vertices matched by this operation.
 func (bu *BookreturnUpdate) Save(ctx context.Context) (int, error) {
+	if v, ok := bu.mutation.DAMAGEDPOINT(); ok {
+		if err := bookreturn.DAMAGEDPOINTValidator(v); err != nil {
+			return 0, &ValidationError{Name: "DAMAGED_POINT", err: fmt.Errorf("ent: validator failed for field \"DAMAGED_POINT\": %w", err)}
+		}
+	}
+	if v, ok := bu.mutation.DAMAGEDPOINTNAME(); ok {
+		if err := bookreturn.DAMAGEDPOINTNAMEValidator(v); err != nil {
+			return 0, &ValidationError{Name: "DAMAGED_POINTNAME", err: fmt.Errorf("ent: validator failed for field \"DAMAGED_POINTNAME\": %w", err)}
+		}
+	}
+	if v, ok := bu.mutation.LOST(); ok {
+		if err := bookreturn.LOSTValidator(v); err != nil {
+			return 0, &ValidationError{Name: "LOST", err: fmt.Errorf("ent: validator failed for field \"LOST\": %w", err)}
+		}
+	}
 
 	var (
 		err      error
@@ -192,6 +232,34 @@ func (bu *BookreturnUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Type:   field.TypeTime,
 			Value:  value,
 			Column: bookreturn.FieldRETURNTIME,
+		})
+	}
+	if value, ok := bu.mutation.DAMAGEDPOINT(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeInt,
+			Value:  value,
+			Column: bookreturn.FieldDAMAGEDPOINT,
+		})
+	}
+	if value, ok := bu.mutation.AddedDAMAGEDPOINT(); ok {
+		_spec.Fields.Add = append(_spec.Fields.Add, &sqlgraph.FieldSpec{
+			Type:   field.TypeInt,
+			Value:  value,
+			Column: bookreturn.FieldDAMAGEDPOINT,
+		})
+	}
+	if value, ok := bu.mutation.DAMAGEDPOINTNAME(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Value:  value,
+			Column: bookreturn.FieldDAMAGEDPOINTNAME,
+		})
+	}
+	if value, ok := bu.mutation.LOST(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Value:  value,
+			Column: bookreturn.FieldLOST,
 		})
 	}
 	if bu.mutation.UserCleared() {
@@ -323,6 +391,31 @@ func (buo *BookreturnUpdateOne) SetRETURNTIME(t time.Time) *BookreturnUpdateOne 
 	return buo
 }
 
+// SetDAMAGEDPOINT sets the DAMAGED_POINT field.
+func (buo *BookreturnUpdateOne) SetDAMAGEDPOINT(i int) *BookreturnUpdateOne {
+	buo.mutation.ResetDAMAGEDPOINT()
+	buo.mutation.SetDAMAGEDPOINT(i)
+	return buo
+}
+
+// AddDAMAGEDPOINT adds i to DAMAGED_POINT.
+func (buo *BookreturnUpdateOne) AddDAMAGEDPOINT(i int) *BookreturnUpdateOne {
+	buo.mutation.AddDAMAGEDPOINT(i)
+	return buo
+}
+
+// SetDAMAGEDPOINTNAME sets the DAMAGED_POINTNAME field.
+func (buo *BookreturnUpdateOne) SetDAMAGEDPOINTNAME(s string) *BookreturnUpdateOne {
+	buo.mutation.SetDAMAGEDPOINTNAME(s)
+	return buo
+}
+
+// SetLOST sets the LOST field.
+func (buo *BookreturnUpdateOne) SetLOST(s string) *BookreturnUpdateOne {
+	buo.mutation.SetLOST(s)
+	return buo
+}
+
 // SetUserID sets the user edge to User by id.
 func (buo *BookreturnUpdateOne) SetUserID(id int) *BookreturnUpdateOne {
 	buo.mutation.SetUserID(id)
@@ -405,6 +498,21 @@ func (buo *BookreturnUpdateOne) ClearMustreturn() *BookreturnUpdateOne {
 
 // Save executes the query and returns the updated entity.
 func (buo *BookreturnUpdateOne) Save(ctx context.Context) (*Bookreturn, error) {
+	if v, ok := buo.mutation.DAMAGEDPOINT(); ok {
+		if err := bookreturn.DAMAGEDPOINTValidator(v); err != nil {
+			return nil, &ValidationError{Name: "DAMAGED_POINT", err: fmt.Errorf("ent: validator failed for field \"DAMAGED_POINT\": %w", err)}
+		}
+	}
+	if v, ok := buo.mutation.DAMAGEDPOINTNAME(); ok {
+		if err := bookreturn.DAMAGEDPOINTNAMEValidator(v); err != nil {
+			return nil, &ValidationError{Name: "DAMAGED_POINTNAME", err: fmt.Errorf("ent: validator failed for field \"DAMAGED_POINTNAME\": %w", err)}
+		}
+	}
+	if v, ok := buo.mutation.LOST(); ok {
+		if err := bookreturn.LOSTValidator(v); err != nil {
+			return nil, &ValidationError{Name: "LOST", err: fmt.Errorf("ent: validator failed for field \"LOST\": %w", err)}
+		}
+	}
 
 	var (
 		err  error
@@ -476,6 +584,34 @@ func (buo *BookreturnUpdateOne) sqlSave(ctx context.Context) (b *Bookreturn, err
 			Type:   field.TypeTime,
 			Value:  value,
 			Column: bookreturn.FieldRETURNTIME,
+		})
+	}
+	if value, ok := buo.mutation.DAMAGEDPOINT(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeInt,
+			Value:  value,
+			Column: bookreturn.FieldDAMAGEDPOINT,
+		})
+	}
+	if value, ok := buo.mutation.AddedDAMAGEDPOINT(); ok {
+		_spec.Fields.Add = append(_spec.Fields.Add, &sqlgraph.FieldSpec{
+			Type:   field.TypeInt,
+			Value:  value,
+			Column: bookreturn.FieldDAMAGEDPOINT,
+		})
+	}
+	if value, ok := buo.mutation.DAMAGEDPOINTNAME(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Value:  value,
+			Column: bookreturn.FieldDAMAGEDPOINTNAME,
+		})
+	}
+	if value, ok := buo.mutation.LOST(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Value:  value,
+			Column: bookreturn.FieldLOST,
 		})
 	}
 	if buo.mutation.UserCleared() {

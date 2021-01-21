@@ -9,6 +9,7 @@ import (
 	"github.com/team11/app/ent/book"
 	"github.com/team11/app/ent/bookborrow"
 	"github.com/team11/app/ent/booking"
+	"github.com/team11/app/ent/bookreturn"
 	"github.com/team11/app/ent/category"
 	"github.com/team11/app/ent/cliententity"
 	"github.com/team11/app/ent/location"
@@ -83,6 +84,34 @@ func init() {
 	bookingDescPHONENUMBER := bookingFields[4].Descriptor()
 	// booking.PHONENUMBERValidator is a validator for the "PHONE_NUMBER" field. It is called by the builders before save.
 	booking.PHONENUMBERValidator = bookingDescPHONENUMBER.Validators[0].(func(string) error)
+	bookreturnFields := schema.Bookreturn{}.Fields()
+	_ = bookreturnFields
+	// bookreturnDescDAMAGEDPOINT is the schema descriptor for DAMAGED_POINT field.
+	bookreturnDescDAMAGEDPOINT := bookreturnFields[1].Descriptor()
+	// bookreturn.DAMAGEDPOINTValidator is a validator for the "DAMAGED_POINT" field. It is called by the builders before save.
+	bookreturn.DAMAGEDPOINTValidator = bookreturnDescDAMAGEDPOINT.Validators[0].(func(int) error)
+	// bookreturnDescDAMAGEDPOINTNAME is the schema descriptor for DAMAGED_POINTNAME field.
+	bookreturnDescDAMAGEDPOINTNAME := bookreturnFields[2].Descriptor()
+	// bookreturn.DAMAGEDPOINTNAMEValidator is a validator for the "DAMAGED_POINTNAME" field. It is called by the builders before save.
+	bookreturn.DAMAGEDPOINTNAMEValidator = bookreturnDescDAMAGEDPOINTNAME.Validators[0].(func(string) error)
+	// bookreturnDescLOST is the schema descriptor for LOST field.
+	bookreturnDescLOST := bookreturnFields[3].Descriptor()
+	// bookreturn.LOSTValidator is a validator for the "LOST" field. It is called by the builders before save.
+	bookreturn.LOSTValidator = func() func(string) error {
+		validators := bookreturnDescLOST.Validators
+		fns := [...]func(string) error{
+			validators[0].(func(string) error),
+			validators[1].(func(string) error),
+		}
+		return func(_LOST string) error {
+			for _, fn := range fns {
+				if err := fn(_LOST); err != nil {
+					return err
+				}
+			}
+			return nil
+		}
+	}()
 	categoryFields := schema.Category{}.Fields()
 	_ = categoryFields
 	// categoryDescCategoryName is the schema descriptor for CategoryName field.
