@@ -1,6 +1,7 @@
 package schema
 
 import (
+	"regexp"
 	"time"
 
 	"github.com/facebookincubator/ent"
@@ -20,6 +21,9 @@ func (Preemption) Fields() []ent.Field {
 		
 		field.Time("PreemptTime").
 			Default(time.Now),
+		field.String("Phonenumber").MaxLen(10).MinLen(10),
+		field.String("Surrogateid").Match(regexp.MustCompile("[BMD]\\d{7}")),
+		field.String("Surrogatephone").MaxLen(10).MinLen(10),
 	}
 }
 

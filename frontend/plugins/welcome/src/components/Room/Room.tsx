@@ -108,6 +108,9 @@ export default function Create() {
   const [userid, setuser] = useState(Number);
   const [roomid, setroom] = useState(Number);
   const [purposeid, setpurpose] = useState(Number);
+  const [otherid, setotherid] = useState(String);
+  const [phoneuser, setphoneuser] = useState(String);
+  const [otherphone, setotherphone] = useState(String);
   const [preempttime, setpreempttime] = useState(String);
   useEffect(() => {
     
@@ -148,6 +151,15 @@ const TimehandleChange = (event: React.ChangeEvent<{ value: unknown }>) => {
   setpreempttime(event.target.value as string);
 };
 
+const PhoneuserhandleChange = (event: React.ChangeEvent<{ value: unknown }>) => {
+  setphoneuser(event.target.value as string);
+};
+const OtheridhandleChange = (event: React.ChangeEvent<{ value: unknown }>) => {
+  setotherid(event.target.value as string);
+};
+const OtherphonehandleChange = (event: React.ChangeEvent<{ value: unknown }>) => {
+  setotherphone(event.target.value as string);
+};
 /*const Createpreempt = async () => { 
 const preemption = {
   user: 1,
@@ -183,14 +195,49 @@ setStatus(true);
     setStatus(false);
   }, 1000);
  }; */
+const alertMessage = (icon: any, title: any) =>{
+  Toast.fire(
+    {
+      icon: icon,
+      title: title,
+    }
+  );
+}
+
+const checkCaseSaveError = (field: string) =>{
+  switch(field){
+    case 'Phonenumber':
+      alertMessage("error","เบอร์โทรศัพท์ต้องมี10หลัก");
+      return;
+    case 'Surrogateid':
+      alertMessage("error","รหัสนักศึกษาขึ้นต้อนด้วย B,M,D ตามด้วยตัวเลขเจ็ดหลัก");
+      return;  
+    case 'Surrogatephone':
+      alertMessage("error","เบอร์โทรศัพท์ต้องมี10หลัก");
+      return;
+    default:
+      alertMessage("error","กรุณากรอกข้อมูลให้ครบทุกส่วน");  
+      return;
+  }
+}
+
+const updateroom = async () => {
+  const roon = {
+    roomStatus: "ไม่ว่าง",
+  };
+  const ros = await api.updateRoominfo({id:roomid,user:roon});
+}
+
 
  const Createpreempt = async () => {
   const preemption = {
     user: 1,
     roominfo: roomid,
     purpose: purposeid,
-  
-    added: preempttime + ":00+07:00"
+    otherpeopleid: otherid,
+    otherpeoplephone: otherphone,
+    phoneuser: phoneuser,
+    //added: preempttime + ":00+07:00"
   
   };
   const roon = {
@@ -206,23 +253,20 @@ setStatus(true);
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(preemption),
 };
-  const ros = await api.updateRoominfo({id:roomid,user:roon});
+  
   console.log(preemption); 
   fetch(apiUrl, requestOptions) 
     .then(response => response.json())
     .then(data => {
       console.log(data);
       if (data.status === true) { 
-        
+        updateroom();
         Toast.fire({
           icon: 'success',
           title: 'จองสำเร็จ',
         });
       } else {
-        Toast.fire({
-          icon: 'error',
-          title: 'จองไม่สำเร็จกรอกข้อมูลให้ครบ',
-        });
+        checkCaseSaveError(data.error.Name)
       }
     });
 }
@@ -339,21 +383,46 @@ const resetLocalStorage = async () => {
       <div className={classes.margin}>
              
              </div>
+      <FormControl className={classes.root}>
+      <TextField 
+      id="Phoneuser" 
+      label="เบอร์โทรศัพท์มือถือผู้จอง" 
+      helperText="เบอร์มือถือ10หลัก" 
+      value={phoneuser}
+      onChange={PhoneuserhandleChange}
+      />   
 
-      <form className={classes.container} noValidate>
-      <TextField
-        id="datetime-local"
-        label="เวลาที่จอง"
-        type="datetime-local"
-        
-        value={preempttime}
-        onChange={TimehandleChange}
-        className={classes.textField}
-        InputLabelProps={{
-          shrink: true,
-        }}
-      />
-    </form>
+      </FormControl>
+
+      <div className={classes.margin}>
+             
+             </div>
+      <FormControl className={classes.root}>
+      <TextField 
+      id="Ohterpeopleid" 
+      label="รหัสนักศึกษาผู้มารับกุญแจ" 
+      helperText="BXXXXXXX" 
+      value={otherid}
+      onChange={OtheridhandleChange}
+      />   
+
+      </FormControl> 
+      
+      <div className={classes.margin}>
+             
+             </div>
+      <FormControl className={classes.root}>
+      <TextField 
+      id="Phoneother" 
+      label="เบอร์โทรศัพท์มือถือผู้รับกุญแจ" 
+      helperText="เบอร์มือถือ10หลัก" 
+      value={otherphone}
+      onChange={OtherphonehandleChange}
+      />   
+
+      </FormControl>
+
+
     {status ? (
            <div>
              {alert ? (

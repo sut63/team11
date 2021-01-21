@@ -237,6 +237,9 @@ var (
 	PreemptionsColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt, Increment: true},
 		{Name: "preempt_time", Type: field.TypeTime},
+		{Name: "phonenumber", Type: field.TypeString, Size: 10},
+		{Name: "surrogateid", Type: field.TypeString},
+		{Name: "surrogatephone", Type: field.TypeString, Size: 10},
 		{Name: "PurposeID", Type: field.TypeInt, Nullable: true},
 		{Name: "RoomID", Type: field.TypeInt, Nullable: true},
 		{Name: "USER_ID", Type: field.TypeInt, Nullable: true},
@@ -249,21 +252,21 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:  "preemptions_purposes_preemption",
-				Columns: []*schema.Column{PreemptionsColumns[2]},
+				Columns: []*schema.Column{PreemptionsColumns[5]},
 
 				RefColumns: []*schema.Column{PurposesColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:  "preemptions_roominfos_preemption",
-				Columns: []*schema.Column{PreemptionsColumns[3]},
+				Columns: []*schema.Column{PreemptionsColumns[6]},
 
 				RefColumns: []*schema.Column{RoominfosColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:  "preemptions_users_preemption",
-				Columns: []*schema.Column{PreemptionsColumns[4]},
+				Columns: []*schema.Column{PreemptionsColumns[7]},
 
 				RefColumns: []*schema.Column{UsersColumns[0]},
 				OnDelete:   schema.SetNull,

@@ -4,6 +4,7 @@ package ent
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"time"
 
@@ -33,6 +34,24 @@ func (pc *PreemptionCreate) SetNillablePreemptTime(t *time.Time) *PreemptionCrea
 	if t != nil {
 		pc.SetPreemptTime(*t)
 	}
+	return pc
+}
+
+// SetPhonenumber sets the Phonenumber field.
+func (pc *PreemptionCreate) SetPhonenumber(s string) *PreemptionCreate {
+	pc.mutation.SetPhonenumber(s)
+	return pc
+}
+
+// SetSurrogateid sets the Surrogateid field.
+func (pc *PreemptionCreate) SetSurrogateid(s string) *PreemptionCreate {
+	pc.mutation.SetSurrogateid(s)
+	return pc
+}
+
+// SetSurrogatephone sets the Surrogatephone field.
+func (pc *PreemptionCreate) SetSurrogatephone(s string) *PreemptionCreate {
+	pc.mutation.SetSurrogatephone(s)
 	return pc
 }
 
@@ -104,6 +123,30 @@ func (pc *PreemptionCreate) Save(ctx context.Context) (*Preemption, error) {
 		v := preemption.DefaultPreemptTime()
 		pc.mutation.SetPreemptTime(v)
 	}
+	if _, ok := pc.mutation.Phonenumber(); !ok {
+		return nil, &ValidationError{Name: "Phonenumber", err: errors.New("ent: missing required field \"Phonenumber\"")}
+	}
+	if v, ok := pc.mutation.Phonenumber(); ok {
+		if err := preemption.PhonenumberValidator(v); err != nil {
+			return nil, &ValidationError{Name: "Phonenumber", err: fmt.Errorf("ent: validator failed for field \"Phonenumber\": %w", err)}
+		}
+	}
+	if _, ok := pc.mutation.Surrogateid(); !ok {
+		return nil, &ValidationError{Name: "Surrogateid", err: errors.New("ent: missing required field \"Surrogateid\"")}
+	}
+	if v, ok := pc.mutation.Surrogateid(); ok {
+		if err := preemption.SurrogateidValidator(v); err != nil {
+			return nil, &ValidationError{Name: "Surrogateid", err: fmt.Errorf("ent: validator failed for field \"Surrogateid\": %w", err)}
+		}
+	}
+	if _, ok := pc.mutation.Surrogatephone(); !ok {
+		return nil, &ValidationError{Name: "Surrogatephone", err: errors.New("ent: missing required field \"Surrogatephone\"")}
+	}
+	if v, ok := pc.mutation.Surrogatephone(); ok {
+		if err := preemption.SurrogatephoneValidator(v); err != nil {
+			return nil, &ValidationError{Name: "Surrogatephone", err: fmt.Errorf("ent: validator failed for field \"Surrogatephone\": %w", err)}
+		}
+	}
 	var (
 		err  error
 		node *Preemption
@@ -171,6 +214,30 @@ func (pc *PreemptionCreate) createSpec() (*Preemption, *sqlgraph.CreateSpec) {
 			Column: preemption.FieldPreemptTime,
 		})
 		pr.PreemptTime = value
+	}
+	if value, ok := pc.mutation.Phonenumber(); ok {
+		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Value:  value,
+			Column: preemption.FieldPhonenumber,
+		})
+		pr.Phonenumber = value
+	}
+	if value, ok := pc.mutation.Surrogateid(); ok {
+		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Value:  value,
+			Column: preemption.FieldSurrogateid,
+		})
+		pr.Surrogateid = value
+	}
+	if value, ok := pc.mutation.Surrogatephone(); ok {
+		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Value:  value,
+			Column: preemption.FieldSurrogatephone,
+		})
+		pr.Surrogatephone = value
 	}
 	if nodes := pc.mutation.UserIDIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{

@@ -45,6 +45,24 @@ func (pu *PreemptionUpdate) SetNillablePreemptTime(t *time.Time) *PreemptionUpda
 	return pu
 }
 
+// SetPhonenumber sets the Phonenumber field.
+func (pu *PreemptionUpdate) SetPhonenumber(s string) *PreemptionUpdate {
+	pu.mutation.SetPhonenumber(s)
+	return pu
+}
+
+// SetSurrogateid sets the Surrogateid field.
+func (pu *PreemptionUpdate) SetSurrogateid(s string) *PreemptionUpdate {
+	pu.mutation.SetSurrogateid(s)
+	return pu
+}
+
+// SetSurrogatephone sets the Surrogatephone field.
+func (pu *PreemptionUpdate) SetSurrogatephone(s string) *PreemptionUpdate {
+	pu.mutation.SetSurrogatephone(s)
+	return pu
+}
+
 // SetUserIDID sets the User_ID edge to User by id.
 func (pu *PreemptionUpdate) SetUserIDID(id int) *PreemptionUpdate {
 	pu.mutation.SetUserIDID(id)
@@ -127,6 +145,21 @@ func (pu *PreemptionUpdate) ClearRoomID() *PreemptionUpdate {
 
 // Save executes the query and returns the number of rows/vertices matched by this operation.
 func (pu *PreemptionUpdate) Save(ctx context.Context) (int, error) {
+	if v, ok := pu.mutation.Phonenumber(); ok {
+		if err := preemption.PhonenumberValidator(v); err != nil {
+			return 0, &ValidationError{Name: "Phonenumber", err: fmt.Errorf("ent: validator failed for field \"Phonenumber\": %w", err)}
+		}
+	}
+	if v, ok := pu.mutation.Surrogateid(); ok {
+		if err := preemption.SurrogateidValidator(v); err != nil {
+			return 0, &ValidationError{Name: "Surrogateid", err: fmt.Errorf("ent: validator failed for field \"Surrogateid\": %w", err)}
+		}
+	}
+	if v, ok := pu.mutation.Surrogatephone(); ok {
+		if err := preemption.SurrogatephoneValidator(v); err != nil {
+			return 0, &ValidationError{Name: "Surrogatephone", err: fmt.Errorf("ent: validator failed for field \"Surrogatephone\": %w", err)}
+		}
+	}
 
 	var (
 		err      error
@@ -200,6 +233,27 @@ func (pu *PreemptionUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Type:   field.TypeTime,
 			Value:  value,
 			Column: preemption.FieldPreemptTime,
+		})
+	}
+	if value, ok := pu.mutation.Phonenumber(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Value:  value,
+			Column: preemption.FieldPhonenumber,
+		})
+	}
+	if value, ok := pu.mutation.Surrogateid(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Value:  value,
+			Column: preemption.FieldSurrogateid,
+		})
+	}
+	if value, ok := pu.mutation.Surrogatephone(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Value:  value,
+			Column: preemption.FieldSurrogatephone,
 		})
 	}
 	if pu.mutation.UserIDCleared() {
@@ -339,6 +393,24 @@ func (puo *PreemptionUpdateOne) SetNillablePreemptTime(t *time.Time) *Preemption
 	return puo
 }
 
+// SetPhonenumber sets the Phonenumber field.
+func (puo *PreemptionUpdateOne) SetPhonenumber(s string) *PreemptionUpdateOne {
+	puo.mutation.SetPhonenumber(s)
+	return puo
+}
+
+// SetSurrogateid sets the Surrogateid field.
+func (puo *PreemptionUpdateOne) SetSurrogateid(s string) *PreemptionUpdateOne {
+	puo.mutation.SetSurrogateid(s)
+	return puo
+}
+
+// SetSurrogatephone sets the Surrogatephone field.
+func (puo *PreemptionUpdateOne) SetSurrogatephone(s string) *PreemptionUpdateOne {
+	puo.mutation.SetSurrogatephone(s)
+	return puo
+}
+
 // SetUserIDID sets the User_ID edge to User by id.
 func (puo *PreemptionUpdateOne) SetUserIDID(id int) *PreemptionUpdateOne {
 	puo.mutation.SetUserIDID(id)
@@ -421,6 +493,21 @@ func (puo *PreemptionUpdateOne) ClearRoomID() *PreemptionUpdateOne {
 
 // Save executes the query and returns the updated entity.
 func (puo *PreemptionUpdateOne) Save(ctx context.Context) (*Preemption, error) {
+	if v, ok := puo.mutation.Phonenumber(); ok {
+		if err := preemption.PhonenumberValidator(v); err != nil {
+			return nil, &ValidationError{Name: "Phonenumber", err: fmt.Errorf("ent: validator failed for field \"Phonenumber\": %w", err)}
+		}
+	}
+	if v, ok := puo.mutation.Surrogateid(); ok {
+		if err := preemption.SurrogateidValidator(v); err != nil {
+			return nil, &ValidationError{Name: "Surrogateid", err: fmt.Errorf("ent: validator failed for field \"Surrogateid\": %w", err)}
+		}
+	}
+	if v, ok := puo.mutation.Surrogatephone(); ok {
+		if err := preemption.SurrogatephoneValidator(v); err != nil {
+			return nil, &ValidationError{Name: "Surrogatephone", err: fmt.Errorf("ent: validator failed for field \"Surrogatephone\": %w", err)}
+		}
+	}
 
 	var (
 		err  error
@@ -492,6 +579,27 @@ func (puo *PreemptionUpdateOne) sqlSave(ctx context.Context) (pr *Preemption, er
 			Type:   field.TypeTime,
 			Value:  value,
 			Column: preemption.FieldPreemptTime,
+		})
+	}
+	if value, ok := puo.mutation.Phonenumber(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Value:  value,
+			Column: preemption.FieldPhonenumber,
+		})
+	}
+	if value, ok := puo.mutation.Surrogateid(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Value:  value,
+			Column: preemption.FieldSurrogateid,
+		})
+	}
+	if value, ok := puo.mutation.Surrogatephone(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Value:  value,
+			Column: preemption.FieldSurrogatephone,
 		})
 	}
 	if puo.mutation.UserIDCleared() {
