@@ -38,6 +38,25 @@ func (bu *BookUpdate) SetBookName(s string) *BookUpdate {
 	return bu
 }
 
+// SetBarcode sets the Barcode field.
+func (bu *BookUpdate) SetBarcode(s string) *BookUpdate {
+	bu.mutation.SetBarcode(s)
+	return bu
+}
+
+// SetBookPage sets the BookPage field.
+func (bu *BookUpdate) SetBookPage(i int) *BookUpdate {
+	bu.mutation.ResetBookPage()
+	bu.mutation.SetBookPage(i)
+	return bu
+}
+
+// AddBookPage adds i to BookPage.
+func (bu *BookUpdate) AddBookPage(i int) *BookUpdate {
+	bu.mutation.AddBookPage(i)
+	return bu
+}
+
 // SetCategoryID sets the category edge to Category by id.
 func (bu *BookUpdate) SetCategoryID(id int) *BookUpdate {
 	bu.mutation.SetCategoryID(id)
@@ -180,6 +199,16 @@ func (bu *BookUpdate) Save(ctx context.Context) (int, error) {
 			return 0, &ValidationError{Name: "BookName", err: fmt.Errorf("ent: validator failed for field \"BookName\": %w", err)}
 		}
 	}
+	if v, ok := bu.mutation.Barcode(); ok {
+		if err := book.BarcodeValidator(v); err != nil {
+			return 0, &ValidationError{Name: "Barcode", err: fmt.Errorf("ent: validator failed for field \"Barcode\": %w", err)}
+		}
+	}
+	if v, ok := bu.mutation.BookPage(); ok {
+		if err := book.BookPageValidator(v); err != nil {
+			return 0, &ValidationError{Name: "BookPage", err: fmt.Errorf("ent: validator failed for field \"BookPage\": %w", err)}
+		}
+	}
 
 	var (
 		err      error
@@ -253,6 +282,27 @@ func (bu *BookUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Type:   field.TypeString,
 			Value:  value,
 			Column: book.FieldBookName,
+		})
+	}
+	if value, ok := bu.mutation.Barcode(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Value:  value,
+			Column: book.FieldBarcode,
+		})
+	}
+	if value, ok := bu.mutation.BookPage(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeInt,
+			Value:  value,
+			Column: book.FieldBookPage,
+		})
+	}
+	if value, ok := bu.mutation.AddedBookPage(); ok {
+		_spec.Fields.Add = append(_spec.Fields.Add, &sqlgraph.FieldSpec{
+			Type:   field.TypeInt,
+			Value:  value,
+			Column: book.FieldBookPage,
 		})
 	}
 	if bu.mutation.CategoryCleared() {
@@ -457,6 +507,25 @@ func (buo *BookUpdateOne) SetBookName(s string) *BookUpdateOne {
 	return buo
 }
 
+// SetBarcode sets the Barcode field.
+func (buo *BookUpdateOne) SetBarcode(s string) *BookUpdateOne {
+	buo.mutation.SetBarcode(s)
+	return buo
+}
+
+// SetBookPage sets the BookPage field.
+func (buo *BookUpdateOne) SetBookPage(i int) *BookUpdateOne {
+	buo.mutation.ResetBookPage()
+	buo.mutation.SetBookPage(i)
+	return buo
+}
+
+// AddBookPage adds i to BookPage.
+func (buo *BookUpdateOne) AddBookPage(i int) *BookUpdateOne {
+	buo.mutation.AddBookPage(i)
+	return buo
+}
+
 // SetCategoryID sets the category edge to Category by id.
 func (buo *BookUpdateOne) SetCategoryID(id int) *BookUpdateOne {
 	buo.mutation.SetCategoryID(id)
@@ -599,6 +668,16 @@ func (buo *BookUpdateOne) Save(ctx context.Context) (*Book, error) {
 			return nil, &ValidationError{Name: "BookName", err: fmt.Errorf("ent: validator failed for field \"BookName\": %w", err)}
 		}
 	}
+	if v, ok := buo.mutation.Barcode(); ok {
+		if err := book.BarcodeValidator(v); err != nil {
+			return nil, &ValidationError{Name: "Barcode", err: fmt.Errorf("ent: validator failed for field \"Barcode\": %w", err)}
+		}
+	}
+	if v, ok := buo.mutation.BookPage(); ok {
+		if err := book.BookPageValidator(v); err != nil {
+			return nil, &ValidationError{Name: "BookPage", err: fmt.Errorf("ent: validator failed for field \"BookPage\": %w", err)}
+		}
+	}
 
 	var (
 		err  error
@@ -670,6 +749,27 @@ func (buo *BookUpdateOne) sqlSave(ctx context.Context) (b *Book, err error) {
 			Type:   field.TypeString,
 			Value:  value,
 			Column: book.FieldBookName,
+		})
+	}
+	if value, ok := buo.mutation.Barcode(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Value:  value,
+			Column: book.FieldBarcode,
+		})
+	}
+	if value, ok := buo.mutation.BookPage(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeInt,
+			Value:  value,
+			Column: book.FieldBookPage,
+		})
+	}
+	if value, ok := buo.mutation.AddedBookPage(); ok {
+		_spec.Fields.Add = append(_spec.Fields.Add, &sqlgraph.FieldSpec{
+			Type:   field.TypeInt,
+			Value:  value,
+			Column: book.FieldBookPage,
 		})
 	}
 	if buo.mutation.CategoryCleared() {

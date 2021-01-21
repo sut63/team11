@@ -24,6 +24,8 @@ var (
 	BooksColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt, Increment: true},
 		{Name: "book_name", Type: field.TypeString, Unique: true},
+		{Name: "barcode", Type: field.TypeString},
+		{Name: "book_page", Type: field.TypeInt},
 		{Name: "AUTHOR_ID", Type: field.TypeInt, Nullable: true},
 		{Name: "Category_id", Type: field.TypeInt, Nullable: true},
 		{Name: "STATUS_ID", Type: field.TypeInt, Nullable: true},
@@ -37,28 +39,28 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:  "books_authors_writer",
-				Columns: []*schema.Column{BooksColumns[2]},
+				Columns: []*schema.Column{BooksColumns[4]},
 
 				RefColumns: []*schema.Column{AuthorsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:  "books_categories_catof",
-				Columns: []*schema.Column{BooksColumns[3]},
+				Columns: []*schema.Column{BooksColumns[5]},
 
 				RefColumns: []*schema.Column{CategoriesColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:  "books_status_statusofbook",
-				Columns: []*schema.Column{BooksColumns[4]},
+				Columns: []*schema.Column{BooksColumns[6]},
 
 				RefColumns: []*schema.Column{StatusColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:  "books_users_addby",
-				Columns: []*schema.Column{BooksColumns[5]},
+				Columns: []*schema.Column{BooksColumns[7]},
 
 				RefColumns: []*schema.Column{UsersColumns[0]},
 				OnDelete:   schema.SetNull,

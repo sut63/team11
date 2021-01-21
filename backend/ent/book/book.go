@@ -9,6 +9,10 @@ const (
 	FieldID = "id"
 	// FieldBookName holds the string denoting the bookname field in the database.
 	FieldBookName = "book_name"
+	// FieldBarcode holds the string denoting the barcode field in the database.
+	FieldBarcode = "barcode"
+	// FieldBookPage holds the string denoting the bookpage field in the database.
+	FieldBookPage = "book_page"
 
 	// EdgeCategory holds the string denoting the category edge name in mutations.
 	EdgeCategory = "category"
@@ -64,6 +68,8 @@ const (
 var Columns = []string{
 	FieldID,
 	FieldBookName,
+	FieldBarcode,
+	FieldBookPage,
 }
 
 // ForeignKeys holds the SQL foreign-keys that are owned by the Book type.
@@ -77,4 +83,8 @@ var ForeignKeys = []string{
 var (
 	// BookNameValidator is a validator for the "BookName" field. It is called by the builders before save.
 	BookNameValidator func(string) error
+	// BarcodeValidator is a validator for the "Barcode" field. It is called by the builders before save.
+	BarcodeValidator func(string) error
+	// BookPageValidator is a validator for the "BookPage" field. It is called by the builders before save.
+	BookPageValidator func(int) error
 )
