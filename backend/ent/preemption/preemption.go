@@ -13,6 +13,12 @@ const (
 	FieldID = "id"
 	// FieldPreemptTime holds the string denoting the preempttime field in the database.
 	FieldPreemptTime = "preempt_time"
+	// FieldPhonenumber holds the string denoting the phonenumber field in the database.
+	FieldPhonenumber = "phonenumber"
+	// FieldSurrogateid holds the string denoting the surrogateid field in the database.
+	FieldSurrogateid = "surrogateid"
+	// FieldSurrogatephone holds the string denoting the surrogatephone field in the database.
+	FieldSurrogatephone = "surrogatephone"
 
 	// EdgeUserID holds the string denoting the user_id edge name in mutations.
 	EdgeUserID = "User_ID"
@@ -50,6 +56,9 @@ const (
 var Columns = []string{
 	FieldID,
 	FieldPreemptTime,
+	FieldPhonenumber,
+	FieldSurrogateid,
+	FieldSurrogatephone,
 }
 
 // ForeignKeys holds the SQL foreign-keys that are owned by the Preemption type.
@@ -62,4 +71,10 @@ var ForeignKeys = []string{
 var (
 	// DefaultPreemptTime holds the default value on creation for the PreemptTime field.
 	DefaultPreemptTime func() time.Time
+	// PhonenumberValidator is a validator for the "Phonenumber" field. It is called by the builders before save.
+	PhonenumberValidator func(string) error
+	// SurrogateidValidator is a validator for the "Surrogateid" field. It is called by the builders before save.
+	SurrogateidValidator func(string) error
+	// SurrogatephoneValidator is a validator for the "Surrogatephone" field. It is called by the builders before save.
+	SurrogatephoneValidator func(string) error
 )

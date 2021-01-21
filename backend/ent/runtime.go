@@ -136,6 +136,46 @@ func init() {
 	preemptionDescPreemptTime := preemptionFields[0].Descriptor()
 	// preemption.DefaultPreemptTime holds the default value on creation for the PreemptTime field.
 	preemption.DefaultPreemptTime = preemptionDescPreemptTime.Default.(func() time.Time)
+	// preemptionDescPhonenumber is the schema descriptor for Phonenumber field.
+	preemptionDescPhonenumber := preemptionFields[1].Descriptor()
+	// preemption.PhonenumberValidator is a validator for the "Phonenumber" field. It is called by the builders before save.
+	preemption.PhonenumberValidator = func() func(string) error {
+		validators := preemptionDescPhonenumber.Validators
+		fns := [...]func(string) error{
+			validators[0].(func(string) error),
+			validators[1].(func(string) error),
+		}
+		return func(_Phonenumber string) error {
+			for _, fn := range fns {
+				if err := fn(_Phonenumber); err != nil {
+					return err
+				}
+			}
+			return nil
+		}
+	}()
+	// preemptionDescSurrogateid is the schema descriptor for Surrogateid field.
+	preemptionDescSurrogateid := preemptionFields[2].Descriptor()
+	// preemption.SurrogateidValidator is a validator for the "Surrogateid" field. It is called by the builders before save.
+	preemption.SurrogateidValidator = preemptionDescSurrogateid.Validators[0].(func(string) error)
+	// preemptionDescSurrogatephone is the schema descriptor for Surrogatephone field.
+	preemptionDescSurrogatephone := preemptionFields[3].Descriptor()
+	// preemption.SurrogatephoneValidator is a validator for the "Surrogatephone" field. It is called by the builders before save.
+	preemption.SurrogatephoneValidator = func() func(string) error {
+		validators := preemptionDescSurrogatephone.Validators
+		fns := [...]func(string) error{
+			validators[0].(func(string) error),
+			validators[1].(func(string) error),
+		}
+		return func(_Surrogatephone string) error {
+			for _, fn := range fns {
+				if err := fn(_Surrogatephone); err != nil {
+					return err
+				}
+			}
+			return nil
+		}
+	}()
 	researchFields := schema.Research{}.Fields()
 	_ = researchFields
 	// researchDescDOCNAME is the schema descriptor for DOC_NAME field.

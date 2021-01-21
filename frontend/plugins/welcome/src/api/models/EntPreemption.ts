@@ -27,11 +27,29 @@ import {
  */
 export interface EntPreemption {
     /**
+     * Phonenumber holds the value of the "Phonenumber" field.
+     * @type {string}
+     * @memberof EntPreemption
+     */
+    phonenumber?: string;
+    /**
      * PreemptTime holds the value of the "PreemptTime" field.
      * @type {string}
      * @memberof EntPreemption
      */
     preemptTime?: string;
+    /**
+     * Surrogateid holds the value of the "Surrogateid" field.
+     * @type {string}
+     * @memberof EntPreemption
+     */
+    surrogateid?: string;
+    /**
+     * Surrogatephone holds the value of the "Surrogatephone" field.
+     * @type {string}
+     * @memberof EntPreemption
+     */
+    surrogatephone?: string;
     /**
      * 
      * @type {EntPreemptionEdges}
@@ -74,7 +92,10 @@ export function EntPreemptionFromJSONTyped(json: any, ignoreDiscriminator: boole
     }
     return {
         
+        'phonenumber': !exists(json, 'Phonenumber') ? undefined : json['Phonenumber'],
         'preemptTime': !exists(json, 'PreemptTime') ? undefined : json['PreemptTime'],
+        'surrogateid': !exists(json, 'Surrogateid') ? undefined : json['Surrogateid'],
+        'surrogatephone': !exists(json, 'Surrogatephone') ? undefined : json['Surrogatephone'],
         'edges': !exists(json, 'edges') ? undefined : EntPreemptionEdgesFromJSON(json['edges']),
         'id': !exists(json, 'id') ? undefined : json['id'],
         'purposeID': !exists(json, 'purposeID') ? undefined : json['purposeID'],
@@ -92,7 +113,10 @@ export function EntPreemptionToJSON(value?: EntPreemption | null): any {
     }
     return {
         
+        'Phonenumber': value.phonenumber,
         'PreemptTime': value.preemptTime,
+        'Surrogateid': value.surrogateid,
+        'Surrogatephone': value.surrogatephone,
         'edges': EntPreemptionEdgesToJSON(value.edges),
         'id': value.id,
         'purposeID': value.purposeID,

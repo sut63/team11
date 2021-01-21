@@ -3603,7 +3603,13 @@ var doc = `{
         "controllers.Preemption": {
             "type": "object",
             "properties": {
-                "added": {
+                "otherpeopleid": {
+                    "type": "string"
+                },
+                "otherpeoplephone": {
+                    "type": "string"
+                },
+                "phoneuser": {
                     "type": "string"
                 },
                 "purpose": {
@@ -4039,8 +4045,20 @@ var doc = `{
         "ent.Preemption": {
             "type": "object",
             "properties": {
+                "Phonenumber": {
+                    "description": "Phonenumber holds the value of the \"Phonenumber\" field.",
+                    "type": "string"
+                },
                 "PreemptTime": {
                     "description": "PreemptTime holds the value of the \"PreemptTime\" field.",
+                    "type": "string"
+                },
+                "Surrogateid": {
+                    "description": "Surrogateid holds the value of the \"Surrogateid\" field.",
+                    "type": "string"
+                },
+                "Surrogatephone": {
+                    "description": "Surrogatephone holds the value of the \"Surrogatephone\" field.",
                     "type": "string"
                 },
                 "edges": {

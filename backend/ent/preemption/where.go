@@ -100,6 +100,27 @@ func PreemptTime(v time.Time) predicate.Preemption {
 	})
 }
 
+// Phonenumber applies equality check predicate on the "Phonenumber" field. It's identical to PhonenumberEQ.
+func Phonenumber(v string) predicate.Preemption {
+	return predicate.Preemption(func(s *sql.Selector) {
+		s.Where(sql.EQ(s.C(FieldPhonenumber), v))
+	})
+}
+
+// Surrogateid applies equality check predicate on the "Surrogateid" field. It's identical to SurrogateidEQ.
+func Surrogateid(v string) predicate.Preemption {
+	return predicate.Preemption(func(s *sql.Selector) {
+		s.Where(sql.EQ(s.C(FieldSurrogateid), v))
+	})
+}
+
+// Surrogatephone applies equality check predicate on the "Surrogatephone" field. It's identical to SurrogatephoneEQ.
+func Surrogatephone(v string) predicate.Preemption {
+	return predicate.Preemption(func(s *sql.Selector) {
+		s.Where(sql.EQ(s.C(FieldSurrogatephone), v))
+	})
+}
+
 // PreemptTimeEQ applies the EQ predicate on the "PreemptTime" field.
 func PreemptTimeEQ(v time.Time) predicate.Preemption {
 	return predicate.Preemption(func(s *sql.Selector) {
@@ -173,6 +194,339 @@ func PreemptTimeLT(v time.Time) predicate.Preemption {
 func PreemptTimeLTE(v time.Time) predicate.Preemption {
 	return predicate.Preemption(func(s *sql.Selector) {
 		s.Where(sql.LTE(s.C(FieldPreemptTime), v))
+	})
+}
+
+// PhonenumberEQ applies the EQ predicate on the "Phonenumber" field.
+func PhonenumberEQ(v string) predicate.Preemption {
+	return predicate.Preemption(func(s *sql.Selector) {
+		s.Where(sql.EQ(s.C(FieldPhonenumber), v))
+	})
+}
+
+// PhonenumberNEQ applies the NEQ predicate on the "Phonenumber" field.
+func PhonenumberNEQ(v string) predicate.Preemption {
+	return predicate.Preemption(func(s *sql.Selector) {
+		s.Where(sql.NEQ(s.C(FieldPhonenumber), v))
+	})
+}
+
+// PhonenumberIn applies the In predicate on the "Phonenumber" field.
+func PhonenumberIn(vs ...string) predicate.Preemption {
+	v := make([]interface{}, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.Preemption(func(s *sql.Selector) {
+		// if not arguments were provided, append the FALSE constants,
+		// since we can't apply "IN ()". This will make this predicate falsy.
+		if len(v) == 0 {
+			s.Where(sql.False())
+			return
+		}
+		s.Where(sql.In(s.C(FieldPhonenumber), v...))
+	})
+}
+
+// PhonenumberNotIn applies the NotIn predicate on the "Phonenumber" field.
+func PhonenumberNotIn(vs ...string) predicate.Preemption {
+	v := make([]interface{}, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.Preemption(func(s *sql.Selector) {
+		// if not arguments were provided, append the FALSE constants,
+		// since we can't apply "IN ()". This will make this predicate falsy.
+		if len(v) == 0 {
+			s.Where(sql.False())
+			return
+		}
+		s.Where(sql.NotIn(s.C(FieldPhonenumber), v...))
+	})
+}
+
+// PhonenumberGT applies the GT predicate on the "Phonenumber" field.
+func PhonenumberGT(v string) predicate.Preemption {
+	return predicate.Preemption(func(s *sql.Selector) {
+		s.Where(sql.GT(s.C(FieldPhonenumber), v))
+	})
+}
+
+// PhonenumberGTE applies the GTE predicate on the "Phonenumber" field.
+func PhonenumberGTE(v string) predicate.Preemption {
+	return predicate.Preemption(func(s *sql.Selector) {
+		s.Where(sql.GTE(s.C(FieldPhonenumber), v))
+	})
+}
+
+// PhonenumberLT applies the LT predicate on the "Phonenumber" field.
+func PhonenumberLT(v string) predicate.Preemption {
+	return predicate.Preemption(func(s *sql.Selector) {
+		s.Where(sql.LT(s.C(FieldPhonenumber), v))
+	})
+}
+
+// PhonenumberLTE applies the LTE predicate on the "Phonenumber" field.
+func PhonenumberLTE(v string) predicate.Preemption {
+	return predicate.Preemption(func(s *sql.Selector) {
+		s.Where(sql.LTE(s.C(FieldPhonenumber), v))
+	})
+}
+
+// PhonenumberContains applies the Contains predicate on the "Phonenumber" field.
+func PhonenumberContains(v string) predicate.Preemption {
+	return predicate.Preemption(func(s *sql.Selector) {
+		s.Where(sql.Contains(s.C(FieldPhonenumber), v))
+	})
+}
+
+// PhonenumberHasPrefix applies the HasPrefix predicate on the "Phonenumber" field.
+func PhonenumberHasPrefix(v string) predicate.Preemption {
+	return predicate.Preemption(func(s *sql.Selector) {
+		s.Where(sql.HasPrefix(s.C(FieldPhonenumber), v))
+	})
+}
+
+// PhonenumberHasSuffix applies the HasSuffix predicate on the "Phonenumber" field.
+func PhonenumberHasSuffix(v string) predicate.Preemption {
+	return predicate.Preemption(func(s *sql.Selector) {
+		s.Where(sql.HasSuffix(s.C(FieldPhonenumber), v))
+	})
+}
+
+// PhonenumberEqualFold applies the EqualFold predicate on the "Phonenumber" field.
+func PhonenumberEqualFold(v string) predicate.Preemption {
+	return predicate.Preemption(func(s *sql.Selector) {
+		s.Where(sql.EqualFold(s.C(FieldPhonenumber), v))
+	})
+}
+
+// PhonenumberContainsFold applies the ContainsFold predicate on the "Phonenumber" field.
+func PhonenumberContainsFold(v string) predicate.Preemption {
+	return predicate.Preemption(func(s *sql.Selector) {
+		s.Where(sql.ContainsFold(s.C(FieldPhonenumber), v))
+	})
+}
+
+// SurrogateidEQ applies the EQ predicate on the "Surrogateid" field.
+func SurrogateidEQ(v string) predicate.Preemption {
+	return predicate.Preemption(func(s *sql.Selector) {
+		s.Where(sql.EQ(s.C(FieldSurrogateid), v))
+	})
+}
+
+// SurrogateidNEQ applies the NEQ predicate on the "Surrogateid" field.
+func SurrogateidNEQ(v string) predicate.Preemption {
+	return predicate.Preemption(func(s *sql.Selector) {
+		s.Where(sql.NEQ(s.C(FieldSurrogateid), v))
+	})
+}
+
+// SurrogateidIn applies the In predicate on the "Surrogateid" field.
+func SurrogateidIn(vs ...string) predicate.Preemption {
+	v := make([]interface{}, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.Preemption(func(s *sql.Selector) {
+		// if not arguments were provided, append the FALSE constants,
+		// since we can't apply "IN ()". This will make this predicate falsy.
+		if len(v) == 0 {
+			s.Where(sql.False())
+			return
+		}
+		s.Where(sql.In(s.C(FieldSurrogateid), v...))
+	})
+}
+
+// SurrogateidNotIn applies the NotIn predicate on the "Surrogateid" field.
+func SurrogateidNotIn(vs ...string) predicate.Preemption {
+	v := make([]interface{}, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.Preemption(func(s *sql.Selector) {
+		// if not arguments were provided, append the FALSE constants,
+		// since we can't apply "IN ()". This will make this predicate falsy.
+		if len(v) == 0 {
+			s.Where(sql.False())
+			return
+		}
+		s.Where(sql.NotIn(s.C(FieldSurrogateid), v...))
+	})
+}
+
+// SurrogateidGT applies the GT predicate on the "Surrogateid" field.
+func SurrogateidGT(v string) predicate.Preemption {
+	return predicate.Preemption(func(s *sql.Selector) {
+		s.Where(sql.GT(s.C(FieldSurrogateid), v))
+	})
+}
+
+// SurrogateidGTE applies the GTE predicate on the "Surrogateid" field.
+func SurrogateidGTE(v string) predicate.Preemption {
+	return predicate.Preemption(func(s *sql.Selector) {
+		s.Where(sql.GTE(s.C(FieldSurrogateid), v))
+	})
+}
+
+// SurrogateidLT applies the LT predicate on the "Surrogateid" field.
+func SurrogateidLT(v string) predicate.Preemption {
+	return predicate.Preemption(func(s *sql.Selector) {
+		s.Where(sql.LT(s.C(FieldSurrogateid), v))
+	})
+}
+
+// SurrogateidLTE applies the LTE predicate on the "Surrogateid" field.
+func SurrogateidLTE(v string) predicate.Preemption {
+	return predicate.Preemption(func(s *sql.Selector) {
+		s.Where(sql.LTE(s.C(FieldSurrogateid), v))
+	})
+}
+
+// SurrogateidContains applies the Contains predicate on the "Surrogateid" field.
+func SurrogateidContains(v string) predicate.Preemption {
+	return predicate.Preemption(func(s *sql.Selector) {
+		s.Where(sql.Contains(s.C(FieldSurrogateid), v))
+	})
+}
+
+// SurrogateidHasPrefix applies the HasPrefix predicate on the "Surrogateid" field.
+func SurrogateidHasPrefix(v string) predicate.Preemption {
+	return predicate.Preemption(func(s *sql.Selector) {
+		s.Where(sql.HasPrefix(s.C(FieldSurrogateid), v))
+	})
+}
+
+// SurrogateidHasSuffix applies the HasSuffix predicate on the "Surrogateid" field.
+func SurrogateidHasSuffix(v string) predicate.Preemption {
+	return predicate.Preemption(func(s *sql.Selector) {
+		s.Where(sql.HasSuffix(s.C(FieldSurrogateid), v))
+	})
+}
+
+// SurrogateidEqualFold applies the EqualFold predicate on the "Surrogateid" field.
+func SurrogateidEqualFold(v string) predicate.Preemption {
+	return predicate.Preemption(func(s *sql.Selector) {
+		s.Where(sql.EqualFold(s.C(FieldSurrogateid), v))
+	})
+}
+
+// SurrogateidContainsFold applies the ContainsFold predicate on the "Surrogateid" field.
+func SurrogateidContainsFold(v string) predicate.Preemption {
+	return predicate.Preemption(func(s *sql.Selector) {
+		s.Where(sql.ContainsFold(s.C(FieldSurrogateid), v))
+	})
+}
+
+// SurrogatephoneEQ applies the EQ predicate on the "Surrogatephone" field.
+func SurrogatephoneEQ(v string) predicate.Preemption {
+	return predicate.Preemption(func(s *sql.Selector) {
+		s.Where(sql.EQ(s.C(FieldSurrogatephone), v))
+	})
+}
+
+// SurrogatephoneNEQ applies the NEQ predicate on the "Surrogatephone" field.
+func SurrogatephoneNEQ(v string) predicate.Preemption {
+	return predicate.Preemption(func(s *sql.Selector) {
+		s.Where(sql.NEQ(s.C(FieldSurrogatephone), v))
+	})
+}
+
+// SurrogatephoneIn applies the In predicate on the "Surrogatephone" field.
+func SurrogatephoneIn(vs ...string) predicate.Preemption {
+	v := make([]interface{}, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.Preemption(func(s *sql.Selector) {
+		// if not arguments were provided, append the FALSE constants,
+		// since we can't apply "IN ()". This will make this predicate falsy.
+		if len(v) == 0 {
+			s.Where(sql.False())
+			return
+		}
+		s.Where(sql.In(s.C(FieldSurrogatephone), v...))
+	})
+}
+
+// SurrogatephoneNotIn applies the NotIn predicate on the "Surrogatephone" field.
+func SurrogatephoneNotIn(vs ...string) predicate.Preemption {
+	v := make([]interface{}, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.Preemption(func(s *sql.Selector) {
+		// if not arguments were provided, append the FALSE constants,
+		// since we can't apply "IN ()". This will make this predicate falsy.
+		if len(v) == 0 {
+			s.Where(sql.False())
+			return
+		}
+		s.Where(sql.NotIn(s.C(FieldSurrogatephone), v...))
+	})
+}
+
+// SurrogatephoneGT applies the GT predicate on the "Surrogatephone" field.
+func SurrogatephoneGT(v string) predicate.Preemption {
+	return predicate.Preemption(func(s *sql.Selector) {
+		s.Where(sql.GT(s.C(FieldSurrogatephone), v))
+	})
+}
+
+// SurrogatephoneGTE applies the GTE predicate on the "Surrogatephone" field.
+func SurrogatephoneGTE(v string) predicate.Preemption {
+	return predicate.Preemption(func(s *sql.Selector) {
+		s.Where(sql.GTE(s.C(FieldSurrogatephone), v))
+	})
+}
+
+// SurrogatephoneLT applies the LT predicate on the "Surrogatephone" field.
+func SurrogatephoneLT(v string) predicate.Preemption {
+	return predicate.Preemption(func(s *sql.Selector) {
+		s.Where(sql.LT(s.C(FieldSurrogatephone), v))
+	})
+}
+
+// SurrogatephoneLTE applies the LTE predicate on the "Surrogatephone" field.
+func SurrogatephoneLTE(v string) predicate.Preemption {
+	return predicate.Preemption(func(s *sql.Selector) {
+		s.Where(sql.LTE(s.C(FieldSurrogatephone), v))
+	})
+}
+
+// SurrogatephoneContains applies the Contains predicate on the "Surrogatephone" field.
+func SurrogatephoneContains(v string) predicate.Preemption {
+	return predicate.Preemption(func(s *sql.Selector) {
+		s.Where(sql.Contains(s.C(FieldSurrogatephone), v))
+	})
+}
+
+// SurrogatephoneHasPrefix applies the HasPrefix predicate on the "Surrogatephone" field.
+func SurrogatephoneHasPrefix(v string) predicate.Preemption {
+	return predicate.Preemption(func(s *sql.Selector) {
+		s.Where(sql.HasPrefix(s.C(FieldSurrogatephone), v))
+	})
+}
+
+// SurrogatephoneHasSuffix applies the HasSuffix predicate on the "Surrogatephone" field.
+func SurrogatephoneHasSuffix(v string) predicate.Preemption {
+	return predicate.Preemption(func(s *sql.Selector) {
+		s.Where(sql.HasSuffix(s.C(FieldSurrogatephone), v))
+	})
+}
+
+// SurrogatephoneEqualFold applies the EqualFold predicate on the "Surrogatephone" field.
+func SurrogatephoneEqualFold(v string) predicate.Preemption {
+	return predicate.Preemption(func(s *sql.Selector) {
+		s.Where(sql.EqualFold(s.C(FieldSurrogatephone), v))
+	})
+}
+
+// SurrogatephoneContainsFold applies the ContainsFold predicate on the "Surrogatephone" field.
+func SurrogatephoneContainsFold(v string) predicate.Preemption {
+	return predicate.Preemption(func(s *sql.Selector) {
+		s.Where(sql.ContainsFold(s.C(FieldSurrogatephone), v))
 	})
 }
 

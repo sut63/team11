@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"fmt"
 	"context"
 	"strconv"
 	"time"
@@ -24,7 +25,9 @@ type Preemption struct {
 	User     int
 	Roominfo int
 	Purpose  int
-	Added    string
+	Otherpeopleid		string
+	Otherpeoplephone	string
+	Phoneuser			string
 }
 
 // CreatePreemption handles POST requests for adding preemption entities
@@ -83,18 +86,23 @@ func (ctl *PreemptionController) CreatePreemption(c *gin.Context) {
 		return
 	}
 
-	time, err := time.Parse(time.RFC3339, obj.Added)
+	time := time.Now().Local()
 	prm, err := ctl.client.Preemption.
 		Create().
 		SetPreemptTime(time).
 		SetUserID(u).
 		SetRoomID(r).
 		SetPurposeID(p).
+		SetPhonenumber(obj.Phoneuser).
+		SetSurrogateid(obj.Otherpeopleid).
+		SetSurrogatephone(obj.Otherpeoplephone).
 		Save(context.Background())
 
 	if err != nil {
+		fmt.Println(err)
 		c.JSON(400, gin.H{
-			"error": "saving failed",
+			"status":	false,
+			"error": err,
 		})
 		return
 	}

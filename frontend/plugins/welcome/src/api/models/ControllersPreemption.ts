@@ -24,7 +24,19 @@ export interface ControllersPreemption {
      * @type {string}
      * @memberof ControllersPreemption
      */
-    added?: string;
+    otherpeopleid?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof ControllersPreemption
+     */
+    otherpeoplephone?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof ControllersPreemption
+     */
+    phoneuser?: string;
     /**
      * 
      * @type {number}
@@ -55,7 +67,9 @@ export function ControllersPreemptionFromJSONTyped(json: any, ignoreDiscriminato
     }
     return {
         
-        'added': !exists(json, 'added') ? undefined : json['added'],
+        'otherpeopleid': !exists(json, 'otherpeopleid') ? undefined : json['otherpeopleid'],
+        'otherpeoplephone': !exists(json, 'otherpeoplephone') ? undefined : json['otherpeoplephone'],
+        'phoneuser': !exists(json, 'phoneuser') ? undefined : json['phoneuser'],
         'purpose': !exists(json, 'purpose') ? undefined : json['purpose'],
         'roominfo': !exists(json, 'roominfo') ? undefined : json['roominfo'],
         'user': !exists(json, 'user') ? undefined : json['user'],
@@ -71,7 +85,9 @@ export function ControllersPreemptionToJSON(value?: ControllersPreemption | null
     }
     return {
         
-        'added': value.added,
+        'otherpeopleid': value.otherpeopleid,
+        'otherpeoplephone': value.otherpeoplephone,
+        'phoneuser': value.phoneuser,
         'purpose': value.purpose,
         'roominfo': value.roominfo,
         'user': value.user,
