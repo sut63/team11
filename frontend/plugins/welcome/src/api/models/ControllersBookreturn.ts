@@ -30,7 +30,25 @@ export interface ControllersBookreturn {
      * @type {number}
      * @memberof ControllersBookreturn
      */
+    damagedPoint?: number;
+    /**
+     * 
+     * @type {string}
+     * @memberof ControllersBookreturn
+     */
+    damagedPointName?: string;
+    /**
+     * 
+     * @type {number}
+     * @memberof ControllersBookreturn
+     */
     locationID?: number;
+    /**
+     * 
+     * @type {string}
+     * @memberof ControllersBookreturn
+     */
+    lost?: string;
     /**
      * 
      * @type {string}
@@ -56,7 +74,10 @@ export function ControllersBookreturnFromJSONTyped(json: any, ignoreDiscriminato
     return {
         
         'bookborrowID': !exists(json, 'bookborrowID') ? undefined : json['bookborrowID'],
+        'damagedPoint': !exists(json, 'damagedPoint') ? undefined : json['damagedPoint'],
+        'damagedPointName': !exists(json, 'damagedPointName') ? undefined : json['damagedPointName'],
         'locationID': !exists(json, 'locationID') ? undefined : json['locationID'],
+        'lost': !exists(json, 'lost') ? undefined : json['lost'],
         'returnTime': !exists(json, 'returnTime') ? undefined : json['returnTime'],
         'userID': !exists(json, 'userID') ? undefined : json['userID'],
     };
@@ -72,7 +93,10 @@ export function ControllersBookreturnToJSON(value?: ControllersBookreturn | null
     return {
         
         'bookborrowID': value.bookborrowID,
+        'damagedPoint': value.damagedPoint,
+        'damagedPointName': value.damagedPointName,
         'locationID': value.locationID,
+        'lost': value.lost,
         'returnTime': value.returnTime,
         'userID': value.userID,
     };

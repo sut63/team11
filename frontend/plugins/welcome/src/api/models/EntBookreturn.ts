@@ -27,6 +27,24 @@ import {
  */
 export interface EntBookreturn {
     /**
+     * DAMAGEDPOINT holds the value of the "DAMAGED_POINT" field.
+     * @type {number}
+     * @memberof EntBookreturn
+     */
+    dAMAGEDPOINT?: number;
+    /**
+     * DAMAGEDPOINTNAME holds the value of the "DAMAGED_POINTNAME" field.
+     * @type {string}
+     * @memberof EntBookreturn
+     */
+    dAMAGEDPOINTNAME?: string;
+    /**
+     * LOST holds the value of the "LOST" field.
+     * @type {string}
+     * @memberof EntBookreturn
+     */
+    lOST?: string;
+    /**
      * RETURNTIME holds the value of the "RETURN_TIME" field.
      * @type {string}
      * @memberof EntBookreturn
@@ -74,6 +92,9 @@ export function EntBookreturnFromJSONTyped(json: any, ignoreDiscriminator: boole
     }
     return {
         
+        'dAMAGEDPOINT': !exists(json, 'DAMAGED_POINT') ? undefined : json['DAMAGED_POINT'],
+        'dAMAGEDPOINTNAME': !exists(json, 'DAMAGED_POINTNAME') ? undefined : json['DAMAGED_POINTNAME'],
+        'lOST': !exists(json, 'LOST') ? undefined : json['LOST'],
         'rETURNTIME': !exists(json, 'RETURN_TIME') ? undefined : json['RETURN_TIME'],
         'clientID': !exists(json, 'client_ID') ? undefined : json['client_ID'],
         'edges': !exists(json, 'edges') ? undefined : EntBookreturnEdgesFromJSON(json['edges']),
@@ -92,6 +113,9 @@ export function EntBookreturnToJSON(value?: EntBookreturn | null): any {
     }
     return {
         
+        'DAMAGED_POINT': value.dAMAGEDPOINT,
+        'DAMAGED_POINTNAME': value.dAMAGEDPOINTNAME,
+        'LOST': value.lOST,
         'RETURN_TIME': value.rETURNTIME,
         'client_ID': value.clientID,
         'edges': EntBookreturnEdgesToJSON(value.edges),

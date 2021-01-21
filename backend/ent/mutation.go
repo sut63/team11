@@ -2467,19 +2467,23 @@ func (m *BookingMutation) ResetEdge(name string) error {
 // nodes in the graph.
 type BookreturnMutation struct {
 	config
-	op                Op
-	typ               string
-	id                *int
-	_RETURN_TIME      *time.Time
-	clearedFields     map[string]struct{}
-	user              *int
-	cleareduser       bool
-	location          *int
-	clearedlocation   bool
-	mustreturn        *int
-	clearedmustreturn bool
-	done              bool
-	oldValue          func(context.Context) (*Bookreturn, error)
+	op                 Op
+	typ                string
+	id                 *int
+	_RETURN_TIME       *time.Time
+	_DAMAGED_POINT     *int
+	add_DAMAGED_POINT  *int
+	_DAMAGED_POINTNAME *string
+	_LOST              *string
+	clearedFields      map[string]struct{}
+	user               *int
+	cleareduser        bool
+	location           *int
+	clearedlocation    bool
+	mustreturn         *int
+	clearedmustreturn  bool
+	done               bool
+	oldValue           func(context.Context) (*Bookreturn, error)
 }
 
 var _ ent.Mutation = (*BookreturnMutation)(nil)
@@ -2596,6 +2600,137 @@ func (m *BookreturnMutation) OldRETURNTIME(ctx context.Context) (v time.Time, er
 // ResetRETURNTIME reset all changes of the "RETURN_TIME" field.
 func (m *BookreturnMutation) ResetRETURNTIME() {
 	m._RETURN_TIME = nil
+}
+
+// SetDAMAGEDPOINT sets the DAMAGED_POINT field.
+func (m *BookreturnMutation) SetDAMAGEDPOINT(i int) {
+	m._DAMAGED_POINT = &i
+	m.add_DAMAGED_POINT = nil
+}
+
+// DAMAGEDPOINT returns the DAMAGED_POINT value in the mutation.
+func (m *BookreturnMutation) DAMAGEDPOINT() (r int, exists bool) {
+	v := m._DAMAGED_POINT
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldDAMAGEDPOINT returns the old DAMAGED_POINT value of the Bookreturn.
+// If the Bookreturn object wasn't provided to the builder, the object is fetched
+// from the database.
+// An error is returned if the mutation operation is not UpdateOne, or database query fails.
+func (m *BookreturnMutation) OldDAMAGEDPOINT(ctx context.Context) (v int, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, fmt.Errorf("OldDAMAGEDPOINT is allowed only on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, fmt.Errorf("OldDAMAGEDPOINT requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldDAMAGEDPOINT: %w", err)
+	}
+	return oldValue.DAMAGEDPOINT, nil
+}
+
+// AddDAMAGEDPOINT adds i to DAMAGED_POINT.
+func (m *BookreturnMutation) AddDAMAGEDPOINT(i int) {
+	if m.add_DAMAGED_POINT != nil {
+		*m.add_DAMAGED_POINT += i
+	} else {
+		m.add_DAMAGED_POINT = &i
+	}
+}
+
+// AddedDAMAGEDPOINT returns the value that was added to the DAMAGED_POINT field in this mutation.
+func (m *BookreturnMutation) AddedDAMAGEDPOINT() (r int, exists bool) {
+	v := m.add_DAMAGED_POINT
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ResetDAMAGEDPOINT reset all changes of the "DAMAGED_POINT" field.
+func (m *BookreturnMutation) ResetDAMAGEDPOINT() {
+	m._DAMAGED_POINT = nil
+	m.add_DAMAGED_POINT = nil
+}
+
+// SetDAMAGEDPOINTNAME sets the DAMAGED_POINTNAME field.
+func (m *BookreturnMutation) SetDAMAGEDPOINTNAME(s string) {
+	m._DAMAGED_POINTNAME = &s
+}
+
+// DAMAGEDPOINTNAME returns the DAMAGED_POINTNAME value in the mutation.
+func (m *BookreturnMutation) DAMAGEDPOINTNAME() (r string, exists bool) {
+	v := m._DAMAGED_POINTNAME
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldDAMAGEDPOINTNAME returns the old DAMAGED_POINTNAME value of the Bookreturn.
+// If the Bookreturn object wasn't provided to the builder, the object is fetched
+// from the database.
+// An error is returned if the mutation operation is not UpdateOne, or database query fails.
+func (m *BookreturnMutation) OldDAMAGEDPOINTNAME(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, fmt.Errorf("OldDAMAGEDPOINTNAME is allowed only on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, fmt.Errorf("OldDAMAGEDPOINTNAME requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldDAMAGEDPOINTNAME: %w", err)
+	}
+	return oldValue.DAMAGEDPOINTNAME, nil
+}
+
+// ResetDAMAGEDPOINTNAME reset all changes of the "DAMAGED_POINTNAME" field.
+func (m *BookreturnMutation) ResetDAMAGEDPOINTNAME() {
+	m._DAMAGED_POINTNAME = nil
+}
+
+// SetLOST sets the LOST field.
+func (m *BookreturnMutation) SetLOST(s string) {
+	m._LOST = &s
+}
+
+// LOST returns the LOST value in the mutation.
+func (m *BookreturnMutation) LOST() (r string, exists bool) {
+	v := m._LOST
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldLOST returns the old LOST value of the Bookreturn.
+// If the Bookreturn object wasn't provided to the builder, the object is fetched
+// from the database.
+// An error is returned if the mutation operation is not UpdateOne, or database query fails.
+func (m *BookreturnMutation) OldLOST(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, fmt.Errorf("OldLOST is allowed only on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, fmt.Errorf("OldLOST requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldLOST: %w", err)
+	}
+	return oldValue.LOST, nil
+}
+
+// ResetLOST reset all changes of the "LOST" field.
+func (m *BookreturnMutation) ResetLOST() {
+	m._LOST = nil
 }
 
 // SetUserID sets the user edge to User by id.
@@ -2729,9 +2864,18 @@ func (m *BookreturnMutation) Type() string {
 // this mutation. Note that, in order to get all numeric
 // fields that were in/decremented, call AddedFields().
 func (m *BookreturnMutation) Fields() []string {
-	fields := make([]string, 0, 1)
+	fields := make([]string, 0, 4)
 	if m._RETURN_TIME != nil {
 		fields = append(fields, bookreturn.FieldRETURNTIME)
+	}
+	if m._DAMAGED_POINT != nil {
+		fields = append(fields, bookreturn.FieldDAMAGEDPOINT)
+	}
+	if m._DAMAGED_POINTNAME != nil {
+		fields = append(fields, bookreturn.FieldDAMAGEDPOINTNAME)
+	}
+	if m._LOST != nil {
+		fields = append(fields, bookreturn.FieldLOST)
 	}
 	return fields
 }
@@ -2743,6 +2887,12 @@ func (m *BookreturnMutation) Field(name string) (ent.Value, bool) {
 	switch name {
 	case bookreturn.FieldRETURNTIME:
 		return m.RETURNTIME()
+	case bookreturn.FieldDAMAGEDPOINT:
+		return m.DAMAGEDPOINT()
+	case bookreturn.FieldDAMAGEDPOINTNAME:
+		return m.DAMAGEDPOINTNAME()
+	case bookreturn.FieldLOST:
+		return m.LOST()
 	}
 	return nil, false
 }
@@ -2754,6 +2904,12 @@ func (m *BookreturnMutation) OldField(ctx context.Context, name string) (ent.Val
 	switch name {
 	case bookreturn.FieldRETURNTIME:
 		return m.OldRETURNTIME(ctx)
+	case bookreturn.FieldDAMAGEDPOINT:
+		return m.OldDAMAGEDPOINT(ctx)
+	case bookreturn.FieldDAMAGEDPOINTNAME:
+		return m.OldDAMAGEDPOINTNAME(ctx)
+	case bookreturn.FieldLOST:
+		return m.OldLOST(ctx)
 	}
 	return nil, fmt.Errorf("unknown Bookreturn field %s", name)
 }
@@ -2770,6 +2926,27 @@ func (m *BookreturnMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetRETURNTIME(v)
 		return nil
+	case bookreturn.FieldDAMAGEDPOINT:
+		v, ok := value.(int)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetDAMAGEDPOINT(v)
+		return nil
+	case bookreturn.FieldDAMAGEDPOINTNAME:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetDAMAGEDPOINTNAME(v)
+		return nil
+	case bookreturn.FieldLOST:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetLOST(v)
+		return nil
 	}
 	return fmt.Errorf("unknown Bookreturn field %s", name)
 }
@@ -2777,13 +2954,21 @@ func (m *BookreturnMutation) SetField(name string, value ent.Value) error {
 // AddedFields returns all numeric fields that were incremented
 // or decremented during this mutation.
 func (m *BookreturnMutation) AddedFields() []string {
-	return nil
+	var fields []string
+	if m.add_DAMAGED_POINT != nil {
+		fields = append(fields, bookreturn.FieldDAMAGEDPOINT)
+	}
+	return fields
 }
 
 // AddedField returns the numeric value that was in/decremented
 // from a field with the given name. The second value indicates
 // that this field was not set, or was not define in the schema.
 func (m *BookreturnMutation) AddedField(name string) (ent.Value, bool) {
+	switch name {
+	case bookreturn.FieldDAMAGEDPOINT:
+		return m.AddedDAMAGEDPOINT()
+	}
 	return nil, false
 }
 
@@ -2792,6 +2977,13 @@ func (m *BookreturnMutation) AddedField(name string) (ent.Value, bool) {
 // type mismatch the field type.
 func (m *BookreturnMutation) AddField(name string, value ent.Value) error {
 	switch name {
+	case bookreturn.FieldDAMAGEDPOINT:
+		v, ok := value.(int)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddDAMAGEDPOINT(v)
+		return nil
 	}
 	return fmt.Errorf("unknown Bookreturn numeric field %s", name)
 }
@@ -2822,6 +3014,15 @@ func (m *BookreturnMutation) ResetField(name string) error {
 	switch name {
 	case bookreturn.FieldRETURNTIME:
 		m.ResetRETURNTIME()
+		return nil
+	case bookreturn.FieldDAMAGEDPOINT:
+		m.ResetDAMAGEDPOINT()
+		return nil
+	case bookreturn.FieldDAMAGEDPOINTNAME:
+		m.ResetDAMAGEDPOINTNAME()
+		return nil
+	case bookreturn.FieldLOST:
+		m.ResetLOST()
 		return nil
 	}
 	return fmt.Errorf("unknown Bookreturn field %s", name)

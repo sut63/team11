@@ -9,6 +9,12 @@ const (
 	FieldID = "id"
 	// FieldRETURNTIME holds the string denoting the return_time field in the database.
 	FieldRETURNTIME = "return_time"
+	// FieldDAMAGEDPOINT holds the string denoting the damaged_point field in the database.
+	FieldDAMAGEDPOINT = "damaged_point"
+	// FieldDAMAGEDPOINTNAME holds the string denoting the damaged_pointname field in the database.
+	FieldDAMAGEDPOINTNAME = "damaged_pointname"
+	// FieldLOST holds the string denoting the lost field in the database.
+	FieldLOST = "lost"
 
 	// EdgeUser holds the string denoting the user edge name in mutations.
 	EdgeUser = "user"
@@ -46,6 +52,9 @@ const (
 var Columns = []string{
 	FieldID,
 	FieldRETURNTIME,
+	FieldDAMAGEDPOINT,
+	FieldDAMAGEDPOINTNAME,
+	FieldLOST,
 }
 
 // ForeignKeys holds the SQL foreign-keys that are owned by the Bookreturn type.
@@ -54,3 +63,12 @@ var ForeignKeys = []string{
 	"LOCATION_ID",
 	"USER_ID",
 }
+
+var (
+	// DAMAGEDPOINTValidator is a validator for the "DAMAGED_POINT" field. It is called by the builders before save.
+	DAMAGEDPOINTValidator func(int) error
+	// DAMAGEDPOINTNAMEValidator is a validator for the "DAMAGED_POINTNAME" field. It is called by the builders before save.
+	DAMAGEDPOINTNAMEValidator func(string) error
+	// LOSTValidator is a validator for the "LOST" field. It is called by the builders before save.
+	LOSTValidator func(string) error
+)

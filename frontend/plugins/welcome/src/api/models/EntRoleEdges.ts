@@ -44,7 +44,7 @@ export function EntRoleEdgesFromJSONTyped(json: any, ignoreDiscriminator: boolea
     }
     return {
         
-        'role': !exists(json, 'Role') ? undefined : ((json['Role'] as Array<any>).map(EntUserFromJSON)),
+        'role': !exists(json, 'role') ? undefined : ((json['role'] as Array<any>).map(EntUserFromJSON)),
     };
 }
 

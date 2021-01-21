@@ -100,6 +100,27 @@ func RETURNTIME(v time.Time) predicate.Bookreturn {
 	})
 }
 
+// DAMAGEDPOINT applies equality check predicate on the "DAMAGED_POINT" field. It's identical to DAMAGEDPOINTEQ.
+func DAMAGEDPOINT(v int) predicate.Bookreturn {
+	return predicate.Bookreturn(func(s *sql.Selector) {
+		s.Where(sql.EQ(s.C(FieldDAMAGEDPOINT), v))
+	})
+}
+
+// DAMAGEDPOINTNAME applies equality check predicate on the "DAMAGED_POINTNAME" field. It's identical to DAMAGEDPOINTNAMEEQ.
+func DAMAGEDPOINTNAME(v string) predicate.Bookreturn {
+	return predicate.Bookreturn(func(s *sql.Selector) {
+		s.Where(sql.EQ(s.C(FieldDAMAGEDPOINTNAME), v))
+	})
+}
+
+// LOST applies equality check predicate on the "LOST" field. It's identical to LOSTEQ.
+func LOST(v string) predicate.Bookreturn {
+	return predicate.Bookreturn(func(s *sql.Selector) {
+		s.Where(sql.EQ(s.C(FieldLOST), v))
+	})
+}
+
 // RETURNTIMEEQ applies the EQ predicate on the "RETURN_TIME" field.
 func RETURNTIMEEQ(v time.Time) predicate.Bookreturn {
 	return predicate.Bookreturn(func(s *sql.Selector) {
@@ -173,6 +194,304 @@ func RETURNTIMELT(v time.Time) predicate.Bookreturn {
 func RETURNTIMELTE(v time.Time) predicate.Bookreturn {
 	return predicate.Bookreturn(func(s *sql.Selector) {
 		s.Where(sql.LTE(s.C(FieldRETURNTIME), v))
+	})
+}
+
+// DAMAGEDPOINTEQ applies the EQ predicate on the "DAMAGED_POINT" field.
+func DAMAGEDPOINTEQ(v int) predicate.Bookreturn {
+	return predicate.Bookreturn(func(s *sql.Selector) {
+		s.Where(sql.EQ(s.C(FieldDAMAGEDPOINT), v))
+	})
+}
+
+// DAMAGEDPOINTNEQ applies the NEQ predicate on the "DAMAGED_POINT" field.
+func DAMAGEDPOINTNEQ(v int) predicate.Bookreturn {
+	return predicate.Bookreturn(func(s *sql.Selector) {
+		s.Where(sql.NEQ(s.C(FieldDAMAGEDPOINT), v))
+	})
+}
+
+// DAMAGEDPOINTIn applies the In predicate on the "DAMAGED_POINT" field.
+func DAMAGEDPOINTIn(vs ...int) predicate.Bookreturn {
+	v := make([]interface{}, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.Bookreturn(func(s *sql.Selector) {
+		// if not arguments were provided, append the FALSE constants,
+		// since we can't apply "IN ()". This will make this predicate falsy.
+		if len(v) == 0 {
+			s.Where(sql.False())
+			return
+		}
+		s.Where(sql.In(s.C(FieldDAMAGEDPOINT), v...))
+	})
+}
+
+// DAMAGEDPOINTNotIn applies the NotIn predicate on the "DAMAGED_POINT" field.
+func DAMAGEDPOINTNotIn(vs ...int) predicate.Bookreturn {
+	v := make([]interface{}, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.Bookreturn(func(s *sql.Selector) {
+		// if not arguments were provided, append the FALSE constants,
+		// since we can't apply "IN ()". This will make this predicate falsy.
+		if len(v) == 0 {
+			s.Where(sql.False())
+			return
+		}
+		s.Where(sql.NotIn(s.C(FieldDAMAGEDPOINT), v...))
+	})
+}
+
+// DAMAGEDPOINTGT applies the GT predicate on the "DAMAGED_POINT" field.
+func DAMAGEDPOINTGT(v int) predicate.Bookreturn {
+	return predicate.Bookreturn(func(s *sql.Selector) {
+		s.Where(sql.GT(s.C(FieldDAMAGEDPOINT), v))
+	})
+}
+
+// DAMAGEDPOINTGTE applies the GTE predicate on the "DAMAGED_POINT" field.
+func DAMAGEDPOINTGTE(v int) predicate.Bookreturn {
+	return predicate.Bookreturn(func(s *sql.Selector) {
+		s.Where(sql.GTE(s.C(FieldDAMAGEDPOINT), v))
+	})
+}
+
+// DAMAGEDPOINTLT applies the LT predicate on the "DAMAGED_POINT" field.
+func DAMAGEDPOINTLT(v int) predicate.Bookreturn {
+	return predicate.Bookreturn(func(s *sql.Selector) {
+		s.Where(sql.LT(s.C(FieldDAMAGEDPOINT), v))
+	})
+}
+
+// DAMAGEDPOINTLTE applies the LTE predicate on the "DAMAGED_POINT" field.
+func DAMAGEDPOINTLTE(v int) predicate.Bookreturn {
+	return predicate.Bookreturn(func(s *sql.Selector) {
+		s.Where(sql.LTE(s.C(FieldDAMAGEDPOINT), v))
+	})
+}
+
+// DAMAGEDPOINTNAMEEQ applies the EQ predicate on the "DAMAGED_POINTNAME" field.
+func DAMAGEDPOINTNAMEEQ(v string) predicate.Bookreturn {
+	return predicate.Bookreturn(func(s *sql.Selector) {
+		s.Where(sql.EQ(s.C(FieldDAMAGEDPOINTNAME), v))
+	})
+}
+
+// DAMAGEDPOINTNAMENEQ applies the NEQ predicate on the "DAMAGED_POINTNAME" field.
+func DAMAGEDPOINTNAMENEQ(v string) predicate.Bookreturn {
+	return predicate.Bookreturn(func(s *sql.Selector) {
+		s.Where(sql.NEQ(s.C(FieldDAMAGEDPOINTNAME), v))
+	})
+}
+
+// DAMAGEDPOINTNAMEIn applies the In predicate on the "DAMAGED_POINTNAME" field.
+func DAMAGEDPOINTNAMEIn(vs ...string) predicate.Bookreturn {
+	v := make([]interface{}, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.Bookreturn(func(s *sql.Selector) {
+		// if not arguments were provided, append the FALSE constants,
+		// since we can't apply "IN ()". This will make this predicate falsy.
+		if len(v) == 0 {
+			s.Where(sql.False())
+			return
+		}
+		s.Where(sql.In(s.C(FieldDAMAGEDPOINTNAME), v...))
+	})
+}
+
+// DAMAGEDPOINTNAMENotIn applies the NotIn predicate on the "DAMAGED_POINTNAME" field.
+func DAMAGEDPOINTNAMENotIn(vs ...string) predicate.Bookreturn {
+	v := make([]interface{}, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.Bookreturn(func(s *sql.Selector) {
+		// if not arguments were provided, append the FALSE constants,
+		// since we can't apply "IN ()". This will make this predicate falsy.
+		if len(v) == 0 {
+			s.Where(sql.False())
+			return
+		}
+		s.Where(sql.NotIn(s.C(FieldDAMAGEDPOINTNAME), v...))
+	})
+}
+
+// DAMAGEDPOINTNAMEGT applies the GT predicate on the "DAMAGED_POINTNAME" field.
+func DAMAGEDPOINTNAMEGT(v string) predicate.Bookreturn {
+	return predicate.Bookreturn(func(s *sql.Selector) {
+		s.Where(sql.GT(s.C(FieldDAMAGEDPOINTNAME), v))
+	})
+}
+
+// DAMAGEDPOINTNAMEGTE applies the GTE predicate on the "DAMAGED_POINTNAME" field.
+func DAMAGEDPOINTNAMEGTE(v string) predicate.Bookreturn {
+	return predicate.Bookreturn(func(s *sql.Selector) {
+		s.Where(sql.GTE(s.C(FieldDAMAGEDPOINTNAME), v))
+	})
+}
+
+// DAMAGEDPOINTNAMELT applies the LT predicate on the "DAMAGED_POINTNAME" field.
+func DAMAGEDPOINTNAMELT(v string) predicate.Bookreturn {
+	return predicate.Bookreturn(func(s *sql.Selector) {
+		s.Where(sql.LT(s.C(FieldDAMAGEDPOINTNAME), v))
+	})
+}
+
+// DAMAGEDPOINTNAMELTE applies the LTE predicate on the "DAMAGED_POINTNAME" field.
+func DAMAGEDPOINTNAMELTE(v string) predicate.Bookreturn {
+	return predicate.Bookreturn(func(s *sql.Selector) {
+		s.Where(sql.LTE(s.C(FieldDAMAGEDPOINTNAME), v))
+	})
+}
+
+// DAMAGEDPOINTNAMEContains applies the Contains predicate on the "DAMAGED_POINTNAME" field.
+func DAMAGEDPOINTNAMEContains(v string) predicate.Bookreturn {
+	return predicate.Bookreturn(func(s *sql.Selector) {
+		s.Where(sql.Contains(s.C(FieldDAMAGEDPOINTNAME), v))
+	})
+}
+
+// DAMAGEDPOINTNAMEHasPrefix applies the HasPrefix predicate on the "DAMAGED_POINTNAME" field.
+func DAMAGEDPOINTNAMEHasPrefix(v string) predicate.Bookreturn {
+	return predicate.Bookreturn(func(s *sql.Selector) {
+		s.Where(sql.HasPrefix(s.C(FieldDAMAGEDPOINTNAME), v))
+	})
+}
+
+// DAMAGEDPOINTNAMEHasSuffix applies the HasSuffix predicate on the "DAMAGED_POINTNAME" field.
+func DAMAGEDPOINTNAMEHasSuffix(v string) predicate.Bookreturn {
+	return predicate.Bookreturn(func(s *sql.Selector) {
+		s.Where(sql.HasSuffix(s.C(FieldDAMAGEDPOINTNAME), v))
+	})
+}
+
+// DAMAGEDPOINTNAMEEqualFold applies the EqualFold predicate on the "DAMAGED_POINTNAME" field.
+func DAMAGEDPOINTNAMEEqualFold(v string) predicate.Bookreturn {
+	return predicate.Bookreturn(func(s *sql.Selector) {
+		s.Where(sql.EqualFold(s.C(FieldDAMAGEDPOINTNAME), v))
+	})
+}
+
+// DAMAGEDPOINTNAMEContainsFold applies the ContainsFold predicate on the "DAMAGED_POINTNAME" field.
+func DAMAGEDPOINTNAMEContainsFold(v string) predicate.Bookreturn {
+	return predicate.Bookreturn(func(s *sql.Selector) {
+		s.Where(sql.ContainsFold(s.C(FieldDAMAGEDPOINTNAME), v))
+	})
+}
+
+// LOSTEQ applies the EQ predicate on the "LOST" field.
+func LOSTEQ(v string) predicate.Bookreturn {
+	return predicate.Bookreturn(func(s *sql.Selector) {
+		s.Where(sql.EQ(s.C(FieldLOST), v))
+	})
+}
+
+// LOSTNEQ applies the NEQ predicate on the "LOST" field.
+func LOSTNEQ(v string) predicate.Bookreturn {
+	return predicate.Bookreturn(func(s *sql.Selector) {
+		s.Where(sql.NEQ(s.C(FieldLOST), v))
+	})
+}
+
+// LOSTIn applies the In predicate on the "LOST" field.
+func LOSTIn(vs ...string) predicate.Bookreturn {
+	v := make([]interface{}, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.Bookreturn(func(s *sql.Selector) {
+		// if not arguments were provided, append the FALSE constants,
+		// since we can't apply "IN ()". This will make this predicate falsy.
+		if len(v) == 0 {
+			s.Where(sql.False())
+			return
+		}
+		s.Where(sql.In(s.C(FieldLOST), v...))
+	})
+}
+
+// LOSTNotIn applies the NotIn predicate on the "LOST" field.
+func LOSTNotIn(vs ...string) predicate.Bookreturn {
+	v := make([]interface{}, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.Bookreturn(func(s *sql.Selector) {
+		// if not arguments were provided, append the FALSE constants,
+		// since we can't apply "IN ()". This will make this predicate falsy.
+		if len(v) == 0 {
+			s.Where(sql.False())
+			return
+		}
+		s.Where(sql.NotIn(s.C(FieldLOST), v...))
+	})
+}
+
+// LOSTGT applies the GT predicate on the "LOST" field.
+func LOSTGT(v string) predicate.Bookreturn {
+	return predicate.Bookreturn(func(s *sql.Selector) {
+		s.Where(sql.GT(s.C(FieldLOST), v))
+	})
+}
+
+// LOSTGTE applies the GTE predicate on the "LOST" field.
+func LOSTGTE(v string) predicate.Bookreturn {
+	return predicate.Bookreturn(func(s *sql.Selector) {
+		s.Where(sql.GTE(s.C(FieldLOST), v))
+	})
+}
+
+// LOSTLT applies the LT predicate on the "LOST" field.
+func LOSTLT(v string) predicate.Bookreturn {
+	return predicate.Bookreturn(func(s *sql.Selector) {
+		s.Where(sql.LT(s.C(FieldLOST), v))
+	})
+}
+
+// LOSTLTE applies the LTE predicate on the "LOST" field.
+func LOSTLTE(v string) predicate.Bookreturn {
+	return predicate.Bookreturn(func(s *sql.Selector) {
+		s.Where(sql.LTE(s.C(FieldLOST), v))
+	})
+}
+
+// LOSTContains applies the Contains predicate on the "LOST" field.
+func LOSTContains(v string) predicate.Bookreturn {
+	return predicate.Bookreturn(func(s *sql.Selector) {
+		s.Where(sql.Contains(s.C(FieldLOST), v))
+	})
+}
+
+// LOSTHasPrefix applies the HasPrefix predicate on the "LOST" field.
+func LOSTHasPrefix(v string) predicate.Bookreturn {
+	return predicate.Bookreturn(func(s *sql.Selector) {
+		s.Where(sql.HasPrefix(s.C(FieldLOST), v))
+	})
+}
+
+// LOSTHasSuffix applies the HasSuffix predicate on the "LOST" field.
+func LOSTHasSuffix(v string) predicate.Bookreturn {
+	return predicate.Bookreturn(func(s *sql.Selector) {
+		s.Where(sql.HasSuffix(s.C(FieldLOST), v))
+	})
+}
+
+// LOSTEqualFold applies the EqualFold predicate on the "LOST" field.
+func LOSTEqualFold(v string) predicate.Bookreturn {
+	return predicate.Bookreturn(func(s *sql.Selector) {
+		s.Where(sql.EqualFold(s.C(FieldLOST), v))
+	})
+}
+
+// LOSTContainsFold applies the ContainsFold predicate on the "LOST" field.
+func LOSTContainsFold(v string) predicate.Bookreturn {
+	return predicate.Bookreturn(func(s *sql.Selector) {
+		s.Where(sql.ContainsFold(s.C(FieldLOST), v))
 	})
 }
 
