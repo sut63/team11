@@ -46,9 +46,28 @@ func (bu *BookborrowUpdate) SetNillableBORROWDATE(t *time.Time) *BookborrowUpdat
 	return bu
 }
 
-// SetRETURNDATE sets the RETURN_DATE field.
-func (bu *BookborrowUpdate) SetRETURNDATE(t time.Time) *BookborrowUpdate {
-	bu.mutation.SetRETURNDATE(t)
+// SetDAYOFBORROW sets the DAY_OF_BORROW field.
+func (bu *BookborrowUpdate) SetDAYOFBORROW(i int) *BookborrowUpdate {
+	bu.mutation.ResetDAYOFBORROW()
+	bu.mutation.SetDAYOFBORROW(i)
+	return bu
+}
+
+// AddDAYOFBORROW adds i to DAY_OF_BORROW.
+func (bu *BookborrowUpdate) AddDAYOFBORROW(i int) *BookborrowUpdate {
+	bu.mutation.AddDAYOFBORROW(i)
+	return bu
+}
+
+// SetPICKUP sets the PICKUP field.
+func (bu *BookborrowUpdate) SetPICKUP(s string) *BookborrowUpdate {
+	bu.mutation.SetPICKUP(s)
+	return bu
+}
+
+// SetPHONENUMBER sets the PHONE_NUMBER field.
+func (bu *BookborrowUpdate) SetPHONENUMBER(s string) *BookborrowUpdate {
+	bu.mutation.SetPHONENUMBER(s)
 	return bu
 }
 
@@ -164,6 +183,21 @@ func (bu *BookborrowUpdate) RemoveBorrowed(b ...*Bookreturn) *BookborrowUpdate {
 
 // Save executes the query and returns the number of rows/vertices matched by this operation.
 func (bu *BookborrowUpdate) Save(ctx context.Context) (int, error) {
+	if v, ok := bu.mutation.DAYOFBORROW(); ok {
+		if err := bookborrow.DAYOFBORROWValidator(v); err != nil {
+			return 0, &ValidationError{Name: "DAY_OF_BORROW", err: fmt.Errorf("ent: validator failed for field \"DAY_OF_BORROW\": %w", err)}
+		}
+	}
+	if v, ok := bu.mutation.PICKUP(); ok {
+		if err := bookborrow.PICKUPValidator(v); err != nil {
+			return 0, &ValidationError{Name: "PICKUP", err: fmt.Errorf("ent: validator failed for field \"PICKUP\": %w", err)}
+		}
+	}
+	if v, ok := bu.mutation.PHONENUMBER(); ok {
+		if err := bookborrow.PHONENUMBERValidator(v); err != nil {
+			return 0, &ValidationError{Name: "PHONE_NUMBER", err: fmt.Errorf("ent: validator failed for field \"PHONE_NUMBER\": %w", err)}
+		}
+	}
 
 	var (
 		err      error
@@ -239,11 +273,32 @@ func (bu *BookborrowUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Column: bookborrow.FieldBORROWDATE,
 		})
 	}
-	if value, ok := bu.mutation.RETURNDATE(); ok {
+	if value, ok := bu.mutation.DAYOFBORROW(); ok {
 		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeTime,
+			Type:   field.TypeInt,
 			Value:  value,
-			Column: bookborrow.FieldRETURNDATE,
+			Column: bookborrow.FieldDAYOFBORROW,
+		})
+	}
+	if value, ok := bu.mutation.AddedDAYOFBORROW(); ok {
+		_spec.Fields.Add = append(_spec.Fields.Add, &sqlgraph.FieldSpec{
+			Type:   field.TypeInt,
+			Value:  value,
+			Column: bookborrow.FieldDAYOFBORROW,
+		})
+	}
+	if value, ok := bu.mutation.PICKUP(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Value:  value,
+			Column: bookborrow.FieldPICKUP,
+		})
+	}
+	if value, ok := bu.mutation.PHONENUMBER(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Value:  value,
+			Column: bookborrow.FieldPHONENUMBER,
 		})
 	}
 	if bu.mutation.USERCleared() {
@@ -421,9 +476,28 @@ func (buo *BookborrowUpdateOne) SetNillableBORROWDATE(t *time.Time) *BookborrowU
 	return buo
 }
 
-// SetRETURNDATE sets the RETURN_DATE field.
-func (buo *BookborrowUpdateOne) SetRETURNDATE(t time.Time) *BookborrowUpdateOne {
-	buo.mutation.SetRETURNDATE(t)
+// SetDAYOFBORROW sets the DAY_OF_BORROW field.
+func (buo *BookborrowUpdateOne) SetDAYOFBORROW(i int) *BookborrowUpdateOne {
+	buo.mutation.ResetDAYOFBORROW()
+	buo.mutation.SetDAYOFBORROW(i)
+	return buo
+}
+
+// AddDAYOFBORROW adds i to DAY_OF_BORROW.
+func (buo *BookborrowUpdateOne) AddDAYOFBORROW(i int) *BookborrowUpdateOne {
+	buo.mutation.AddDAYOFBORROW(i)
+	return buo
+}
+
+// SetPICKUP sets the PICKUP field.
+func (buo *BookborrowUpdateOne) SetPICKUP(s string) *BookborrowUpdateOne {
+	buo.mutation.SetPICKUP(s)
+	return buo
+}
+
+// SetPHONENUMBER sets the PHONE_NUMBER field.
+func (buo *BookborrowUpdateOne) SetPHONENUMBER(s string) *BookborrowUpdateOne {
+	buo.mutation.SetPHONENUMBER(s)
 	return buo
 }
 
@@ -539,6 +613,21 @@ func (buo *BookborrowUpdateOne) RemoveBorrowed(b ...*Bookreturn) *BookborrowUpda
 
 // Save executes the query and returns the updated entity.
 func (buo *BookborrowUpdateOne) Save(ctx context.Context) (*Bookborrow, error) {
+	if v, ok := buo.mutation.DAYOFBORROW(); ok {
+		if err := bookborrow.DAYOFBORROWValidator(v); err != nil {
+			return nil, &ValidationError{Name: "DAY_OF_BORROW", err: fmt.Errorf("ent: validator failed for field \"DAY_OF_BORROW\": %w", err)}
+		}
+	}
+	if v, ok := buo.mutation.PICKUP(); ok {
+		if err := bookborrow.PICKUPValidator(v); err != nil {
+			return nil, &ValidationError{Name: "PICKUP", err: fmt.Errorf("ent: validator failed for field \"PICKUP\": %w", err)}
+		}
+	}
+	if v, ok := buo.mutation.PHONENUMBER(); ok {
+		if err := bookborrow.PHONENUMBERValidator(v); err != nil {
+			return nil, &ValidationError{Name: "PHONE_NUMBER", err: fmt.Errorf("ent: validator failed for field \"PHONE_NUMBER\": %w", err)}
+		}
+	}
 
 	var (
 		err  error
@@ -612,11 +701,32 @@ func (buo *BookborrowUpdateOne) sqlSave(ctx context.Context) (b *Bookborrow, err
 			Column: bookborrow.FieldBORROWDATE,
 		})
 	}
-	if value, ok := buo.mutation.RETURNDATE(); ok {
+	if value, ok := buo.mutation.DAYOFBORROW(); ok {
 		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeTime,
+			Type:   field.TypeInt,
 			Value:  value,
-			Column: bookborrow.FieldRETURNDATE,
+			Column: bookborrow.FieldDAYOFBORROW,
+		})
+	}
+	if value, ok := buo.mutation.AddedDAYOFBORROW(); ok {
+		_spec.Fields.Add = append(_spec.Fields.Add, &sqlgraph.FieldSpec{
+			Type:   field.TypeInt,
+			Value:  value,
+			Column: bookborrow.FieldDAYOFBORROW,
+		})
+	}
+	if value, ok := buo.mutation.PICKUP(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Value:  value,
+			Column: bookborrow.FieldPICKUP,
+		})
+	}
+	if value, ok := buo.mutation.PHONENUMBER(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Value:  value,
+			Column: bookborrow.FieldPHONENUMBER,
 		})
 	}
 	if buo.mutation.USERCleared() {

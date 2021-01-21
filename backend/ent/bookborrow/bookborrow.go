@@ -13,8 +13,12 @@ const (
 	FieldID = "id"
 	// FieldBORROWDATE holds the string denoting the borrow_date field in the database.
 	FieldBORROWDATE = "borrow_date"
-	// FieldRETURNDATE holds the string denoting the return_date field in the database.
-	FieldRETURNDATE = "return_date"
+	// FieldDAYOFBORROW holds the string denoting the day_of_borrow field in the database.
+	FieldDAYOFBORROW = "day_of_borrow"
+	// FieldPICKUP holds the string denoting the pickup field in the database.
+	FieldPICKUP = "pickup"
+	// FieldPHONENUMBER holds the string denoting the phone_number field in the database.
+	FieldPHONENUMBER = "phone_number"
 
 	// EdgeUSER holds the string denoting the user edge name in mutations.
 	EdgeUSER = "USER"
@@ -61,7 +65,9 @@ const (
 var Columns = []string{
 	FieldID,
 	FieldBORROWDATE,
-	FieldRETURNDATE,
+	FieldDAYOFBORROW,
+	FieldPICKUP,
+	FieldPHONENUMBER,
 }
 
 // ForeignKeys holds the SQL foreign-keys that are owned by the Bookborrow type.
@@ -74,4 +80,10 @@ var ForeignKeys = []string{
 var (
 	// DefaultBORROWDATE holds the default value on creation for the BORROW_DATE field.
 	DefaultBORROWDATE func() time.Time
+	// DAYOFBORROWValidator is a validator for the "DAY_OF_BORROW" field. It is called by the builders before save.
+	DAYOFBORROWValidator func(int) error
+	// PICKUPValidator is a validator for the "PICKUP" field. It is called by the builders before save.
+	PICKUPValidator func(string) error
+	// PHONENUMBERValidator is a validator for the "PHONE_NUMBER" field. It is called by the builders before save.
+	PHONENUMBERValidator func(string) error
 )

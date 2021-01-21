@@ -100,10 +100,24 @@ func BORROWDATE(v time.Time) predicate.Bookborrow {
 	})
 }
 
-// RETURNDATE applies equality check predicate on the "RETURN_DATE" field. It's identical to RETURNDATEEQ.
-func RETURNDATE(v time.Time) predicate.Bookborrow {
+// DAYOFBORROW applies equality check predicate on the "DAY_OF_BORROW" field. It's identical to DAYOFBORROWEQ.
+func DAYOFBORROW(v int) predicate.Bookborrow {
 	return predicate.Bookborrow(func(s *sql.Selector) {
-		s.Where(sql.EQ(s.C(FieldRETURNDATE), v))
+		s.Where(sql.EQ(s.C(FieldDAYOFBORROW), v))
+	})
+}
+
+// PICKUP applies equality check predicate on the "PICKUP" field. It's identical to PICKUPEQ.
+func PICKUP(v string) predicate.Bookborrow {
+	return predicate.Bookborrow(func(s *sql.Selector) {
+		s.Where(sql.EQ(s.C(FieldPICKUP), v))
+	})
+}
+
+// PHONENUMBER applies equality check predicate on the "PHONE_NUMBER" field. It's identical to PHONENUMBEREQ.
+func PHONENUMBER(v string) predicate.Bookborrow {
+	return predicate.Bookborrow(func(s *sql.Selector) {
+		s.Where(sql.EQ(s.C(FieldPHONENUMBER), v))
 	})
 }
 
@@ -183,22 +197,22 @@ func BORROWDATELTE(v time.Time) predicate.Bookborrow {
 	})
 }
 
-// RETURNDATEEQ applies the EQ predicate on the "RETURN_DATE" field.
-func RETURNDATEEQ(v time.Time) predicate.Bookborrow {
+// DAYOFBORROWEQ applies the EQ predicate on the "DAY_OF_BORROW" field.
+func DAYOFBORROWEQ(v int) predicate.Bookborrow {
 	return predicate.Bookborrow(func(s *sql.Selector) {
-		s.Where(sql.EQ(s.C(FieldRETURNDATE), v))
+		s.Where(sql.EQ(s.C(FieldDAYOFBORROW), v))
 	})
 }
 
-// RETURNDATENEQ applies the NEQ predicate on the "RETURN_DATE" field.
-func RETURNDATENEQ(v time.Time) predicate.Bookborrow {
+// DAYOFBORROWNEQ applies the NEQ predicate on the "DAY_OF_BORROW" field.
+func DAYOFBORROWNEQ(v int) predicate.Bookborrow {
 	return predicate.Bookborrow(func(s *sql.Selector) {
-		s.Where(sql.NEQ(s.C(FieldRETURNDATE), v))
+		s.Where(sql.NEQ(s.C(FieldDAYOFBORROW), v))
 	})
 }
 
-// RETURNDATEIn applies the In predicate on the "RETURN_DATE" field.
-func RETURNDATEIn(vs ...time.Time) predicate.Bookborrow {
+// DAYOFBORROWIn applies the In predicate on the "DAY_OF_BORROW" field.
+func DAYOFBORROWIn(vs ...int) predicate.Bookborrow {
 	v := make([]interface{}, len(vs))
 	for i := range v {
 		v[i] = vs[i]
@@ -210,12 +224,12 @@ func RETURNDATEIn(vs ...time.Time) predicate.Bookborrow {
 			s.Where(sql.False())
 			return
 		}
-		s.Where(sql.In(s.C(FieldRETURNDATE), v...))
+		s.Where(sql.In(s.C(FieldDAYOFBORROW), v...))
 	})
 }
 
-// RETURNDATENotIn applies the NotIn predicate on the "RETURN_DATE" field.
-func RETURNDATENotIn(vs ...time.Time) predicate.Bookborrow {
+// DAYOFBORROWNotIn applies the NotIn predicate on the "DAY_OF_BORROW" field.
+func DAYOFBORROWNotIn(vs ...int) predicate.Bookborrow {
 	v := make([]interface{}, len(vs))
 	for i := range v {
 		v[i] = vs[i]
@@ -227,35 +241,257 @@ func RETURNDATENotIn(vs ...time.Time) predicate.Bookborrow {
 			s.Where(sql.False())
 			return
 		}
-		s.Where(sql.NotIn(s.C(FieldRETURNDATE), v...))
+		s.Where(sql.NotIn(s.C(FieldDAYOFBORROW), v...))
 	})
 }
 
-// RETURNDATEGT applies the GT predicate on the "RETURN_DATE" field.
-func RETURNDATEGT(v time.Time) predicate.Bookborrow {
+// DAYOFBORROWGT applies the GT predicate on the "DAY_OF_BORROW" field.
+func DAYOFBORROWGT(v int) predicate.Bookborrow {
 	return predicate.Bookborrow(func(s *sql.Selector) {
-		s.Where(sql.GT(s.C(FieldRETURNDATE), v))
+		s.Where(sql.GT(s.C(FieldDAYOFBORROW), v))
 	})
 }
 
-// RETURNDATEGTE applies the GTE predicate on the "RETURN_DATE" field.
-func RETURNDATEGTE(v time.Time) predicate.Bookborrow {
+// DAYOFBORROWGTE applies the GTE predicate on the "DAY_OF_BORROW" field.
+func DAYOFBORROWGTE(v int) predicate.Bookborrow {
 	return predicate.Bookborrow(func(s *sql.Selector) {
-		s.Where(sql.GTE(s.C(FieldRETURNDATE), v))
+		s.Where(sql.GTE(s.C(FieldDAYOFBORROW), v))
 	})
 }
 
-// RETURNDATELT applies the LT predicate on the "RETURN_DATE" field.
-func RETURNDATELT(v time.Time) predicate.Bookborrow {
+// DAYOFBORROWLT applies the LT predicate on the "DAY_OF_BORROW" field.
+func DAYOFBORROWLT(v int) predicate.Bookborrow {
 	return predicate.Bookborrow(func(s *sql.Selector) {
-		s.Where(sql.LT(s.C(FieldRETURNDATE), v))
+		s.Where(sql.LT(s.C(FieldDAYOFBORROW), v))
 	})
 }
 
-// RETURNDATELTE applies the LTE predicate on the "RETURN_DATE" field.
-func RETURNDATELTE(v time.Time) predicate.Bookborrow {
+// DAYOFBORROWLTE applies the LTE predicate on the "DAY_OF_BORROW" field.
+func DAYOFBORROWLTE(v int) predicate.Bookborrow {
 	return predicate.Bookborrow(func(s *sql.Selector) {
-		s.Where(sql.LTE(s.C(FieldRETURNDATE), v))
+		s.Where(sql.LTE(s.C(FieldDAYOFBORROW), v))
+	})
+}
+
+// PICKUPEQ applies the EQ predicate on the "PICKUP" field.
+func PICKUPEQ(v string) predicate.Bookborrow {
+	return predicate.Bookborrow(func(s *sql.Selector) {
+		s.Where(sql.EQ(s.C(FieldPICKUP), v))
+	})
+}
+
+// PICKUPNEQ applies the NEQ predicate on the "PICKUP" field.
+func PICKUPNEQ(v string) predicate.Bookborrow {
+	return predicate.Bookborrow(func(s *sql.Selector) {
+		s.Where(sql.NEQ(s.C(FieldPICKUP), v))
+	})
+}
+
+// PICKUPIn applies the In predicate on the "PICKUP" field.
+func PICKUPIn(vs ...string) predicate.Bookborrow {
+	v := make([]interface{}, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.Bookborrow(func(s *sql.Selector) {
+		// if not arguments were provided, append the FALSE constants,
+		// since we can't apply "IN ()". This will make this predicate falsy.
+		if len(v) == 0 {
+			s.Where(sql.False())
+			return
+		}
+		s.Where(sql.In(s.C(FieldPICKUP), v...))
+	})
+}
+
+// PICKUPNotIn applies the NotIn predicate on the "PICKUP" field.
+func PICKUPNotIn(vs ...string) predicate.Bookborrow {
+	v := make([]interface{}, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.Bookborrow(func(s *sql.Selector) {
+		// if not arguments were provided, append the FALSE constants,
+		// since we can't apply "IN ()". This will make this predicate falsy.
+		if len(v) == 0 {
+			s.Where(sql.False())
+			return
+		}
+		s.Where(sql.NotIn(s.C(FieldPICKUP), v...))
+	})
+}
+
+// PICKUPGT applies the GT predicate on the "PICKUP" field.
+func PICKUPGT(v string) predicate.Bookborrow {
+	return predicate.Bookborrow(func(s *sql.Selector) {
+		s.Where(sql.GT(s.C(FieldPICKUP), v))
+	})
+}
+
+// PICKUPGTE applies the GTE predicate on the "PICKUP" field.
+func PICKUPGTE(v string) predicate.Bookborrow {
+	return predicate.Bookborrow(func(s *sql.Selector) {
+		s.Where(sql.GTE(s.C(FieldPICKUP), v))
+	})
+}
+
+// PICKUPLT applies the LT predicate on the "PICKUP" field.
+func PICKUPLT(v string) predicate.Bookborrow {
+	return predicate.Bookborrow(func(s *sql.Selector) {
+		s.Where(sql.LT(s.C(FieldPICKUP), v))
+	})
+}
+
+// PICKUPLTE applies the LTE predicate on the "PICKUP" field.
+func PICKUPLTE(v string) predicate.Bookborrow {
+	return predicate.Bookborrow(func(s *sql.Selector) {
+		s.Where(sql.LTE(s.C(FieldPICKUP), v))
+	})
+}
+
+// PICKUPContains applies the Contains predicate on the "PICKUP" field.
+func PICKUPContains(v string) predicate.Bookborrow {
+	return predicate.Bookborrow(func(s *sql.Selector) {
+		s.Where(sql.Contains(s.C(FieldPICKUP), v))
+	})
+}
+
+// PICKUPHasPrefix applies the HasPrefix predicate on the "PICKUP" field.
+func PICKUPHasPrefix(v string) predicate.Bookborrow {
+	return predicate.Bookborrow(func(s *sql.Selector) {
+		s.Where(sql.HasPrefix(s.C(FieldPICKUP), v))
+	})
+}
+
+// PICKUPHasSuffix applies the HasSuffix predicate on the "PICKUP" field.
+func PICKUPHasSuffix(v string) predicate.Bookborrow {
+	return predicate.Bookborrow(func(s *sql.Selector) {
+		s.Where(sql.HasSuffix(s.C(FieldPICKUP), v))
+	})
+}
+
+// PICKUPEqualFold applies the EqualFold predicate on the "PICKUP" field.
+func PICKUPEqualFold(v string) predicate.Bookborrow {
+	return predicate.Bookborrow(func(s *sql.Selector) {
+		s.Where(sql.EqualFold(s.C(FieldPICKUP), v))
+	})
+}
+
+// PICKUPContainsFold applies the ContainsFold predicate on the "PICKUP" field.
+func PICKUPContainsFold(v string) predicate.Bookborrow {
+	return predicate.Bookborrow(func(s *sql.Selector) {
+		s.Where(sql.ContainsFold(s.C(FieldPICKUP), v))
+	})
+}
+
+// PHONENUMBEREQ applies the EQ predicate on the "PHONE_NUMBER" field.
+func PHONENUMBEREQ(v string) predicate.Bookborrow {
+	return predicate.Bookborrow(func(s *sql.Selector) {
+		s.Where(sql.EQ(s.C(FieldPHONENUMBER), v))
+	})
+}
+
+// PHONENUMBERNEQ applies the NEQ predicate on the "PHONE_NUMBER" field.
+func PHONENUMBERNEQ(v string) predicate.Bookborrow {
+	return predicate.Bookborrow(func(s *sql.Selector) {
+		s.Where(sql.NEQ(s.C(FieldPHONENUMBER), v))
+	})
+}
+
+// PHONENUMBERIn applies the In predicate on the "PHONE_NUMBER" field.
+func PHONENUMBERIn(vs ...string) predicate.Bookborrow {
+	v := make([]interface{}, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.Bookborrow(func(s *sql.Selector) {
+		// if not arguments were provided, append the FALSE constants,
+		// since we can't apply "IN ()". This will make this predicate falsy.
+		if len(v) == 0 {
+			s.Where(sql.False())
+			return
+		}
+		s.Where(sql.In(s.C(FieldPHONENUMBER), v...))
+	})
+}
+
+// PHONENUMBERNotIn applies the NotIn predicate on the "PHONE_NUMBER" field.
+func PHONENUMBERNotIn(vs ...string) predicate.Bookborrow {
+	v := make([]interface{}, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.Bookborrow(func(s *sql.Selector) {
+		// if not arguments were provided, append the FALSE constants,
+		// since we can't apply "IN ()". This will make this predicate falsy.
+		if len(v) == 0 {
+			s.Where(sql.False())
+			return
+		}
+		s.Where(sql.NotIn(s.C(FieldPHONENUMBER), v...))
+	})
+}
+
+// PHONENUMBERGT applies the GT predicate on the "PHONE_NUMBER" field.
+func PHONENUMBERGT(v string) predicate.Bookborrow {
+	return predicate.Bookborrow(func(s *sql.Selector) {
+		s.Where(sql.GT(s.C(FieldPHONENUMBER), v))
+	})
+}
+
+// PHONENUMBERGTE applies the GTE predicate on the "PHONE_NUMBER" field.
+func PHONENUMBERGTE(v string) predicate.Bookborrow {
+	return predicate.Bookborrow(func(s *sql.Selector) {
+		s.Where(sql.GTE(s.C(FieldPHONENUMBER), v))
+	})
+}
+
+// PHONENUMBERLT applies the LT predicate on the "PHONE_NUMBER" field.
+func PHONENUMBERLT(v string) predicate.Bookborrow {
+	return predicate.Bookborrow(func(s *sql.Selector) {
+		s.Where(sql.LT(s.C(FieldPHONENUMBER), v))
+	})
+}
+
+// PHONENUMBERLTE applies the LTE predicate on the "PHONE_NUMBER" field.
+func PHONENUMBERLTE(v string) predicate.Bookborrow {
+	return predicate.Bookborrow(func(s *sql.Selector) {
+		s.Where(sql.LTE(s.C(FieldPHONENUMBER), v))
+	})
+}
+
+// PHONENUMBERContains applies the Contains predicate on the "PHONE_NUMBER" field.
+func PHONENUMBERContains(v string) predicate.Bookborrow {
+	return predicate.Bookborrow(func(s *sql.Selector) {
+		s.Where(sql.Contains(s.C(FieldPHONENUMBER), v))
+	})
+}
+
+// PHONENUMBERHasPrefix applies the HasPrefix predicate on the "PHONE_NUMBER" field.
+func PHONENUMBERHasPrefix(v string) predicate.Bookborrow {
+	return predicate.Bookborrow(func(s *sql.Selector) {
+		s.Where(sql.HasPrefix(s.C(FieldPHONENUMBER), v))
+	})
+}
+
+// PHONENUMBERHasSuffix applies the HasSuffix predicate on the "PHONE_NUMBER" field.
+func PHONENUMBERHasSuffix(v string) predicate.Bookborrow {
+	return predicate.Bookborrow(func(s *sql.Selector) {
+		s.Where(sql.HasSuffix(s.C(FieldPHONENUMBER), v))
+	})
+}
+
+// PHONENUMBEREqualFold applies the EqualFold predicate on the "PHONE_NUMBER" field.
+func PHONENUMBEREqualFold(v string) predicate.Bookborrow {
+	return predicate.Bookborrow(func(s *sql.Selector) {
+		s.Where(sql.EqualFold(s.C(FieldPHONENUMBER), v))
+	})
+}
+
+// PHONENUMBERContainsFold applies the ContainsFold predicate on the "PHONE_NUMBER" field.
+func PHONENUMBERContainsFold(v string) predicate.Bookborrow {
+	return predicate.Bookborrow(func(s *sql.Selector) {
+		s.Where(sql.ContainsFold(s.C(FieldPHONENUMBER), v))
 	})
 }
 

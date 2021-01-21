@@ -575,49 +575,6 @@ var doc = `{
             }
         },
         "/bookborrows/{id}": {
-            "get": {
-                "description": "get bookborrow by ID",
-                "produces": [
-                    "application/json"
-                ],
-                "summary": "Get a bookborrow entity by ID",
-                "operationId": "get-bookborrow",
-                "parameters": [
-                    {
-                        "type": "integer",
-                        "description": "Bookborrow ID",
-                        "name": "id",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/ent.Bookborrow"
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "schema": {
-                            "$ref": "#/definitions/gin.H"
-                        }
-                    },
-                    "404": {
-                        "description": "Not Found",
-                        "schema": {
-                            "$ref": "#/definitions/gin.H"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/gin.H"
-                        }
-                    }
-                }
-            },
             "put": {
                 "description": "update bookborrow by ID",
                 "consumes": [
@@ -3563,7 +3520,13 @@ var doc = `{
                 "borrowDate": {
                     "type": "string"
                 },
-                "returnDate": {
+                "dayOfBorrow": {
+                    "type": "integer"
+                },
+                "phoneNumber": {
+                    "type": "string"
+                },
+                "pickup": {
                     "type": "string"
                 },
                 "servicePointID": {
@@ -3765,8 +3728,16 @@ var doc = `{
                     "description": "BORROWDATE holds the value of the \"BORROW_DATE\" field.",
                     "type": "string"
                 },
-                "RETURN_DATE": {
-                    "description": "RETURNDATE holds the value of the \"RETURN_DATE\" field.",
+                "DAY_OF_BORROW": {
+                    "description": "DAYOFBORROW holds the value of the \"DAY_OF_BORROW\" field.",
+                    "type": "integer"
+                },
+                "PHONE_NUMBER": {
+                    "description": "PHONENUMBER holds the value of the \"PHONE_NUMBER\" field.",
+                    "type": "string"
+                },
+                "PICKUP": {
+                    "description": "PICKUP holds the value of the \"PICKUP\" field.",
                     "type": "string"
                 },
                 "book_ID": {

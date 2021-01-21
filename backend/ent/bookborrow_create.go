@@ -38,9 +38,21 @@ func (bc *BookborrowCreate) SetNillableBORROWDATE(t *time.Time) *BookborrowCreat
 	return bc
 }
 
-// SetRETURNDATE sets the RETURN_DATE field.
-func (bc *BookborrowCreate) SetRETURNDATE(t time.Time) *BookborrowCreate {
-	bc.mutation.SetRETURNDATE(t)
+// SetDAYOFBORROW sets the DAY_OF_BORROW field.
+func (bc *BookborrowCreate) SetDAYOFBORROW(i int) *BookborrowCreate {
+	bc.mutation.SetDAYOFBORROW(i)
+	return bc
+}
+
+// SetPICKUP sets the PICKUP field.
+func (bc *BookborrowCreate) SetPICKUP(s string) *BookborrowCreate {
+	bc.mutation.SetPICKUP(s)
+	return bc
+}
+
+// SetPHONENUMBER sets the PHONE_NUMBER field.
+func (bc *BookborrowCreate) SetPHONENUMBER(s string) *BookborrowCreate {
+	bc.mutation.SetPHONENUMBER(s)
 	return bc
 }
 
@@ -127,8 +139,29 @@ func (bc *BookborrowCreate) Save(ctx context.Context) (*Bookborrow, error) {
 		v := bookborrow.DefaultBORROWDATE()
 		bc.mutation.SetBORROWDATE(v)
 	}
-	if _, ok := bc.mutation.RETURNDATE(); !ok {
-		return nil, &ValidationError{Name: "RETURN_DATE", err: errors.New("ent: missing required field \"RETURN_DATE\"")}
+	if _, ok := bc.mutation.DAYOFBORROW(); !ok {
+		return nil, &ValidationError{Name: "DAY_OF_BORROW", err: errors.New("ent: missing required field \"DAY_OF_BORROW\"")}
+	}
+	if v, ok := bc.mutation.DAYOFBORROW(); ok {
+		if err := bookborrow.DAYOFBORROWValidator(v); err != nil {
+			return nil, &ValidationError{Name: "DAY_OF_BORROW", err: fmt.Errorf("ent: validator failed for field \"DAY_OF_BORROW\": %w", err)}
+		}
+	}
+	if _, ok := bc.mutation.PICKUP(); !ok {
+		return nil, &ValidationError{Name: "PICKUP", err: errors.New("ent: missing required field \"PICKUP\"")}
+	}
+	if v, ok := bc.mutation.PICKUP(); ok {
+		if err := bookborrow.PICKUPValidator(v); err != nil {
+			return nil, &ValidationError{Name: "PICKUP", err: fmt.Errorf("ent: validator failed for field \"PICKUP\": %w", err)}
+		}
+	}
+	if _, ok := bc.mutation.PHONENUMBER(); !ok {
+		return nil, &ValidationError{Name: "PHONE_NUMBER", err: errors.New("ent: missing required field \"PHONE_NUMBER\"")}
+	}
+	if v, ok := bc.mutation.PHONENUMBER(); ok {
+		if err := bookborrow.PHONENUMBERValidator(v); err != nil {
+			return nil, &ValidationError{Name: "PHONE_NUMBER", err: fmt.Errorf("ent: validator failed for field \"PHONE_NUMBER\": %w", err)}
+		}
 	}
 	var (
 		err  error
@@ -198,13 +231,29 @@ func (bc *BookborrowCreate) createSpec() (*Bookborrow, *sqlgraph.CreateSpec) {
 		})
 		b.BORROWDATE = value
 	}
-	if value, ok := bc.mutation.RETURNDATE(); ok {
+	if value, ok := bc.mutation.DAYOFBORROW(); ok {
 		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
-			Type:   field.TypeTime,
+			Type:   field.TypeInt,
 			Value:  value,
-			Column: bookborrow.FieldRETURNDATE,
+			Column: bookborrow.FieldDAYOFBORROW,
 		})
-		b.RETURNDATE = value
+		b.DAYOFBORROW = value
+	}
+	if value, ok := bc.mutation.PICKUP(); ok {
+		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Value:  value,
+			Column: bookborrow.FieldPICKUP,
+		})
+		b.PICKUP = value
+	}
+	if value, ok := bc.mutation.PHONENUMBER(); ok {
+		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Value:  value,
+			Column: bookborrow.FieldPHONENUMBER,
+		})
+		b.PHONENUMBER = value
 	}
 	if nodes := bc.mutation.USERIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
