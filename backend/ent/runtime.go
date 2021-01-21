@@ -45,6 +45,18 @@ func init() {
 	bookborrowDescBORROWDATE := bookborrowFields[0].Descriptor()
 	// bookborrow.DefaultBORROWDATE holds the default value on creation for the BORROW_DATE field.
 	bookborrow.DefaultBORROWDATE = bookborrowDescBORROWDATE.Default.(func() time.Time)
+	// bookborrowDescDAYOFBORROW is the schema descriptor for DAY_OF_BORROW field.
+	bookborrowDescDAYOFBORROW := bookborrowFields[1].Descriptor()
+	// bookborrow.DAYOFBORROWValidator is a validator for the "DAY_OF_BORROW" field. It is called by the builders before save.
+	bookborrow.DAYOFBORROWValidator = bookborrowDescDAYOFBORROW.Validators[0].(func(int) error)
+	// bookborrowDescPICKUP is the schema descriptor for PICKUP field.
+	bookborrowDescPICKUP := bookborrowFields[2].Descriptor()
+	// bookborrow.PICKUPValidator is a validator for the "PICKUP" field. It is called by the builders before save.
+	bookborrow.PICKUPValidator = bookborrowDescPICKUP.Validators[0].(func(string) error)
+	// bookborrowDescPHONENUMBER is the schema descriptor for PHONE_NUMBER field.
+	bookborrowDescPHONENUMBER := bookborrowFields[3].Descriptor()
+	// bookborrow.PHONENUMBERValidator is a validator for the "PHONE_NUMBER" field. It is called by the builders before save.
+	bookborrow.PHONENUMBERValidator = bookborrowDescPHONENUMBER.Validators[0].(func(string) error)
 	bookingFields := schema.Booking{}.Fields()
 	_ = bookingFields
 	// bookingDescBOOKINGDATE is the schema descriptor for BOOKING_DATE field.

@@ -1102,7 +1102,10 @@ type BookborrowMutation struct {
 	typ                  string
 	id                   *int
 	_BORROW_DATE         *time.Time
-	_RETURN_DATE         *time.Time
+	_DAY_OF_BORROW       *int
+	add_DAY_OF_BORROW    *int
+	_PICKUP              *string
+	_PHONE_NUMBER        *string
 	clearedFields        map[string]struct{}
 	_USER                *int
 	cleared_USER         bool
@@ -1232,41 +1235,135 @@ func (m *BookborrowMutation) ResetBORROWDATE() {
 	m._BORROW_DATE = nil
 }
 
-// SetRETURNDATE sets the RETURN_DATE field.
-func (m *BookborrowMutation) SetRETURNDATE(t time.Time) {
-	m._RETURN_DATE = &t
+// SetDAYOFBORROW sets the DAY_OF_BORROW field.
+func (m *BookborrowMutation) SetDAYOFBORROW(i int) {
+	m._DAY_OF_BORROW = &i
+	m.add_DAY_OF_BORROW = nil
 }
 
-// RETURNDATE returns the RETURN_DATE value in the mutation.
-func (m *BookborrowMutation) RETURNDATE() (r time.Time, exists bool) {
-	v := m._RETURN_DATE
+// DAYOFBORROW returns the DAY_OF_BORROW value in the mutation.
+func (m *BookborrowMutation) DAYOFBORROW() (r int, exists bool) {
+	v := m._DAY_OF_BORROW
 	if v == nil {
 		return
 	}
 	return *v, true
 }
 
-// OldRETURNDATE returns the old RETURN_DATE value of the Bookborrow.
+// OldDAYOFBORROW returns the old DAY_OF_BORROW value of the Bookborrow.
 // If the Bookborrow object wasn't provided to the builder, the object is fetched
 // from the database.
 // An error is returned if the mutation operation is not UpdateOne, or database query fails.
-func (m *BookborrowMutation) OldRETURNDATE(ctx context.Context) (v time.Time, err error) {
+func (m *BookborrowMutation) OldDAYOFBORROW(ctx context.Context) (v int, err error) {
 	if !m.op.Is(OpUpdateOne) {
-		return v, fmt.Errorf("OldRETURNDATE is allowed only on UpdateOne operations")
+		return v, fmt.Errorf("OldDAYOFBORROW is allowed only on UpdateOne operations")
 	}
 	if m.id == nil || m.oldValue == nil {
-		return v, fmt.Errorf("OldRETURNDATE requires an ID field in the mutation")
+		return v, fmt.Errorf("OldDAYOFBORROW requires an ID field in the mutation")
 	}
 	oldValue, err := m.oldValue(ctx)
 	if err != nil {
-		return v, fmt.Errorf("querying old value for OldRETURNDATE: %w", err)
+		return v, fmt.Errorf("querying old value for OldDAYOFBORROW: %w", err)
 	}
-	return oldValue.RETURNDATE, nil
+	return oldValue.DAYOFBORROW, nil
 }
 
-// ResetRETURNDATE reset all changes of the "RETURN_DATE" field.
-func (m *BookborrowMutation) ResetRETURNDATE() {
-	m._RETURN_DATE = nil
+// AddDAYOFBORROW adds i to DAY_OF_BORROW.
+func (m *BookborrowMutation) AddDAYOFBORROW(i int) {
+	if m.add_DAY_OF_BORROW != nil {
+		*m.add_DAY_OF_BORROW += i
+	} else {
+		m.add_DAY_OF_BORROW = &i
+	}
+}
+
+// AddedDAYOFBORROW returns the value that was added to the DAY_OF_BORROW field in this mutation.
+func (m *BookborrowMutation) AddedDAYOFBORROW() (r int, exists bool) {
+	v := m.add_DAY_OF_BORROW
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ResetDAYOFBORROW reset all changes of the "DAY_OF_BORROW" field.
+func (m *BookborrowMutation) ResetDAYOFBORROW() {
+	m._DAY_OF_BORROW = nil
+	m.add_DAY_OF_BORROW = nil
+}
+
+// SetPICKUP sets the PICKUP field.
+func (m *BookborrowMutation) SetPICKUP(s string) {
+	m._PICKUP = &s
+}
+
+// PICKUP returns the PICKUP value in the mutation.
+func (m *BookborrowMutation) PICKUP() (r string, exists bool) {
+	v := m._PICKUP
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldPICKUP returns the old PICKUP value of the Bookborrow.
+// If the Bookborrow object wasn't provided to the builder, the object is fetched
+// from the database.
+// An error is returned if the mutation operation is not UpdateOne, or database query fails.
+func (m *BookborrowMutation) OldPICKUP(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, fmt.Errorf("OldPICKUP is allowed only on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, fmt.Errorf("OldPICKUP requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldPICKUP: %w", err)
+	}
+	return oldValue.PICKUP, nil
+}
+
+// ResetPICKUP reset all changes of the "PICKUP" field.
+func (m *BookborrowMutation) ResetPICKUP() {
+	m._PICKUP = nil
+}
+
+// SetPHONENUMBER sets the PHONE_NUMBER field.
+func (m *BookborrowMutation) SetPHONENUMBER(s string) {
+	m._PHONE_NUMBER = &s
+}
+
+// PHONENUMBER returns the PHONE_NUMBER value in the mutation.
+func (m *BookborrowMutation) PHONENUMBER() (r string, exists bool) {
+	v := m._PHONE_NUMBER
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldPHONENUMBER returns the old PHONE_NUMBER value of the Bookborrow.
+// If the Bookborrow object wasn't provided to the builder, the object is fetched
+// from the database.
+// An error is returned if the mutation operation is not UpdateOne, or database query fails.
+func (m *BookborrowMutation) OldPHONENUMBER(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, fmt.Errorf("OldPHONENUMBER is allowed only on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, fmt.Errorf("OldPHONENUMBER requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldPHONENUMBER: %w", err)
+	}
+	return oldValue.PHONENUMBER, nil
+}
+
+// ResetPHONENUMBER reset all changes of the "PHONE_NUMBER" field.
+func (m *BookborrowMutation) ResetPHONENUMBER() {
+	m._PHONE_NUMBER = nil
 }
 
 // SetUSERID sets the USER edge to User by id.
@@ -1442,12 +1539,18 @@ func (m *BookborrowMutation) Type() string {
 // this mutation. Note that, in order to get all numeric
 // fields that were in/decremented, call AddedFields().
 func (m *BookborrowMutation) Fields() []string {
-	fields := make([]string, 0, 2)
+	fields := make([]string, 0, 4)
 	if m._BORROW_DATE != nil {
 		fields = append(fields, bookborrow.FieldBORROWDATE)
 	}
-	if m._RETURN_DATE != nil {
-		fields = append(fields, bookborrow.FieldRETURNDATE)
+	if m._DAY_OF_BORROW != nil {
+		fields = append(fields, bookborrow.FieldDAYOFBORROW)
+	}
+	if m._PICKUP != nil {
+		fields = append(fields, bookborrow.FieldPICKUP)
+	}
+	if m._PHONE_NUMBER != nil {
+		fields = append(fields, bookborrow.FieldPHONENUMBER)
 	}
 	return fields
 }
@@ -1459,8 +1562,12 @@ func (m *BookborrowMutation) Field(name string) (ent.Value, bool) {
 	switch name {
 	case bookborrow.FieldBORROWDATE:
 		return m.BORROWDATE()
-	case bookborrow.FieldRETURNDATE:
-		return m.RETURNDATE()
+	case bookborrow.FieldDAYOFBORROW:
+		return m.DAYOFBORROW()
+	case bookborrow.FieldPICKUP:
+		return m.PICKUP()
+	case bookborrow.FieldPHONENUMBER:
+		return m.PHONENUMBER()
 	}
 	return nil, false
 }
@@ -1472,8 +1579,12 @@ func (m *BookborrowMutation) OldField(ctx context.Context, name string) (ent.Val
 	switch name {
 	case bookborrow.FieldBORROWDATE:
 		return m.OldBORROWDATE(ctx)
-	case bookborrow.FieldRETURNDATE:
-		return m.OldRETURNDATE(ctx)
+	case bookborrow.FieldDAYOFBORROW:
+		return m.OldDAYOFBORROW(ctx)
+	case bookborrow.FieldPICKUP:
+		return m.OldPICKUP(ctx)
+	case bookborrow.FieldPHONENUMBER:
+		return m.OldPHONENUMBER(ctx)
 	}
 	return nil, fmt.Errorf("unknown Bookborrow field %s", name)
 }
@@ -1490,12 +1601,26 @@ func (m *BookborrowMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetBORROWDATE(v)
 		return nil
-	case bookborrow.FieldRETURNDATE:
-		v, ok := value.(time.Time)
+	case bookborrow.FieldDAYOFBORROW:
+		v, ok := value.(int)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
-		m.SetRETURNDATE(v)
+		m.SetDAYOFBORROW(v)
+		return nil
+	case bookborrow.FieldPICKUP:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetPICKUP(v)
+		return nil
+	case bookborrow.FieldPHONENUMBER:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetPHONENUMBER(v)
 		return nil
 	}
 	return fmt.Errorf("unknown Bookborrow field %s", name)
@@ -1504,13 +1629,21 @@ func (m *BookborrowMutation) SetField(name string, value ent.Value) error {
 // AddedFields returns all numeric fields that were incremented
 // or decremented during this mutation.
 func (m *BookborrowMutation) AddedFields() []string {
-	return nil
+	var fields []string
+	if m.add_DAY_OF_BORROW != nil {
+		fields = append(fields, bookborrow.FieldDAYOFBORROW)
+	}
+	return fields
 }
 
 // AddedField returns the numeric value that was in/decremented
 // from a field with the given name. The second value indicates
 // that this field was not set, or was not define in the schema.
 func (m *BookborrowMutation) AddedField(name string) (ent.Value, bool) {
+	switch name {
+	case bookborrow.FieldDAYOFBORROW:
+		return m.AddedDAYOFBORROW()
+	}
 	return nil, false
 }
 
@@ -1519,6 +1652,13 @@ func (m *BookborrowMutation) AddedField(name string) (ent.Value, bool) {
 // type mismatch the field type.
 func (m *BookborrowMutation) AddField(name string, value ent.Value) error {
 	switch name {
+	case bookborrow.FieldDAYOFBORROW:
+		v, ok := value.(int)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddDAYOFBORROW(v)
+		return nil
 	}
 	return fmt.Errorf("unknown Bookborrow numeric field %s", name)
 }
@@ -1550,8 +1690,14 @@ func (m *BookborrowMutation) ResetField(name string) error {
 	case bookborrow.FieldBORROWDATE:
 		m.ResetBORROWDATE()
 		return nil
-	case bookborrow.FieldRETURNDATE:
-		m.ResetRETURNDATE()
+	case bookborrow.FieldDAYOFBORROW:
+		m.ResetDAYOFBORROW()
+		return nil
+	case bookborrow.FieldPICKUP:
+		m.ResetPICKUP()
+		return nil
+	case bookborrow.FieldPHONENUMBER:
+		m.ResetPHONENUMBER()
 		return nil
 	}
 	return fmt.Errorf("unknown Bookborrow field %s", name)

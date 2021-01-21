@@ -33,10 +33,22 @@ export interface ControllersBookborrow {
     borrowDate?: string;
     /**
      * 
+     * @type {number}
+     * @memberof ControllersBookborrow
+     */
+    dayOfBorrow?: number;
+    /**
+     * 
      * @type {string}
      * @memberof ControllersBookborrow
      */
-    returnDate?: string;
+    phoneNumber?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof ControllersBookborrow
+     */
+    pickup?: string;
     /**
      * 
      * @type {number}
@@ -63,7 +75,9 @@ export function ControllersBookborrowFromJSONTyped(json: any, ignoreDiscriminato
         
         'bookID': !exists(json, 'bookID') ? undefined : json['bookID'],
         'borrowDate': !exists(json, 'borrowDate') ? undefined : json['borrowDate'],
-        'returnDate': !exists(json, 'returnDate') ? undefined : json['returnDate'],
+        'dayOfBorrow': !exists(json, 'dayOfBorrow') ? undefined : json['dayOfBorrow'],
+        'phoneNumber': !exists(json, 'phoneNumber') ? undefined : json['phoneNumber'],
+        'pickup': !exists(json, 'pickup') ? undefined : json['pickup'],
         'servicePointID': !exists(json, 'servicePointID') ? undefined : json['servicePointID'],
         'userID': !exists(json, 'userID') ? undefined : json['userID'],
     };
@@ -80,7 +94,9 @@ export function ControllersBookborrowToJSON(value?: ControllersBookborrow | null
         
         'bookID': value.bookID,
         'borrowDate': value.borrowDate,
-        'returnDate': value.returnDate,
+        'dayOfBorrow': value.dayOfBorrow,
+        'phoneNumber': value.phoneNumber,
+        'pickup': value.pickup,
         'servicePointID': value.servicePointID,
         'userID': value.userID,
     };

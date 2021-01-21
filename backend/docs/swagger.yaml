@@ -17,7 +17,11 @@ definitions:
         type: integer
       borrowDate:
         type: string
-      returnDate:
+      dayOfBorrow:
+        type: integer
+      phoneNumber:
+        type: string
+      pickup:
         type: string
       servicePointID:
         type: integer
@@ -159,8 +163,14 @@ definitions:
       BORROW_DATE:
         description: BORROWDATE holds the value of the "BORROW_DATE" field.
         type: string
-      RETURN_DATE:
-        description: RETURNDATE holds the value of the "RETURN_DATE" field.
+      DAY_OF_BORROW:
+        description: DAYOFBORROW holds the value of the "DAY_OF_BORROW" field.
+        type: integer
+      PHONE_NUMBER:
+        description: PHONENUMBER holds the value of the "PHONE_NUMBER" field.
+        type: string
+      PICKUP:
+        description: PICKUP holds the value of the "PICKUP" field.
         type: string
       book_ID:
         type: integer
@@ -1060,35 +1070,6 @@ paths:
           schema:
             $ref: '#/definitions/gin.H'
       summary: Delete a bookborrow entity by ID
-    get:
-      description: get bookborrow by ID
-      operationId: get-bookborrow
-      parameters:
-      - description: Bookborrow ID
-        in: path
-        name: id
-        required: true
-        type: integer
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/ent.Bookborrow'
-        "400":
-          description: Bad Request
-          schema:
-            $ref: '#/definitions/gin.H'
-        "404":
-          description: Not Found
-          schema:
-            $ref: '#/definitions/gin.H'
-        "500":
-          description: Internal Server Error
-          schema:
-            $ref: '#/definitions/gin.H'
-      summary: Get a bookborrow entity by ID
     put:
       consumes:
       - application/json

@@ -33,11 +33,23 @@ export interface EntBookborrow {
      */
     bORROWDATE?: string;
     /**
-     * RETURNDATE holds the value of the "RETURN_DATE" field.
+     * DAYOFBORROW holds the value of the "DAY_OF_BORROW" field.
+     * @type {number}
+     * @memberof EntBookborrow
+     */
+    dAYOFBORROW?: number;
+    /**
+     * PHONENUMBER holds the value of the "PHONE_NUMBER" field.
      * @type {string}
      * @memberof EntBookborrow
      */
-    rETURNDATE?: string;
+    pHONENUMBER?: string;
+    /**
+     * PICKUP holds the value of the "PICKUP" field.
+     * @type {string}
+     * @memberof EntBookborrow
+     */
+    pICKUP?: string;
     /**
      * 
      * @type {number}
@@ -81,7 +93,9 @@ export function EntBookborrowFromJSONTyped(json: any, ignoreDiscriminator: boole
     return {
         
         'bORROWDATE': !exists(json, 'BORROW_DATE') ? undefined : json['BORROW_DATE'],
-        'rETURNDATE': !exists(json, 'RETURN_DATE') ? undefined : json['RETURN_DATE'],
+        'dAYOFBORROW': !exists(json, 'DAY_OF_BORROW') ? undefined : json['DAY_OF_BORROW'],
+        'pHONENUMBER': !exists(json, 'PHONE_NUMBER') ? undefined : json['PHONE_NUMBER'],
+        'pICKUP': !exists(json, 'PICKUP') ? undefined : json['PICKUP'],
         'bookID': !exists(json, 'book_ID') ? undefined : json['book_ID'],
         'edges': !exists(json, 'edges') ? undefined : EntBookborrowEdgesFromJSON(json['edges']),
         'id': !exists(json, 'id') ? undefined : json['id'],
@@ -100,7 +114,9 @@ export function EntBookborrowToJSON(value?: EntBookborrow | null): any {
     return {
         
         'BORROW_DATE': value.bORROWDATE,
-        'RETURN_DATE': value.rETURNDATE,
+        'DAY_OF_BORROW': value.dAYOFBORROW,
+        'PHONE_NUMBER': value.pHONENUMBER,
+        'PICKUP': value.pICKUP,
         'book_ID': value.bookID,
         'edges': EntBookborrowEdgesToJSON(value.edges),
         'id': value.id,

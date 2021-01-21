@@ -21,8 +21,12 @@ type Bookborrow struct {
 	ID int `json:"id,omitempty"`
 	// BORROWDATE holds the value of the "BORROW_DATE" field.
 	BORROWDATE time.Time `json:"BORROW_DATE,omitempty"`
-	// RETURNDATE holds the value of the "RETURN_DATE" field.
-	RETURNDATE time.Time `json:"RETURN_DATE,omitempty"`
+	// DAYOFBORROW holds the value of the "DAY_OF_BORROW" field.
+	DAYOFBORROW int `json:"DAY_OF_BORROW,omitempty"`
+	// PICKUP holds the value of the "PICKUP" field.
+	PICKUP string `json:"PICKUP,omitempty"`
+	// PHONENUMBER holds the value of the "PHONE_NUMBER" field.
+	PHONENUMBER string `json:"PHONE_NUMBER,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the BookborrowQuery when eager-loading is set.
 	Edges           BookborrowEdges `json:"edges"`
@@ -100,9 +104,11 @@ func (e BookborrowEdges) BorrowedOrErr() ([]*Bookreturn, error) {
 // scanValues returns the types for scanning values from sql.Rows.
 func (*Bookborrow) scanValues() []interface{} {
 	return []interface{}{
-		&sql.NullInt64{}, // id
-		&sql.NullTime{},  // BORROW_DATE
-		&sql.NullTime{},  // RETURN_DATE
+		&sql.NullInt64{},  // id
+		&sql.NullTime{},   // BORROW_DATE
+		&sql.NullInt64{},  // DAY_OF_BORROW
+		&sql.NullString{}, // PICKUP
+		&sql.NullString{}, // PHONE_NUMBER
 	}
 }
 
@@ -132,12 +138,22 @@ func (b *Bookborrow) assignValues(values ...interface{}) error {
 	} else if value.Valid {
 		b.BORROWDATE = value.Time
 	}
-	if value, ok := values[1].(*sql.NullTime); !ok {
-		return fmt.Errorf("unexpected type %T for field RETURN_DATE", values[1])
+	if value, ok := values[1].(*sql.NullInt64); !ok {
+		return fmt.Errorf("unexpected type %T for field DAY_OF_BORROW", values[1])
 	} else if value.Valid {
-		b.RETURNDATE = value.Time
+		b.DAYOFBORROW = int(value.Int64)
 	}
-	values = values[2:]
+	if value, ok := values[2].(*sql.NullString); !ok {
+		return fmt.Errorf("unexpected type %T for field PICKUP", values[2])
+	} else if value.Valid {
+		b.PICKUP = value.String
+	}
+	if value, ok := values[3].(*sql.NullString); !ok {
+		return fmt.Errorf("unexpected type %T for field PHONE_NUMBER", values[3])
+	} else if value.Valid {
+		b.PHONENUMBER = value.String
+	}
+	values = values[4:]
 	if len(values) == len(bookborrow.ForeignKeys) {
 		if value, ok := values[0].(*sql.NullInt64); !ok {
 			return fmt.Errorf("unexpected type %T for edge-field BOOK_ID", value)
@@ -206,8 +222,12 @@ func (b *Bookborrow) String() string {
 	builder.WriteString(fmt.Sprintf("id=%v", b.ID))
 	builder.WriteString(", BORROW_DATE=")
 	builder.WriteString(b.BORROWDATE.Format(time.ANSIC))
-	builder.WriteString(", RETURN_DATE=")
-	builder.WriteString(b.RETURNDATE.Format(time.ANSIC))
+	builder.WriteString(", DAY_OF_BORROW=")
+	builder.WriteString(fmt.Sprintf("%v", b.DAYOFBORROW))
+	builder.WriteString(", PICKUP=")
+	builder.WriteString(b.PICKUP)
+	builder.WriteString(", PHONE_NUMBER=")
+	builder.WriteString(b.PHONENUMBER)
 	builder.WriteByte(')')
 	return builder.String()
 }

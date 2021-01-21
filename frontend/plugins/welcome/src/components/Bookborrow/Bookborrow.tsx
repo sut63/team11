@@ -10,14 +10,16 @@ import {
 import { makeStyles, Theme, createStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import FormControl from '@material-ui/core/FormControl';
+import TextField from '@material-ui/core/TextField';
 import { Alert } from '@material-ui/lab';
 import { DefaultApi } from '../../api/apis';
 import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
 import Select from '@material-ui/core/Select';
 import { EntUser } from '../../api/models/EntUser';
-import { EntBook } from '../../api/models/EntBook'; 
-import { EntServicePoint } from '../../api/models/EntServicePoint'; 
+import { EntBook } from '../../api/models/EntBook';
+import { EntBookborrow } from '../../api/models/EntBookborrow';
+import { EntServicePoint } from '../../api/models/EntServicePoint';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -56,13 +58,14 @@ const useStyles = makeStyles((theme: Theme) =>
 
 export default function Create() {
   const name = JSON.parse(String(localStorage.getItem("userName")));
-  const userName ="ยินดีต้อนรับ "+name
+  const userName = "ยินดีต้อนรับ " + name
   const classes = useStyles();
   const api = new DefaultApi();
 
   const [users, setUsers] = useState<EntUser[]>([]);
   const [books, setBooks] = useState<EntBook[]>([]);
   const [servicepoints, setServicepoints] = useState<EntServicePoint[]>([]);
+  const [bookborrows, setBookBorrows] = useState<EntBookborrow[]>([]);
 
   const [userID, setUser] = useState(Number);
   const [bookID, setBook] = useState(Number);
@@ -70,10 +73,21 @@ export default function Create() {
 
   const [status, setStatus] = useState(false);
   const [alert, setAlert] = useState(true);
+  const [alert2, setAlerts] = useState(true);
   const [loading, setLoading] = useState(true);
+
+  const [dayOfBorrow, setDayOfBorrow] = useState(Number);
+  const [pickup, setPickup] = useState(String);
+  const [phoneNumber, setPhoneNumber] = useState(String);
 
   const idString = JSON.parse(String(localStorage.getItem("userID")));
   const idInt = parseInt(idString);
+
+  const [dayOfBorrowerror, setDayOfBorrowerror] = React.useState('');
+  const [pickuperror, setPickuperror] = React.useState('');
+  const [phoneNumbererror, setPhoneNumbererror] = React.useState('');
+  const [errormessege, setErrorMessege] = useState(String);
+  const [alerttype, setAlertType] = useState(String);
 
   useEffect(() => {
     const getBook = async () => {
@@ -82,7 +96,6 @@ export default function Create() {
       setBooks(res);
     };
     getBook();
-
 
     const getServicepoint = async () => {
       const res = await api.listServicepoint({ limit: 10, offset: 0 });
@@ -103,6 +116,37 @@ export default function Create() {
   }, [loading]);
 
   //----------------
+
+  const validateDayofborrow = (val: number) => {
+    return val <= 14 && val >= 1 ? true : false
+
+  }
+
+  const validatePickup = (val: string) => {
+    return val.length > 0  ? true : false
+  }
+
+  const validatePhonenumber = (val: string) => {
+    return val.match("[0]\\d{9}");
+  }
+
+  const checkPattern = (id: string, value: string) => {
+    console.log(value);
+    switch (id) {
+      case 'phoneNumber':
+        validatePhonenumber(value) ? setPhoneNumbererror('') : setPhoneNumbererror('หมายเลขโทรศัพท์ขึ้นต้นด้วย 0 และตามด้วยตัวเลขอีก 9 ตัว');
+        return;
+      case 'pickup':
+        validatePickup(value) ? setPickuperror('') : setPickuperror('กรุณากรอกข้อมูล ไม่สามารถเป็นค่าว่างได้');
+        return;
+      case 'dayOfBorrow':
+        validateDayofborrow(Number(value)) ? setDayOfBorrowerror('') : setDayOfBorrowerror('จำนวนวันที่ยืมได้คือ 1-14 วัน');
+        return;
+      default:
+        return;
+    }
+  }
+
   const handleBookchange = (event: React.ChangeEvent<{ value: unknown }>) => {
     setBook(event.target.value as number);
   };
@@ -111,75 +155,120 @@ export default function Create() {
     setServicepoint(event.target.value as number);
   };
 
-  const handleUserchange = (event: React.ChangeEvent<{ value: unknown }>) => {
-    setUser(event.target.value as number);
+  const handlePhoneNumberChange = (event: React.ChangeEvent<{ value: any }>) => {
+    const { value } = event.target;
+    const validateValue = value
+    checkPattern('phoneNumber', validateValue)
+    setPhoneNumber(event.target.value as string);
   };
-  const createBookBorrow = async ()=>{
-    if ((userID != 0) && (bookID!= 0) && (servicePointID!= 0)) {  
+
+  const handlePickupChange = (event: React.ChangeEvent<{ value: any }>) => {
+    const { value } = event.target;
+    const validateValue = value
+    checkPattern('pickup', validateValue)
+    setPickup(event.target.value as string);
+  };
+
+  const handleDayOfBorrowChange = (event: React.ChangeEvent<{ value: any }>) => {
+    const { value } = event.target;
+    const validateValue = value
+    checkPattern('dayOfBorrow', validateValue)
+    setDayOfBorrow(event.target.value as number);
+  };
+
+  const listbb = () => {
+    setStatus(false);
+    if(errormessege == "บันทึกข้อมูลสำเร็จ"){
+    window.location.href ="http://localhost:3000/Bookborrow";
+    }
+  };
+
+  const checkCaseSaveError = (field: string) => {
+    if (field == "DAY_OF_BORROW") { setErrorMessege("ข้อมูลfield จำนวนวันที่ยืมผิด"); }
+    else if (field == "PICKUP") { setErrorMessege("ข้อมูลfield วิธีรับหนังสือผิด"); }
+    else if (field == "PHONE_NUMBER") { setErrorMessege("ข้อมูลfield เบอร์โทรศัพท์ผิด"); }
+    else { setErrorMessege("บันทึกไม่สำเร็จใส่ข้อมูลไม่ครบ"); }
+  }
+
+  const createBookBorrow = async () => {
+    if ((userID != 0) && (bookID != 0) && (servicePointID != 0)) {
+      const apiUrl = 'http://localhost:8080/api/v1/bookborrows';
       const bookBorrow = {
         bookID: bookID,
         servicePointID: servicePointID,
         userID: userID,
+        dayOfBorrow: Number(dayOfBorrow),
+        pickup: pickup,
+        phoneNumber: phoneNumber,
       };
       console.log(bookBorrow);
-      const res: any = await api.createBookborrow({ bookborrow: bookBorrow });
-      setStatus(true);
-        if(res.id != ''){
-            setAlert(true);
-        }
-        }else{
-            setAlert(false);
-            setStatus(true);
-        }
-        const timer = setTimeout(() => {
-            setStatus(false);
-            window.location.reload(false);
-        }, 10000);
-    };
+      const requestOptions = {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(bookBorrow),
+      };
 
-    const resetLocalStorage = async () => {
-      localStorage.setItem("userID", JSON.stringify(null))
-      localStorage.setItem("role", JSON.stringify(null))
-      localStorage.setItem("valid", JSON.stringify(null))
-      localStorage.setItem("userName", JSON.stringify(null))
-      window.location.href = "/"
+      fetch(apiUrl, requestOptions)
+        .then(response => response.json())
+        .then(data => {
+          console.log(data);
+          setStatus(true);
+          if (data.status === true) {
+            setErrorMessege("บันทึกข้อมูลสำเร็จ");
+            setAlertType("success");
+          }
+          else {
+            checkCaseSaveError(data.error.Name);
+            setAlertType("error");
+          }
+        });
     }
+    else {
+      setErrorMessege("บันทึกไม่สำเร็จใส่ข้อมูลไม่ครบ");
+      setAlertType("error");
+      setStatus(true);
+    }
+  };
+
+  const resetLocalStorage = async () => {
+    localStorage.setItem("userID", JSON.stringify(null))
+    localStorage.setItem("role", JSON.stringify(null))
+    localStorage.setItem("valid", JSON.stringify(null))
+    localStorage.setItem("userName", JSON.stringify(null))
+    window.location.href = "/"
+  }
 
   return (
     <Page theme={pageTheme.home}>
       <Header
         title={`Welcome to BookBorrow System`}
         subtitle="ระบบยืมหนังสือ"
-        >
-           <Button
-            // disabled={LogoutBtn}
-            variant="contained"
-            color="secondary"
-            className={classes.button}
-            startIcon={<LockOutlinedIcon />}
-            onClick={() => {
-              resetLocalStorage();
-            }}>
-            ล็อกเอ้าท์
+      >
+        <Button
+          // disabled={LogoutBtn}
+          variant="contained"
+          color="secondary"
+          className={classes.button}
+          startIcon={<LockOutlinedIcon />}
+          onClick={() => {
+            resetLocalStorage();
+          }}>
+          ล็อกเอ้าท์
           </Button>
-        </Header>
-        
+      </Header>
+
       <Content>
         <ContentHeader title={userName}>
-        {status ? (
-           <div>
-             {alert ? (
-               <Alert severity="success">
-                 เพิ่มบันทึกเรียบร้อย!
-               </Alert>
-             ) : (
-               <Alert severity="warning" style={{ marginTop: 20 }}>
-                 บันทึกไม่สำเร็จ กรุณากรอกข้อมูลใหม่
-               </Alert>
-             )}
-           </div>
-         ) : null}
-         
+          {status ? (
+            <div>
+              {alerttype != "" ? (
+                <Alert severity={alerttype} onClose={() => { listbb() }}>
+                  {errormessege}
+                </Alert>
+              ) : null}
+            </div>
+          ) : null}
+
         </ContentHeader>
 
         <div className={classes.root}>
@@ -214,7 +303,7 @@ export default function Create() {
                 <div className={classes.paper}><strong>ผู้ยืม</strong></div>
                 <InputLabel id="user-label"></InputLabel>
                 <Select
-                  disabled = {true}
+                  disabled={true}
                   labelId="ผู้ยืม"
                   id="userID"
                   value={userID}
@@ -249,6 +338,51 @@ export default function Create() {
               </FormControl>
             </div>
 
+            <div className={classes.paper}><strong>จำนวนวันที่ยืม</strong></div>
+            <TextField 
+              style={{ width: 400, marginLeft: 20, marginRight: -10 }}
+              id="dayOfBorrow"
+              error = {dayOfBorrowerror ? true : false}
+              label=""
+              variant="outlined"
+              color="primary"
+              type="string"
+              size="medium"
+              helperText= {dayOfBorrowerror}
+              value={dayOfBorrow}
+              onChange={handleDayOfBorrowChange}
+            />
+
+            <div className={classes.paper}><strong>วิธีรับหนังสือ</strong></div>
+            <TextField 
+              style={{ width: 400, marginLeft: 20, marginRight: -10 }}
+              id="pickup"
+              error = {pickuperror ? true : false}
+              label=""
+              variant="outlined"
+              color="primary"
+              type="string"
+              size="medium"
+              helperText= {pickuperror}
+              value={pickup}
+              onChange={handlePickupChange}
+            />
+
+            <div className={classes.paper}><strong>เบอร์โทรศัพท์</strong></div>
+            <TextField 
+              style={{ width: 400, marginLeft: 20, marginRight: -10 }}
+              id="phoneNumber"
+              error = {phoneNumbererror ? true : false}
+              label=""
+              variant="outlined"
+              color="primary"
+              type="string"
+              size="medium"
+              helperText= {phoneNumbererror}
+              value={phoneNumber}
+              onChange={handlePhoneNumberChange}
+            />
+
             <div className={classes.margin}>
               <Button
                 onClick={() => {
@@ -274,3 +408,4 @@ export default function Create() {
     </Page>
   );
 }
+
