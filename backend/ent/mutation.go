@@ -5109,6 +5109,10 @@ type ResearchMutation struct {
 	id              *int
 	_DOC_NAME       *string
 	_DATE           *time.Time
+	_PAGE_NUMBER    *int
+	add_PAGE_NUMBER *int
+	_YEAR_NUMBER    *int
+	add_YEAR_NUMBER *int
 	clearedFields   map[string]struct{}
 	register        *int
 	clearedregister bool
@@ -5273,6 +5277,120 @@ func (m *ResearchMutation) ResetDATE() {
 	m._DATE = nil
 }
 
+// SetPAGENUMBER sets the PAGE_NUMBER field.
+func (m *ResearchMutation) SetPAGENUMBER(i int) {
+	m._PAGE_NUMBER = &i
+	m.add_PAGE_NUMBER = nil
+}
+
+// PAGENUMBER returns the PAGE_NUMBER value in the mutation.
+func (m *ResearchMutation) PAGENUMBER() (r int, exists bool) {
+	v := m._PAGE_NUMBER
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldPAGENUMBER returns the old PAGE_NUMBER value of the Research.
+// If the Research object wasn't provided to the builder, the object is fetched
+// from the database.
+// An error is returned if the mutation operation is not UpdateOne, or database query fails.
+func (m *ResearchMutation) OldPAGENUMBER(ctx context.Context) (v int, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, fmt.Errorf("OldPAGENUMBER is allowed only on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, fmt.Errorf("OldPAGENUMBER requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldPAGENUMBER: %w", err)
+	}
+	return oldValue.PAGENUMBER, nil
+}
+
+// AddPAGENUMBER adds i to PAGE_NUMBER.
+func (m *ResearchMutation) AddPAGENUMBER(i int) {
+	if m.add_PAGE_NUMBER != nil {
+		*m.add_PAGE_NUMBER += i
+	} else {
+		m.add_PAGE_NUMBER = &i
+	}
+}
+
+// AddedPAGENUMBER returns the value that was added to the PAGE_NUMBER field in this mutation.
+func (m *ResearchMutation) AddedPAGENUMBER() (r int, exists bool) {
+	v := m.add_PAGE_NUMBER
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ResetPAGENUMBER reset all changes of the "PAGE_NUMBER" field.
+func (m *ResearchMutation) ResetPAGENUMBER() {
+	m._PAGE_NUMBER = nil
+	m.add_PAGE_NUMBER = nil
+}
+
+// SetYEARNUMBER sets the YEAR_NUMBER field.
+func (m *ResearchMutation) SetYEARNUMBER(i int) {
+	m._YEAR_NUMBER = &i
+	m.add_YEAR_NUMBER = nil
+}
+
+// YEARNUMBER returns the YEAR_NUMBER value in the mutation.
+func (m *ResearchMutation) YEARNUMBER() (r int, exists bool) {
+	v := m._YEAR_NUMBER
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldYEARNUMBER returns the old YEAR_NUMBER value of the Research.
+// If the Research object wasn't provided to the builder, the object is fetched
+// from the database.
+// An error is returned if the mutation operation is not UpdateOne, or database query fails.
+func (m *ResearchMutation) OldYEARNUMBER(ctx context.Context) (v int, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, fmt.Errorf("OldYEARNUMBER is allowed only on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, fmt.Errorf("OldYEARNUMBER requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldYEARNUMBER: %w", err)
+	}
+	return oldValue.YEARNUMBER, nil
+}
+
+// AddYEARNUMBER adds i to YEAR_NUMBER.
+func (m *ResearchMutation) AddYEARNUMBER(i int) {
+	if m.add_YEAR_NUMBER != nil {
+		*m.add_YEAR_NUMBER += i
+	} else {
+		m.add_YEAR_NUMBER = &i
+	}
+}
+
+// AddedYEARNUMBER returns the value that was added to the YEAR_NUMBER field in this mutation.
+func (m *ResearchMutation) AddedYEARNUMBER() (r int, exists bool) {
+	v := m.add_YEAR_NUMBER
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ResetYEARNUMBER reset all changes of the "YEAR_NUMBER" field.
+func (m *ResearchMutation) ResetYEARNUMBER() {
+	m._YEAR_NUMBER = nil
+	m.add_YEAR_NUMBER = nil
+}
+
 // SetRegisterID sets the register edge to User by id.
 func (m *ResearchMutation) SetRegisterID(id int) {
 	m.register = &id
@@ -5404,12 +5522,18 @@ func (m *ResearchMutation) Type() string {
 // this mutation. Note that, in order to get all numeric
 // fields that were in/decremented, call AddedFields().
 func (m *ResearchMutation) Fields() []string {
-	fields := make([]string, 0, 2)
+	fields := make([]string, 0, 4)
 	if m._DOC_NAME != nil {
 		fields = append(fields, research.FieldDOCNAME)
 	}
 	if m._DATE != nil {
 		fields = append(fields, research.FieldDATE)
+	}
+	if m._PAGE_NUMBER != nil {
+		fields = append(fields, research.FieldPAGENUMBER)
+	}
+	if m._YEAR_NUMBER != nil {
+		fields = append(fields, research.FieldYEARNUMBER)
 	}
 	return fields
 }
@@ -5423,6 +5547,10 @@ func (m *ResearchMutation) Field(name string) (ent.Value, bool) {
 		return m.DOCNAME()
 	case research.FieldDATE:
 		return m.DATE()
+	case research.FieldPAGENUMBER:
+		return m.PAGENUMBER()
+	case research.FieldYEARNUMBER:
+		return m.YEARNUMBER()
 	}
 	return nil, false
 }
@@ -5436,6 +5564,10 @@ func (m *ResearchMutation) OldField(ctx context.Context, name string) (ent.Value
 		return m.OldDOCNAME(ctx)
 	case research.FieldDATE:
 		return m.OldDATE(ctx)
+	case research.FieldPAGENUMBER:
+		return m.OldPAGENUMBER(ctx)
+	case research.FieldYEARNUMBER:
+		return m.OldYEARNUMBER(ctx)
 	}
 	return nil, fmt.Errorf("unknown Research field %s", name)
 }
@@ -5459,6 +5591,20 @@ func (m *ResearchMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetDATE(v)
 		return nil
+	case research.FieldPAGENUMBER:
+		v, ok := value.(int)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetPAGENUMBER(v)
+		return nil
+	case research.FieldYEARNUMBER:
+		v, ok := value.(int)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetYEARNUMBER(v)
+		return nil
 	}
 	return fmt.Errorf("unknown Research field %s", name)
 }
@@ -5466,13 +5612,26 @@ func (m *ResearchMutation) SetField(name string, value ent.Value) error {
 // AddedFields returns all numeric fields that were incremented
 // or decremented during this mutation.
 func (m *ResearchMutation) AddedFields() []string {
-	return nil
+	var fields []string
+	if m.add_PAGE_NUMBER != nil {
+		fields = append(fields, research.FieldPAGENUMBER)
+	}
+	if m.add_YEAR_NUMBER != nil {
+		fields = append(fields, research.FieldYEARNUMBER)
+	}
+	return fields
 }
 
 // AddedField returns the numeric value that was in/decremented
 // from a field with the given name. The second value indicates
 // that this field was not set, or was not define in the schema.
 func (m *ResearchMutation) AddedField(name string) (ent.Value, bool) {
+	switch name {
+	case research.FieldPAGENUMBER:
+		return m.AddedPAGENUMBER()
+	case research.FieldYEARNUMBER:
+		return m.AddedYEARNUMBER()
+	}
 	return nil, false
 }
 
@@ -5481,6 +5640,20 @@ func (m *ResearchMutation) AddedField(name string) (ent.Value, bool) {
 // type mismatch the field type.
 func (m *ResearchMutation) AddField(name string, value ent.Value) error {
 	switch name {
+	case research.FieldPAGENUMBER:
+		v, ok := value.(int)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddPAGENUMBER(v)
+		return nil
+	case research.FieldYEARNUMBER:
+		v, ok := value.(int)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddYEARNUMBER(v)
+		return nil
 	}
 	return fmt.Errorf("unknown Research numeric field %s", name)
 }
@@ -5514,6 +5687,12 @@ func (m *ResearchMutation) ResetField(name string) error {
 		return nil
 	case research.FieldDATE:
 		m.ResetDATE()
+		return nil
+	case research.FieldPAGENUMBER:
+		m.ResetPAGENUMBER()
+		return nil
+	case research.FieldYEARNUMBER:
+		m.ResetYEARNUMBER()
 		return nil
 	}
 	return fmt.Errorf("unknown Research field %s", name)

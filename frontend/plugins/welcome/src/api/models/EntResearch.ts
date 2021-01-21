@@ -39,6 +39,18 @@ export interface EntResearch {
      */
     dOCNAME?: string;
     /**
+     * PAGENUMBER holds the value of the "PAGE_NUMBER" field.
+     * @type {number}
+     * @memberof EntResearch
+     */
+    pAGENUMBER?: number;
+    /**
+     * YEARNUMBER holds the value of the "YEAR_NUMBER" field.
+     * @type {number}
+     * @memberof EntResearch
+     */
+    yEARNUMBER?: number;
+    /**
      * 
      * @type {EntResearchEdges}
      * @memberof EntResearch
@@ -82,6 +94,8 @@ export function EntResearchFromJSONTyped(json: any, ignoreDiscriminator: boolean
         
         'dATE': !exists(json, 'DATE') ? undefined : json['DATE'],
         'dOCNAME': !exists(json, 'DOC_NAME') ? undefined : json['DOC_NAME'],
+        'pAGENUMBER': !exists(json, 'PAGE_NUMBER') ? undefined : json['PAGE_NUMBER'],
+        'yEARNUMBER': !exists(json, 'YEAR_NUMBER') ? undefined : json['YEAR_NUMBER'],
         'edges': !exists(json, 'edges') ? undefined : EntResearchEdgesFromJSON(json['edges']),
         'id': !exists(json, 'id') ? undefined : json['id'],
         'ownerID': !exists(json, 'owner_ID') ? undefined : json['owner_ID'],
@@ -101,6 +115,8 @@ export function EntResearchToJSON(value?: EntResearch | null): any {
         
         'DATE': value.dATE,
         'DOC_NAME': value.dOCNAME,
+        'PAGE_NUMBER': value.pAGENUMBER,
+        'YEAR_NUMBER': value.yEARNUMBER,
         'edges': EntResearchEdgesToJSON(value.edges),
         'id': value.id,
         'owner_ID': value.ownerID,

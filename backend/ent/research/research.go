@@ -15,6 +15,10 @@ const (
 	FieldDOCNAME = "doc_name"
 	// FieldDATE holds the string denoting the date field in the database.
 	FieldDATE = "date"
+	// FieldPAGENUMBER holds the string denoting the page_number field in the database.
+	FieldPAGENUMBER = "page_number"
+	// FieldYEARNUMBER holds the string denoting the year_number field in the database.
+	FieldYEARNUMBER = "year_number"
 
 	// EdgeRegister holds the string denoting the register edge name in mutations.
 	EdgeRegister = "register"
@@ -53,6 +57,8 @@ var Columns = []string{
 	FieldID,
 	FieldDOCNAME,
 	FieldDATE,
+	FieldPAGENUMBER,
+	FieldYEARNUMBER,
 }
 
 // ForeignKeys holds the SQL foreign-keys that are owned by the Research type.
@@ -67,4 +73,8 @@ var (
 	DOCNAMEValidator func(string) error
 	// DefaultDATE holds the default value on creation for the DATE field.
 	DefaultDATE func() time.Time
+	// PAGENUMBERValidator is a validator for the "PAGE_NUMBER" field. It is called by the builders before save.
+	PAGENUMBERValidator func(int) error
+	// YEARNUMBERValidator is a validator for the "YEAR_NUMBER" field. It is called by the builders before save.
+	YEARNUMBERValidator func(int) error
 )

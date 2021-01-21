@@ -104,11 +104,33 @@ func init() {
 	// researchDescDOCNAME is the schema descriptor for DOC_NAME field.
 	researchDescDOCNAME := researchFields[0].Descriptor()
 	// research.DOCNAMEValidator is a validator for the "DOC_NAME" field. It is called by the builders before save.
-	research.DOCNAMEValidator = researchDescDOCNAME.Validators[0].(func(string) error)
+	research.DOCNAMEValidator = func() func(string) error {
+		validators := researchDescDOCNAME.Validators
+		fns := [...]func(string) error{
+			validators[0].(func(string) error),
+			validators[1].(func(string) error),
+		}
+		return func(_DOC_NAME string) error {
+			for _, fn := range fns {
+				if err := fn(_DOC_NAME); err != nil {
+					return err
+				}
+			}
+			return nil
+		}
+	}()
 	// researchDescDATE is the schema descriptor for DATE field.
 	researchDescDATE := researchFields[1].Descriptor()
 	// research.DefaultDATE holds the default value on creation for the DATE field.
 	research.DefaultDATE = researchDescDATE.Default.(func() time.Time)
+	// researchDescPAGENUMBER is the schema descriptor for PAGE_NUMBER field.
+	researchDescPAGENUMBER := researchFields[2].Descriptor()
+	// research.PAGENUMBERValidator is a validator for the "PAGE_NUMBER" field. It is called by the builders before save.
+	research.PAGENUMBERValidator = researchDescPAGENUMBER.Validators[0].(func(int) error)
+	// researchDescYEARNUMBER is the schema descriptor for YEAR_NUMBER field.
+	researchDescYEARNUMBER := researchFields[3].Descriptor()
+	// research.YEARNUMBERValidator is a validator for the "YEAR_NUMBER" field. It is called by the builders before save.
+	research.YEARNUMBERValidator = researchDescYEARNUMBER.Validators[0].(func(int) error)
 	researchtypeFields := schema.Researchtype{}.Fields()
 	_ = researchtypeFields
 	// researchtypeDescTYPENAME is the schema descriptor for TYPE_NAME field.

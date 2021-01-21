@@ -107,6 +107,20 @@ func DATE(v time.Time) predicate.Research {
 	})
 }
 
+// PAGENUMBER applies equality check predicate on the "PAGE_NUMBER" field. It's identical to PAGENUMBEREQ.
+func PAGENUMBER(v int) predicate.Research {
+	return predicate.Research(func(s *sql.Selector) {
+		s.Where(sql.EQ(s.C(FieldPAGENUMBER), v))
+	})
+}
+
+// YEARNUMBER applies equality check predicate on the "YEAR_NUMBER" field. It's identical to YEARNUMBEREQ.
+func YEARNUMBER(v int) predicate.Research {
+	return predicate.Research(func(s *sql.Selector) {
+		s.Where(sql.EQ(s.C(FieldYEARNUMBER), v))
+	})
+}
+
 // DOCNAMEEQ applies the EQ predicate on the "DOC_NAME" field.
 func DOCNAMEEQ(v string) predicate.Research {
 	return predicate.Research(func(s *sql.Selector) {
@@ -291,6 +305,158 @@ func DATELT(v time.Time) predicate.Research {
 func DATELTE(v time.Time) predicate.Research {
 	return predicate.Research(func(s *sql.Selector) {
 		s.Where(sql.LTE(s.C(FieldDATE), v))
+	})
+}
+
+// PAGENUMBEREQ applies the EQ predicate on the "PAGE_NUMBER" field.
+func PAGENUMBEREQ(v int) predicate.Research {
+	return predicate.Research(func(s *sql.Selector) {
+		s.Where(sql.EQ(s.C(FieldPAGENUMBER), v))
+	})
+}
+
+// PAGENUMBERNEQ applies the NEQ predicate on the "PAGE_NUMBER" field.
+func PAGENUMBERNEQ(v int) predicate.Research {
+	return predicate.Research(func(s *sql.Selector) {
+		s.Where(sql.NEQ(s.C(FieldPAGENUMBER), v))
+	})
+}
+
+// PAGENUMBERIn applies the In predicate on the "PAGE_NUMBER" field.
+func PAGENUMBERIn(vs ...int) predicate.Research {
+	v := make([]interface{}, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.Research(func(s *sql.Selector) {
+		// if not arguments were provided, append the FALSE constants,
+		// since we can't apply "IN ()". This will make this predicate falsy.
+		if len(v) == 0 {
+			s.Where(sql.False())
+			return
+		}
+		s.Where(sql.In(s.C(FieldPAGENUMBER), v...))
+	})
+}
+
+// PAGENUMBERNotIn applies the NotIn predicate on the "PAGE_NUMBER" field.
+func PAGENUMBERNotIn(vs ...int) predicate.Research {
+	v := make([]interface{}, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.Research(func(s *sql.Selector) {
+		// if not arguments were provided, append the FALSE constants,
+		// since we can't apply "IN ()". This will make this predicate falsy.
+		if len(v) == 0 {
+			s.Where(sql.False())
+			return
+		}
+		s.Where(sql.NotIn(s.C(FieldPAGENUMBER), v...))
+	})
+}
+
+// PAGENUMBERGT applies the GT predicate on the "PAGE_NUMBER" field.
+func PAGENUMBERGT(v int) predicate.Research {
+	return predicate.Research(func(s *sql.Selector) {
+		s.Where(sql.GT(s.C(FieldPAGENUMBER), v))
+	})
+}
+
+// PAGENUMBERGTE applies the GTE predicate on the "PAGE_NUMBER" field.
+func PAGENUMBERGTE(v int) predicate.Research {
+	return predicate.Research(func(s *sql.Selector) {
+		s.Where(sql.GTE(s.C(FieldPAGENUMBER), v))
+	})
+}
+
+// PAGENUMBERLT applies the LT predicate on the "PAGE_NUMBER" field.
+func PAGENUMBERLT(v int) predicate.Research {
+	return predicate.Research(func(s *sql.Selector) {
+		s.Where(sql.LT(s.C(FieldPAGENUMBER), v))
+	})
+}
+
+// PAGENUMBERLTE applies the LTE predicate on the "PAGE_NUMBER" field.
+func PAGENUMBERLTE(v int) predicate.Research {
+	return predicate.Research(func(s *sql.Selector) {
+		s.Where(sql.LTE(s.C(FieldPAGENUMBER), v))
+	})
+}
+
+// YEARNUMBEREQ applies the EQ predicate on the "YEAR_NUMBER" field.
+func YEARNUMBEREQ(v int) predicate.Research {
+	return predicate.Research(func(s *sql.Selector) {
+		s.Where(sql.EQ(s.C(FieldYEARNUMBER), v))
+	})
+}
+
+// YEARNUMBERNEQ applies the NEQ predicate on the "YEAR_NUMBER" field.
+func YEARNUMBERNEQ(v int) predicate.Research {
+	return predicate.Research(func(s *sql.Selector) {
+		s.Where(sql.NEQ(s.C(FieldYEARNUMBER), v))
+	})
+}
+
+// YEARNUMBERIn applies the In predicate on the "YEAR_NUMBER" field.
+func YEARNUMBERIn(vs ...int) predicate.Research {
+	v := make([]interface{}, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.Research(func(s *sql.Selector) {
+		// if not arguments were provided, append the FALSE constants,
+		// since we can't apply "IN ()". This will make this predicate falsy.
+		if len(v) == 0 {
+			s.Where(sql.False())
+			return
+		}
+		s.Where(sql.In(s.C(FieldYEARNUMBER), v...))
+	})
+}
+
+// YEARNUMBERNotIn applies the NotIn predicate on the "YEAR_NUMBER" field.
+func YEARNUMBERNotIn(vs ...int) predicate.Research {
+	v := make([]interface{}, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.Research(func(s *sql.Selector) {
+		// if not arguments were provided, append the FALSE constants,
+		// since we can't apply "IN ()". This will make this predicate falsy.
+		if len(v) == 0 {
+			s.Where(sql.False())
+			return
+		}
+		s.Where(sql.NotIn(s.C(FieldYEARNUMBER), v...))
+	})
+}
+
+// YEARNUMBERGT applies the GT predicate on the "YEAR_NUMBER" field.
+func YEARNUMBERGT(v int) predicate.Research {
+	return predicate.Research(func(s *sql.Selector) {
+		s.Where(sql.GT(s.C(FieldYEARNUMBER), v))
+	})
+}
+
+// YEARNUMBERGTE applies the GTE predicate on the "YEAR_NUMBER" field.
+func YEARNUMBERGTE(v int) predicate.Research {
+	return predicate.Research(func(s *sql.Selector) {
+		s.Where(sql.GTE(s.C(FieldYEARNUMBER), v))
+	})
+}
+
+// YEARNUMBERLT applies the LT predicate on the "YEAR_NUMBER" field.
+func YEARNUMBERLT(v int) predicate.Research {
+	return predicate.Research(func(s *sql.Selector) {
+		s.Where(sql.LT(s.C(FieldYEARNUMBER), v))
+	})
+}
+
+// YEARNUMBERLTE applies the LTE predicate on the "YEAR_NUMBER" field.
+func YEARNUMBERLTE(v int) predicate.Research {
+	return predicate.Research(func(s *sql.Selector) {
+		s.Where(sql.LTE(s.C(FieldYEARNUMBER), v))
 	})
 }
 

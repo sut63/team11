@@ -48,7 +48,19 @@ export interface ControllersResearch {
      * @type {number}
      * @memberof ControllersResearch
      */
+    pagenumber?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof ControllersResearch
+     */
     register?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof ControllersResearch
+     */
+    yearnumber?: number;
 }
 
 export function ControllersResearchFromJSON(json: any): ControllersResearch {
@@ -65,7 +77,9 @@ export function ControllersResearchFromJSONTyped(json: any, ignoreDiscriminator:
         'docType': !exists(json, 'docType') ? undefined : json['docType'],
         'docname': !exists(json, 'docname') ? undefined : json['docname'],
         'myDoc': !exists(json, 'myDoc') ? undefined : json['myDoc'],
+        'pagenumber': !exists(json, 'pagenumber') ? undefined : json['pagenumber'],
         'register': !exists(json, 'register') ? undefined : json['register'],
+        'yearnumber': !exists(json, 'yearnumber') ? undefined : json['yearnumber'],
     };
 }
 
@@ -82,7 +96,9 @@ export function ControllersResearchToJSON(value?: ControllersResearch | null): a
         'docType': value.docType,
         'docname': value.docname,
         'myDoc': value.myDoc,
+        'pagenumber': value.pagenumber,
         'register': value.register,
+        'yearnumber': value.yearnumber,
     };
 }
 

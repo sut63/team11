@@ -282,6 +282,8 @@ var (
 		{Name: "id", Type: field.TypeInt, Increment: true},
 		{Name: "doc_name", Type: field.TypeString},
 		{Name: "date", Type: field.TypeTime},
+		{Name: "page_number", Type: field.TypeInt},
+		{Name: "year_number", Type: field.TypeInt},
 		{Name: "OWNER_ID", Type: field.TypeInt, Nullable: true},
 		{Name: "TYPE_ID", Type: field.TypeInt, Nullable: true},
 		{Name: "USER_ID", Type: field.TypeInt, Nullable: true},
@@ -294,21 +296,21 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:  "researches_authors_owner",
-				Columns: []*schema.Column{ResearchesColumns[3]},
+				Columns: []*schema.Column{ResearchesColumns[5]},
 
 				RefColumns: []*schema.Column{AuthorsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:  "researches_researchtypes_researchType",
-				Columns: []*schema.Column{ResearchesColumns[4]},
+				Columns: []*schema.Column{ResearchesColumns[6]},
 
 				RefColumns: []*schema.Column{ResearchtypesColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:  "researches_users_record",
-				Columns: []*schema.Column{ResearchesColumns[5]},
+				Columns: []*schema.Column{ResearchesColumns[7]},
 
 				RefColumns: []*schema.Column{UsersColumns[0]},
 				OnDelete:   schema.SetNull,
