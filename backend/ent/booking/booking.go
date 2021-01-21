@@ -15,6 +15,12 @@ const (
 	FieldBOOKINGDATE = "booking_date"
 	// FieldTIMELEFT holds the string denoting the time_left field in the database.
 	FieldTIMELEFT = "time_left"
+	// FieldUSERNUMBER holds the string denoting the user_number field in the database.
+	FieldUSERNUMBER = "user_number"
+	// FieldBORROWITEM holds the string denoting the borrow_item field in the database.
+	FieldBORROWITEM = "borrow_item"
+	// FieldPHONENUMBER holds the string denoting the phone_number field in the database.
+	FieldPHONENUMBER = "phone_number"
 
 	// EdgeUsedby holds the string denoting the usedby edge name in mutations.
 	EdgeUsedby = "usedby"
@@ -53,6 +59,9 @@ var Columns = []string{
 	FieldID,
 	FieldBOOKINGDATE,
 	FieldTIMELEFT,
+	FieldUSERNUMBER,
+	FieldBORROWITEM,
+	FieldPHONENUMBER,
 }
 
 // ForeignKeys holds the SQL foreign-keys that are owned by the Booking type.
@@ -65,4 +74,10 @@ var ForeignKeys = []string{
 var (
 	// DefaultBOOKINGDATE holds the default value on creation for the BOOKING_DATE field.
 	DefaultBOOKINGDATE func() time.Time
+	// USERNUMBERValidator is a validator for the "USER_NUMBER" field. It is called by the builders before save.
+	USERNUMBERValidator func(int) error
+	// BORROWITEMValidator is a validator for the "BORROW_ITEM" field. It is called by the builders before save.
+	BORROWITEMValidator func(int) error
+	// PHONENUMBERValidator is a validator for the "PHONE_NUMBER" field. It is called by the builders before save.
+	PHONENUMBERValidator func(string) error
 )

@@ -27,6 +27,7 @@ type Bookborrow struct {
 	ServicePointID int
 	BorrowDate	string
 	ReturnDate	string
+	
 }
 
 // CreateBookborrow handles POST requests for adding bookborrow entities

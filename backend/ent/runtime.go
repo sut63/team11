@@ -51,6 +51,18 @@ func init() {
 	bookingDescBOOKINGDATE := bookingFields[0].Descriptor()
 	// booking.DefaultBOOKINGDATE holds the default value on creation for the BOOKING_DATE field.
 	booking.DefaultBOOKINGDATE = bookingDescBOOKINGDATE.Default.(func() time.Time)
+	// bookingDescUSERNUMBER is the schema descriptor for USER_NUMBER field.
+	bookingDescUSERNUMBER := bookingFields[2].Descriptor()
+	// booking.USERNUMBERValidator is a validator for the "USER_NUMBER" field. It is called by the builders before save.
+	booking.USERNUMBERValidator = bookingDescUSERNUMBER.Validators[0].(func(int) error)
+	// bookingDescBORROWITEM is the schema descriptor for BORROW_ITEM field.
+	bookingDescBORROWITEM := bookingFields[3].Descriptor()
+	// booking.BORROWITEMValidator is a validator for the "BORROW_ITEM" field. It is called by the builders before save.
+	booking.BORROWITEMValidator = bookingDescBORROWITEM.Validators[0].(func(int) error)
+	// bookingDescPHONENUMBER is the schema descriptor for PHONE_NUMBER field.
+	bookingDescPHONENUMBER := bookingFields[4].Descriptor()
+	// booking.PHONENUMBERValidator is a validator for the "PHONE_NUMBER" field. It is called by the builders before save.
+	booking.PHONENUMBERValidator = bookingDescPHONENUMBER.Validators[0].(func(string) error)
 	categoryFields := schema.Category{}.Fields()
 	_ = categoryFields
 	// categoryDescCategoryName is the schema descriptor for CategoryName field.

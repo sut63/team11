@@ -23,6 +23,12 @@ type Booking struct {
 	BOOKINGDATE time.Time `json:"BOOKING_DATE,omitempty"`
 	// TIMELEFT holds the value of the "TIME_LEFT" field.
 	TIMELEFT time.Time `json:"TIME_LEFT,omitempty"`
+	// USERNUMBER holds the value of the "USER_NUMBER" field.
+	USERNUMBER int `json:"USER_NUMBER,omitempty"`
+	// BORROWITEM holds the value of the "BORROW_ITEM" field.
+	BORROWITEM int `json:"BORROW_ITEM,omitempty"`
+	// PHONENUMBER holds the value of the "PHONE_NUMBER" field.
+	PHONENUMBER string `json:"PHONE_NUMBER,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the BookingQuery when eager-loading is set.
 	Edges           BookingEdges `json:"edges"`
@@ -89,9 +95,12 @@ func (e BookingEdges) UsingOrErr() (*ClientEntity, error) {
 // scanValues returns the types for scanning values from sql.Rows.
 func (*Booking) scanValues() []interface{} {
 	return []interface{}{
-		&sql.NullInt64{}, // id
-		&sql.NullTime{},  // BOOKING_DATE
-		&sql.NullTime{},  // TIME_LEFT
+		&sql.NullInt64{},  // id
+		&sql.NullTime{},   // BOOKING_DATE
+		&sql.NullTime{},   // TIME_LEFT
+		&sql.NullInt64{},  // USER_NUMBER
+		&sql.NullInt64{},  // BORROW_ITEM
+		&sql.NullString{}, // PHONE_NUMBER
 	}
 }
 
@@ -126,7 +135,22 @@ func (b *Booking) assignValues(values ...interface{}) error {
 	} else if value.Valid {
 		b.TIMELEFT = value.Time
 	}
-	values = values[2:]
+	if value, ok := values[2].(*sql.NullInt64); !ok {
+		return fmt.Errorf("unexpected type %T for field USER_NUMBER", values[2])
+	} else if value.Valid {
+		b.USERNUMBER = int(value.Int64)
+	}
+	if value, ok := values[3].(*sql.NullInt64); !ok {
+		return fmt.Errorf("unexpected type %T for field BORROW_ITEM", values[3])
+	} else if value.Valid {
+		b.BORROWITEM = int(value.Int64)
+	}
+	if value, ok := values[4].(*sql.NullString); !ok {
+		return fmt.Errorf("unexpected type %T for field PHONE_NUMBER", values[4])
+	} else if value.Valid {
+		b.PHONENUMBER = value.String
+	}
+	values = values[5:]
 	if len(values) == len(booking.ForeignKeys) {
 		if value, ok := values[0].(*sql.NullInt64); !ok {
 			return fmt.Errorf("unexpected type %T for edge-field CLIENT_ID", value)
@@ -192,6 +216,12 @@ func (b *Booking) String() string {
 	builder.WriteString(b.BOOKINGDATE.Format(time.ANSIC))
 	builder.WriteString(", TIME_LEFT=")
 	builder.WriteString(b.TIMELEFT.Format(time.ANSIC))
+	builder.WriteString(", USER_NUMBER=")
+	builder.WriteString(fmt.Sprintf("%v", b.USERNUMBER))
+	builder.WriteString(", BORROW_ITEM=")
+	builder.WriteString(fmt.Sprintf("%v", b.BORROWITEM))
+	builder.WriteString(", PHONE_NUMBER=")
+	builder.WriteString(b.PHONENUMBER)
 	builder.WriteByte(')')
 	return builder.String()
 }

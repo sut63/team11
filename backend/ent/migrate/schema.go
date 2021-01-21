@@ -108,6 +108,9 @@ var (
 		{Name: "id", Type: field.TypeInt, Increment: true},
 		{Name: "booking_date", Type: field.TypeTime},
 		{Name: "time_left", Type: field.TypeTime},
+		{Name: "user_number", Type: field.TypeInt},
+		{Name: "borrow_item", Type: field.TypeInt},
+		{Name: "phone_number", Type: field.TypeString},
 		{Name: "CLIENT_ID", Type: field.TypeInt, Nullable: true},
 		{Name: "SERVICEPOINT_ID", Type: field.TypeInt, Nullable: true},
 		{Name: "USER_ID", Type: field.TypeInt, Nullable: true},
@@ -120,21 +123,21 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:  "bookings_client_entities_booked",
-				Columns: []*schema.Column{BookingsColumns[3]},
+				Columns: []*schema.Column{BookingsColumns[6]},
 
 				RefColumns: []*schema.Column{ClientEntitiesColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:  "bookings_service_points_servicepoint",
-				Columns: []*schema.Column{BookingsColumns[4]},
+				Columns: []*schema.Column{BookingsColumns[7]},
 
 				RefColumns: []*schema.Column{ServicePointsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:  "bookings_users_booking",
-				Columns: []*schema.Column{BookingsColumns[5]},
+				Columns: []*schema.Column{BookingsColumns[8]},
 
 				RefColumns: []*schema.Column{UsersColumns[0]},
 				OnDelete:   schema.SetNull,

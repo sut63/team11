@@ -51,6 +51,38 @@ func (bu *BookingUpdate) SetTIMELEFT(t time.Time) *BookingUpdate {
 	return bu
 }
 
+// SetUSERNUMBER sets the USER_NUMBER field.
+func (bu *BookingUpdate) SetUSERNUMBER(i int) *BookingUpdate {
+	bu.mutation.ResetUSERNUMBER()
+	bu.mutation.SetUSERNUMBER(i)
+	return bu
+}
+
+// AddUSERNUMBER adds i to USER_NUMBER.
+func (bu *BookingUpdate) AddUSERNUMBER(i int) *BookingUpdate {
+	bu.mutation.AddUSERNUMBER(i)
+	return bu
+}
+
+// SetBORROWITEM sets the BORROW_ITEM field.
+func (bu *BookingUpdate) SetBORROWITEM(i int) *BookingUpdate {
+	bu.mutation.ResetBORROWITEM()
+	bu.mutation.SetBORROWITEM(i)
+	return bu
+}
+
+// AddBORROWITEM adds i to BORROW_ITEM.
+func (bu *BookingUpdate) AddBORROWITEM(i int) *BookingUpdate {
+	bu.mutation.AddBORROWITEM(i)
+	return bu
+}
+
+// SetPHONENUMBER sets the PHONE_NUMBER field.
+func (bu *BookingUpdate) SetPHONENUMBER(s string) *BookingUpdate {
+	bu.mutation.SetPHONENUMBER(s)
+	return bu
+}
+
 // SetUsedbyID sets the usedby edge to User by id.
 func (bu *BookingUpdate) SetUsedbyID(id int) *BookingUpdate {
 	bu.mutation.SetUsedbyID(id)
@@ -133,6 +165,21 @@ func (bu *BookingUpdate) ClearUsing() *BookingUpdate {
 
 // Save executes the query and returns the number of rows/vertices matched by this operation.
 func (bu *BookingUpdate) Save(ctx context.Context) (int, error) {
+	if v, ok := bu.mutation.USERNUMBER(); ok {
+		if err := booking.USERNUMBERValidator(v); err != nil {
+			return 0, &ValidationError{Name: "USER_NUMBER", err: fmt.Errorf("ent: validator failed for field \"USER_NUMBER\": %w", err)}
+		}
+	}
+	if v, ok := bu.mutation.BORROWITEM(); ok {
+		if err := booking.BORROWITEMValidator(v); err != nil {
+			return 0, &ValidationError{Name: "BORROW_ITEM", err: fmt.Errorf("ent: validator failed for field \"BORROW_ITEM\": %w", err)}
+		}
+	}
+	if v, ok := bu.mutation.PHONENUMBER(); ok {
+		if err := booking.PHONENUMBERValidator(v); err != nil {
+			return 0, &ValidationError{Name: "PHONE_NUMBER", err: fmt.Errorf("ent: validator failed for field \"PHONE_NUMBER\": %w", err)}
+		}
+	}
 
 	var (
 		err      error
@@ -213,6 +260,41 @@ func (bu *BookingUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Type:   field.TypeTime,
 			Value:  value,
 			Column: booking.FieldTIMELEFT,
+		})
+	}
+	if value, ok := bu.mutation.USERNUMBER(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeInt,
+			Value:  value,
+			Column: booking.FieldUSERNUMBER,
+		})
+	}
+	if value, ok := bu.mutation.AddedUSERNUMBER(); ok {
+		_spec.Fields.Add = append(_spec.Fields.Add, &sqlgraph.FieldSpec{
+			Type:   field.TypeInt,
+			Value:  value,
+			Column: booking.FieldUSERNUMBER,
+		})
+	}
+	if value, ok := bu.mutation.BORROWITEM(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeInt,
+			Value:  value,
+			Column: booking.FieldBORROWITEM,
+		})
+	}
+	if value, ok := bu.mutation.AddedBORROWITEM(); ok {
+		_spec.Fields.Add = append(_spec.Fields.Add, &sqlgraph.FieldSpec{
+			Type:   field.TypeInt,
+			Value:  value,
+			Column: booking.FieldBORROWITEM,
+		})
+	}
+	if value, ok := bu.mutation.PHONENUMBER(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Value:  value,
+			Column: booking.FieldPHONENUMBER,
 		})
 	}
 	if bu.mutation.UsedbyCleared() {
@@ -358,6 +440,38 @@ func (buo *BookingUpdateOne) SetTIMELEFT(t time.Time) *BookingUpdateOne {
 	return buo
 }
 
+// SetUSERNUMBER sets the USER_NUMBER field.
+func (buo *BookingUpdateOne) SetUSERNUMBER(i int) *BookingUpdateOne {
+	buo.mutation.ResetUSERNUMBER()
+	buo.mutation.SetUSERNUMBER(i)
+	return buo
+}
+
+// AddUSERNUMBER adds i to USER_NUMBER.
+func (buo *BookingUpdateOne) AddUSERNUMBER(i int) *BookingUpdateOne {
+	buo.mutation.AddUSERNUMBER(i)
+	return buo
+}
+
+// SetBORROWITEM sets the BORROW_ITEM field.
+func (buo *BookingUpdateOne) SetBORROWITEM(i int) *BookingUpdateOne {
+	buo.mutation.ResetBORROWITEM()
+	buo.mutation.SetBORROWITEM(i)
+	return buo
+}
+
+// AddBORROWITEM adds i to BORROW_ITEM.
+func (buo *BookingUpdateOne) AddBORROWITEM(i int) *BookingUpdateOne {
+	buo.mutation.AddBORROWITEM(i)
+	return buo
+}
+
+// SetPHONENUMBER sets the PHONE_NUMBER field.
+func (buo *BookingUpdateOne) SetPHONENUMBER(s string) *BookingUpdateOne {
+	buo.mutation.SetPHONENUMBER(s)
+	return buo
+}
+
 // SetUsedbyID sets the usedby edge to User by id.
 func (buo *BookingUpdateOne) SetUsedbyID(id int) *BookingUpdateOne {
 	buo.mutation.SetUsedbyID(id)
@@ -440,6 +554,21 @@ func (buo *BookingUpdateOne) ClearUsing() *BookingUpdateOne {
 
 // Save executes the query and returns the updated entity.
 func (buo *BookingUpdateOne) Save(ctx context.Context) (*Booking, error) {
+	if v, ok := buo.mutation.USERNUMBER(); ok {
+		if err := booking.USERNUMBERValidator(v); err != nil {
+			return nil, &ValidationError{Name: "USER_NUMBER", err: fmt.Errorf("ent: validator failed for field \"USER_NUMBER\": %w", err)}
+		}
+	}
+	if v, ok := buo.mutation.BORROWITEM(); ok {
+		if err := booking.BORROWITEMValidator(v); err != nil {
+			return nil, &ValidationError{Name: "BORROW_ITEM", err: fmt.Errorf("ent: validator failed for field \"BORROW_ITEM\": %w", err)}
+		}
+	}
+	if v, ok := buo.mutation.PHONENUMBER(); ok {
+		if err := booking.PHONENUMBERValidator(v); err != nil {
+			return nil, &ValidationError{Name: "PHONE_NUMBER", err: fmt.Errorf("ent: validator failed for field \"PHONE_NUMBER\": %w", err)}
+		}
+	}
 
 	var (
 		err  error
@@ -518,6 +647,41 @@ func (buo *BookingUpdateOne) sqlSave(ctx context.Context) (b *Booking, err error
 			Type:   field.TypeTime,
 			Value:  value,
 			Column: booking.FieldTIMELEFT,
+		})
+	}
+	if value, ok := buo.mutation.USERNUMBER(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeInt,
+			Value:  value,
+			Column: booking.FieldUSERNUMBER,
+		})
+	}
+	if value, ok := buo.mutation.AddedUSERNUMBER(); ok {
+		_spec.Fields.Add = append(_spec.Fields.Add, &sqlgraph.FieldSpec{
+			Type:   field.TypeInt,
+			Value:  value,
+			Column: booking.FieldUSERNUMBER,
+		})
+	}
+	if value, ok := buo.mutation.BORROWITEM(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeInt,
+			Value:  value,
+			Column: booking.FieldBORROWITEM,
+		})
+	}
+	if value, ok := buo.mutation.AddedBORROWITEM(); ok {
+		_spec.Fields.Add = append(_spec.Fields.Add, &sqlgraph.FieldSpec{
+			Type:   field.TypeInt,
+			Value:  value,
+			Column: booking.FieldBORROWITEM,
+		})
+	}
+	if value, ok := buo.mutation.PHONENUMBER(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Value:  value,
+			Column: booking.FieldPHONENUMBER,
 		})
 	}
 	if buo.mutation.UsedbyCleared() {
