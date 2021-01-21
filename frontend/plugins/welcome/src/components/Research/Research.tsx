@@ -188,7 +188,7 @@ export default function Create() {
         setAlertMessage("error ข้อมูล field yearnumber ผิด");
         return;
       default:
-        setAlertMessage("บันทึกข้อมูลไม่สำเร็จ");
+        setAlertMessage("บันทึกข้อมูลไม่สำเร็จ ใส่ข้อมูลไม่ครบ");
         return;
     }
   }
