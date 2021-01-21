@@ -24,7 +24,19 @@ export interface ControllersBooking {
      * @type {number}
      * @memberof ControllersBooking
      */
+    borrowItem?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof ControllersBooking
+     */
     client?: number;
+    /**
+     * 
+     * @type {string}
+     * @memberof ControllersBooking
+     */
+    phoneNumber?: string;
     /**
      * 
      * @type {number}
@@ -37,6 +49,12 @@ export interface ControllersBooking {
      * @memberof ControllersBooking
      */
     user?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof ControllersBooking
+     */
+    userNumber?: number;
 }
 
 export function ControllersBookingFromJSON(json: any): ControllersBooking {
@@ -49,9 +67,12 @@ export function ControllersBookingFromJSONTyped(json: any, ignoreDiscriminator: 
     }
     return {
         
+        'borrowItem': !exists(json, 'borrowItem') ? undefined : json['borrowItem'],
         'client': !exists(json, 'client') ? undefined : json['client'],
+        'phoneNumber': !exists(json, 'phoneNumber') ? undefined : json['phoneNumber'],
         'servicePoint': !exists(json, 'servicePoint') ? undefined : json['servicePoint'],
         'user': !exists(json, 'user') ? undefined : json['user'],
+        'userNumber': !exists(json, 'userNumber') ? undefined : json['userNumber'],
     };
 }
 
@@ -64,9 +85,12 @@ export function ControllersBookingToJSON(value?: ControllersBooking | null): any
     }
     return {
         
+        'borrowItem': value.borrowItem,
         'client': value.client,
+        'phoneNumber': value.phoneNumber,
         'servicePoint': value.servicePoint,
         'user': value.user,
+        'userNumber': value.userNumber,
     };
 }
 

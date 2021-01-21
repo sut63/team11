@@ -74,7 +74,7 @@ export function EntBookborrowEdgesFromJSONTyped(json: any, ignoreDiscriminator: 
     }
     return {
         
-        'book': !exists(json, 'Book') ? undefined : EntBookFromJSON(json['Book']),
+        'book': !exists(json, 'book') ? undefined : EntBookFromJSON(json['book']),
         'borrowed': !exists(json, 'borrowed') ? undefined : ((json['borrowed'] as Array<any>).map(EntBookreturnFromJSON)),
         'servicepoint': !exists(json, 'servicepoint') ? undefined : EntServicePointFromJSON(json['servicepoint']),
         'user': !exists(json, 'user') ? undefined : EntUserFromJSON(json['user']),

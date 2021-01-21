@@ -6,12 +6,12 @@ import (
 	"strconv"
 	"time"
 
+	"github.com/gin-gonic/gin"
 	"github.com/team11/app/ent"
 	"github.com/team11/app/ent/booking"
-	"github.com/team11/app/ent/servicepoint"
 	"github.com/team11/app/ent/cliententity"
+	"github.com/team11/app/ent/servicepoint"
 	"github.com/team11/app/ent/user"
-	"github.com/gin-gonic/gin"
 )
 
 // BookingController defines the struct for the booking controller
@@ -22,9 +22,12 @@ type BookingController struct {
 
 //Booking struct
 type Booking struct {
-	User        	int
-	Client      	int
-	ServicePoint 	int
+	User         int
+	Client       int
+	ServicePoint int
+	UserNumber   int
+	BorrowItem   int
+	PhoneNumber  string
 }
 
 // CreateBooking handles POST requests for adding booking entities
@@ -91,17 +94,25 @@ func (ctl *BookingController) CreateBooking(c *gin.Context) {
 		SetBOOKINGDATE(times).
 		SetUsedby(u).
 		SetGetservice(sp).
+		SetUSERNUMBER(obj.UserNumber).
+		SetBORROWITEM(obj.BorrowItem).
+		SetPHONENUMBER(obj.PhoneNumber).
 		SetUsing(cl).
 		SetTIMELEFT(times2).
 		Save(context.Background())
 	if err != nil {
+		fmt.Println(err)
 		c.JSON(400, gin.H{
-			"error": "saving failed",
+			"status": false,
+			"error":  err,
 		})
 		return
 	}
 
-	c.JSON(200, b)
+	c.JSON(200, gin.H{
+		"status": true,
+		"data":   b,
+	})
 }
 
 // GetBooking handles GET requests to retrieve a booking entity

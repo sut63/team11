@@ -26,11 +26,17 @@ definitions:
     type: object
   controllers.Booking:
     properties:
+      borrowItem:
+        type: integer
       client:
         type: integer
+      phoneNumber:
+        type: string
       servicePoint:
         type: integer
       user:
+        type: integer
+      userNumber:
         type: integer
     type: object
   controllers.Bookreturn:
@@ -197,9 +203,18 @@ definitions:
       BOOKING_DATE:
         description: BOOKINGDATE holds the value of the "BOOKING_DATE" field.
         type: string
+      BORROW_ITEM:
+        description: BORROWITEM holds the value of the "BORROW_ITEM" field.
+        type: integer
+      PHONE_NUMBER:
+        description: PHONENUMBER holds the value of the "PHONE_NUMBER" field.
+        type: string
       TIME_LEFT:
         description: TIMELEFT holds the value of the "TIME_LEFT" field.
         type: string
+      USER_NUMBER:
+        description: USERNUMBER holds the value of the "USER_NUMBER" field.
+        type: integer
       client_ID:
         type: integer
       edges:
@@ -3008,6 +3023,7 @@ securityDefinitions:
     tokenUrl: https://example.com/oauth/token
     type: oauth2
   OAuth2Application:
+    authorizationUrl: ""
     flow: application
     scopes:
       admin: ' Grants read and write access to administrative information'
@@ -3022,6 +3038,7 @@ securityDefinitions:
       write: ' Grants write access'
     type: oauth2
   OAuth2Password:
+    authorizationUrl: ""
     flow: password
     scopes:
       admin: ' Grants read and write access to administrative information'

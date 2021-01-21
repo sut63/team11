@@ -43,6 +43,24 @@ func (bc *BookingCreate) SetTIMELEFT(t time.Time) *BookingCreate {
 	return bc
 }
 
+// SetUSERNUMBER sets the USER_NUMBER field.
+func (bc *BookingCreate) SetUSERNUMBER(i int) *BookingCreate {
+	bc.mutation.SetUSERNUMBER(i)
+	return bc
+}
+
+// SetBORROWITEM sets the BORROW_ITEM field.
+func (bc *BookingCreate) SetBORROWITEM(i int) *BookingCreate {
+	bc.mutation.SetBORROWITEM(i)
+	return bc
+}
+
+// SetPHONENUMBER sets the PHONE_NUMBER field.
+func (bc *BookingCreate) SetPHONENUMBER(s string) *BookingCreate {
+	bc.mutation.SetPHONENUMBER(s)
+	return bc
+}
+
 // SetUsedbyID sets the usedby edge to User by id.
 func (bc *BookingCreate) SetUsedbyID(id int) *BookingCreate {
 	bc.mutation.SetUsedbyID(id)
@@ -113,6 +131,30 @@ func (bc *BookingCreate) Save(ctx context.Context) (*Booking, error) {
 	}
 	if _, ok := bc.mutation.TIMELEFT(); !ok {
 		return nil, &ValidationError{Name: "TIME_LEFT", err: errors.New("ent: missing required field \"TIME_LEFT\"")}
+	}
+	if _, ok := bc.mutation.USERNUMBER(); !ok {
+		return nil, &ValidationError{Name: "USER_NUMBER", err: errors.New("ent: missing required field \"USER_NUMBER\"")}
+	}
+	if v, ok := bc.mutation.USERNUMBER(); ok {
+		if err := booking.USERNUMBERValidator(v); err != nil {
+			return nil, &ValidationError{Name: "USER_NUMBER", err: fmt.Errorf("ent: validator failed for field \"USER_NUMBER\": %w", err)}
+		}
+	}
+	if _, ok := bc.mutation.BORROWITEM(); !ok {
+		return nil, &ValidationError{Name: "BORROW_ITEM", err: errors.New("ent: missing required field \"BORROW_ITEM\"")}
+	}
+	if v, ok := bc.mutation.BORROWITEM(); ok {
+		if err := booking.BORROWITEMValidator(v); err != nil {
+			return nil, &ValidationError{Name: "BORROW_ITEM", err: fmt.Errorf("ent: validator failed for field \"BORROW_ITEM\": %w", err)}
+		}
+	}
+	if _, ok := bc.mutation.PHONENUMBER(); !ok {
+		return nil, &ValidationError{Name: "PHONE_NUMBER", err: errors.New("ent: missing required field \"PHONE_NUMBER\"")}
+	}
+	if v, ok := bc.mutation.PHONENUMBER(); ok {
+		if err := booking.PHONENUMBERValidator(v); err != nil {
+			return nil, &ValidationError{Name: "PHONE_NUMBER", err: fmt.Errorf("ent: validator failed for field \"PHONE_NUMBER\": %w", err)}
+		}
 	}
 	var (
 		err  error
@@ -189,6 +231,30 @@ func (bc *BookingCreate) createSpec() (*Booking, *sqlgraph.CreateSpec) {
 			Column: booking.FieldTIMELEFT,
 		})
 		b.TIMELEFT = value
+	}
+	if value, ok := bc.mutation.USERNUMBER(); ok {
+		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
+			Type:   field.TypeInt,
+			Value:  value,
+			Column: booking.FieldUSERNUMBER,
+		})
+		b.USERNUMBER = value
+	}
+	if value, ok := bc.mutation.BORROWITEM(); ok {
+		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
+			Type:   field.TypeInt,
+			Value:  value,
+			Column: booking.FieldBORROWITEM,
+		})
+		b.BORROWITEM = value
+	}
+	if value, ok := bc.mutation.PHONENUMBER(); ok {
+		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Value:  value,
+			Column: booking.FieldPHONENUMBER,
+		})
+		b.PHONENUMBER = value
 	}
 	if nodes := bc.mutation.UsedbyIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{

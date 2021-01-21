@@ -1703,6 +1703,11 @@ type BookingMutation struct {
 	id                *int
 	_BOOKING_DATE     *time.Time
 	_TIME_LEFT        *time.Time
+	_USER_NUMBER      *int
+	add_USER_NUMBER   *int
+	_BORROW_ITEM      *int
+	add_BORROW_ITEM   *int
+	_PHONE_NUMBER     *string
 	clearedFields     map[string]struct{}
 	usedby            *int
 	clearedusedby     bool
@@ -1867,6 +1872,157 @@ func (m *BookingMutation) ResetTIMELEFT() {
 	m._TIME_LEFT = nil
 }
 
+// SetUSERNUMBER sets the USER_NUMBER field.
+func (m *BookingMutation) SetUSERNUMBER(i int) {
+	m._USER_NUMBER = &i
+	m.add_USER_NUMBER = nil
+}
+
+// USERNUMBER returns the USER_NUMBER value in the mutation.
+func (m *BookingMutation) USERNUMBER() (r int, exists bool) {
+	v := m._USER_NUMBER
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldUSERNUMBER returns the old USER_NUMBER value of the Booking.
+// If the Booking object wasn't provided to the builder, the object is fetched
+// from the database.
+// An error is returned if the mutation operation is not UpdateOne, or database query fails.
+func (m *BookingMutation) OldUSERNUMBER(ctx context.Context) (v int, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, fmt.Errorf("OldUSERNUMBER is allowed only on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, fmt.Errorf("OldUSERNUMBER requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldUSERNUMBER: %w", err)
+	}
+	return oldValue.USERNUMBER, nil
+}
+
+// AddUSERNUMBER adds i to USER_NUMBER.
+func (m *BookingMutation) AddUSERNUMBER(i int) {
+	if m.add_USER_NUMBER != nil {
+		*m.add_USER_NUMBER += i
+	} else {
+		m.add_USER_NUMBER = &i
+	}
+}
+
+// AddedUSERNUMBER returns the value that was added to the USER_NUMBER field in this mutation.
+func (m *BookingMutation) AddedUSERNUMBER() (r int, exists bool) {
+	v := m.add_USER_NUMBER
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ResetUSERNUMBER reset all changes of the "USER_NUMBER" field.
+func (m *BookingMutation) ResetUSERNUMBER() {
+	m._USER_NUMBER = nil
+	m.add_USER_NUMBER = nil
+}
+
+// SetBORROWITEM sets the BORROW_ITEM field.
+func (m *BookingMutation) SetBORROWITEM(i int) {
+	m._BORROW_ITEM = &i
+	m.add_BORROW_ITEM = nil
+}
+
+// BORROWITEM returns the BORROW_ITEM value in the mutation.
+func (m *BookingMutation) BORROWITEM() (r int, exists bool) {
+	v := m._BORROW_ITEM
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldBORROWITEM returns the old BORROW_ITEM value of the Booking.
+// If the Booking object wasn't provided to the builder, the object is fetched
+// from the database.
+// An error is returned if the mutation operation is not UpdateOne, or database query fails.
+func (m *BookingMutation) OldBORROWITEM(ctx context.Context) (v int, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, fmt.Errorf("OldBORROWITEM is allowed only on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, fmt.Errorf("OldBORROWITEM requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldBORROWITEM: %w", err)
+	}
+	return oldValue.BORROWITEM, nil
+}
+
+// AddBORROWITEM adds i to BORROW_ITEM.
+func (m *BookingMutation) AddBORROWITEM(i int) {
+	if m.add_BORROW_ITEM != nil {
+		*m.add_BORROW_ITEM += i
+	} else {
+		m.add_BORROW_ITEM = &i
+	}
+}
+
+// AddedBORROWITEM returns the value that was added to the BORROW_ITEM field in this mutation.
+func (m *BookingMutation) AddedBORROWITEM() (r int, exists bool) {
+	v := m.add_BORROW_ITEM
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ResetBORROWITEM reset all changes of the "BORROW_ITEM" field.
+func (m *BookingMutation) ResetBORROWITEM() {
+	m._BORROW_ITEM = nil
+	m.add_BORROW_ITEM = nil
+}
+
+// SetPHONENUMBER sets the PHONE_NUMBER field.
+func (m *BookingMutation) SetPHONENUMBER(s string) {
+	m._PHONE_NUMBER = &s
+}
+
+// PHONENUMBER returns the PHONE_NUMBER value in the mutation.
+func (m *BookingMutation) PHONENUMBER() (r string, exists bool) {
+	v := m._PHONE_NUMBER
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldPHONENUMBER returns the old PHONE_NUMBER value of the Booking.
+// If the Booking object wasn't provided to the builder, the object is fetched
+// from the database.
+// An error is returned if the mutation operation is not UpdateOne, or database query fails.
+func (m *BookingMutation) OldPHONENUMBER(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, fmt.Errorf("OldPHONENUMBER is allowed only on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, fmt.Errorf("OldPHONENUMBER requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldPHONENUMBER: %w", err)
+	}
+	return oldValue.PHONENUMBER, nil
+}
+
+// ResetPHONENUMBER reset all changes of the "PHONE_NUMBER" field.
+func (m *BookingMutation) ResetPHONENUMBER() {
+	m._PHONE_NUMBER = nil
+}
+
 // SetUsedbyID sets the usedby edge to User by id.
 func (m *BookingMutation) SetUsedbyID(id int) {
 	m.usedby = &id
@@ -1998,12 +2154,21 @@ func (m *BookingMutation) Type() string {
 // this mutation. Note that, in order to get all numeric
 // fields that were in/decremented, call AddedFields().
 func (m *BookingMutation) Fields() []string {
-	fields := make([]string, 0, 2)
+	fields := make([]string, 0, 5)
 	if m._BOOKING_DATE != nil {
 		fields = append(fields, booking.FieldBOOKINGDATE)
 	}
 	if m._TIME_LEFT != nil {
 		fields = append(fields, booking.FieldTIMELEFT)
+	}
+	if m._USER_NUMBER != nil {
+		fields = append(fields, booking.FieldUSERNUMBER)
+	}
+	if m._BORROW_ITEM != nil {
+		fields = append(fields, booking.FieldBORROWITEM)
+	}
+	if m._PHONE_NUMBER != nil {
+		fields = append(fields, booking.FieldPHONENUMBER)
 	}
 	return fields
 }
@@ -2017,6 +2182,12 @@ func (m *BookingMutation) Field(name string) (ent.Value, bool) {
 		return m.BOOKINGDATE()
 	case booking.FieldTIMELEFT:
 		return m.TIMELEFT()
+	case booking.FieldUSERNUMBER:
+		return m.USERNUMBER()
+	case booking.FieldBORROWITEM:
+		return m.BORROWITEM()
+	case booking.FieldPHONENUMBER:
+		return m.PHONENUMBER()
 	}
 	return nil, false
 }
@@ -2030,6 +2201,12 @@ func (m *BookingMutation) OldField(ctx context.Context, name string) (ent.Value,
 		return m.OldBOOKINGDATE(ctx)
 	case booking.FieldTIMELEFT:
 		return m.OldTIMELEFT(ctx)
+	case booking.FieldUSERNUMBER:
+		return m.OldUSERNUMBER(ctx)
+	case booking.FieldBORROWITEM:
+		return m.OldBORROWITEM(ctx)
+	case booking.FieldPHONENUMBER:
+		return m.OldPHONENUMBER(ctx)
 	}
 	return nil, fmt.Errorf("unknown Booking field %s", name)
 }
@@ -2053,6 +2230,27 @@ func (m *BookingMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetTIMELEFT(v)
 		return nil
+	case booking.FieldUSERNUMBER:
+		v, ok := value.(int)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetUSERNUMBER(v)
+		return nil
+	case booking.FieldBORROWITEM:
+		v, ok := value.(int)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetBORROWITEM(v)
+		return nil
+	case booking.FieldPHONENUMBER:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetPHONENUMBER(v)
+		return nil
 	}
 	return fmt.Errorf("unknown Booking field %s", name)
 }
@@ -2060,13 +2258,26 @@ func (m *BookingMutation) SetField(name string, value ent.Value) error {
 // AddedFields returns all numeric fields that were incremented
 // or decremented during this mutation.
 func (m *BookingMutation) AddedFields() []string {
-	return nil
+	var fields []string
+	if m.add_USER_NUMBER != nil {
+		fields = append(fields, booking.FieldUSERNUMBER)
+	}
+	if m.add_BORROW_ITEM != nil {
+		fields = append(fields, booking.FieldBORROWITEM)
+	}
+	return fields
 }
 
 // AddedField returns the numeric value that was in/decremented
 // from a field with the given name. The second value indicates
 // that this field was not set, or was not define in the schema.
 func (m *BookingMutation) AddedField(name string) (ent.Value, bool) {
+	switch name {
+	case booking.FieldUSERNUMBER:
+		return m.AddedUSERNUMBER()
+	case booking.FieldBORROWITEM:
+		return m.AddedBORROWITEM()
+	}
 	return nil, false
 }
 
@@ -2075,6 +2286,20 @@ func (m *BookingMutation) AddedField(name string) (ent.Value, bool) {
 // type mismatch the field type.
 func (m *BookingMutation) AddField(name string, value ent.Value) error {
 	switch name {
+	case booking.FieldUSERNUMBER:
+		v, ok := value.(int)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddUSERNUMBER(v)
+		return nil
+	case booking.FieldBORROWITEM:
+		v, ok := value.(int)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddBORROWITEM(v)
+		return nil
 	}
 	return fmt.Errorf("unknown Booking numeric field %s", name)
 }
@@ -2108,6 +2333,15 @@ func (m *BookingMutation) ResetField(name string) error {
 		return nil
 	case booking.FieldTIMELEFT:
 		m.ResetTIMELEFT()
+		return nil
+	case booking.FieldUSERNUMBER:
+		m.ResetUSERNUMBER()
+		return nil
+	case booking.FieldBORROWITEM:
+		m.ResetBORROWITEM()
+		return nil
+	case booking.FieldPHONENUMBER:
+		m.ResetPHONENUMBER()
 		return nil
 	}
 	return fmt.Errorf("unknown Booking field %s", name)

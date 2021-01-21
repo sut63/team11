@@ -1,6 +1,8 @@
 package schema
 
 import (
+	"errors"
+	"regexp"
 	"time"
 
 	"github.com/facebookincubator/ent"
@@ -19,6 +21,15 @@ func (Booking) Fields() []ent.Field {
 		field.Time("BOOKING_DATE").
 			Default(time.Now),
 		field.Time("TIME_LEFT"),
+		field.Int("USER_NUMBER").Range(1, 6),
+		field.Int("BORROW_ITEM").Range(1, 6),
+		field.String("PHONE_NUMBER").Validate(func(s string) error {
+			match, _ := regexp.MatchString("[0][689]\\d{8}", s)
+			if !match {
+				return errors.New("รูปแบบของเบอร์มือถือไม่ถูกต้อง")
+			}
+			return nil
+		}),
 	}
 }
 

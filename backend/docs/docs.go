@@ -3577,13 +3577,22 @@ var doc = `{
         "controllers.Booking": {
             "type": "object",
             "properties": {
+                "borrowItem": {
+                    "type": "integer"
+                },
                 "client": {
                     "type": "integer"
+                },
+                "phoneNumber": {
+                    "type": "string"
                 },
                 "servicePoint": {
                     "type": "integer"
                 },
                 "user": {
+                    "type": "integer"
+                },
+                "userNumber": {
                     "type": "integer"
                 }
             }
@@ -3814,9 +3823,21 @@ var doc = `{
                     "description": "BOOKINGDATE holds the value of the \"BOOKING_DATE\" field.",
                     "type": "string"
                 },
+                "BORROW_ITEM": {
+                    "description": "BORROWITEM holds the value of the \"BORROW_ITEM\" field.",
+                    "type": "integer"
+                },
+                "PHONE_NUMBER": {
+                    "description": "PHONENUMBER holds the value of the \"PHONE_NUMBER\" field.",
+                    "type": "string"
+                },
                 "TIME_LEFT": {
                     "description": "TIMELEFT holds the value of the \"TIME_LEFT\" field.",
                     "type": "string"
+                },
+                "USER_NUMBER": {
+                    "description": "USERNUMBER holds the value of the \"USER_NUMBER\" field.",
+                    "type": "integer"
                 },
                 "client_ID": {
                     "type": "integer"
@@ -4418,6 +4439,7 @@ var doc = `{
         "OAuth2Application": {
             "type": "oauth2",
             "flow": "application",
+            "authorizationUrl": "",
             "tokenUrl": "https://example.com/oauth/token",
             "scopes": {
                 "admin": " Grants read and write access to administrative information",
@@ -4436,6 +4458,7 @@ var doc = `{
         "OAuth2Password": {
             "type": "oauth2",
             "flow": "password",
+            "authorizationUrl": "",
             "tokenUrl": "https://example.com/oauth/token",
             "scopes": {
                 "admin": " Grants read and write access to administrative information",
