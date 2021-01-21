@@ -1,6 +1,9 @@
 package schema
 
 import (
+	"errors"
+	"regexp"
+
 	"github.com/facebookincubator/ent"
 	"github.com/facebookincubator/ent/schema/edge"
 	"github.com/facebookincubator/ent/schema/field"
@@ -17,6 +20,14 @@ func (Book) Fields() []ent.Field {
 		field.String("BookName").
 			NotEmpty().
 			Unique(),
+		field.String("Barcode").Validate(func(s string) error {
+			match, _ := regexp.MatchString("[0-9]\\d{9}", s)
+			if !match {
+				return errors.New("รูปแบบของ Barcode ไม่ถูกต้อง")
+			}
+			return nil
+		}),
+		field.Int("BookPage").Min(1),
 	}
 }
 

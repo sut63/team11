@@ -39,6 +39,14 @@ func init() {
 	bookDescBookName := bookFields[0].Descriptor()
 	// book.BookNameValidator is a validator for the "BookName" field. It is called by the builders before save.
 	book.BookNameValidator = bookDescBookName.Validators[0].(func(string) error)
+	// bookDescBarcode is the schema descriptor for Barcode field.
+	bookDescBarcode := bookFields[1].Descriptor()
+	// book.BarcodeValidator is a validator for the "Barcode" field. It is called by the builders before save.
+	book.BarcodeValidator = bookDescBarcode.Validators[0].(func(string) error)
+	// bookDescBookPage is the schema descriptor for BookPage field.
+	bookDescBookPage := bookFields[2].Descriptor()
+	// book.BookPageValidator is a validator for the "BookPage" field. It is called by the builders before save.
+	book.BookPageValidator = bookDescBookPage.Validators[0].(func(int) error)
 	bookborrowFields := schema.Bookborrow{}.Fields()
 	_ = bookborrowFields
 	// bookborrowDescBORROWDATE is the schema descriptor for BORROW_DATE field.

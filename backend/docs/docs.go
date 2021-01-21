@@ -1171,7 +1171,7 @@ var doc = `{
                 "produces": [
                     "application/json"
                 ],
-                "summary": "Get a book entity by ID",
+                "summary": "Get a book entity bygo mod  ID",
                 "operationId": "get-book",
                 "parameters": [
                     {
@@ -3500,6 +3500,12 @@ var doc = `{
                 "author": {
                     "type": "integer"
                 },
+                "barCode": {
+                    "type": "string"
+                },
+                "bookPage": {
+                    "type": "integer"
+                },
                 "bookname": {
                     "type": "string"
                 },
@@ -3668,9 +3674,17 @@ var doc = `{
         "ent.Book": {
             "type": "object",
             "properties": {
+                "Barcode": {
+                    "description": "Barcode holds the value of the \"Barcode\" field.",
+                    "type": "string"
+                },
                 "BookName": {
                     "description": "BookName holds the value of the \"BookName\" field.",
                     "type": "string"
+                },
+                "BookPage": {
+                    "description": "BookPage holds the value of the \"BookPage\" field.",
+                    "type": "integer"
                 },
                 "author_ID": {
                     "type": "integer"
@@ -4424,7 +4438,6 @@ var doc = `{
         "OAuth2Application": {
             "type": "oauth2",
             "flow": "application",
-            "authorizationUrl": "",
             "tokenUrl": "https://example.com/oauth/token",
             "scopes": {
                 "admin": " Grants read and write access to administrative information",
@@ -4443,7 +4456,6 @@ var doc = `{
         "OAuth2Password": {
             "type": "oauth2",
             "flow": "password",
-            "authorizationUrl": "",
             "tokenUrl": "https://example.com/oauth/token",
             "scopes": {
                 "admin": " Grants read and write access to administrative information",
