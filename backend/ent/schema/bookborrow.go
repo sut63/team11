@@ -44,6 +44,9 @@ func (Bookborrow) Edges() []ent.Edge {
 		edge.From("SERVICEPOINT", ServicePoint.Type).
 			Ref("from").
 			Unique(),
+		edge.From("STATUS", Status.Type).
+			Ref("statusbookborrow").
+			Unique(),
 
 		edge.To("borrowed", Bookreturn.Type).
 			StorageKey(edge.Column("CLIENT_ID")),

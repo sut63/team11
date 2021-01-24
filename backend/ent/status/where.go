@@ -265,6 +265,34 @@ func HasStatusofbookWith(preds ...predicate.Book) predicate.Status {
 	})
 }
 
+// HasStatusbookborrow applies the HasEdge predicate on the "statusbookborrow" edge.
+func HasStatusbookborrow() predicate.Status {
+	return predicate.Status(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.To(StatusbookborrowTable, FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, StatusbookborrowTable, StatusbookborrowColumn),
+		)
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasStatusbookborrowWith applies the HasEdge predicate on the "statusbookborrow" edge with a given conditions (other predicates).
+func HasStatusbookborrowWith(preds ...predicate.Bookborrow) predicate.Status {
+	return predicate.Status(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.To(StatusbookborrowInverseTable, FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, StatusbookborrowTable, StatusbookborrowColumn),
+		)
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
 // And groups list of predicates with the AND operator between them.
 func And(predicates ...predicate.Status) predicate.Status {
 	return predicate.Status(func(s *sql.Selector) {

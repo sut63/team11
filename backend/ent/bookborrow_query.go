@@ -17,6 +17,7 @@ import (
 	"github.com/team11/app/ent/bookreturn"
 	"github.com/team11/app/ent/predicate"
 	"github.com/team11/app/ent/servicepoint"
+	"github.com/team11/app/ent/status"
 	"github.com/team11/app/ent/user"
 )
 
@@ -32,6 +33,7 @@ type BookborrowQuery struct {
 	withUSER         *UserQuery
 	withBOOK         *BookQuery
 	withSERVICEPOINT *ServicePointQuery
+	withSTATUS       *StatusQuery
 	withBorrowed     *BookreturnQuery
 	withFKs          bool
 	// intermediate query (i.e. traversal path).
@@ -110,6 +112,24 @@ func (bq *BookborrowQuery) QuerySERVICEPOINT() *ServicePointQuery {
 			sqlgraph.From(bookborrow.Table, bookborrow.FieldID, bq.sqlQuery()),
 			sqlgraph.To(servicepoint.Table, servicepoint.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, bookborrow.SERVICEPOINTTable, bookborrow.SERVICEPOINTColumn),
+		)
+		fromU = sqlgraph.SetNeighbors(bq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QuerySTATUS chains the current query on the STATUS edge.
+func (bq *BookborrowQuery) QuerySTATUS() *StatusQuery {
+	query := &StatusQuery{config: bq.config}
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := bq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(bookborrow.Table, bookborrow.FieldID, bq.sqlQuery()),
+			sqlgraph.To(status.Table, status.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, bookborrow.STATUSTable, bookborrow.STATUSColumn),
 		)
 		fromU = sqlgraph.SetNeighbors(bq.driver.Dialect(), step)
 		return fromU, nil
@@ -347,6 +367,17 @@ func (bq *BookborrowQuery) WithSERVICEPOINT(opts ...func(*ServicePointQuery)) *B
 	return bq
 }
 
+//  WithSTATUS tells the query-builder to eager-loads the nodes that are connected to
+// the "STATUS" edge. The optional arguments used to configure the query builder of the edge.
+func (bq *BookborrowQuery) WithSTATUS(opts ...func(*StatusQuery)) *BookborrowQuery {
+	query := &StatusQuery{config: bq.config}
+	for _, opt := range opts {
+		opt(query)
+	}
+	bq.withSTATUS = query
+	return bq
+}
+
 //  WithBorrowed tells the query-builder to eager-loads the nodes that are connected to
 // the "borrowed" edge. The optional arguments used to configure the query builder of the edge.
 func (bq *BookborrowQuery) WithBorrowed(opts ...func(*BookreturnQuery)) *BookborrowQuery {
@@ -425,14 +456,15 @@ func (bq *BookborrowQuery) sqlAll(ctx context.Context) ([]*Bookborrow, error) {
 		nodes       = []*Bookborrow{}
 		withFKs     = bq.withFKs
 		_spec       = bq.querySpec()
-		loadedTypes = [4]bool{
+		loadedTypes = [5]bool{
 			bq.withUSER != nil,
 			bq.withBOOK != nil,
 			bq.withSERVICEPOINT != nil,
+			bq.withSTATUS != nil,
 			bq.withBorrowed != nil,
 		}
 	)
-	if bq.withUSER != nil || bq.withBOOK != nil || bq.withSERVICEPOINT != nil {
+	if bq.withUSER != nil || bq.withBOOK != nil || bq.withSERVICEPOINT != nil || bq.withSTATUS != nil {
 		withFKs = true
 	}
 	if withFKs {
@@ -533,6 +565,31 @@ func (bq *BookborrowQuery) sqlAll(ctx context.Context) ([]*Bookborrow, error) {
 			}
 			for i := range nodes {
 				nodes[i].Edges.SERVICEPOINT = n
+			}
+		}
+	}
+
+	if query := bq.withSTATUS; query != nil {
+		ids := make([]int, 0, len(nodes))
+		nodeids := make(map[int][]*Bookborrow)
+		for i := range nodes {
+			if fk := nodes[i].STATUS_ID; fk != nil {
+				ids = append(ids, *fk)
+				nodeids[*fk] = append(nodeids[*fk], nodes[i])
+			}
+		}
+		query.Where(status.IDIn(ids...))
+		neighbors, err := query.All(ctx)
+		if err != nil {
+			return nil, err
+		}
+		for _, n := range neighbors {
+			nodes, ok := nodeids[n.ID]
+			if !ok {
+				return nil, fmt.Errorf(`unexpected foreign-key "STATUS_ID" returned %v`, n.ID)
+			}
+			for i := range nodes {
+				nodes[i].Edges.STATUS = n
 			}
 		}
 	}

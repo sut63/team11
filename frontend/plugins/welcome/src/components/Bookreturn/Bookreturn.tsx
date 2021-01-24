@@ -77,7 +77,6 @@ export default function Create() {
   const [errordamagedpointname, setErrorDamagedpointName] = useState(true);
   const [errorlost, setErrorLost] = useState(true);
 
-  const [returnbook, setBookreturn] = useState<Partial<bookReturn>>({});
 
 
   // function validate DamagedPoint
@@ -218,7 +217,6 @@ export default function Create() {
 
     };
     console.log(bookreturn);
-    console.log(returnbook);
 
     /*const ErrorCaseCheck = (casename: string) => {
       if (casename == "wheel_center") { setErrorMessege("ค่า ศูนย์ล้อ ต้องมากกว่า 0"); }

@@ -579,6 +579,34 @@ func HasSERVICEPOINTWith(preds ...predicate.ServicePoint) predicate.Bookborrow {
 	})
 }
 
+// HasSTATUS applies the HasEdge predicate on the "STATUS" edge.
+func HasSTATUS() predicate.Bookborrow {
+	return predicate.Bookborrow(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.To(STATUSTable, FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, STATUSTable, STATUSColumn),
+		)
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasSTATUSWith applies the HasEdge predicate on the "STATUS" edge with a given conditions (other predicates).
+func HasSTATUSWith(preds ...predicate.Status) predicate.Bookborrow {
+	return predicate.Bookborrow(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.To(STATUSInverseTable, FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, STATUSTable, STATUSColumn),
+		)
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
 // HasBorrowed applies the HasEdge predicate on the "borrowed" edge.
 func HasBorrowed() predicate.Bookborrow {
 	return predicate.Bookborrow(func(s *sql.Selector) {

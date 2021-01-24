@@ -139,6 +139,19 @@ func (ctl *BookreturnController) CreateBookreturn(c *gin.Context) {
 	}
 	fmt.Print(bk)
 
+	borrows, err := ctl.client.Bookborrow.
+		UpdateOne(b).
+		SetSTATUSID(5).
+		Save(context.Background())
+
+	if err != nil {
+		c.JSON(400, gin.H{
+			"error": "Update status bookborow error",
+		})
+		return
+	}
+	fmt.Print(borrows)
+
 }
 
 // ListBookreturn handles request to get a list of bookreturn entities

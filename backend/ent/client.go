@@ -633,6 +633,22 @@ func (c *BookborrowClient) QuerySERVICEPOINT(b *Bookborrow) *ServicePointQuery {
 	return query
 }
 
+// QuerySTATUS queries the STATUS edge of a Bookborrow.
+func (c *BookborrowClient) QuerySTATUS(b *Bookborrow) *StatusQuery {
+	query := &StatusQuery{config: c.config}
+	query.path = func(ctx context.Context) (fromV *sql.Selector, _ error) {
+		id := b.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(bookborrow.Table, bookborrow.FieldID, id),
+			sqlgraph.To(status.Table, status.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, bookborrow.STATUSTable, bookborrow.STATUSColumn),
+		)
+		fromV = sqlgraph.Neighbors(b.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // QueryBorrowed queries the borrowed edge of a Bookborrow.
 func (c *BookborrowClient) QueryBorrowed(b *Bookborrow) *BookreturnQuery {
 	query := &BookreturnQuery{config: c.config}
@@ -2105,6 +2121,22 @@ func (c *StatusClient) QueryStatusofbook(s *Status) *BookQuery {
 			sqlgraph.From(status.Table, status.FieldID, id),
 			sqlgraph.To(book.Table, book.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, status.StatusofbookTable, status.StatusofbookColumn),
+		)
+		fromV = sqlgraph.Neighbors(s.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryStatusbookborrow queries the statusbookborrow edge of a Status.
+func (c *StatusClient) QueryStatusbookborrow(s *Status) *BookborrowQuery {
+	query := &BookborrowQuery{config: c.config}
+	query.path = func(ctx context.Context) (fromV *sql.Selector, _ error) {
+		id := s.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(status.Table, status.FieldID, id),
+			sqlgraph.To(bookborrow.Table, bookborrow.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, status.StatusbookborrowTable, status.StatusbookborrowColumn),
 		)
 		fromV = sqlgraph.Neighbors(s.driver.Dialect(), step)
 		return fromV, nil

@@ -1259,6 +1259,8 @@ type BookborrowMutation struct {
 	cleared_BOOK         bool
 	_SERVICEPOINT        *int
 	cleared_SERVICEPOINT bool
+	_STATUS              *int
+	cleared_STATUS       bool
 	borrowed             map[int]struct{}
 	removedborrowed      map[int]struct{}
 	done                 bool
@@ -1629,6 +1631,45 @@ func (m *BookborrowMutation) ResetSERVICEPOINT() {
 	m.cleared_SERVICEPOINT = false
 }
 
+// SetSTATUSID sets the STATUS edge to Status by id.
+func (m *BookborrowMutation) SetSTATUSID(id int) {
+	m._STATUS = &id
+}
+
+// ClearSTATUS clears the STATUS edge to Status.
+func (m *BookborrowMutation) ClearSTATUS() {
+	m.cleared_STATUS = true
+}
+
+// STATUSCleared returns if the edge STATUS was cleared.
+func (m *BookborrowMutation) STATUSCleared() bool {
+	return m.cleared_STATUS
+}
+
+// STATUSID returns the STATUS id in the mutation.
+func (m *BookborrowMutation) STATUSID() (id int, exists bool) {
+	if m._STATUS != nil {
+		return *m._STATUS, true
+	}
+	return
+}
+
+// STATUSIDs returns the STATUS ids in the mutation.
+// Note that ids always returns len(ids) <= 1 for unique edges, and you should use
+// STATUSID instead. It exists only for internal usage by the builders.
+func (m *BookborrowMutation) STATUSIDs() (ids []int) {
+	if id := m._STATUS; id != nil {
+		ids = append(ids, *id)
+	}
+	return
+}
+
+// ResetSTATUS reset all changes of the "STATUS" edge.
+func (m *BookborrowMutation) ResetSTATUS() {
+	m._STATUS = nil
+	m.cleared_STATUS = false
+}
+
 // AddBorrowedIDs adds the borrowed edge to Bookreturn by ids.
 func (m *BookborrowMutation) AddBorrowedIDs(ids ...int) {
 	if m.borrowed == nil {
@@ -1852,7 +1893,7 @@ func (m *BookborrowMutation) ResetField(name string) error {
 // AddedEdges returns all edge names that were set/added in this
 // mutation.
 func (m *BookborrowMutation) AddedEdges() []string {
-	edges := make([]string, 0, 4)
+	edges := make([]string, 0, 5)
 	if m._USER != nil {
 		edges = append(edges, bookborrow.EdgeUSER)
 	}
@@ -1861,6 +1902,9 @@ func (m *BookborrowMutation) AddedEdges() []string {
 	}
 	if m._SERVICEPOINT != nil {
 		edges = append(edges, bookborrow.EdgeSERVICEPOINT)
+	}
+	if m._STATUS != nil {
+		edges = append(edges, bookborrow.EdgeSTATUS)
 	}
 	if m.borrowed != nil {
 		edges = append(edges, bookborrow.EdgeBorrowed)
@@ -1884,6 +1928,10 @@ func (m *BookborrowMutation) AddedIDs(name string) []ent.Value {
 		if id := m._SERVICEPOINT; id != nil {
 			return []ent.Value{*id}
 		}
+	case bookborrow.EdgeSTATUS:
+		if id := m._STATUS; id != nil {
+			return []ent.Value{*id}
+		}
 	case bookborrow.EdgeBorrowed:
 		ids := make([]ent.Value, 0, len(m.borrowed))
 		for id := range m.borrowed {
@@ -1897,7 +1945,7 @@ func (m *BookborrowMutation) AddedIDs(name string) []ent.Value {
 // RemovedEdges returns all edge names that were removed in this
 // mutation.
 func (m *BookborrowMutation) RemovedEdges() []string {
-	edges := make([]string, 0, 4)
+	edges := make([]string, 0, 5)
 	if m.removedborrowed != nil {
 		edges = append(edges, bookborrow.EdgeBorrowed)
 	}
@@ -1921,7 +1969,7 @@ func (m *BookborrowMutation) RemovedIDs(name string) []ent.Value {
 // ClearedEdges returns all edge names that were cleared in this
 // mutation.
 func (m *BookborrowMutation) ClearedEdges() []string {
-	edges := make([]string, 0, 4)
+	edges := make([]string, 0, 5)
 	if m.cleared_USER {
 		edges = append(edges, bookborrow.EdgeUSER)
 	}
@@ -1930,6 +1978,9 @@ func (m *BookborrowMutation) ClearedEdges() []string {
 	}
 	if m.cleared_SERVICEPOINT {
 		edges = append(edges, bookborrow.EdgeSERVICEPOINT)
+	}
+	if m.cleared_STATUS {
+		edges = append(edges, bookborrow.EdgeSTATUS)
 	}
 	return edges
 }
@@ -1944,6 +1995,8 @@ func (m *BookborrowMutation) EdgeCleared(name string) bool {
 		return m.cleared_BOOK
 	case bookborrow.EdgeSERVICEPOINT:
 		return m.cleared_SERVICEPOINT
+	case bookborrow.EdgeSTATUS:
+		return m.cleared_STATUS
 	}
 	return false
 }
@@ -1960,6 +2013,9 @@ func (m *BookborrowMutation) ClearEdge(name string) error {
 		return nil
 	case bookborrow.EdgeSERVICEPOINT:
 		m.ClearSERVICEPOINT()
+		return nil
+	case bookborrow.EdgeSTATUS:
+		m.ClearSTATUS()
 		return nil
 	}
 	return fmt.Errorf("unknown Bookborrow unique edge %s", name)
@@ -1978,6 +2034,9 @@ func (m *BookborrowMutation) ResetEdge(name string) error {
 		return nil
 	case bookborrow.EdgeSERVICEPOINT:
 		m.ResetSERVICEPOINT()
+		return nil
+	case bookborrow.EdgeSTATUS:
+		m.ResetSTATUS()
 		return nil
 	case bookborrow.EdgeBorrowed:
 		m.ResetBorrowed()
@@ -8087,17 +8146,19 @@ func (m *ServicePointMutation) ResetEdge(name string) error {
 // nodes in the graph.
 type StatusMutation struct {
 	config
-	op                  Op
-	typ                 string
-	id                  *int
-	_STATUS_NAME        *string
-	clearedFields       map[string]struct{}
-	status              map[int]struct{}
-	removedstatus       map[int]struct{}
-	statusofbook        map[int]struct{}
-	removedstatusofbook map[int]struct{}
-	done                bool
-	oldValue            func(context.Context) (*Status, error)
+	op                      Op
+	typ                     string
+	id                      *int
+	_STATUS_NAME            *string
+	clearedFields           map[string]struct{}
+	status                  map[int]struct{}
+	removedstatus           map[int]struct{}
+	statusofbook            map[int]struct{}
+	removedstatusofbook     map[int]struct{}
+	statusbookborrow        map[int]struct{}
+	removedstatusbookborrow map[int]struct{}
+	done                    bool
+	oldValue                func(context.Context) (*Status, error)
 }
 
 var _ ent.Mutation = (*StatusMutation)(nil)
@@ -8300,6 +8361,48 @@ func (m *StatusMutation) ResetStatusofbook() {
 	m.removedstatusofbook = nil
 }
 
+// AddStatusbookborrowIDs adds the statusbookborrow edge to Bookborrow by ids.
+func (m *StatusMutation) AddStatusbookborrowIDs(ids ...int) {
+	if m.statusbookborrow == nil {
+		m.statusbookborrow = make(map[int]struct{})
+	}
+	for i := range ids {
+		m.statusbookborrow[ids[i]] = struct{}{}
+	}
+}
+
+// RemoveStatusbookborrowIDs removes the statusbookborrow edge to Bookborrow by ids.
+func (m *StatusMutation) RemoveStatusbookborrowIDs(ids ...int) {
+	if m.removedstatusbookborrow == nil {
+		m.removedstatusbookborrow = make(map[int]struct{})
+	}
+	for i := range ids {
+		m.removedstatusbookborrow[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedStatusbookborrow returns the removed ids of statusbookborrow.
+func (m *StatusMutation) RemovedStatusbookborrowIDs() (ids []int) {
+	for id := range m.removedstatusbookborrow {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// StatusbookborrowIDs returns the statusbookborrow ids in the mutation.
+func (m *StatusMutation) StatusbookborrowIDs() (ids []int) {
+	for id := range m.statusbookborrow {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetStatusbookborrow reset all changes of the "statusbookborrow" edge.
+func (m *StatusMutation) ResetStatusbookborrow() {
+	m.statusbookborrow = nil
+	m.removedstatusbookborrow = nil
+}
+
 // Op returns the operation name.
 func (m *StatusMutation) Op() Op {
 	return m.op
@@ -8415,12 +8518,15 @@ func (m *StatusMutation) ResetField(name string) error {
 // AddedEdges returns all edge names that were set/added in this
 // mutation.
 func (m *StatusMutation) AddedEdges() []string {
-	edges := make([]string, 0, 2)
+	edges := make([]string, 0, 3)
 	if m.status != nil {
 		edges = append(edges, status.EdgeStatus)
 	}
 	if m.statusofbook != nil {
 		edges = append(edges, status.EdgeStatusofbook)
+	}
+	if m.statusbookborrow != nil {
+		edges = append(edges, status.EdgeStatusbookborrow)
 	}
 	return edges
 }
@@ -8441,6 +8547,12 @@ func (m *StatusMutation) AddedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
+	case status.EdgeStatusbookborrow:
+		ids := make([]ent.Value, 0, len(m.statusbookborrow))
+		for id := range m.statusbookborrow {
+			ids = append(ids, id)
+		}
+		return ids
 	}
 	return nil
 }
@@ -8448,12 +8560,15 @@ func (m *StatusMutation) AddedIDs(name string) []ent.Value {
 // RemovedEdges returns all edge names that were removed in this
 // mutation.
 func (m *StatusMutation) RemovedEdges() []string {
-	edges := make([]string, 0, 2)
+	edges := make([]string, 0, 3)
 	if m.removedstatus != nil {
 		edges = append(edges, status.EdgeStatus)
 	}
 	if m.removedstatusofbook != nil {
 		edges = append(edges, status.EdgeStatusofbook)
+	}
+	if m.removedstatusbookborrow != nil {
+		edges = append(edges, status.EdgeStatusbookborrow)
 	}
 	return edges
 }
@@ -8474,6 +8589,12 @@ func (m *StatusMutation) RemovedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
+	case status.EdgeStatusbookborrow:
+		ids := make([]ent.Value, 0, len(m.removedstatusbookborrow))
+		for id := range m.removedstatusbookborrow {
+			ids = append(ids, id)
+		}
+		return ids
 	}
 	return nil
 }
@@ -8481,7 +8602,7 @@ func (m *StatusMutation) RemovedIDs(name string) []ent.Value {
 // ClearedEdges returns all edge names that were cleared in this
 // mutation.
 func (m *StatusMutation) ClearedEdges() []string {
-	edges := make([]string, 0, 2)
+	edges := make([]string, 0, 3)
 	return edges
 }
 
@@ -8511,6 +8632,9 @@ func (m *StatusMutation) ResetEdge(name string) error {
 		return nil
 	case status.EdgeStatusofbook:
 		m.ResetStatusofbook()
+		return nil
+	case status.EdgeStatusbookborrow:
+		m.ResetStatusbookborrow()
 		return nil
 	}
 	return fmt.Errorf("unknown Status edge %s", name)

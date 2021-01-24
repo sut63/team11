@@ -12,6 +12,7 @@ import (
 	"github.com/team11/app/ent/bookborrow"
 	"github.com/team11/app/ent/servicepoint"
 	"github.com/team11/app/ent/user"
+	"github.com/team11/app/ent/status"
 )
 
 // BookborrowController defines the struct for the bookborrow controller
@@ -25,6 +26,7 @@ type Bookborrow struct {
 	UserID         int
 	BookID         int
 	ServicePointID int
+	StatusID	   int
 	BorrowDate     string
 	DayOfBorrow    int
 	Pickup         string
@@ -87,6 +89,18 @@ func (ctl *BookborrowController) CreateBookborrow(c *gin.Context) {
 		return
 	}
 
+	s, err := ctl.client.Status.
+		Query().
+		Where(status.IDEQ(int(4))).
+		Only(context.Background())
+
+	if err != nil {
+		c.JSON(400, gin.H{
+			"error": "status not found",
+		})
+		return
+	}
+
 	times := time.Now().Local()
 
 	bb, err := ctl.client.Bookborrow.
@@ -94,6 +108,7 @@ func (ctl *BookborrowController) CreateBookborrow(c *gin.Context) {
 		SetBOOK(bk).
 		SetUSER(u).
 		SetSERVICEPOINT(sp).
+		SetSTATUS(s).
 		SetBORROWDATE(times).
 		SetDAYOFBORROW(obj.DayOfBorrow).
 		SetPICKUP(obj.Pickup).
@@ -127,6 +142,41 @@ func (ctl *BookborrowController) CreateBookborrow(c *gin.Context) {
 	}
 	fmt.Print(book)
 }
+
+// GetBookborrow handles GET requests to retrieve a bookborrow entity
+// @Summary Get a bookborrow entity by ID
+// @Description get bookborrow by ID
+// @ID get-bookborrow
+// @Produce  json
+// @Param id path int true "Bookborrow ID"
+// @Success 200 {object} ent.Bookborrow
+// @Failure 400 {object} gin.H
+// @Failure 404 {object} gin.H
+// @Failure 500 {object} gin.H
+// @Router /bookborrows/{id} [get]
+func (ctl *BookborrowController) GetBookborrow(c *gin.Context) {
+	id, err := strconv.ParseInt(c.Param("id"), 10, 64)
+	if err != nil {
+		c.JSON(400, gin.H{
+			"error": err.Error(),
+		})
+		return
+	}
+
+	bb, err := ctl.client.Bookborrow.
+		Query().
+		Where(bookborrow.IDEQ(int(id))).
+		Only(context.Background())
+	if err != nil {
+		c.JSON(404, gin.H{
+			"error": err.Error(),
+		})
+		return
+	}
+
+	c.JSON(200, bb)
+}
+
 
 // ListBookborrow handles request to get a list of bookborrow entities
 // @Summary List bookborrow entities
@@ -258,7 +308,7 @@ func (ctl *BookborrowController) UpdateBookborrow(c *gin.Context) {
 // @Failure 404 {object} gin.H
 // @Failure 500 {object} gin.H
 // @Router /bookborrowusers/{id} [get]
-func (ctl *BookborrowController) GetBookborrow(c *gin.Context) {
+func (ctl *BookborrowController) GetBookborrowUser(c *gin.Context) {
 	id, err := strconv.ParseInt(c.Param("id"), 10, 64)
 	if err != nil {
 		c.JSON(400, gin.H{
@@ -272,7 +322,7 @@ func (ctl *BookborrowController) GetBookborrow(c *gin.Context) {
 		WithUSER().
 		WithBOOK().
 		WithSERVICEPOINT().
-		Where(bookborrow.HasUSERWith(user.IDEQ(int(id)))).
+		Where((bookborrow.HasUSERWith(user.IDEQ(int(id)))),(bookborrow.HasSTATUSWith(status.IDEQ(int(4))))).
 		All(context.Background())
 	if err != nil {
 		c.JSON(404, gin.H{
@@ -297,9 +347,11 @@ func NewBookborrowController(router gin.IRouter, client *ent.Client) *Bookborrow
 // InitBookborrowController registers routes to the main engine
 func (ctl *BookborrowController) register() {
 	bookborrows := ctl.router.Group("/bookborrows")
+	bookborrowusers := ctl.router.Group("/bookborrowusers")
 	bookborrows.GET("", ctl.ListBookborrow)
 
 	// CRUD
+	bookborrowusers.GET(":id", ctl.GetBookborrowUser)
 	bookborrows.POST("", ctl.CreateBookborrow)
 	bookborrows.GET(":id", ctl.GetBookborrow)
 	bookborrows.PUT(":id", ctl.UpdateBookborrow)

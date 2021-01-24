@@ -11,6 +11,7 @@ import (
 	"github.com/team11/app/ent/book"
 	"github.com/team11/app/ent/bookborrow"
 	"github.com/team11/app/ent/servicepoint"
+	"github.com/team11/app/ent/status"
 	"github.com/team11/app/ent/user"
 )
 
@@ -32,6 +33,7 @@ type Bookborrow struct {
 	Edges           BookborrowEdges `json:"edges"`
 	BOOK_ID         *int
 	SERVICEPOINT_ID *int
+	STATUS_ID       *int
 	USER_ID         *int
 }
 
@@ -43,11 +45,13 @@ type BookborrowEdges struct {
 	BOOK *Book
 	// SERVICEPOINT holds the value of the SERVICEPOINT edge.
 	SERVICEPOINT *ServicePoint
+	// STATUS holds the value of the STATUS edge.
+	STATUS *Status
 	// Borrowed holds the value of the borrowed edge.
 	Borrowed []*Bookreturn
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [4]bool
+	loadedTypes [5]bool
 }
 
 // USEROrErr returns the USER value or an error if the edge
@@ -92,10 +96,24 @@ func (e BookborrowEdges) SERVICEPOINTOrErr() (*ServicePoint, error) {
 	return nil, &NotLoadedError{edge: "SERVICEPOINT"}
 }
 
+// STATUSOrErr returns the STATUS value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e BookborrowEdges) STATUSOrErr() (*Status, error) {
+	if e.loadedTypes[3] {
+		if e.STATUS == nil {
+			// The edge STATUS was loaded in eager-loading,
+			// but was not found.
+			return nil, &NotFoundError{label: status.Label}
+		}
+		return e.STATUS, nil
+	}
+	return nil, &NotLoadedError{edge: "STATUS"}
+}
+
 // BorrowedOrErr returns the Borrowed value or an error if the edge
 // was not loaded in eager-loading.
 func (e BookborrowEdges) BorrowedOrErr() ([]*Bookreturn, error) {
-	if e.loadedTypes[3] {
+	if e.loadedTypes[4] {
 		return e.Borrowed, nil
 	}
 	return nil, &NotLoadedError{edge: "borrowed"}
@@ -117,6 +135,7 @@ func (*Bookborrow) fkValues() []interface{} {
 	return []interface{}{
 		&sql.NullInt64{}, // BOOK_ID
 		&sql.NullInt64{}, // SERVICEPOINT_ID
+		&sql.NullInt64{}, // STATUS_ID
 		&sql.NullInt64{}, // USER_ID
 	}
 }
@@ -168,6 +187,12 @@ func (b *Bookborrow) assignValues(values ...interface{}) error {
 			*b.SERVICEPOINT_ID = int(value.Int64)
 		}
 		if value, ok := values[2].(*sql.NullInt64); !ok {
+			return fmt.Errorf("unexpected type %T for edge-field STATUS_ID", value)
+		} else if value.Valid {
+			b.STATUS_ID = new(int)
+			*b.STATUS_ID = int(value.Int64)
+		}
+		if value, ok := values[3].(*sql.NullInt64); !ok {
 			return fmt.Errorf("unexpected type %T for edge-field USER_ID", value)
 		} else if value.Valid {
 			b.USER_ID = new(int)
@@ -190,6 +215,11 @@ func (b *Bookborrow) QueryBOOK() *BookQuery {
 // QuerySERVICEPOINT queries the SERVICEPOINT edge of the Bookborrow.
 func (b *Bookborrow) QuerySERVICEPOINT() *ServicePointQuery {
 	return (&BookborrowClient{config: b.config}).QuerySERVICEPOINT(b)
+}
+
+// QuerySTATUS queries the STATUS edge of the Bookborrow.
+func (b *Bookborrow) QuerySTATUS() *StatusQuery {
+	return (&BookborrowClient{config: b.config}).QuerySTATUS(b)
 }
 
 // QueryBorrowed queries the borrowed edge of the Bookborrow.

@@ -64,6 +64,7 @@ type Bookborrow struct {
 	UserID         int
 	BookID         int
 	ServicePointID int
+	Status 			int
 }
 
 // Roominfos for struct
@@ -199,7 +200,7 @@ func main() {
 			Save(context.Background())
 	}
 
-	Status := []string{"Available", "In Use", "No Service", "Borrowed"}
+	Status := []string{"Available", "In Use", "No Service", "Borrowed","Returned"}
 	for _, st := range Status {
 		client.Status.
 			Create().
