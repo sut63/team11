@@ -59,16 +59,6 @@ type Researchtype struct {
 	NameResearchtype string
 }
 
-//Researchs struct
-type Researchs struct {
-	Research []Research
-}
-
-//Research struct
-type Research struct {
-	NameResearch string
-}
-
 //Bookborrow struct
 type Bookborrow struct {
 	UserID         int

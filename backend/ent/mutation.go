@@ -4666,6 +4666,9 @@ type PreemptionMutation struct {
 	typ               string
 	id                *int
 	_PreemptTime      *time.Time
+	_Phonenumber      *string
+	_Surrogateid      *string
+	_Surrogatephone   *string
 	clearedFields     map[string]struct{}
 	_User_ID          *int
 	cleared_User_ID   bool
@@ -4791,6 +4794,117 @@ func (m *PreemptionMutation) OldPreemptTime(ctx context.Context) (v time.Time, e
 // ResetPreemptTime reset all changes of the "PreemptTime" field.
 func (m *PreemptionMutation) ResetPreemptTime() {
 	m._PreemptTime = nil
+}
+
+// SetPhonenumber sets the Phonenumber field.
+func (m *PreemptionMutation) SetPhonenumber(s string) {
+	m._Phonenumber = &s
+}
+
+// Phonenumber returns the Phonenumber value in the mutation.
+func (m *PreemptionMutation) Phonenumber() (r string, exists bool) {
+	v := m._Phonenumber
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldPhonenumber returns the old Phonenumber value of the Preemption.
+// If the Preemption object wasn't provided to the builder, the object is fetched
+// from the database.
+// An error is returned if the mutation operation is not UpdateOne, or database query fails.
+func (m *PreemptionMutation) OldPhonenumber(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, fmt.Errorf("OldPhonenumber is allowed only on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, fmt.Errorf("OldPhonenumber requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldPhonenumber: %w", err)
+	}
+	return oldValue.Phonenumber, nil
+}
+
+// ResetPhonenumber reset all changes of the "Phonenumber" field.
+func (m *PreemptionMutation) ResetPhonenumber() {
+	m._Phonenumber = nil
+}
+
+// SetSurrogateid sets the Surrogateid field.
+func (m *PreemptionMutation) SetSurrogateid(s string) {
+	m._Surrogateid = &s
+}
+
+// Surrogateid returns the Surrogateid value in the mutation.
+func (m *PreemptionMutation) Surrogateid() (r string, exists bool) {
+	v := m._Surrogateid
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldSurrogateid returns the old Surrogateid value of the Preemption.
+// If the Preemption object wasn't provided to the builder, the object is fetched
+// from the database.
+// An error is returned if the mutation operation is not UpdateOne, or database query fails.
+func (m *PreemptionMutation) OldSurrogateid(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, fmt.Errorf("OldSurrogateid is allowed only on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, fmt.Errorf("OldSurrogateid requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldSurrogateid: %w", err)
+	}
+	return oldValue.Surrogateid, nil
+}
+
+// ResetSurrogateid reset all changes of the "Surrogateid" field.
+func (m *PreemptionMutation) ResetSurrogateid() {
+	m._Surrogateid = nil
+}
+
+// SetSurrogatephone sets the Surrogatephone field.
+func (m *PreemptionMutation) SetSurrogatephone(s string) {
+	m._Surrogatephone = &s
+}
+
+// Surrogatephone returns the Surrogatephone value in the mutation.
+func (m *PreemptionMutation) Surrogatephone() (r string, exists bool) {
+	v := m._Surrogatephone
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldSurrogatephone returns the old Surrogatephone value of the Preemption.
+// If the Preemption object wasn't provided to the builder, the object is fetched
+// from the database.
+// An error is returned if the mutation operation is not UpdateOne, or database query fails.
+func (m *PreemptionMutation) OldSurrogatephone(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, fmt.Errorf("OldSurrogatephone is allowed only on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, fmt.Errorf("OldSurrogatephone requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldSurrogatephone: %w", err)
+	}
+	return oldValue.Surrogatephone, nil
+}
+
+// ResetSurrogatephone reset all changes of the "Surrogatephone" field.
+func (m *PreemptionMutation) ResetSurrogatephone() {
+	m._Surrogatephone = nil
 }
 
 // SetUserIDID sets the User_ID edge to User by id.
@@ -4924,9 +5038,18 @@ func (m *PreemptionMutation) Type() string {
 // this mutation. Note that, in order to get all numeric
 // fields that were in/decremented, call AddedFields().
 func (m *PreemptionMutation) Fields() []string {
-	fields := make([]string, 0, 1)
+	fields := make([]string, 0, 4)
 	if m._PreemptTime != nil {
 		fields = append(fields, preemption.FieldPreemptTime)
+	}
+	if m._Phonenumber != nil {
+		fields = append(fields, preemption.FieldPhonenumber)
+	}
+	if m._Surrogateid != nil {
+		fields = append(fields, preemption.FieldSurrogateid)
+	}
+	if m._Surrogatephone != nil {
+		fields = append(fields, preemption.FieldSurrogatephone)
 	}
 	return fields
 }
@@ -4938,6 +5061,12 @@ func (m *PreemptionMutation) Field(name string) (ent.Value, bool) {
 	switch name {
 	case preemption.FieldPreemptTime:
 		return m.PreemptTime()
+	case preemption.FieldPhonenumber:
+		return m.Phonenumber()
+	case preemption.FieldSurrogateid:
+		return m.Surrogateid()
+	case preemption.FieldSurrogatephone:
+		return m.Surrogatephone()
 	}
 	return nil, false
 }
@@ -4949,6 +5078,12 @@ func (m *PreemptionMutation) OldField(ctx context.Context, name string) (ent.Val
 	switch name {
 	case preemption.FieldPreemptTime:
 		return m.OldPreemptTime(ctx)
+	case preemption.FieldPhonenumber:
+		return m.OldPhonenumber(ctx)
+	case preemption.FieldSurrogateid:
+		return m.OldSurrogateid(ctx)
+	case preemption.FieldSurrogatephone:
+		return m.OldSurrogatephone(ctx)
 	}
 	return nil, fmt.Errorf("unknown Preemption field %s", name)
 }
@@ -4964,6 +5099,27 @@ func (m *PreemptionMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetPreemptTime(v)
+		return nil
+	case preemption.FieldPhonenumber:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetPhonenumber(v)
+		return nil
+	case preemption.FieldSurrogateid:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetSurrogateid(v)
+		return nil
+	case preemption.FieldSurrogatephone:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetSurrogatephone(v)
 		return nil
 	}
 	return fmt.Errorf("unknown Preemption field %s", name)
@@ -5017,6 +5173,15 @@ func (m *PreemptionMutation) ResetField(name string) error {
 	switch name {
 	case preemption.FieldPreemptTime:
 		m.ResetPreemptTime()
+		return nil
+	case preemption.FieldPhonenumber:
+		m.ResetPhonenumber()
+		return nil
+	case preemption.FieldSurrogateid:
+		m.ResetSurrogateid()
+		return nil
+	case preemption.FieldSurrogatephone:
+		m.ResetSurrogatephone()
 		return nil
 	}
 	return fmt.Errorf("unknown Preemption field %s", name)

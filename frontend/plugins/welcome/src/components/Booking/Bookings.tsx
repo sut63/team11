@@ -190,7 +190,7 @@ export default function Create() {
   }
 
   const checkCaseSaveError = (field: string) => {
-    switch(field) {
+    switch (field) {
       case 'PHONE_NUMBER':
         setAlertMessage("error ข้อมูล field phone_number ผิด");
         return;
@@ -201,7 +201,7 @@ export default function Create() {
         setAlertMessage("error ข้อมูล field borrow_item ผิด");
         return;
       default:
-        setAlertMessage("บันทึกข้อมูลไม่สำเร็จ");
+        setAlertMessage("บันทึกไม่สำเร็จ");
         return;
     }
   }
@@ -212,21 +212,21 @@ export default function Create() {
 
   const CreateBooking = async () => {
 
-      const resC = await api.listCliententity();
-      setClients(resC);
-      const booking = {
-        servicePoint: servicepointID,
-        client: clientID,
-        user: userID,
-        phoneNumber: String(bookingField.phone_number),
-        userNumber: Number(bookingField.user_number),
-        borrowItem: Number(bookingField.borrow_item),
-      };
-      const cliententity = {
-        sid: Number(2)
-      };
-      
-      const apiUrl = 'http://localhost:8080/api/v1/bookings';
+    const resC = await api.listCliententity();
+    setClients(resC);
+    const booking = {
+      servicePoint: servicepointID,
+      client: clientID,
+      user: userID,
+      phoneNumber: String(bookingField.phone_number),
+      userNumber: Number(bookingField.user_number),
+      borrowItem: Number(bookingField.borrow_item),
+    };
+    const cliententity = {
+      sid: Number(2)
+    };
+    console.log(booking)
+    const apiUrl = 'http://localhost:8080/api/v1/bookings';
     const requestOptions = {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -330,24 +330,6 @@ export default function Create() {
                 </FormControl>
                 <br />
                 <FormControl required className={classes.formControl}>
-                  <TextField style={{ width: 300 }} error={phoneNumberError ? true : false} id="phone_number"
-                    helperText={phoneNumberError} onChange={handleChange} label="หมายเลขโทรศัพท์*"
-                    value={bookingField.phone_number || ''} />
-                </FormControl>
-                <FormControl required className={classes.formControl}>
-                  <TextField style={{ width: 300 }} error={userNumberError ? true : false} id="user_number"
-                    helperText={userNumberError} type="number" InputProps={{ inputProps: { min: 1, max: 6 } }}
-                    onChange={handleChange} label="จำนวนผู้ใช้บริการ (รวมผู้จอง)*"
-                    value={bookingField.user_number} />
-                </FormControl>
-                <br />
-                <FormControl required className={classes.formControl}>
-                  <TextField style={{ width: 300 }} error={borrowItemError ? true : false} id="borrow_item"
-                    helperText={borrowItemError} type="number" InputProps={{ inputProps: { min: 1, max: 6 } }}
-                    onChange={handleChange} label="HeadSet ที่ยืมร่วมกับการใช้เครื่อง (ชิ้น)*"
-                    value={bookingField.borrow_item} />
-                </FormControl>
-                <FormControl required className={classes.formControl}>
                   <InputLabel id="demo-simple-select-required-label">จุดบริการ</InputLabel>
                   <Select
                     labelId="demo-simple-select-required-label"
@@ -363,6 +345,27 @@ export default function Create() {
                   </Select>
                   <FormHelperText>Required</FormHelperText>
                 </FormControl>
+                <FormControl required className={classes.formControl}>
+                  <TextField style={{ width: 300 }} error={userNumberError ? true : false} id="user_number"
+                    helperText={userNumberError} type="number" InputProps={{ inputProps: { min: 1, max: 6 } }}
+                    onChange={handleChange} label="จำนวนผู้ใช้บริการ (รวมผู้จอง)*"
+                    value={bookingField.user_number} />
+
+
+                  <br />
+                </FormControl>
+                <FormControl required className={classes.formControl}>
+                  <TextField style={{ width: 300 }} error={borrowItemError ? true : false} id="borrow_item"
+                    helperText={borrowItemError} type="number" InputProps={{ inputProps: { min: 1, max: 6 } }}
+                    onChange={handleChange} label="HeadSet ที่ยืมร่วมกับการใช้เครื่อง (ชิ้น)*"
+                    value={bookingField.borrow_item} />
+                </FormControl>
+                <FormControl required className={classes.formControl}>
+                  <TextField style={{ width: 300 }} error={phoneNumberError ? true : false} id="phone_number"
+                    helperText={phoneNumberError} onChange={handleChange} label="หมายเลขโทรศัพท์*"
+                    value={bookingField.phone_number || ''} />
+                </FormControl>
+
                 <Grid container justify="center" item xs={12}>
                   <Button
                     variant="contained"
@@ -384,15 +387,15 @@ export default function Create() {
                   {status ? (
                     <div>
                       {alert ? (
-                        <Alert severity="success" style={{ width: 400 }} onClose={() => { setStatus(false); window.location.reload(false);}  }>
+                        <Alert severity="success" style={{ width: 400 }} onClose={() => { setStatus(false); window.location.reload(false); }}>
                           <AlertTitle>Success</AlertTitle>
                           <div>
-                          บันทึกข้อมูลสำเร็จ — <strong>🎉</strong>
+                            บันทึกข้อมูลสำเร็จ — <strong>🎉</strong>
                           </div>
                           <br />
                         </Alert>
                       ) : (
-                          <Alert severity="error" style={{ width: 400 }} onClose={() => { setStatus(false); window.location.reload(false);}}>
+                          <Alert severity="error" style={{ width: 400 }} onClose={() => { setStatus(false); window.location.reload(false); }}>
                             <AlertTitle>Error</AlertTitle >
                             <div>
                               {alertMessage} — <strong>❌</strong>

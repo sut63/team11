@@ -21,6 +21,12 @@ type Preemption struct {
 	ID int `json:"id,omitempty"`
 	// PreemptTime holds the value of the "PreemptTime" field.
 	PreemptTime time.Time `json:"PreemptTime,omitempty"`
+	// Phonenumber holds the value of the "Phonenumber" field.
+	Phonenumber string `json:"Phonenumber,omitempty"`
+	// Surrogateid holds the value of the "Surrogateid" field.
+	Surrogateid string `json:"Surrogateid,omitempty"`
+	// Surrogatephone holds the value of the "Surrogatephone" field.
+	Surrogatephone string `json:"Surrogatephone,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the PreemptionQuery when eager-loading is set.
 	Edges     PreemptionEdges `json:"edges"`
@@ -87,8 +93,11 @@ func (e PreemptionEdges) RoomIDOrErr() (*Roominfo, error) {
 // scanValues returns the types for scanning values from sql.Rows.
 func (*Preemption) scanValues() []interface{} {
 	return []interface{}{
-		&sql.NullInt64{}, // id
-		&sql.NullTime{},  // PreemptTime
+		&sql.NullInt64{},  // id
+		&sql.NullTime{},   // PreemptTime
+		&sql.NullString{}, // Phonenumber
+		&sql.NullString{}, // Surrogateid
+		&sql.NullString{}, // Surrogatephone
 	}
 }
 
@@ -118,7 +127,22 @@ func (pr *Preemption) assignValues(values ...interface{}) error {
 	} else if value.Valid {
 		pr.PreemptTime = value.Time
 	}
-	values = values[1:]
+	if value, ok := values[1].(*sql.NullString); !ok {
+		return fmt.Errorf("unexpected type %T for field Phonenumber", values[1])
+	} else if value.Valid {
+		pr.Phonenumber = value.String
+	}
+	if value, ok := values[2].(*sql.NullString); !ok {
+		return fmt.Errorf("unexpected type %T for field Surrogateid", values[2])
+	} else if value.Valid {
+		pr.Surrogateid = value.String
+	}
+	if value, ok := values[3].(*sql.NullString); !ok {
+		return fmt.Errorf("unexpected type %T for field Surrogatephone", values[3])
+	} else if value.Valid {
+		pr.Surrogatephone = value.String
+	}
+	values = values[4:]
 	if len(values) == len(preemption.ForeignKeys) {
 		if value, ok := values[0].(*sql.NullInt64); !ok {
 			return fmt.Errorf("unexpected type %T for edge-field PurposeID", value)
@@ -182,6 +206,12 @@ func (pr *Preemption) String() string {
 	builder.WriteString(fmt.Sprintf("id=%v", pr.ID))
 	builder.WriteString(", PreemptTime=")
 	builder.WriteString(pr.PreemptTime.Format(time.ANSIC))
+	builder.WriteString(", Phonenumber=")
+	builder.WriteString(pr.Phonenumber)
+	builder.WriteString(", Surrogateid=")
+	builder.WriteString(pr.Surrogateid)
+	builder.WriteString(", Surrogatephone=")
+	builder.WriteString(pr.Surrogatephone)
 	builder.WriteByte(')')
 	return builder.String()
 }
