@@ -14,6 +14,7 @@ import (
 	"github.com/team11/app/ent/bookborrow"
 	"github.com/team11/app/ent/bookreturn"
 	"github.com/team11/app/ent/servicepoint"
+	"github.com/team11/app/ent/status"
 	"github.com/team11/app/ent/user"
 )
 
@@ -111,6 +112,25 @@ func (bc *BookborrowCreate) SetNillableSERVICEPOINTID(id *int) *BookborrowCreate
 // SetSERVICEPOINT sets the SERVICEPOINT edge to ServicePoint.
 func (bc *BookborrowCreate) SetSERVICEPOINT(s *ServicePoint) *BookborrowCreate {
 	return bc.SetSERVICEPOINTID(s.ID)
+}
+
+// SetSTATUSID sets the STATUS edge to Status by id.
+func (bc *BookborrowCreate) SetSTATUSID(id int) *BookborrowCreate {
+	bc.mutation.SetSTATUSID(id)
+	return bc
+}
+
+// SetNillableSTATUSID sets the STATUS edge to Status by id if the given value is not nil.
+func (bc *BookborrowCreate) SetNillableSTATUSID(id *int) *BookborrowCreate {
+	if id != nil {
+		bc = bc.SetSTATUSID(*id)
+	}
+	return bc
+}
+
+// SetSTATUS sets the STATUS edge to Status.
+func (bc *BookborrowCreate) SetSTATUS(s *Status) *BookborrowCreate {
+	return bc.SetSTATUSID(s.ID)
 }
 
 // AddBorrowedIDs adds the borrowed edge to Bookreturn by ids.
@@ -304,6 +324,25 @@ func (bc *BookborrowCreate) createSpec() (*Bookborrow, *sqlgraph.CreateSpec) {
 				IDSpec: &sqlgraph.FieldSpec{
 					Type:   field.TypeInt,
 					Column: servicepoint.FieldID,
+				},
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := bc.mutation.STATUSIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   bookborrow.STATUSTable,
+			Columns: []string{bookborrow.STATUSColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: &sqlgraph.FieldSpec{
+					Type:   field.TypeInt,
+					Column: status.FieldID,
 				},
 			},
 		}

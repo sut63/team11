@@ -10,6 +10,7 @@ import (
 	"github.com/facebookincubator/ent/dialect/sql/sqlgraph"
 	"github.com/facebookincubator/ent/schema/field"
 	"github.com/team11/app/ent/book"
+	"github.com/team11/app/ent/bookborrow"
 	"github.com/team11/app/ent/cliententity"
 	"github.com/team11/app/ent/predicate"
 	"github.com/team11/app/ent/status"
@@ -65,6 +66,21 @@ func (su *StatusUpdate) AddStatusofbook(b ...*Book) *StatusUpdate {
 	return su.AddStatusofbookIDs(ids...)
 }
 
+// AddStatusbookborrowIDs adds the statusbookborrow edge to Bookborrow by ids.
+func (su *StatusUpdate) AddStatusbookborrowIDs(ids ...int) *StatusUpdate {
+	su.mutation.AddStatusbookborrowIDs(ids...)
+	return su
+}
+
+// AddStatusbookborrow adds the statusbookborrow edges to Bookborrow.
+func (su *StatusUpdate) AddStatusbookborrow(b ...*Bookborrow) *StatusUpdate {
+	ids := make([]int, len(b))
+	for i := range b {
+		ids[i] = b[i].ID
+	}
+	return su.AddStatusbookborrowIDs(ids...)
+}
+
 // Mutation returns the StatusMutation object of the builder.
 func (su *StatusUpdate) Mutation() *StatusMutation {
 	return su.mutation
@@ -98,6 +114,21 @@ func (su *StatusUpdate) RemoveStatusofbook(b ...*Book) *StatusUpdate {
 		ids[i] = b[i].ID
 	}
 	return su.RemoveStatusofbookIDs(ids...)
+}
+
+// RemoveStatusbookborrowIDs removes the statusbookborrow edge to Bookborrow by ids.
+func (su *StatusUpdate) RemoveStatusbookborrowIDs(ids ...int) *StatusUpdate {
+	su.mutation.RemoveStatusbookborrowIDs(ids...)
+	return su
+}
+
+// RemoveStatusbookborrow removes statusbookborrow edges to Bookborrow.
+func (su *StatusUpdate) RemoveStatusbookborrow(b ...*Bookborrow) *StatusUpdate {
+	ids := make([]int, len(b))
+	for i := range b {
+		ids[i] = b[i].ID
+	}
+	return su.RemoveStatusbookborrowIDs(ids...)
 }
 
 // Save executes the query and returns the number of rows/vertices matched by this operation.
@@ -258,6 +289,44 @@ func (su *StatusUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	if nodes := su.mutation.RemovedStatusbookborrowIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   status.StatusbookborrowTable,
+			Columns: []string{status.StatusbookborrowColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: &sqlgraph.FieldSpec{
+					Type:   field.TypeInt,
+					Column: bookborrow.FieldID,
+				},
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := su.mutation.StatusbookborrowIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   status.StatusbookborrowTable,
+			Columns: []string{status.StatusbookborrowColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: &sqlgraph.FieldSpec{
+					Type:   field.TypeInt,
+					Column: bookborrow.FieldID,
+				},
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
 	if n, err = sqlgraph.UpdateNodes(ctx, su.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{status.Label}
@@ -312,6 +381,21 @@ func (suo *StatusUpdateOne) AddStatusofbook(b ...*Book) *StatusUpdateOne {
 	return suo.AddStatusofbookIDs(ids...)
 }
 
+// AddStatusbookborrowIDs adds the statusbookborrow edge to Bookborrow by ids.
+func (suo *StatusUpdateOne) AddStatusbookborrowIDs(ids ...int) *StatusUpdateOne {
+	suo.mutation.AddStatusbookborrowIDs(ids...)
+	return suo
+}
+
+// AddStatusbookborrow adds the statusbookborrow edges to Bookborrow.
+func (suo *StatusUpdateOne) AddStatusbookborrow(b ...*Bookborrow) *StatusUpdateOne {
+	ids := make([]int, len(b))
+	for i := range b {
+		ids[i] = b[i].ID
+	}
+	return suo.AddStatusbookborrowIDs(ids...)
+}
+
 // Mutation returns the StatusMutation object of the builder.
 func (suo *StatusUpdateOne) Mutation() *StatusMutation {
 	return suo.mutation
@@ -345,6 +429,21 @@ func (suo *StatusUpdateOne) RemoveStatusofbook(b ...*Book) *StatusUpdateOne {
 		ids[i] = b[i].ID
 	}
 	return suo.RemoveStatusofbookIDs(ids...)
+}
+
+// RemoveStatusbookborrowIDs removes the statusbookborrow edge to Bookborrow by ids.
+func (suo *StatusUpdateOne) RemoveStatusbookborrowIDs(ids ...int) *StatusUpdateOne {
+	suo.mutation.RemoveStatusbookborrowIDs(ids...)
+	return suo
+}
+
+// RemoveStatusbookborrow removes statusbookborrow edges to Bookborrow.
+func (suo *StatusUpdateOne) RemoveStatusbookborrow(b ...*Bookborrow) *StatusUpdateOne {
+	ids := make([]int, len(b))
+	for i := range b {
+		ids[i] = b[i].ID
+	}
+	return suo.RemoveStatusbookborrowIDs(ids...)
 }
 
 // Save executes the query and returns the updated entity.
@@ -495,6 +594,44 @@ func (suo *StatusUpdateOne) sqlSave(ctx context.Context) (s *Status, err error) 
 				IDSpec: &sqlgraph.FieldSpec{
 					Type:   field.TypeInt,
 					Column: book.FieldID,
+				},
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if nodes := suo.mutation.RemovedStatusbookborrowIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   status.StatusbookborrowTable,
+			Columns: []string{status.StatusbookborrowColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: &sqlgraph.FieldSpec{
+					Type:   field.TypeInt,
+					Column: bookborrow.FieldID,
+				},
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := suo.mutation.StatusbookborrowIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   status.StatusbookborrowTable,
+			Columns: []string{status.StatusbookborrowColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: &sqlgraph.FieldSpec{
+					Type:   field.TypeInt,
+					Column: bookborrow.FieldID,
 				},
 			},
 		}

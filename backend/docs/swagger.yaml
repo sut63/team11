@@ -29,6 +29,8 @@ definitions:
         type: string
       servicePointID:
         type: integer
+      statusID:
+        type: integer
       userID:
         type: integer
     type: object
@@ -205,6 +207,8 @@ definitions:
         type: integer
       servicepoint_ID:
         type: integer
+      status_ID:
+        type: integer
       user_ID:
         type: integer
     type: object
@@ -222,6 +226,10 @@ definitions:
       servicepoint:
         $ref: '#/definitions/ent.ServicePoint'
         description: SERVICEPOINT holds the value of the SERVICEPOINT edge.
+        type: object
+      status:
+        $ref: '#/definitions/ent.Status'
+        description: STATUS holds the value of the STATUS edge.
         type: object
       user:
         $ref: '#/definitions/ent.User'
@@ -630,6 +638,11 @@ definitions:
         description: Status holds the value of the status edge.
         items:
           $ref: '#/definitions/ent.ClientEntity'
+        type: array
+      statusbookborrow:
+        description: Statusbookborrow holds the value of the statusbookborrow edge.
+        items:
+          $ref: '#/definitions/ent.Bookborrow'
         type: array
       statusofbook:
         description: Statusofbook holds the value of the statusofbook edge.
@@ -1105,6 +1118,35 @@ paths:
           schema:
             $ref: '#/definitions/gin.H'
       summary: Delete a bookborrow entity by ID
+    get:
+      description: get bookborrow by ID
+      operationId: get-bookborrow
+      parameters:
+      - description: Bookborrow ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/ent.Bookborrow'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/gin.H'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/gin.H'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/gin.H'
+      summary: Get a bookborrow entity by ID
     put:
       consumes:
       - application/json
@@ -3039,6 +3081,7 @@ securityDefinitions:
     tokenUrl: https://example.com/oauth/token
     type: oauth2
   OAuth2Application:
+    authorizationUrl: ""
     flow: application
     scopes:
       admin: ' Grants read and write access to administrative information'
@@ -3053,6 +3096,7 @@ securityDefinitions:
       write: ' Grants write access'
     type: oauth2
   OAuth2Password:
+    authorizationUrl: ""
     flow: password
     scopes:
       admin: ' Grants read and write access to administrative information'

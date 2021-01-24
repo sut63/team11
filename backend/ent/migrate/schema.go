@@ -76,6 +76,7 @@ var (
 		{Name: "phone_number", Type: field.TypeString},
 		{Name: "BOOK_ID", Type: field.TypeInt, Nullable: true},
 		{Name: "SERVICEPOINT_ID", Type: field.TypeInt, Nullable: true},
+		{Name: "STATUS_ID", Type: field.TypeInt, Nullable: true},
 		{Name: "USER_ID", Type: field.TypeInt, Nullable: true},
 	}
 	// BookborrowsTable holds the schema information for the "bookborrows" table.
@@ -99,8 +100,15 @@ var (
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:  "bookborrows_users_borrow",
+				Symbol:  "bookborrows_status_statusbookborrow",
 				Columns: []*schema.Column{BookborrowsColumns[7]},
+
+				RefColumns: []*schema.Column{StatusColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:  "bookborrows_users_borrow",
+				Columns: []*schema.Column{BookborrowsColumns[8]},
 
 				RefColumns: []*schema.Column{UsersColumns[0]},
 				OnDelete:   schema.SetNull,
@@ -438,7 +446,8 @@ func init() {
 	BooksTable.ForeignKeys[3].RefTable = UsersTable
 	BookborrowsTable.ForeignKeys[0].RefTable = BooksTable
 	BookborrowsTable.ForeignKeys[1].RefTable = ServicePointsTable
-	BookborrowsTable.ForeignKeys[2].RefTable = UsersTable
+	BookborrowsTable.ForeignKeys[2].RefTable = StatusTable
+	BookborrowsTable.ForeignKeys[3].RefTable = UsersTable
 	BookingsTable.ForeignKeys[0].RefTable = ClientEntitiesTable
 	BookingsTable.ForeignKeys[1].RefTable = ServicePointsTable
 	BookingsTable.ForeignKeys[2].RefTable = UsersTable

@@ -15,6 +15,7 @@ import (
 	"github.com/team11/app/ent/bookreturn"
 	"github.com/team11/app/ent/predicate"
 	"github.com/team11/app/ent/servicepoint"
+	"github.com/team11/app/ent/status"
 	"github.com/team11/app/ent/user"
 )
 
@@ -128,6 +129,25 @@ func (bu *BookborrowUpdate) SetSERVICEPOINT(s *ServicePoint) *BookborrowUpdate {
 	return bu.SetSERVICEPOINTID(s.ID)
 }
 
+// SetSTATUSID sets the STATUS edge to Status by id.
+func (bu *BookborrowUpdate) SetSTATUSID(id int) *BookborrowUpdate {
+	bu.mutation.SetSTATUSID(id)
+	return bu
+}
+
+// SetNillableSTATUSID sets the STATUS edge to Status by id if the given value is not nil.
+func (bu *BookborrowUpdate) SetNillableSTATUSID(id *int) *BookborrowUpdate {
+	if id != nil {
+		bu = bu.SetSTATUSID(*id)
+	}
+	return bu
+}
+
+// SetSTATUS sets the STATUS edge to Status.
+func (bu *BookborrowUpdate) SetSTATUS(s *Status) *BookborrowUpdate {
+	return bu.SetSTATUSID(s.ID)
+}
+
 // AddBorrowedIDs adds the borrowed edge to Bookreturn by ids.
 func (bu *BookborrowUpdate) AddBorrowedIDs(ids ...int) *BookborrowUpdate {
 	bu.mutation.AddBorrowedIDs(ids...)
@@ -163,6 +183,12 @@ func (bu *BookborrowUpdate) ClearBOOK() *BookborrowUpdate {
 // ClearSERVICEPOINT clears the SERVICEPOINT edge to ServicePoint.
 func (bu *BookborrowUpdate) ClearSERVICEPOINT() *BookborrowUpdate {
 	bu.mutation.ClearSERVICEPOINT()
+	return bu
+}
+
+// ClearSTATUS clears the STATUS edge to Status.
+func (bu *BookborrowUpdate) ClearSTATUS() *BookborrowUpdate {
+	bu.mutation.ClearSTATUS()
 	return bu
 }
 
@@ -406,6 +432,41 @@ func (bu *BookborrowUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	if bu.mutation.STATUSCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   bookborrow.STATUSTable,
+			Columns: []string{bookborrow.STATUSColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: &sqlgraph.FieldSpec{
+					Type:   field.TypeInt,
+					Column: status.FieldID,
+				},
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := bu.mutation.STATUSIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   bookborrow.STATUSTable,
+			Columns: []string{bookborrow.STATUSColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: &sqlgraph.FieldSpec{
+					Type:   field.TypeInt,
+					Column: status.FieldID,
+				},
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
 	if nodes := bu.mutation.RemovedBorrowedIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
@@ -558,6 +619,25 @@ func (buo *BookborrowUpdateOne) SetSERVICEPOINT(s *ServicePoint) *BookborrowUpda
 	return buo.SetSERVICEPOINTID(s.ID)
 }
 
+// SetSTATUSID sets the STATUS edge to Status by id.
+func (buo *BookborrowUpdateOne) SetSTATUSID(id int) *BookborrowUpdateOne {
+	buo.mutation.SetSTATUSID(id)
+	return buo
+}
+
+// SetNillableSTATUSID sets the STATUS edge to Status by id if the given value is not nil.
+func (buo *BookborrowUpdateOne) SetNillableSTATUSID(id *int) *BookborrowUpdateOne {
+	if id != nil {
+		buo = buo.SetSTATUSID(*id)
+	}
+	return buo
+}
+
+// SetSTATUS sets the STATUS edge to Status.
+func (buo *BookborrowUpdateOne) SetSTATUS(s *Status) *BookborrowUpdateOne {
+	return buo.SetSTATUSID(s.ID)
+}
+
 // AddBorrowedIDs adds the borrowed edge to Bookreturn by ids.
 func (buo *BookborrowUpdateOne) AddBorrowedIDs(ids ...int) *BookborrowUpdateOne {
 	buo.mutation.AddBorrowedIDs(ids...)
@@ -593,6 +673,12 @@ func (buo *BookborrowUpdateOne) ClearBOOK() *BookborrowUpdateOne {
 // ClearSERVICEPOINT clears the SERVICEPOINT edge to ServicePoint.
 func (buo *BookborrowUpdateOne) ClearSERVICEPOINT() *BookborrowUpdateOne {
 	buo.mutation.ClearSERVICEPOINT()
+	return buo
+}
+
+// ClearSTATUS clears the STATUS edge to Status.
+func (buo *BookborrowUpdateOne) ClearSTATUS() *BookborrowUpdateOne {
+	buo.mutation.ClearSTATUS()
 	return buo
 }
 
@@ -826,6 +912,41 @@ func (buo *BookborrowUpdateOne) sqlSave(ctx context.Context) (b *Bookborrow, err
 				IDSpec: &sqlgraph.FieldSpec{
 					Type:   field.TypeInt,
 					Column: servicepoint.FieldID,
+				},
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if buo.mutation.STATUSCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   bookborrow.STATUSTable,
+			Columns: []string{bookborrow.STATUSColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: &sqlgraph.FieldSpec{
+					Type:   field.TypeInt,
+					Column: status.FieldID,
+				},
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := buo.mutation.STATUSIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   bookborrow.STATUSTable,
+			Columns: []string{bookborrow.STATUSColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: &sqlgraph.FieldSpec{
+					Type:   field.TypeInt,
+					Column: status.FieldID,
 				},
 			},
 		}

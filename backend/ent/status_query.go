@@ -13,6 +13,7 @@ import (
 	"github.com/facebookincubator/ent/dialect/sql/sqlgraph"
 	"github.com/facebookincubator/ent/schema/field"
 	"github.com/team11/app/ent/book"
+	"github.com/team11/app/ent/bookborrow"
 	"github.com/team11/app/ent/cliententity"
 	"github.com/team11/app/ent/predicate"
 	"github.com/team11/app/ent/status"
@@ -27,8 +28,9 @@ type StatusQuery struct {
 	unique     []string
 	predicates []predicate.Status
 	// eager-loading edges.
-	withStatus       *ClientEntityQuery
-	withStatusofbook *BookQuery
+	withStatus           *ClientEntityQuery
+	withStatusofbook     *BookQuery
+	withStatusbookborrow *BookborrowQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -87,6 +89,24 @@ func (sq *StatusQuery) QueryStatusofbook() *BookQuery {
 			sqlgraph.From(status.Table, status.FieldID, sq.sqlQuery()),
 			sqlgraph.To(book.Table, book.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, status.StatusofbookTable, status.StatusofbookColumn),
+		)
+		fromU = sqlgraph.SetNeighbors(sq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryStatusbookborrow chains the current query on the statusbookborrow edge.
+func (sq *StatusQuery) QueryStatusbookborrow() *BookborrowQuery {
+	query := &BookborrowQuery{config: sq.config}
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := sq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(status.Table, status.FieldID, sq.sqlQuery()),
+			sqlgraph.To(bookborrow.Table, bookborrow.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, status.StatusbookborrowTable, status.StatusbookborrowColumn),
 		)
 		fromU = sqlgraph.SetNeighbors(sq.driver.Dialect(), step)
 		return fromU, nil
@@ -295,6 +315,17 @@ func (sq *StatusQuery) WithStatusofbook(opts ...func(*BookQuery)) *StatusQuery {
 	return sq
 }
 
+//  WithStatusbookborrow tells the query-builder to eager-loads the nodes that are connected to
+// the "statusbookborrow" edge. The optional arguments used to configure the query builder of the edge.
+func (sq *StatusQuery) WithStatusbookborrow(opts ...func(*BookborrowQuery)) *StatusQuery {
+	query := &BookborrowQuery{config: sq.config}
+	for _, opt := range opts {
+		opt(query)
+	}
+	sq.withStatusbookborrow = query
+	return sq
+}
+
 // GroupBy used to group vertices by one or more fields/columns.
 // It is often used with aggregate functions, like: count, max, mean, min, sum.
 //
@@ -361,9 +392,10 @@ func (sq *StatusQuery) sqlAll(ctx context.Context) ([]*Status, error) {
 	var (
 		nodes       = []*Status{}
 		_spec       = sq.querySpec()
-		loadedTypes = [2]bool{
+		loadedTypes = [3]bool{
 			sq.withStatus != nil,
 			sq.withStatusofbook != nil,
+			sq.withStatusbookborrow != nil,
 		}
 	)
 	_spec.ScanValues = func() []interface{} {
@@ -440,6 +472,34 @@ func (sq *StatusQuery) sqlAll(ctx context.Context) ([]*Status, error) {
 				return nil, fmt.Errorf(`unexpected foreign-key "STATUS_ID" returned %v for node %v`, *fk, n.ID)
 			}
 			node.Edges.Statusofbook = append(node.Edges.Statusofbook, n)
+		}
+	}
+
+	if query := sq.withStatusbookborrow; query != nil {
+		fks := make([]driver.Value, 0, len(nodes))
+		nodeids := make(map[int]*Status)
+		for i := range nodes {
+			fks = append(fks, nodes[i].ID)
+			nodeids[nodes[i].ID] = nodes[i]
+		}
+		query.withFKs = true
+		query.Where(predicate.Bookborrow(func(s *sql.Selector) {
+			s.Where(sql.InValues(status.StatusbookborrowColumn, fks...))
+		}))
+		neighbors, err := query.All(ctx)
+		if err != nil {
+			return nil, err
+		}
+		for _, n := range neighbors {
+			fk := n.STATUS_ID
+			if fk == nil {
+				return nil, fmt.Errorf(`foreign-key "STATUS_ID" is nil for node %v`, n.ID)
+			}
+			node, ok := nodeids[*fk]
+			if !ok {
+				return nil, fmt.Errorf(`unexpected foreign-key "STATUS_ID" returned %v for node %v`, *fk, n.ID)
+			}
+			node.Edges.Statusbookborrow = append(node.Edges.Statusbookborrow, n)
 		}
 	}
 

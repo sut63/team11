@@ -10,6 +10,7 @@ import (
 	"github.com/facebookincubator/ent/dialect/sql/sqlgraph"
 	"github.com/facebookincubator/ent/schema/field"
 	"github.com/team11/app/ent/book"
+	"github.com/team11/app/ent/bookborrow"
 	"github.com/team11/app/ent/cliententity"
 	"github.com/team11/app/ent/status"
 )
@@ -55,6 +56,21 @@ func (sc *StatusCreate) AddStatusofbook(b ...*Book) *StatusCreate {
 		ids[i] = b[i].ID
 	}
 	return sc.AddStatusofbookIDs(ids...)
+}
+
+// AddStatusbookborrowIDs adds the statusbookborrow edge to Bookborrow by ids.
+func (sc *StatusCreate) AddStatusbookborrowIDs(ids ...int) *StatusCreate {
+	sc.mutation.AddStatusbookborrowIDs(ids...)
+	return sc
+}
+
+// AddStatusbookborrow adds the statusbookborrow edges to Bookborrow.
+func (sc *StatusCreate) AddStatusbookborrow(b ...*Bookborrow) *StatusCreate {
+	ids := make([]int, len(b))
+	for i := range b {
+		ids[i] = b[i].ID
+	}
+	return sc.AddStatusbookborrowIDs(ids...)
 }
 
 // Mutation returns the StatusMutation object of the builder.
@@ -170,6 +186,25 @@ func (sc *StatusCreate) createSpec() (*Status, *sqlgraph.CreateSpec) {
 				IDSpec: &sqlgraph.FieldSpec{
 					Type:   field.TypeInt,
 					Column: book.FieldID,
+				},
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := sc.mutation.StatusbookborrowIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   status.StatusbookborrowTable,
+			Columns: []string{status.StatusbookborrowColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: &sqlgraph.FieldSpec{
+					Type:   field.TypeInt,
+					Column: bookborrow.FieldID,
 				},
 			},
 		}

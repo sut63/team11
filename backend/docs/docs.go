@@ -575,6 +575,49 @@ var doc = `{
             }
         },
         "/bookborrows/{id}": {
+            "get": {
+                "description": "get bookborrow by ID",
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "Get a bookborrow entity by ID",
+                "operationId": "get-bookborrow",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Bookborrow ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/ent.Bookborrow"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/gin.H"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/gin.H"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/gin.H"
+                        }
+                    }
+                }
+            },
             "put": {
                 "description": "update bookborrow by ID",
                 "consumes": [
@@ -3538,6 +3581,9 @@ var doc = `{
                 "servicePointID": {
                     "type": "integer"
                 },
+                "statusID": {
+                    "type": "integer"
+                },
                 "userID": {
                     "type": "integer"
                 }
@@ -3784,6 +3830,9 @@ var doc = `{
                 "servicepoint_ID": {
                     "type": "integer"
                 },
+                "status_ID": {
+                    "type": "integer"
+                },
                 "user_ID": {
                     "type": "integer"
                 }
@@ -3808,6 +3857,11 @@ var doc = `{
                     "description": "SERVICEPOINT holds the value of the SERVICEPOINT edge.",
                     "type": "object",
                     "$ref": "#/definitions/ent.ServicePoint"
+                },
+                "status": {
+                    "description": "STATUS holds the value of the STATUS edge.",
+                    "type": "object",
+                    "$ref": "#/definitions/ent.Status"
                 },
                 "user": {
                     "description": "USER holds the value of the USER edge.",
@@ -4343,6 +4397,13 @@ var doc = `{
                         "$ref": "#/definitions/ent.ClientEntity"
                     }
                 },
+                "statusbookborrow": {
+                    "description": "Statusbookborrow holds the value of the statusbookborrow edge.",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/ent.Bookborrow"
+                    }
+                },
                 "statusofbook": {
                     "description": "Statusofbook holds the value of the statusofbook edge.",
                     "type": "array",
@@ -4459,6 +4520,7 @@ var doc = `{
         "OAuth2Application": {
             "type": "oauth2",
             "flow": "application",
+            "authorizationUrl": "",
             "tokenUrl": "https://example.com/oauth/token",
             "scopes": {
                 "admin": " Grants read and write access to administrative information",
@@ -4477,6 +4539,7 @@ var doc = `{
         "OAuth2Password": {
             "type": "oauth2",
             "flow": "password",
+            "authorizationUrl": "",
             "tokenUrl": "https://example.com/oauth/token",
             "scopes": {
                 "admin": " Grants read and write access to administrative information",

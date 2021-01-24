@@ -28,9 +28,11 @@ type StatusEdges struct {
 	Status []*ClientEntity
 	// Statusofbook holds the value of the statusofbook edge.
 	Statusofbook []*Book
+	// Statusbookborrow holds the value of the statusbookborrow edge.
+	Statusbookborrow []*Bookborrow
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [2]bool
+	loadedTypes [3]bool
 }
 
 // StatusOrErr returns the Status value or an error if the edge
@@ -49,6 +51,15 @@ func (e StatusEdges) StatusofbookOrErr() ([]*Book, error) {
 		return e.Statusofbook, nil
 	}
 	return nil, &NotLoadedError{edge: "statusofbook"}
+}
+
+// StatusbookborrowOrErr returns the Statusbookborrow value or an error if the edge
+// was not loaded in eager-loading.
+func (e StatusEdges) StatusbookborrowOrErr() ([]*Bookborrow, error) {
+	if e.loadedTypes[2] {
+		return e.Statusbookborrow, nil
+	}
+	return nil, &NotLoadedError{edge: "statusbookborrow"}
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -87,6 +98,11 @@ func (s *Status) QueryStatus() *ClientEntityQuery {
 // QueryStatusofbook queries the statusofbook edge of the Status.
 func (s *Status) QueryStatusofbook() *BookQuery {
 	return (&StatusClient{config: s.config}).QueryStatusofbook(s)
+}
+
+// QueryStatusbookborrow queries the statusbookborrow edge of the Status.
+func (s *Status) QueryStatusbookborrow() *BookborrowQuery {
+	return (&StatusClient{config: s.config}).QueryStatusbookborrow(s)
 }
 
 // Update returns a builder for updating this Status.

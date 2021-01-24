@@ -14,6 +14,8 @@ const (
 	EdgeStatus = "status"
 	// EdgeStatusofbook holds the string denoting the statusofbook edge name in mutations.
 	EdgeStatusofbook = "statusofbook"
+	// EdgeStatusbookborrow holds the string denoting the statusbookborrow edge name in mutations.
+	EdgeStatusbookborrow = "statusbookborrow"
 
 	// Table holds the table name of the status in the database.
 	Table = "status"
@@ -31,6 +33,13 @@ const (
 	StatusofbookInverseTable = "books"
 	// StatusofbookColumn is the table column denoting the statusofbook relation/edge.
 	StatusofbookColumn = "STATUS_ID"
+	// StatusbookborrowTable is the table the holds the statusbookborrow relation/edge.
+	StatusbookborrowTable = "bookborrows"
+	// StatusbookborrowInverseTable is the table name for the Bookborrow entity.
+	// It exists in this package in order to avoid circular dependency with the "bookborrow" package.
+	StatusbookborrowInverseTable = "bookborrows"
+	// StatusbookborrowColumn is the table column denoting the statusbookborrow relation/edge.
+	StatusbookborrowColumn = "STATUS_ID"
 )
 
 // Columns holds all SQL columns for status fields.

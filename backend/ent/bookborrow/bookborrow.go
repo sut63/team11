@@ -26,6 +26,8 @@ const (
 	EdgeBOOK = "BOOK"
 	// EdgeSERVICEPOINT holds the string denoting the servicepoint edge name in mutations.
 	EdgeSERVICEPOINT = "SERVICEPOINT"
+	// EdgeSTATUS holds the string denoting the status edge name in mutations.
+	EdgeSTATUS = "STATUS"
 	// EdgeBorrowed holds the string denoting the borrowed edge name in mutations.
 	EdgeBorrowed = "borrowed"
 
@@ -52,6 +54,13 @@ const (
 	SERVICEPOINTInverseTable = "service_points"
 	// SERVICEPOINTColumn is the table column denoting the SERVICEPOINT relation/edge.
 	SERVICEPOINTColumn = "SERVICEPOINT_ID"
+	// STATUSTable is the table the holds the STATUS relation/edge.
+	STATUSTable = "bookborrows"
+	// STATUSInverseTable is the table name for the Status entity.
+	// It exists in this package in order to avoid circular dependency with the "status" package.
+	STATUSInverseTable = "status"
+	// STATUSColumn is the table column denoting the STATUS relation/edge.
+	STATUSColumn = "STATUS_ID"
 	// BorrowedTable is the table the holds the borrowed relation/edge.
 	BorrowedTable = "bookreturns"
 	// BorrowedInverseTable is the table name for the Bookreturn entity.
@@ -74,6 +83,7 @@ var Columns = []string{
 var ForeignKeys = []string{
 	"BOOK_ID",
 	"SERVICEPOINT_ID",
+	"STATUS_ID",
 	"USER_ID",
 }
 
