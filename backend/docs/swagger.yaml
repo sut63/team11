@@ -1229,15 +1229,6 @@ paths:
     get:
       description: list booking entities
       operationId: list-booking
-      parameters:
-      - description: Limit
-        in: query
-        name: limit
-        type: integer
-      - description: Offset
-        in: query
-        name: offset
-        type: integer
       produces:
       - application/json
       responses:

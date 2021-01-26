@@ -79,6 +79,12 @@ export interface EntBookborrow {
      * @type {number}
      * @memberof EntBookborrow
      */
+    statusID?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof EntBookborrow
+     */
     userID?: number;
 }
 
@@ -100,6 +106,7 @@ export function EntBookborrowFromJSONTyped(json: any, ignoreDiscriminator: boole
         'edges': !exists(json, 'edges') ? undefined : EntBookborrowEdgesFromJSON(json['edges']),
         'id': !exists(json, 'id') ? undefined : json['id'],
         'servicepointID': !exists(json, 'servicepoint_ID') ? undefined : json['servicepoint_ID'],
+        'statusID': !exists(json, 'status_ID') ? undefined : json['status_ID'],
         'userID': !exists(json, 'user_ID') ? undefined : json['user_ID'],
     };
 }
@@ -121,6 +128,7 @@ export function EntBookborrowToJSON(value?: EntBookborrow | null): any {
         'edges': EntBookborrowEdgesToJSON(value.edges),
         'id': value.id,
         'servicepoint_ID': value.servicepointID,
+        'status_ID': value.statusID,
         'user_ID': value.userID,
     };
 }

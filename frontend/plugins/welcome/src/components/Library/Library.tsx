@@ -189,9 +189,9 @@ const WelcomePage = () => {
               </Typography>
             </InfoCard>
           </Grid>
-          <Grid item xs={12} md={2}>
-
-            <InfoCard title="Quick Links">
+          <Grid item xs={12} md={3}>
+              <Grid>
+            <InfoCard title="เมนูสำหรับการสร้าง 🛠">
                   <Button
                     disabled ={LibrarianBtn}
                     variant="contained"
@@ -265,6 +265,84 @@ const WelcomePage = () => {
                     คืนหนังสือ
                   </Button>
             </InfoCard>
+            </Grid>
+            <br/>
+            <Grid>
+            <InfoCard title="เมนูสำหรับการค้นหา 🔎">
+                  <Button
+                    disabled ={LibrarianBtn}
+                    variant="contained"
+                    color="secondary"
+                    className={classes.button}
+                    startIcon={<Research />}
+                    component={RouterLink}
+                    to="/Research"
+                  >
+                    เพิ่มงานวิจัย
+                  </Button>
+                  <br />
+                  <Button
+                    disabled ={LibrarianBtn}
+                    variant="contained"
+                    color="secondary"
+                    className={classes.button}
+                    startIcon={<Book />}
+                    component={RouterLink}
+                    to="/Book"
+                  >
+                    เพิ่มหนังสือ
+                  </Button>
+                  <br/>
+                  <Button
+                    disabled ={MemberBtn}
+                    variant="contained"
+                    color="primary"
+                    className={classes.button}
+                    startIcon={<VideoOnDemand />}
+                    component={RouterLink}
+                    to="/SearchBooking"
+                  >
+                    ค้นหาการจองเครื่องรับชม Video On Demand
+                  </Button>
+                  <br />
+                  <Button
+                    disabled ={MemberBtn}
+                    variant="contained"
+                    color="secondary"
+                    className={classes.button}
+                    startIcon={<Room />}
+                    component={RouterLink}
+                    to="/Room"
+                  >
+                    จองห้องติว
+                  </Button>
+                  <br />
+
+                  <Button
+                    disabled ={MemberBtn}
+                    variant="contained"
+                    color="secondary"
+                    className={classes.button}
+                    startIcon={<Borrow />}
+                    component={RouterLink}
+                    to="/Bookborrow"
+                  >
+                    ยืมหนังสือ
+                  </Button>
+                  <br />
+                  <Button
+                    disabled ={MemberBtn}
+                    variant="contained"
+                    color="secondary"
+                    className={classes.button}
+                    startIcon={<Return />}
+                    component={RouterLink}
+                    to="/Bookreturn"
+                  >
+                    คืนหนังสือ
+                  </Button>
+            </InfoCard>
+            </Grid>
           </Grid>
         </Grid>
       </Content>

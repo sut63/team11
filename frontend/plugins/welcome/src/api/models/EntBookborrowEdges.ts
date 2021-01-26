@@ -26,6 +26,10 @@ import {
     EntServicePointFromJSON,
     EntServicePointFromJSONTyped,
     EntServicePointToJSON,
+    EntStatus,
+    EntStatusFromJSON,
+    EntStatusFromJSONTyped,
+    EntStatusToJSON,
     EntUser,
     EntUserFromJSON,
     EntUserFromJSONTyped,
@@ -58,6 +62,12 @@ export interface EntBookborrowEdges {
     servicepoint?: EntServicePoint;
     /**
      * 
+     * @type {EntStatus}
+     * @memberof EntBookborrowEdges
+     */
+    status?: EntStatus;
+    /**
+     * 
      * @type {EntUser}
      * @memberof EntBookborrowEdges
      */
@@ -77,6 +87,7 @@ export function EntBookborrowEdgesFromJSONTyped(json: any, ignoreDiscriminator: 
         'book': !exists(json, 'book') ? undefined : EntBookFromJSON(json['book']),
         'borrowed': !exists(json, 'borrowed') ? undefined : ((json['borrowed'] as Array<any>).map(EntBookreturnFromJSON)),
         'servicepoint': !exists(json, 'servicepoint') ? undefined : EntServicePointFromJSON(json['servicepoint']),
+        'status': !exists(json, 'status') ? undefined : EntStatusFromJSON(json['status']),
         'user': !exists(json, 'user') ? undefined : EntUserFromJSON(json['user']),
     };
 }
@@ -93,6 +104,7 @@ export function EntBookborrowEdgesToJSON(value?: EntBookborrowEdges | null): any
         'book': EntBookToJSON(value.book),
         'borrowed': value.borrowed === undefined ? undefined : ((value.borrowed as Array<any>).map(EntBookreturnToJSON)),
         'servicepoint': EntServicePointToJSON(value.servicepoint),
+        'status': EntStatusToJSON(value.status),
         'user': EntUserToJSON(value.user),
     };
 }

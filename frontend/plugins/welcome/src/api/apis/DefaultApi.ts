@@ -217,6 +217,10 @@ export interface GetBookRequest {
     id: number;
 }
 
+export interface GetBookborrowRequest {
+    id: number;
+}
+
 export interface GetBookborrowuserRequest {
     id: number;
 }
@@ -284,11 +288,6 @@ export interface ListBookRequest {
 }
 
 export interface ListBookborrowRequest {
-    limit?: number;
-    offset?: number;
-}
-
-export interface ListBookingRequest {
     limit?: number;
     offset?: number;
 }
@@ -1493,6 +1492,38 @@ export class DefaultApi extends runtime.BaseAPI {
     }
 
     /**
+     * get bookborrow by ID
+     * Get a bookborrow entity by ID
+     */
+    async getBookborrowRaw(requestParameters: GetBookborrowRequest): Promise<runtime.ApiResponse<EntBookborrow>> {
+        if (requestParameters.id === null || requestParameters.id === undefined) {
+            throw new runtime.RequiredError('id','Required parameter requestParameters.id was null or undefined when calling getBookborrow.');
+        }
+
+        const queryParameters: runtime.HTTPQuery = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        const response = await this.request({
+            path: `/bookborrows/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters.id))),
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        });
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => EntBookborrowFromJSON(jsonValue));
+    }
+
+    /**
+     * get bookborrow by ID
+     * Get a bookborrow entity by ID
+     */
+    async getBookborrow(requestParameters: GetBookborrowRequest): Promise<EntBookborrow> {
+        const response = await this.getBookborrowRaw(requestParameters);
+        return await response.value();
+    }
+
+    /**
      * get bookborrowuser by ID
      * Get a bookborrowuser entity by ID
      */
@@ -2052,16 +2083,8 @@ export class DefaultApi extends runtime.BaseAPI {
      * list booking entities
      * List booking entities
      */
-    async listBookingRaw(requestParameters: ListBookingRequest): Promise<runtime.ApiResponse<Array<EntBooking>>> {
+    async listBookingRaw(): Promise<runtime.ApiResponse<Array<EntBooking>>> {
         const queryParameters: runtime.HTTPQuery = {};
-
-        if (requestParameters.limit !== undefined) {
-            queryParameters['limit'] = requestParameters.limit;
-        }
-
-        if (requestParameters.offset !== undefined) {
-            queryParameters['offset'] = requestParameters.offset;
-        }
 
         const headerParameters: runtime.HTTPHeaders = {};
 
@@ -2079,8 +2102,8 @@ export class DefaultApi extends runtime.BaseAPI {
      * list booking entities
      * List booking entities
      */
-    async listBooking(requestParameters: ListBookingRequest): Promise<Array<EntBooking>> {
-        const response = await this.listBookingRaw(requestParameters);
+    async listBooking(): Promise<Array<EntBooking>> {
+        const response = await this.listBookingRaw();
         return await response.value();
     }
 
