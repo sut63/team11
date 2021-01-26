@@ -211,7 +211,7 @@ export default function Create() {
   const [userID, setUserID] = useState(Number);
 
   const CreateBooking = async () => {
-
+    console.log(bookingField)
     const resC = await api.listCliententity();
     setClients(resC);
     const booking = {
