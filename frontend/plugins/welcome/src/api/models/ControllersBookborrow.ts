@@ -60,6 +60,12 @@ export interface ControllersBookborrow {
      * @type {number}
      * @memberof ControllersBookborrow
      */
+    statusID?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof ControllersBookborrow
+     */
     userID?: number;
 }
 
@@ -79,6 +85,7 @@ export function ControllersBookborrowFromJSONTyped(json: any, ignoreDiscriminato
         'phoneNumber': !exists(json, 'phoneNumber') ? undefined : json['phoneNumber'],
         'pickup': !exists(json, 'pickup') ? undefined : json['pickup'],
         'servicePointID': !exists(json, 'servicePointID') ? undefined : json['servicePointID'],
+        'statusID': !exists(json, 'statusID') ? undefined : json['statusID'],
         'userID': !exists(json, 'userID') ? undefined : json['userID'],
     };
 }
@@ -98,6 +105,7 @@ export function ControllersBookborrowToJSON(value?: ControllersBookborrow | null
         'phoneNumber': value.phoneNumber,
         'pickup': value.pickup,
         'servicePointID': value.servicePointID,
+        'statusID': value.statusID,
         'userID': value.userID,
     };
 }

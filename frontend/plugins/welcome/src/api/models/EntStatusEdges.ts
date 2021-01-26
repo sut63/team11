@@ -18,6 +18,10 @@ import {
     EntBookFromJSON,
     EntBookFromJSONTyped,
     EntBookToJSON,
+    EntBookborrow,
+    EntBookborrowFromJSON,
+    EntBookborrowFromJSONTyped,
+    EntBookborrowToJSON,
     EntClientEntity,
     EntClientEntityFromJSON,
     EntClientEntityFromJSONTyped,
@@ -37,6 +41,12 @@ export interface EntStatusEdges {
      */
     status?: Array<EntClientEntity>;
     /**
+     * Statusbookborrow holds the value of the statusbookborrow edge.
+     * @type {Array<EntBookborrow>}
+     * @memberof EntStatusEdges
+     */
+    statusbookborrow?: Array<EntBookborrow>;
+    /**
      * Statusofbook holds the value of the statusofbook edge.
      * @type {Array<EntBook>}
      * @memberof EntStatusEdges
@@ -55,6 +65,7 @@ export function EntStatusEdgesFromJSONTyped(json: any, ignoreDiscriminator: bool
     return {
         
         'status': !exists(json, 'status') ? undefined : ((json['status'] as Array<any>).map(EntClientEntityFromJSON)),
+        'statusbookborrow': !exists(json, 'statusbookborrow') ? undefined : ((json['statusbookborrow'] as Array<any>).map(EntBookborrowFromJSON)),
         'statusofbook': !exists(json, 'statusofbook') ? undefined : ((json['statusofbook'] as Array<any>).map(EntBookFromJSON)),
     };
 }
@@ -69,6 +80,7 @@ export function EntStatusEdgesToJSON(value?: EntStatusEdges | null): any {
     return {
         
         'status': value.status === undefined ? undefined : ((value.status as Array<any>).map(EntClientEntityToJSON)),
+        'statusbookborrow': value.statusbookborrow === undefined ? undefined : ((value.statusbookborrow as Array<any>).map(EntBookborrowToJSON)),
         'statusofbook': value.statusofbook === undefined ? undefined : ((value.statusofbook as Array<any>).map(EntBookToJSON)),
     };
 }
