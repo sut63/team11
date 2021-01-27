@@ -155,35 +155,18 @@ func (ctl *ResearchController) GetResearch(c *gin.Context) {
 // @Failure 500 {object} gin.H
 // @Router /researches [get]
 func (ctl *ResearchController) ListResearch(c *gin.Context) {
-    limitQuery := c.Query("limit")
-    limit := 10
-    if limitQuery != "" {
-        limit64, err := strconv.ParseInt(limitQuery, 10, 64)
-        if err == nil {
-            limit = int(limit64)
-        }
-    }
+    researchs, err := ctl.client.Research.
+		Query().
+		WithMyDoc().
+		WithDocType().
+		WithRegister().
+		All(context.Background())
+	if err != nil {
+		c.JSON(400, gin.H{"error": err.Error()})
+		return
+	}
 
-    offsetQuery := c.Query("offset")
-    offset := 0
-    if offsetQuery != "" {
-        offset64, err := strconv.ParseInt(offsetQuery, 10, 64)
-        if err == nil {
-            offset = int(offset64)
-        }
-    }
-
-    Researches, err := ctl.client.Research.
-        Query().
-        Limit(limit).
-        Offset(offset).
-        All(context.Background())
-    if err != nil {
-        c.JSON(400, gin.H{"error": err.Error()})
-        return
-    }
-
-    c.JSON(200, Researches)
+    c.JSON(200, researchs)
 }
 
 // DeleteResearch handles DELETE requests to delete a Research entity
