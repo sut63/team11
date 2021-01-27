@@ -81,7 +81,7 @@ export default function Create() {
 
   // function validate DamagedPoint
   const ValidateDamagedPoint = (val: number) => {
-    val < 1 || val > 10 ? setErrorDamagedpoint(false) : setErrorDamagedpoint(true);
+    val < -1 || val > 10 ? setErrorDamagedpoint(false) : setErrorDamagedpoint(true);
   }
 
   // function validate DamagedPointName
@@ -370,7 +370,7 @@ export default function Create() {
                     type="number"
                     size="medium"
                     helperText={errordamagedpoint ? "" : "ต้องเป็นตัวเลข 0-10 เท่านั้น"}
-                    InputProps={{ inputProps: { min: 1, max: 10 } }}
+                    InputProps={{ inputProps: { min: -1, max: 10 } }}
                     value={damagedpoint}
                     onChange={DamagedPointhandleChange}
                   />
