@@ -64,9 +64,9 @@ export function EntResearchEdgesFromJSONTyped(json: any, ignoreDiscriminator: bo
     }
     return {
         
-        'docType': !exists(json, 'DocType') ? undefined : EntResearchtypeFromJSON(json['DocType']),
-        'myDoc': !exists(json, 'MyDoc') ? undefined : EntAuthorFromJSON(json['MyDoc']),
-        'register': !exists(json, 'Register') ? undefined : EntUserFromJSON(json['Register']),
+        'docType': !exists(json, 'docType') ? undefined : EntResearchtypeFromJSON(json['docType']),
+        'myDoc': !exists(json, 'myDoc') ? undefined : EntAuthorFromJSON(json['myDoc']),
+        'register': !exists(json, 'register') ? undefined : EntUserFromJSON(json['register']),
     };
 }
 

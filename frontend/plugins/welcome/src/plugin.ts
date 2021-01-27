@@ -8,11 +8,8 @@ import Research from './components/Research'
 import Book from './components/Book'
 import Library from './components/Library'
 import SearchBooking from './components/SearchBooking'
-<<<<<<< HEAD
 import SearchBookreturn from './components/SearchBookreturn'
-=======
 import SearchResearch from './components/SearchResearch'
->>>>>>> af12488... แก้ค้าระบบวิจัยกับcontrollerlistตรงWith - close #205
 
 export const plugin = createPlugin({
   id: 'welcome',
@@ -26,10 +23,7 @@ export const plugin = createPlugin({
     router.registerRoute('/Room', Room);
     router.registerRoute('/Book', Book);
     router.registerRoute('/SearchBooking', SearchBooking);
-<<<<<<< HEAD
     router.registerRoute('/SearchBookreturn', SearchBookreturn);
-=======
     router.registerRoute('/SearchResearch', SearchResearch);
->>>>>>> af12488... แก้ค้าระบบวิจัยกับcontrollerlistตรงWith - close #205
   },
 });
