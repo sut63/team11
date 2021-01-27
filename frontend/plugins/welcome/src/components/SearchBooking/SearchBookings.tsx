@@ -128,7 +128,7 @@ export default function Search() {
       setBookings(res);
     };
     getBookings();
-
+    console.log("bookings")
 
 
   }, [loading]);
@@ -171,11 +171,10 @@ export default function Search() {
     }
   }
   const [rows, setRows] = useState([]);
-  const r: any = []
+  var r: any = []
 
   const SearchBooking = async () => {
 
-    setRows([])
     const BI = Number(bookingField.searchID)
     const BU = bookingField.searchUserName
     const BC= bookingField.searchClient
@@ -269,7 +268,9 @@ export default function Search() {
     if (BI==0 && BU==""&&BC==""&&BP=="") {
       setRows([])
       setLoad(false)
+      console.log("IF")
     }else{
+      console.log("ELSE")
       if(F=="||"){
         bookings.filter((filter: any) => 
         compareSym(OI,filter.id,BI) || 
@@ -283,9 +284,13 @@ export default function Search() {
             phoneNumber: row.pHONENUMBER,
             userNumber: row.uSERNUMBER,
             borrowItem: row.bORROWITEM,
+            bookingDate: row.bOOKINGDATE,
+            timeOut: row.tIMELEFT,
             servicePoint: row.edges.getservice.cOUNTERNUMBER
           })
         ))
+        console.log("OR")
+        console.log(r)
         setRows(r)
       }
       else{
@@ -301,15 +306,18 @@ export default function Search() {
             phoneNumber: row.pHONENUMBER,
             userNumber: row.uSERNUMBER,
             borrowItem: row.bORROWITEM,
+            bookingDate: row.bOOKINGDATE,
+            timeOut: row.tIMELEFT,
             servicePoint: row.edges.getservice.cOUNTERNUMBER
           })
         ))
+        console.log("AND")
+        console.log(r)
         setRows(r)
       }
 
     }
-    console.log(rows)
-    if(rows.length==0){
+    if(r.length==0){
       setStatus(true);
       setAlert(false);
     }
@@ -332,12 +340,14 @@ export default function Search() {
   }
 
   const columns: ColDef[] = [
-    { field: 'id', type: 'number', headerName: 'ID', width: 70 },
+  { field: 'id', type: 'number', headerName: 'ID', width: 90 },
     { field: 'userName', headerName: 'ชื่อผู้จอง ', width: 200 },
     { field: 'client', headerName: 'ชื่อเครื่องรับชม', width: 180 },
     { field: 'phoneNumber', headerName: 'หมายเลขโทรศัพท์ผู้จอง', width: 200 },
     { field: 'userNumber', type: 'number', headerName: 'จำนวนผู้ใช้งาน', width: 145 },
     { field: 'borrowItem', type: 'number', headerName: 'จำนวนอุปกรณ์ที่ยืม', width: 170 },
+    { field: 'bookingDate', headerName: 'วันเวลาที่จอง', width: 210 },
+    { field: 'timeOut',headerName: 'วันที่หมดเวลา', width: 210 },
     { field: 'servicePoint', headerName: 'ติดต่อรับเครื่องได้ที่', width: 170 },
   ];
 
@@ -371,9 +381,11 @@ export default function Search() {
 
             <InfoCard title="กรอกข้อมูลสำหรับค้นหาการจองเครื่องรับชม VideoOnDemand 🔎">
               <Typography variant="body1" gutterBottom>
-                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;🖱 Log off ออกจากเครื่องรับชมเมื่อเลิกใช้งาน และส่งคืนหูฟังที่เคาน์เตอร์
-                (After using the video on demand machines, please log off. Then kindly return the headphone to the staff at the Information Counter.)<br />
-                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;👨‍💻 ผู้ใช้บริการต้องรับผิดชอบต่ออุปกรณ์ที่ชำรุดเสียหาย (Library users are liable to any damage incurred or lost.)
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;🖱 การค้นหา ผู้ใช้สามารถค้นหาข้อมููลได้๖ามช่องที่ใส่ข้อมูลด้านล่างนี้ โดยเมื่อใส่ข้อมูลไปแล้ว ผุ้ใช้สามารถเลือก Operator สำหรับค้นหาได้สองแบบหลักๆ ดังนี้ <br />
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1) แบบตัวเลขจะสามารถเลือก Operator ได้คือ "=" &nbsp;&nbsp; "!=" &nbsp;&nbsp;"{`>`}"&nbsp;&nbsp; "{`>`}="&nbsp;&nbsp; "{`<`}" &nbsp;&nbsp;"{`<`}="<br />
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2) แบบคำจะสามารถเลือก Operator ได้คือ "contains"=มีคำนี้อยู่ข้างใน, "equals"=เท่ากับคำนี้, <br/> 
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; "start with"=ขึ้นต้นด้วยคำนี้, "end with"=ลงท้ายด้วยคำนี้ <br />
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;และคำค้นหาทั้งหมดสามารถนำมาเชื่อมกันได้ด้วย LinkFilter ทั้งแบบ "And" และ "Or"
               </Typography>
               <br />
               <Grid container alignItems="center" justify="center" spacing={3} >

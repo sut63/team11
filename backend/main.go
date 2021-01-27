@@ -64,7 +64,7 @@ type Bookborrow struct {
 	UserID         int
 	BookID         int
 	ServicePointID int
-	Status 			int
+	Status         int
 }
 
 // Roominfos for struct
@@ -200,7 +200,7 @@ func main() {
 			Save(context.Background())
 	}
 
-	Status := []string{"Available", "In Use", "No Service", "Borrowed","Returned"}
+	Status := []string{"Available", "In Use", "No Service", "Borrowed", "Returned"}
 	for _, st := range Status {
 		client.Status.
 			Create().
@@ -209,16 +209,16 @@ func main() {
 	}
 
 	ClientEntity := []ClientEntity{
-		{"Video 0n Demand - 01", 1},
-		{"Video 0n Demand - 02", 1},
-		{"Video 0n Demand - 02", 1},
-		{"Video 0n Demand - 03", 1},
-		{"Video 0n Demand - 04", 1},
-		{"Video 0n Demand - 05", 1},
-		{"Video 0n Demand - 06", 1},
-		{"Video 0n Demand - 07", 1},
-		{"Video 0n Demand - 08", 1},
-		{"Video 0n Demand - 09", 1}}
+		{"Video On Demand - 01", 1},
+		{"Video On Demand - 02", 1},
+		{"Video On Demand - 02", 1},
+		{"Video On Demand - 03", 1},
+		{"Video On Demand - 04", 1},
+		{"Video On Demand - 05", 1},
+		{"Video On Demand - 06", 1},
+		{"Video On Demand - 07", 1},
+		{"Video On Demand - 08", 1},
+		{"Video On Demand - 09", 1}}
 	for _, cl := range ClientEntity {
 
 		s, err := client.Status.
@@ -320,7 +320,7 @@ func main() {
 			SetRoomStatus(r.RoomStatus).
 			Save(context.Background())
 	}
-	
+
 	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 	router.Run()
 }

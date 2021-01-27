@@ -211,9 +211,15 @@ export default function Create() {
   const [userID, setUserID] = useState(Number);
 
   const CreateBooking = async () => {
-    console.log(bookingField)
+
+    
     const resC = await api.listCliententity();
     setClients(resC);
+    console.log(resC)
+    console.log("this is res")
+    // clients.filter((filter: any) => filter.edges.state.sTATUSNAME == "Available").map((item: EntClientEntity) => (
+    //   console.log
+    // ))
     const booking = {
       servicePoint: servicepointID,
       client: clientID,
@@ -236,7 +242,6 @@ export default function Create() {
     fetch(apiUrl, requestOptions)
       .then(response => response.json())
       .then(data => {
-        console.log(data);
         if (data.status === true) {
           setStatus(true);
           api.updateCliententity({ id: clientID, cliententity: cliententity });
@@ -395,7 +400,7 @@ export default function Create() {
                           <br />
                         </Alert>
                       ) : (
-                          <Alert severity="error" style={{ width: 400 }} onClose={() => { setStatus(false); window.location.reload(false); }}>
+                          <Alert severity="error" style={{ width: 400 }} onClose={() => { setStatus(false) ; window.location.reload(false);}}>
                             <AlertTitle>Error</AlertTitle >
                             <div>
                               {alertMessage} — <strong>❌</strong>
