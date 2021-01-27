@@ -84,11 +84,11 @@ export function EntBookEdgesFromJSONTyped(json: any, ignoreDiscriminator: boolea
     }
     return {
         
-        'author': !exists(json, 'author') ? undefined : EntAuthorFromJSON(json['author']),
-        'booklist': !exists(json, 'booklist') ? undefined : ((json['booklist'] as Array<any>).map(EntBookborrowFromJSON)),
-        'category': !exists(json, 'category') ? undefined : EntCategoryFromJSON(json['category']),
-        'status': !exists(json, 'status') ? undefined : EntStatusFromJSON(json['status']),
-        'user': !exists(json, 'user') ? undefined : EntUserFromJSON(json['user']),
+        'author': !exists(json, 'Author') ? undefined : EntAuthorFromJSON(json['Author']),
+        'booklist': !exists(json, 'Booklist') ? undefined : ((json['Booklist'] as Array<any>).map(EntBookborrowFromJSON)),
+        'category': !exists(json, 'Category') ? undefined : EntCategoryFromJSON(json['Category']),
+        'status': !exists(json, 'Status') ? undefined : EntStatusFromJSON(json['Status']),
+        'user': !exists(json, 'User') ? undefined : EntUserFromJSON(json['User']),
     };
 }
 

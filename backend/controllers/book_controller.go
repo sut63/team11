@@ -139,6 +139,11 @@ func (ctl *BookController) GetBook(c *gin.Context) {
 
 	u, err := ctl.client.Book.
 		Query().
+		WithAuthor().
+		WithBooklist().
+		WithCategory().
+		WithStatus().
+		WithUser().
 		Where(book.IDEQ(int(id))).
 		Only(context.Background())
 	if err != nil {
@@ -183,6 +188,11 @@ func (ctl *BookController) ListBook(c *gin.Context) {
 
 	books, err := ctl.client.Book.
 		Query().
+		WithAuthor().
+		WithBooklist().
+		WithCategory().
+		WithStatus().
+		WithUser().
 		Where(book.HasStatusWith(status.STATUSNAMEEQ("Available"))).
 		Limit(limit).
 		Offset(offset).

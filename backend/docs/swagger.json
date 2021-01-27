@@ -1046,6 +1046,52 @@
             }
         },
         "/bookreturns/{id}": {
+            "get": {
+                "description": "get bookreturn by ID",
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "Get a bookreturn entity by ID",
+                "operationId": "get-bookreturn",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Bookreturn ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/ent.Bookreturn"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/gin.H"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/gin.H"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/gin.H"
+                        }
+                    }
+                }
+            },
             "delete": {
                 "description": "get bookreturn by ID",
                 "produces": [

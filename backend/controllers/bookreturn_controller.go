@@ -12,6 +12,7 @@ import (
 	"github.com/team11/app/ent/bookborrow"
 	"github.com/team11/app/ent/location"
 	"github.com/team11/app/ent/user"
+	"github.com/team11/app/ent/bookreturn"
 )
 
 // BookreturnController defines the struct for the bookreturn controller
@@ -200,6 +201,45 @@ func (ctl *BookreturnController) ListBookreturn(c *gin.Context) {
 	c.JSON(200, bookreturns)
 }
 
+// GetBookreturn handles GET requests to retrieve a bookreturn entity
+// @Summary Get a bookreturn entity by ID
+// @Description get bookreturn by ID
+// @ID get-bookreturn
+// @Produce  json
+// @Param id path int true "Bookreturn ID"
+// @Success 200 {array} ent.Bookreturn
+// @Failure 400 {object} gin.H
+// @Failure 404 {object} gin.H
+// @Failure 500 {object} gin.H
+// @Router /bookreturns/{id} [get]
+func (ctl *BookreturnController) GetBookreturn(c *gin.Context) {
+	id, err := strconv.ParseInt(c.Param("id"), 10, 64)
+	if err != nil {
+		c.JSON(400, gin.H{
+			"error": err.Error(),
+		})
+		return
+	}
+
+	br, err := ctl.client.Bookreturn.
+		Query().
+		WithUser().
+		WithMustreturn().
+		WithLocation().
+		Where(bookreturn.HasUserWith(user.IDEQ(int(id)))).
+		All(context.Background())
+
+	if err != nil {
+		c.JSON(404, gin.H{
+			"error": err.Error(),
+		})
+		return
+	}
+
+	c.JSON(200, br)
+
+}
+
 // DeleteBookreturn handles DELETE requests to delete a bookreturn entity
 // @Summary Delete a bookreturn entity by ID
 // @Description get bookreturn by ID
@@ -247,6 +287,7 @@ func NewBookreturnController(router gin.IRouter, client *ent.Client) *Bookreturn
 func (ctl *BookreturnController) register() {
 	bookreturns := ctl.router.Group("/bookreturns")
 
+	bookreturns.GET(":id", ctl.GetBookreturn)
 	bookreturns.GET("", ctl.ListBookreturn)
 	bookreturns.POST("", ctl.CreateBookreturn)
 	bookreturns.DELETE(":id", ctl.DeleteBookreturn)

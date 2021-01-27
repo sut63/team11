@@ -8,6 +8,7 @@ import Research from './components/Research'
 import Book from './components/Book'
 import Library from './components/Library'
 import SearchBooking from './components/SearchBooking'
+import SearchBookreturn from './components/SearchBookreturn'
 
 export const plugin = createPlugin({
   id: 'welcome',
@@ -21,5 +22,6 @@ export const plugin = createPlugin({
     router.registerRoute('/Room', Room);
     router.registerRoute('/Book', Book);
     router.registerRoute('/SearchBooking', SearchBooking);
+    router.registerRoute('/SearchBookreturn', SearchBookreturn);
   },
 });

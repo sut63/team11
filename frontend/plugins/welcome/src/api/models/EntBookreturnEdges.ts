@@ -64,9 +64,9 @@ export function EntBookreturnEdgesFromJSONTyped(json: any, ignoreDiscriminator: 
     }
     return {
         
-        'location': !exists(json, 'location') ? undefined : EntLocationFromJSON(json['location']),
-        'mustreturn': !exists(json, 'mustreturn') ? undefined : EntBookborrowFromJSON(json['mustreturn']),
-        'user': !exists(json, 'user') ? undefined : EntUserFromJSON(json['user']),
+        'location': !exists(json, 'Location') ? undefined : EntLocationFromJSON(json['Location']),
+        'mustreturn': !exists(json, 'Mustreturn') ? undefined : EntBookborrowFromJSON(json['Mustreturn']),
+        'user': !exists(json, 'User') ? undefined : EntUserFromJSON(json['User']),
     };
 }
 
