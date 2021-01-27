@@ -270,15 +270,15 @@ const WelcomePage = () => {
             <Grid>
             <InfoCard title="เมนูสำหรับการค้นหา 🔎">
                   <Button
-                    disabled ={LibrarianBtn}
+                    disabled ={MemberBtn}
                     variant="contained"
-                    color="secondary"
+                    color="primary"
                     className={classes.button}
                     startIcon={<Research />}
                     component={RouterLink}
-                    to="/Research"
+                    to="/SearchResearch"
                   >
-                    เพิ่มงานวิจัย
+                    ค้นหางานวิจัย
                   </Button>
                   <br />
                   <Button
