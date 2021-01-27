@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+	<meta content="text/html; charset=UTF-8" http-equiv="content-type" />
+	<title>SearchBookreturn Test Suite</title>
+</head>
+<body>
+<table cellpadding="1" cellspacing="1" border="1">
+<thead>
+<tr><td rowspan="1" colspan="3">Success Search Test Case</td></tr>
+</thead>
+<tbody>
+<tr><td>open</td><td>http://localhost:3000/SignIn<datalist><option>http://localhost:3000/SignIn</option></datalist></td><td></td>
+</tr>
+<tr><td>click</td><td>id=email<datalist><option>id=email</option><option>name=email</option><option>//input[@id='email']</option><option>//div[@id='root']/div/main/div/form/div/div/input</option><option>//input</option><option>css=#email</option></datalist></td><td></td>
+</tr>
+<tr><td>type</td><td>id=email<datalist><option>id=email</option><option>name=email</option><option>//input[@id='email']</option><option>//div[@id='root']/div/main/div/form/div/div/input</option><option>//input</option><option>css=#email</option></datalist></td><td>B6111427@gmail.com</td>
+</tr>
+<tr><td>click</td><td>id=password<datalist><option>id=password</option><option>name=password</option><option>//input[@id='password']</option><option>//div[@id='root']/div/main/div/form/div[2]/div/input</option><option>//div[2]/div/input</option><option>css=#password</option></datalist></td><td></td>
+</tr>
+<tr><td>type</td><td>id=password<datalist><option>id=password</option><option>name=password</option><option>//input[@id='password']</option><option>//div[@id='root']/div/main/div/form/div[2]/div/input</option><option>//div[2]/div/input</option><option>css=#password</option></datalist></td><td>B6111427</td>
+</tr>
+<tr><td>click</td><td>xpath=(//input[@name='quiz'])[2]<datalist><option>xpath=(//input[@name='quiz'])[2]</option><option>//div[@id='root']/div/main/div/form/div[3]/div/label[2]/span/span/input</option><option>//label[2]/span/span/input</option></datalist></td><td></td>
+</tr>
+<tr><td>click</td><td>//div[@id='root']/div/main/div/form/a/span<datalist><option>//div[@id='root']/div/main/div/form/a/span</option><option>//form/a/span</option><option>css=span.MuiButton-label</option></datalist></td><td></td>
+</tr>
+<tr><td>click</td><td>//div[@id='root']/div/div[2]/article/div[2]/div[3]/div[2]/div/div[2]/a[6]/span<datalist><option>//div[@id='root']/div/div[2]/article/div[2]/div[3]/div[2]/div/div[2]/a[6]/span</option><option>//div[2]/div/div[2]/a[6]/span</option></datalist></td><td></td>
+</tr>
+<tr><td>click</td><td>id=mui-component-select-User<datalist><option>id=mui-component-select-User</option><option>//div[@id='mui-component-select-User']</option><option>//div[@id='root']/div/div[2]/article/div/div[2]/div/div/div</option><option>//div/div[2]/div/div/div</option><option>css=#mui-component-select-User</option></datalist></td><td></td>
+</tr>
+<tr><td>click</td><td>//div[@id='menu-User']/div[3]/ul/li<datalist><option>//div[@id='menu-User']/div[3]/ul/li</option><option>//li</option><option>css=li.MuiButtonBase-root.MuiListItem-root.MuiMenuItem-root.MuiMenuItem-gutters.MuiListItem-gutters.MuiListItem-button</option></datalist></td><td></td>
+</tr>
+<tr><td>click</td><td>//div[@id='root']/div/div[2]/article/div/div[3]/button/span<datalist><option>//div[@id='root']/div/div[2]/article/div/div[3]/button/span</option><option>//button/span</option><option>css=span.MuiButton-label</option></datalist></td><td></td>
+</tr>
+<tr><td>assertText</td><td>//div[@id='root']/div/div[2]/article/div[4]/div/div[2]<datalist><option>//div[@id='root']/div/div[2]/article/div[4]/div/div[2]</option><option>//div[4]/div/div[2]</option><option>css=div.MuiAlert-message</option></datalist></td><td>ค้นหาสำเร็จ</td>
+</tr>
+</tbody></table>
+<table cellpadding="1" cellspacing="1" border="1">
+<thead>
+<tr><td rowspan="1" colspan="3">Failure Search Test Case</td></tr>
+</thead>
+<tbody>
+<tr><td>open</td><td>http://localhost:3000/SignIn<datalist><option>http://localhost:3000/SignIn</option></datalist></td><td></td>
+</tr>
+<tr><td>click</td><td>id=email<datalist><option>id=email</option><option>name=email</option><option>//input[@id='email']</option><option>//div[@id='root']/div/main/div/form/div/div/input</option><option>//input</option><option>css=#email</option></datalist></td><td></td>
+</tr>
+<tr><td>type</td><td>id=email<datalist><option>id=email</option><option>name=email</option><option>//input[@id='email']</option><option>//div[@id='root']/div/main/div/form/div/div/input</option><option>//input</option><option>css=#email</option></datalist></td><td>B6111427@gmail.com</td>
+</tr>
+<tr><td>click</td><td>id=password<datalist><option>id=password</option><option>name=password</option><option>//input[@id='password']</option><option>//div[@id='root']/div/main/div/form/div[2]/div/input</option><option>//div[2]/div/input</option><option>css=#password</option></datalist></td><td></td>
+</tr>
+<tr><td>type</td><td>id=password<datalist><option>id=password</option><option>name=password</option><option>//input[@id='password']</option><option>//div[@id='root']/div/main/div/form/div[2]/div/input</option><option>//div[2]/div/input</option><option>css=#password</option></datalist></td><td>B6111427</td>
+</tr>
+<tr><td>click</td><td>xpath=(//input[@name='quiz'])[2]<datalist><option>xpath=(//input[@name='quiz'])[2]</option><option>//div[@id='root']/div/main/div/form/div[3]/div/label[2]/span/span/input</option><option>//label[2]/span/span/input</option></datalist></td><td></td>
+</tr>
+<tr><td>click</td><td>//div[@id='root']/div/main/div/form/a/span<datalist><option>//div[@id='root']/div/main/div/form/a/span</option><option>//form/a/span</option><option>css=span.MuiButton-label</option></datalist></td><td></td>
+</tr>
+<tr><td>click</td><td>//div[@id='root']/div/div[2]/article/div[2]/div[3]/div[2]/div/div[2]/a[6]/span<datalist><option>//div[@id='root']/div/div[2]/article/div[2]/div[3]/div[2]/div/div[2]/a[6]/span</option><option>//div[2]/div/div[2]/a[6]/span</option></datalist></td><td></td>
+</tr>
+<tr><td>click</td><td>id=mui-component-select-User<datalist><option>//body</option><option>css=body</option><option>id=mui-component-select-User</option></datalist></td><td></td>
+</tr>
+<tr><td>click</td><td>//div[@id='menu-User']/div[3]/ul/li[3]<datalist><option>//div[@id='menu-User']/div[3]/ul/li[3]</option><option>//li[3]</option></datalist></td><td></td>
+</tr>
+<tr><td>click</td><td>//div[@id='root']/div/div[2]/article/div/div[3]/button/span<datalist><option>//div[@id='root']/div/div[2]/article/div/div[3]/button/span</option><option>//button/span</option><option>css=span.MuiButton-label</option></datalist></td><td></td>
+</tr>
+<tr><td>assertText</td><td>//div[@id='root']/div/div[2]/article/div[4]/div/div[2]<datalist><option>//div[@id='root']/div/div[2]/article/div[4]/div/div[2]</option><option>//div[4]/div/div[2]</option><option>css=div.MuiAlert-message</option></datalist></td><td>ไม่มีรายการคืนหนังสือ</td>
+</tr>
+</tbody></table>
+</body>
+</html>
