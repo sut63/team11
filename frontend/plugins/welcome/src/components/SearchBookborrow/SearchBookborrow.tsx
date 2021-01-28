@@ -122,13 +122,11 @@ const SearchBookborrows: FC<{}> = () => {
             <div>
               {alert ? (
                 <Alert severity="success" style={{ width: 400 }} onClose={() => { setStatus(false)}}>
-                 <AlertTitle>Success</AlertTitle>
                  <div> ค้นหาข้อมูลพบ</div>
                 </Alert>
                 
           ) : (
                 <Alert severity="error" style={{ width: 400 }} onClose={() => { setStatus(false)}}>
-                <AlertTitle>Error</AlertTitle >
                 <div>
                   ไม่พบข้อมูลที่ค้นหา
                 </div>
@@ -141,9 +139,9 @@ const SearchBookborrows: FC<{}> = () => {
         <Grid item xs={2}></Grid>
         <Grid item xs={2}>
           <Select
-            labelId="Equipment_id-label"
-            label="Equipment"
-            id="Equipment_id"
+            labelId="user_id-label"
+            label="User"
+            id="UserID"
             onChange={UserID_handleChange}
             style={{ width: 300 }}
             value={userid}
