@@ -28,6 +28,7 @@ type Preemption struct {
 	Otherpeopleid		string
 	Otherpeoplephone	string
 	Phoneuser			string
+	Username	string
 }
 
 // CreatePreemption handles POST requests for adding preemption entities
@@ -125,6 +126,7 @@ func (ctl *PreemptionController) CreatePreemption(c *gin.Context) {
 // @Failure 500 {object} gin.H
 // @Router /preemptions [get]
 func (ctl *PreemptionController) ListPreemption(c *gin.Context) {
+	
 	limitQuery := c.Query("limit")
 	limit := 10
 	if limitQuery != "" {
@@ -145,11 +147,12 @@ func (ctl *PreemptionController) ListPreemption(c *gin.Context) {
 
 	preemptions, err := ctl.client.Preemption.
 		Query().
+		Where(preemption.HasUserIDWith(user.ID(offset))).
 		WithUserID().
 		WithRoomID().
 		WithPurposeID().
 		Limit(limit).
-		Offset(offset).
+		Offset(0).
 		All(context.Background())
 		
 	if err != nil {

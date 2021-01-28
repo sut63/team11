@@ -20,20 +20,11 @@ import { DefaultApi } from '../../api/apis';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
-import FormHelperText from '@material-ui/core/FormHelperText';
 import IconButton from '@material-ui/core/IconButton';
 import Select from '@material-ui/core/Select';
-
-import Grid from '@material-ui/core/Grid';
 import Swal from 'sweetalert2';
-import {
-  MuiPickersUtilsProvider,
-  KeyboardTimePicker,
-  KeyboardDatePicker,
-} from '@material-ui/pickers';
-
 import { EntRoominfo } from '../../api/models/EntRoominfo'; // import interface Roominfo
-import { EntUser } from '../../api/models/EntUser'; // import interface User
+
 import { EntPreemption } from '../../api/models/EntPreemption'; // import interface Preemption
 import { EntPurpose } from '../../api/models/EntPurpose'; // import interface Purpose
 import ComponanceTable from '../RoomTable';
@@ -94,24 +85,20 @@ const Toast = Swal.mixin({
  
 export default function Create() {
   const name = JSON.parse(String(localStorage.getItem("userName")));
+  const userID = JSON.parse(String(localStorage.getItem("userID")));
   const userName ="ยินดีต้อนรับ "+name
   const classes = useStyles();
   const [status, setStatus] = useState(false);
   const [alert, setAlert] = useState(true);
   const api = new DefaultApi();
   const [roominfos, setRoominfos] = React.useState<EntRoominfo[]>([]);
-  const [preemptions, setPreemptions] = React.useState<EntPreemption[]>([]);
   const [purposes, setPurposes] = React.useState<EntPurpose[]>([]);
-  
   const [loading, setLoading] = useState(true);
-  
-  const [userid, setuser] = useState(Number);
   const [roomid, setroom] = useState(Number);
   const [purposeid, setpurpose] = useState(Number);
   const [otherid, setotherid] = useState(String);
   const [phoneuser, setphoneuser] = useState(String);
   const [otherphone, setotherphone] = useState(String);
-  const [preempttime, setpreempttime] = useState(String);
   useEffect(() => {
     
     
@@ -133,11 +120,7 @@ export default function Create() {
 
 }, [loading]);
 
-const getPreemptions = async () => {
-  const res = await api.listPreemption({ limit: 10, offset: 0 });
-  setPreemptions(res);
-  
-};
+
 
 const RoomhandleChange = (event: React.ChangeEvent<{ value: unknown }>) => {
   setroom(event.target.value as number);
@@ -147,9 +130,7 @@ const PurposehandleChange = (event: React.ChangeEvent<{ value: unknown }>) => {
   setpurpose(event.target.value as number);
 };
 
-const TimehandleChange = (event: React.ChangeEvent<{ value: unknown }>) => {
-  setpreempttime(event.target.value as string);
-};
+
 
 const PhoneuserhandleChange = (event: React.ChangeEvent<{ value: unknown }>) => {
   setphoneuser(event.target.value as string);
@@ -231,21 +212,16 @@ const updateroom = async () => {
 
  const Createpreempt = async () => {
   const preemption = {
-    user: 1,
+    user: userID,
     roominfo: roomid,
     purpose: purposeid,
     otherpeopleid: otherid,
     otherpeoplephone: otherphone,
     phoneuser: phoneuser,
-    //added: preempttime + ":00+07:00"
-  
-  };
-  const roon = {
-    
-    roomStatus: "ไม่ว่าง",
     
   
   };
+  
   
   const apiUrl = 'http://localhost:8080/api/v1/preemptions'; 
   const requestOptions = { 
@@ -305,7 +281,7 @@ const resetLocalStorage = async () => {
 
        
       <div className={classes.margin}>
-      <Link component={RouterLink} to="/user">
+      <Link component={RouterLink} to="/Searchroom">
       <IconButton>
                 
                 
@@ -423,20 +399,7 @@ const resetLocalStorage = async () => {
       </FormControl>
 
 
-    {status ? (
-           <div>
-             {alert ? (
-               <Alert severity="success" style={{ marginTop: 20 }}>
-                 จองสำเร็จ
-                 
-               </Alert>
-             ) : (
-               <Alert severity="warning" style={{ marginTop: 20 }}>
-                 Aww จองบ่ได๋
-               </Alert>
-             )}
-           </div>
-         ) : null}      
+        
     <div className={classes.margin}>
              
              </div>

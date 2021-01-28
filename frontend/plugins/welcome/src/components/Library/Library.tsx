@@ -308,13 +308,13 @@ const WelcomePage = () => {
                   <Button
                     disabled ={MemberBtn}
                     variant="contained"
-                    color="secondary"
+                    color="primary"
                     className={classes.button}
                     startIcon={<Room />}
                     component={RouterLink}
-                    to="/Room"
+                    to="/SearchRoom"
                   >
-                    จองห้องติว
+                    ค้นหาใบจอง
                   </Button>
                   <br />
 
