@@ -282,15 +282,15 @@ const WelcomePage = () => {
                   </Button>
                   <br />
                   <Button
-                    disabled ={LibrarianBtn}
+                    disabled ={MemberBtn}
                     variant="contained"
-                    color="secondary"
+                    color="primary"
                     className={classes.button}
                     startIcon={<Book />}
                     component={RouterLink}
-                    to="/Book"
+                    to="/SearchBook"
                   >
-                    เพิ่มหนังสือ
+                    ค้นหาข้อมูลหนังสือ
                   </Button>
                   <br/>
                   <Button
