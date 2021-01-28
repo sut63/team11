@@ -10,6 +10,7 @@ import Library from './components/Library'
 import SearchBooking from './components/SearchBooking'
 import SearchBookreturn from './components/SearchBookreturn'
 import SearchResearch from './components/SearchResearch'
+import SearchBook from './components/SearchBook'
 
 export const plugin = createPlugin({
   id: 'welcome',
@@ -25,5 +26,6 @@ export const plugin = createPlugin({
     router.registerRoute('/SearchBooking', SearchBooking);
     router.registerRoute('/SearchBookreturn', SearchBookreturn);
     router.registerRoute('/SearchResearch', SearchResearch);
+    router.registerRoute('/SearchBook', SearchBook);
   },
 });
