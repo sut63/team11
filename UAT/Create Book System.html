@@ -3,19 +3,59 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
 	<meta content="text/html; charset=UTF-8" http-equiv="content-type" />
-	<title>Create Book System</title>
+	<title>Sprint1Lab9</title>
 </head>
 <body>
 <table cellpadding="1" cellspacing="1" border="1">
 <thead>
-<tr><td rowspan="1" colspan="3">ข้อมูลครบ บันทึกได้</td></tr>
+<tr><td rowspan="1" colspan="3">ข้อมูลครบบันทึกได้</td></tr>
 </thead>
 <tbody>
 <tr><td>open</td><td>http://localhost:3000/Book<datalist><option>http://localhost:3000/Book</option></datalist></td><td></td>
 </tr>
-<tr><td>click</td><td>id=BookName<datalist><option>id=BookName</option><option>//input[@id='BookName']</option><option>//div[@id='root']/div/div[2]/article/div[2]/form/div[2]/div/input</option><option>//input</option><option>css=#BookName</option></datalist></td><td></td>
+<tr><td>click</td><td>id=book_name<datalist><option>id=book_name</option><option>//input[@id='book_name']</option><option>//div[@id='root']/div/div[2]/article/div[2]/form/div[2]/div/input</option><option>//input</option><option>css=#book_name</option></datalist></td><td></td>
 </tr>
-<tr><td>type</td><td>id=BookName<datalist><option>id=BookName</option><option>//input[@id='BookName']</option><option>//div[@id='root']/div/div[2]/article/div[2]/form/div[2]/div/input</option><option>//input</option><option>css=#BookName</option></datalist></td><td>rogy4589</td>
+<tr><td>type</td><td>id=book_name<datalist><option>id=book_name</option><option>//input[@id='book_name']</option><option>//div[@id='root']/div/div[2]/article/div[2]/form/div[2]/div/input</option><option>//input</option><option>css=#book_name</option></datalist></td><td>mmllflofwoi</td>
+</tr>
+<tr><td>click</td><td>id=book_page<datalist><option>id=book_page</option><option>//input[@id='book_page']</option><option>//div[@id='root']/div/div[2]/article/div[2]/form/div[4]/div/input</option><option>//div[4]/div/input</option><option>css=#book_page</option></datalist></td><td></td>
+</tr>
+<tr><td>type</td><td>id=book_page<datalist><option>id=book_page</option><option>//input[@id='book_page']</option><option>//div[@id='root']/div/div[2]/article/div[2]/form/div[4]/div/input</option><option>//div[4]/div/input</option><option>css=#book_page</option></datalist></td><td>89</td>
+</tr>
+<tr><td>click</td><td>id=bar_code<datalist><option>id=bar_code</option><option>//input[@id='bar_code']</option><option>//div[@id='root']/div/div[2]/article/div[2]/form/div[6]/div/input</option><option>//div[6]/div/input</option><option>css=#bar_code</option></datalist></td><td></td>
+</tr>
+<tr><td>type</td><td>id=bar_code<datalist><option>id=bar_code</option><option>//input[@id='bar_code']</option><option>//div[@id='root']/div/div[2]/article/div[2]/form/div[6]/div/input</option><option>//div[6]/div/input</option><option>css=#bar_code</option></datalist></td><td>9876543210</td>
+</tr>
+<tr><td>click</td><td>id=author<datalist><option>//body</option><option>css=body</option><option>id=author</option></datalist></td><td></td>
+</tr>
+<tr><td>click</td><td>//div[@id='menu-']/div[3]/ul/li<datalist><option>//div[@id='menu-']/div[3]/ul/li</option><option>//li</option><option>css=li.MuiButtonBase-root.MuiListItem-root.MuiMenuItem-root.MuiMenuItem-gutters.MuiListItem-gutters.MuiListItem-button.Mui-focusVisible.Mui-focusVisible</option></datalist></td><td></td>
+</tr>
+<tr><td>click</td><td>id=category<datalist><option>//body</option><option>css=body</option><option>id=category</option></datalist></td><td></td>
+</tr>
+<tr><td>click</td><td>//div[@id='menu-']/div[3]/ul/li[4]<datalist><option>//div[@id='menu-']/div[3]/ul/li[4]</option><option>//li[4]</option></datalist></td><td></td>
+</tr>
+<tr><td>click</td><td>//div[@id='root']/div/div[2]/article/div[2]/form/div[9]/button/span<datalist><option>//div[@id='root']/div/div[2]/article/div[2]/form/div[9]/button/span</option><option>//div[9]/button/span</option><option>css=button.MuiButtonBase-root.MuiButton-root.MuiButton-contained.MuiButton-containedPrimary &gt; span.MuiButton-label</option></datalist></td><td></td>
+</tr>
+<tr><td>assertText</td><td>//div[@id='root']/div/div[2]/article/div/div[2]/div/div/div[2]<datalist><option>//div[@id='root']/div/div[2]/article/div/div[2]/div/div/div[2]</option><option>//div[2]/div/div/div[2]</option><option>css=div.MuiAlert-message</option></datalist></td><td>เพิ่มบันทึกเรียบร้อย!</td>
+</tr>
+</tbody></table>
+<table cellpadding="1" cellspacing="1" border="1">
+<thead>
+<tr><td rowspan="1" colspan="3">Barcode ผิดบันทึกไม่ได้</td></tr>
+</thead>
+<tbody>
+<tr><td>open</td><td>http://localhost:3000/Book<datalist><option>http://localhost:3000/Book</option></datalist></td><td></td>
+</tr>
+<tr><td>click</td><td>id=book_name<datalist><option>id=book_name</option><option>//input[@id='book_name']</option><option>//div[@id='root']/div/div[2]/article/div[2]/form/div[2]/div/input</option><option>//input</option><option>css=#book_name</option></datalist></td><td></td>
+</tr>
+<tr><td>type</td><td>id=book_name<datalist><option>id=book_name</option><option>//input[@id='book_name']</option><option>//div[@id='root']/div/div[2]/article/div[2]/form/div[2]/div/input</option><option>//input</option><option>css=#book_name</option></datalist></td><td>utiknobus78</td>
+</tr>
+<tr><td>click</td><td>id=book_page<datalist><option>id=book_page</option><option>//input[@id='book_page']</option><option>//div[@id='root']/div/div[2]/article/div[2]/form/div[4]/div/input</option><option>//div[4]/div/input</option><option>css=#book_page</option></datalist></td><td></td>
+</tr>
+<tr><td>type</td><td>id=book_page<datalist><option>id=book_page</option><option>//input[@id='book_page']</option><option>//div[@id='root']/div/div[2]/article/div[2]/form/div[4]/div/input</option><option>//div[4]/div/input</option><option>css=#book_page</option></datalist></td><td>777</td>
+</tr>
+<tr><td>click</td><td>id=bar_code<datalist><option>id=bar_code</option><option>//input[@id='bar_code']</option><option>//div[@id='root']/div/div[2]/article/div[2]/form/div[6]/div/input</option><option>//div[6]/div/input</option><option>css=#bar_code</option></datalist></td><td></td>
+</tr>
+<tr><td>type</td><td>id=bar_code<datalist><option>id=bar_code</option><option>//input[@id='bar_code']</option><option>//div[@id='root']/div/div[2]/article/div[2]/form/div[6]/div/input</option><option>//div[6]/div/input</option><option>css=#bar_code</option></datalist></td><td>123</td>
 </tr>
 <tr><td>click</td><td>id=author<datalist><option>//body</option><option>css=body</option><option>id=author</option></datalist></td><td></td>
 </tr>
@@ -23,27 +63,73 @@
 </tr>
 <tr><td>click</td><td>id=category<datalist><option>//body</option><option>css=body</option><option>id=category</option></datalist></td><td></td>
 </tr>
-<tr><td>click</td><td>//div[@id='menu-']/div[3]/ul/li<datalist><option>//div[@id='menu-']/div[3]/ul/li</option><option>//li</option><option>css=li.MuiButtonBase-root.MuiListItem-root.MuiMenuItem-root.MuiMenuItem-gutters.MuiListItem-gutters.MuiListItem-button</option></datalist></td><td></td>
+<tr><td>click</td><td>//div[@id='menu-']/div[3]/ul/li[10]<datalist><option>//div[@id='menu-']/div[3]/ul/li[10]</option><option>//li[10]</option></datalist></td><td></td>
 </tr>
-<tr><td>click</td><td>//div[@id='root']/div/div[2]/article/div[2]/form/div[5]/button/span<datalist><option>//div[@id='root']/div/div[2]/article/div[2]/form/div[5]/button/span</option><option>//button/span</option><option>css=span.MuiButton-label</option></datalist></td><td></td>
+<tr><td>click</td><td>//div[@id='root']/div/div[2]/article/div[2]/form/div[9]/button/span<datalist><option>//div[@id='root']/div/div[2]/article/div[2]/form/div[9]/button/span</option><option>//div[9]/button/span</option><option>css=button.MuiButtonBase-root.MuiButton-root.MuiButton-contained.MuiButton-containedPrimary &gt; span.MuiButton-label</option></datalist></td><td></td>
 </tr>
-<tr><td>assertText</td><td>//div[@id='root']/div/div[2]/article/div/div[2]/div/div/div[2]<datalist><option>//div[@id='root']/div/div[2]/article/div/div[2]/div/div/div[2]</option><option>//div[2]/div/div/div[2]</option><option>css=div.MuiAlert-message</option></datalist></td><td>เพิ่มบันทึกเรียบร้อย!</td>
+<tr><td>assertText</td><td>//div[@id='root']/div/div[2]/article/div/div[2]/div/div/div[2]<datalist><option>//div[@id='root']/div/div[2]/article/div/div[2]/div/div/div[2]</option><option>//div[2]/div/div/div[2]</option><option>css=div.MuiAlert-message</option></datalist></td><td>error ข้อมูล field Barcode ผิด</td>
 </tr>
 </tbody></table>
 <table cellpadding="1" cellspacing="1" border="1">
 <thead>
-<tr><td rowspan="1" colspan="3">ข้อมูลไม่ครบ บันทึกไม่ได้</td></tr>
+<tr><td rowspan="1" colspan="3">จำนวนหน้าผิดบันทึกไม่ได้</td></tr>
 </thead>
 <tbody>
 <tr><td>open</td><td>http://localhost:3000/Book<datalist><option>http://localhost:3000/Book</option></datalist></td><td></td>
+</tr>
+<tr><td>click</td><td>id=book_name<datalist><option>id=book_name</option><option>//input[@id='book_name']</option><option>//div[@id='root']/div/div[2]/article/div[2]/form/div[2]/div/input</option><option>//input</option><option>css=#book_name</option></datalist></td><td></td>
+</tr>
+<tr><td>type</td><td>id=book_name<datalist><option>id=book_name</option><option>//input[@id='book_name']</option><option>//div[@id='root']/div/div[2]/article/div[2]/form/div[2]/div/input</option><option>//input</option><option>css=#book_name</option></datalist></td><td>ajdhiuhi2225</td>
+</tr>
+<tr><td>click</td><td>id=book_page<datalist><option>id=book_page</option><option>//input[@id='book_page']</option><option>//div[@id='root']/div/div[2]/article/div[2]/form/div[4]/div/input</option><option>//div[4]/div/input</option><option>css=#book_page</option></datalist></td><td></td>
+</tr>
+<tr><td>type</td><td>id=book_page<datalist><option>id=book_page</option><option>//input[@id='book_page']</option><option>//div[@id='root']/div/div[2]/article/div[2]/form/div[4]/div/input</option><option>//div[4]/div/input</option><option>css=#book_page</option></datalist></td><td>0</td>
+</tr>
+<tr><td>click</td><td>id=bar_code<datalist><option>id=bar_code</option><option>//input[@id='bar_code']</option><option>//div[@id='root']/div/div[2]/article/div[2]/form/div[6]/div/input</option><option>//div[6]/div/input</option><option>css=#bar_code</option></datalist></td><td></td>
+</tr>
+<tr><td>type</td><td>id=bar_code<datalist><option>id=bar_code</option><option>//input[@id='bar_code']</option><option>//div[@id='root']/div/div[2]/article/div[2]/form/div[6]/div/input</option><option>//div[6]/div/input</option><option>css=#bar_code</option></datalist></td><td>5648972310</td>
 </tr>
 <tr><td>click</td><td>id=author<datalist><option>//body</option><option>css=body</option><option>id=author</option></datalist></td><td></td>
 </tr>
 <tr><td>click</td><td>//div[@id='menu-']/div[3]/ul/li<datalist><option>//div[@id='menu-']/div[3]/ul/li</option><option>//li</option><option>css=li.MuiButtonBase-root.MuiListItem-root.MuiMenuItem-root.MuiMenuItem-gutters.MuiListItem-gutters.MuiListItem-button.Mui-focusVisible.Mui-focusVisible</option></datalist></td><td></td>
 </tr>
-<tr><td>click</td><td>//div[@id='root']/div/div[2]/article/div[2]/form/div[5]/button/span<datalist><option>//div[@id='root']/div/div[2]/article/div[2]/form/div[5]/button/span</option><option>//button/span</option><option>css=span.MuiButton-label</option></datalist></td><td></td>
+<tr><td>click</td><td>id=category<datalist><option>//body</option><option>css=body</option><option>id=category</option></datalist></td><td></td>
 </tr>
-<tr><td>assertText</td><td>//div[@id='root']/div/div[2]/article/div/div[2]/div/div/div[2]<datalist><option>//div[@id='root']/div/div[2]/article/div/div[2]/div/div/div[2]</option><option>//div[2]/div/div/div[2]</option><option>css=div.MuiAlert-message</option></datalist></td><td>บันทึกไม่สำเร็จกรอกข้อมูลให้ครบ</td>
+<tr><td>click</td><td>//div[@id='menu-']/div[3]/ul/li[2]<datalist><option>//div[@id='menu-']/div[3]/ul/li[2]</option><option>//li[2]</option></datalist></td><td></td>
+</tr>
+<tr><td>click</td><td>//div[@id='root']/div/div[2]/article/div[2]/form/div[9]/button/span<datalist><option>//div[@id='root']/div/div[2]/article/div[2]/form/div[9]/button/span</option><option>//div[9]/button/span</option><option>css=button.MuiButtonBase-root.MuiButton-root.MuiButton-contained.MuiButton-containedPrimary &gt; span.MuiButton-label</option></datalist></td><td></td>
+</tr>
+<tr><td>assertText</td><td>//div[@id='root']/div/div[2]/article/div/div[2]/div/div/div[2]<datalist><option>//div[@id='root']/div/div[2]/article/div/div[2]/div/div/div[2]</option><option>//div[2]/div/div/div[2]</option><option>css=div.MuiAlert-message</option></datalist></td><td>error ข้อมูล field BookPage ผิด</td>
+</tr>
+</tbody></table>
+<table cellpadding="1" cellspacing="1" border="1">
+<thead>
+<tr><td rowspan="1" colspan="3">ชื่อหนังสือผิดบันทึกไม่ได้</td></tr>
+</thead>
+<tbody>
+<tr><td>open</td><td>http://localhost:3000/Book<datalist><option>http://localhost:3000/Book</option></datalist></td><td></td>
+</tr>
+<tr><td>click</td><td>id=book_name<datalist><option>id=book_name</option><option>//input[@id='book_name']</option><option>//div[@id='root']/div/div[2]/article/div[2]/form/div[2]/div/input</option><option>//input</option><option>css=#book_name</option></datalist></td><td></td>
+</tr>
+<tr><td>click</td><td>id=book_page<datalist><option>id=book_page</option><option>//input[@id='book_page']</option><option>//div[@id='root']/div/div[2]/article/div[2]/form/div[4]/div/input</option><option>//div[4]/div/input</option><option>css=#book_page</option></datalist></td><td></td>
+</tr>
+<tr><td>type</td><td>id=book_page<datalist><option>id=book_page</option><option>//input[@id='book_page']</option><option>//div[@id='root']/div/div[2]/article/div[2]/form/div[4]/div/input</option><option>//div[4]/div/input</option><option>css=#book_page</option></datalist></td><td>45</td>
+</tr>
+<tr><td>click</td><td>id=bar_code<datalist><option>id=bar_code</option><option>//input[@id='bar_code']</option><option>//div[@id='root']/div/div[2]/article/div[2]/form/div[6]/div/input</option><option>//div[6]/div/input</option><option>css=#bar_code</option></datalist></td><td></td>
+</tr>
+<tr><td>type</td><td>id=bar_code<datalist><option>id=bar_code</option><option>//input[@id='bar_code']</option><option>//div[@id='root']/div/div[2]/article/div[2]/form/div[6]/div/input</option><option>//div[6]/div/input</option><option>css=#bar_code</option></datalist></td><td>2314567892</td>
+</tr>
+<tr><td>click</td><td>id=author<datalist><option>//body</option><option>css=body</option><option>id=author</option></datalist></td><td></td>
+</tr>
+<tr><td>click</td><td>//div[@id='menu-']/div[3]/ul/li<datalist><option>//div[@id='menu-']/div[3]/ul/li</option><option>//li</option><option>css=li.MuiButtonBase-root.MuiListItem-root.MuiMenuItem-root.MuiMenuItem-gutters.MuiListItem-gutters.MuiListItem-button.Mui-focusVisible.Mui-focusVisible</option></datalist></td><td></td>
+</tr>
+<tr><td>click</td><td>id=category<datalist><option>//body</option><option>css=body</option><option>id=category</option></datalist></td><td></td>
+</tr>
+<tr><td>click</td><td>//div[@id='menu-']/div[3]/ul/li[5]<datalist><option>//div[@id='menu-']/div[3]/ul/li[5]</option><option>//li[5]</option></datalist></td><td></td>
+</tr>
+<tr><td>click</td><td>//div[@id='root']/div/div[2]/article/div[2]/form/div[9]/button/span<datalist><option>//div[@id='root']/div/div[2]/article/div[2]/form/div[9]/button/span</option><option>//div[9]/button/span</option><option>css=button.MuiButtonBase-root.MuiButton-root.MuiButton-contained.MuiButton-containedPrimary &gt; span.MuiButton-label</option></datalist></td><td></td>
+</tr>
+<tr><td>assertText</td><td>//div[@id='root']/div/div[2]/article/div/div[2]/div/div/div[2]<datalist><option>//div[@id='root']/div/div[2]/article/div/div[2]/div/div/div[2]</option><option>//div[2]/div/div/div[2]</option><option>css=div.MuiAlert-message</option></datalist></td><td>error ข้อมูล field BookName ผิด</td>
 </tr>
 </tbody></table>
 </body>
