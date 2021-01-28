@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+	<meta content="text/html; charset=UTF-8" http-equiv="content-type" />
+	<title>Sprint2</title>
+</head>
+<body>
+<table cellpadding="1" cellspacing="1" border="1">
+<thead>
+<tr><td rowspan="1" colspan="3">พบข้อมูลหนังสือที่ค้นหา</td></tr>
+</thead>
+<tbody>
+<tr><td>open</td><td>http://localhost:3000/SearchBook<datalist><option>http://localhost:3000/SearchBook</option></datalist></td><td></td>
+</tr>
+<tr><td>click</td><td>id=bookname<datalist><option>id=bookname</option><option>//input[@id='bookname']</option><option>//div[@id='root']/div/div[2]/article/div/div/div/p/div[2]/div/div[2]/div/input</option><option>//input</option><option>css=#bookname</option></datalist></td><td></td>
+</tr>
+<tr><td>type</td><td>id=bookname<datalist><option>id=bookname</option><option>//input[@id='bookname']</option><option>//div[@id='root']/div/div[2]/article/div/div/div/p/div[2]/div/div[2]/div/input</option><option>//input</option><option>css=#bookname</option></datalist></td><td>Hobbit</td>
+</tr>
+<tr><td>click</td><td>//div[@id='root']/div/div[2]/article/div<datalist><option>//div[@id='root']/div/div[2]/article/div</option><option>//article/div</option><option>css=div.MuiGrid-root.MuiGrid-container.MuiGrid-spacing-xs-2.MuiGrid-item.MuiGrid-justify-xs-center.MuiGrid-grid-xs-12</option></datalist></td><td></td>
+</tr>
+<tr><td>click</td><td>css=span.MuiButton-endIcon.MuiButton-iconSizeMedium &gt; svg.MuiSvgIcon-root<datalist><option>css=span.MuiButton-endIcon.MuiButton-iconSizeMedium &gt; svg.MuiSvgIcon-root</option></datalist></td><td></td>
+</tr>
+<tr><td>assertText</td><td>id=swal2-title<datalist><option>id=swal2-title</option><option>//h2[@id='swal2-title']</option><option>//h2</option><option>css=#swal2-title</option></datalist></td><td>พบข้อมูลหนังสือที่ค้นหา</td>
+</tr>
+<tr><td>click</td><td>xpath=(//button[@type='button'])[4]<datalist><option>xpath=(//button[@type='button'])[4]</option><option>//div/button</option><option>css=button.swal2-close</option></datalist></td><td></td>
+</tr>
+</tbody></table>
+<table cellpadding="1" cellspacing="1" border="1">
+<thead>
+<tr><td rowspan="1" colspan="3">ไม่พบข้อมูลหนังสือที่ค้นหา</td></tr>
+</thead>
+<tbody>
+<tr><td>open</td><td>http://localhost:3000/SearchBook<datalist><option>http://localhost:3000/SearchBook</option></datalist></td><td></td>
+</tr>
+<tr><td>click</td><td>id=bookname<datalist><option>id=bookname</option><option>//input[@id='bookname']</option><option>//div[@id='root']/div/div[2]/article/div/div/div/p/div[2]/div/div[2]/div/input</option><option>//input</option><option>css=#bookname</option></datalist></td><td></td>
+</tr>
+<tr><td>type</td><td>id=bookname<datalist><option>id=bookname</option><option>//input[@id='bookname']</option><option>//div[@id='root']/div/div[2]/article/div/div/div/p/div[2]/div/div[2]/div/input</option><option>//input</option><option>css=#bookname</option></datalist></td><td>vergvsv</td>
+</tr>
+<tr><td>click</td><td>//div[@id='root']/div/div[2]/article/div/div/div/p/button/span/h3<datalist><option>//div[@id='root']/div/div[2]/article/div/div/div/p/button/span/h3</option><option>//p/button/span/h3</option><option>css=button.MuiButtonBase-root.MuiButton-root.MuiButton-contained.makeStyles-margins-27 &gt; span.MuiButton-label &gt; h3</option></datalist></td><td></td>
+</tr>
+<tr><td>assertText</td><td>id=swal2-title<datalist><option>id=swal2-title</option><option>//h2[@id='swal2-title']</option><option>//h2</option><option>css=#swal2-title</option></datalist></td><td>ไม่พบข้อมูลหนังสือที่ค้นหา</td>
+</tr>
+<tr><td>click</td><td>xpath=(//button[@type='button'])[4]<datalist><option>xpath=(//button[@type='button'])[4]</option><option>//div/button</option><option>css=button.swal2-close</option></datalist></td><td></td>
+</tr>
+</tbody></table>
+<table cellpadding="1" cellspacing="1" border="1">
+<thead>
+<tr><td rowspan="1" colspan="3">แสดงข้อมูลหนังสือทั้งหมด</td></tr>
+</thead>
+<tbody>
+<tr><td>open</td><td>http://localhost:3000/SearchBook<datalist><option>http://localhost:3000/SearchBook</option></datalist></td><td></td>
+</tr>
+<tr><td>click</td><td>//div[@id='root']/div/div[2]/article/div/div/div/p/button/span/h3<datalist><option>//div[@id='root']/div/div[2]/article/div/div/div/p/button/span/h3</option><option>//p/button/span/h3</option><option>css=button.MuiButtonBase-root.MuiButton-root.MuiButton-contained.makeStyles-margins-27 &gt; span.MuiButton-label &gt; h3</option></datalist></td><td></td>
+</tr>
+<tr><td>assertText</td><td>id=swal2-title<datalist><option>id=swal2-title</option><option>//h2[@id='swal2-title']</option><option>//h2</option><option>css=#swal2-title</option></datalist></td><td>แสดงข้อมูลหนังสือทั้งหมดในระบบ</td>
+</tr>
+<tr><td>click</td><td>xpath=(//button[@type='button'])[4]<datalist><option>xpath=(//button[@type='button'])[4]</option><option>//div/button</option><option>css=button.swal2-close</option></datalist></td><td></td>
+</tr>
+</tbody></table>
+</body>
+</html>
