@@ -64,9 +64,9 @@ export function EntBookingEdgesFromJSONTyped(json: any, ignoreDiscriminator: boo
     }
     return {
         
-        'getservice': !exists(json, 'Getservice') ? undefined : EntServicePointFromJSON(json['Getservice']),
-        'usedby': !exists(json, 'Usedby') ? undefined : EntUserFromJSON(json['Usedby']),
-        'using': !exists(json, 'Using') ? undefined : EntClientEntityFromJSON(json['Using']),
+        'getservice': !exists(json, 'getservice') ? undefined : EntServicePointFromJSON(json['getservice']),
+        'usedby': !exists(json, 'usedby') ? undefined : EntUserFromJSON(json['usedby']),
+        'using': !exists(json, 'using') ? undefined : EntClientEntityFromJSON(json['using']),
     };
 }
 

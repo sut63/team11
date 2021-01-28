@@ -321,13 +321,13 @@ const WelcomePage = () => {
                   <Button
                     disabled ={MemberBtn}
                     variant="contained"
-                    color="secondary"
+                    color="primary"
                     className={classes.button}
                     startIcon={<Borrow />}
                     component={RouterLink}
-                    to="/Bookborrow"
+                    to="/SearchBookborrow"
                   >
-                    ยืมหนังสือ
+                    ค้นหาการยืมหนังสือ
                   </Button>
                   <br />
                   <Button

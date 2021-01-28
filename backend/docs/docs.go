@@ -595,7 +595,10 @@ var doc = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/ent.Bookborrow"
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/ent.Bookborrow"
+                            }
                         }
                     },
                     "400": {
