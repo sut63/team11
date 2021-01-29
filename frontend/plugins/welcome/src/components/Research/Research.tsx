@@ -320,7 +320,7 @@ export default function Create() {
                 </FormControl>
             </form>
 
-            <div className={classes.paper}><strong>ปีที่พิมพ์</strong></div>
+            <div className={classes.paper}><strong>ปีที่พิมพ์ (พ.ศ.)</strong></div>
             <form className={classes.root} noValidate autoComplete="off">
             <FormControl required className={classes.formControl}>
                   <TextField style={{ width: 150 }} error={yearNumberError ? true : false} id="yearnumber"

@@ -108,7 +108,7 @@ export function EntUserEdgesFromJSONTyped(json: any, ignoreDiscriminator: boolea
         'booking': !exists(json, 'booking') ? undefined : ((json['booking'] as Array<any>).map(EntBookingFromJSON)),
         'borrow': !exists(json, 'borrow') ? undefined : ((json['borrow'] as Array<any>).map(EntBookborrowFromJSON)),
         'position': !exists(json, 'Position') ? undefined : EntRoleFromJSON(json['Position']),
-        'preemption': !exists(json, 'Preemption') ? undefined : ((json['Preemption'] as Array<any>).map(EntPreemptionFromJSON)),
+        'preemption': !exists(json, 'preemption') ? undefined : ((json['preemption'] as Array<any>).map(EntPreemptionFromJSON)),
         'record': !exists(json, 'record') ? undefined : ((json['record'] as Array<any>).map(EntResearchFromJSON)),
         '_return': !exists(json, 'return') ? undefined : ((json['return'] as Array<any>).map(EntBookreturnFromJSON)),
     };

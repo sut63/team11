@@ -55,6 +55,12 @@ export interface ControllersPreemption {
      * @memberof ControllersPreemption
      */
     user?: number;
+    /**
+     * 
+     * @type {string}
+     * @memberof ControllersPreemption
+     */
+    username?: string;
 }
 
 export function ControllersPreemptionFromJSON(json: any): ControllersPreemption {
@@ -73,6 +79,7 @@ export function ControllersPreemptionFromJSONTyped(json: any, ignoreDiscriminato
         'purpose': !exists(json, 'purpose') ? undefined : json['purpose'],
         'roominfo': !exists(json, 'roominfo') ? undefined : json['roominfo'],
         'user': !exists(json, 'user') ? undefined : json['user'],
+        'username': !exists(json, 'username') ? undefined : json['username'],
     };
 }
 
@@ -91,6 +98,7 @@ export function ControllersPreemptionToJSON(value?: ControllersPreemption | null
         'purpose': value.purpose,
         'roominfo': value.roominfo,
         'user': value.user,
+        'username': value.username,
     };
 }
 
