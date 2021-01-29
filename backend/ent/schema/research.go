@@ -20,9 +20,9 @@ func (Research) Fields() []ent.Field {
 	return []ent.Field{
 		field.String("DOC_NAME").
 			Validate(func(s string) error {
-				match, _ := regexp.Match("[?+=-_!@#$%^&*<>:;.]", []byte(s))
-				if match {
-					return errors.New("มีตัวเลขหรืออักษรพิเศษ")
+				match, _ := regexp.MatchString("^[0-9a-zA-Zก-๙]+$", s)
+				if !match {
+					return errors.New("มีอักษรพิเศษ")
 				}
 				return nil
 			}).
