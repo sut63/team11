@@ -11,12 +11,13 @@ import { DefaultApi } from '../../api/apis';
 
 import { EntResearch } from '../../api/models/EntResearch';
 
-import Swal from 'sweetalert2'
 import { Link as RouterLink } from 'react-router-dom';
 import moment from 'moment';
 import { Page, pageTheme, Header, Content, Link } from '@backstage/core';
 import { Grid, Button, TextField, Typography, FormControl } from '@material-ui/core';
 import SearchTwoToneIcon from '@material-ui/icons/SearchTwoTone';
+
+import { Alert } from '@material-ui/lab';
 
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -56,16 +57,6 @@ const useStyles = makeStyles((theme: Theme) =>
 
   }),
 );
-const Toast = Swal.mixin({
-  // toast: true,
-  position: 'center',
-  showConfirmButton: false,
-  //timer: 3000,
-  //timerProgressBar: true,
-  showCloseButton: true,
-
-});
-
 
 export default function ComponentsTable() {
 
@@ -83,17 +74,13 @@ export default function ComponentsTable() {
   const [checkdocname, setdocnames] = useState(false);
   const [research, setResearch] = useState<EntResearch[]>([])
 
+  const [alert, setAlert] = useState(true);
+  const [status, setStatus] = useState(false);
+
   //--------------------------
   const [docname, setdocname] = useState(String);
   const profile = { givenName: 'ยินดีต้อนรับสู่ ระบบค้นหาข้อมูลงานวิจัย' };
-  const alertMessage = (icon: any, title: any) => {
-    Toast.fire({
-      icon: icon,
-      title: title,
-    });
-    setSearch(false);
-  }
-
+  
   useEffect(() => {
     const getResearchs = async () => {
       const res = await api.listResearch({ offset: 0 });
@@ -107,6 +94,7 @@ export default function ComponentsTable() {
   const Docnamehandlehange = (event: React.ChangeEvent<{ value: unknown }>) => {
     setSearch(false);
     setdocnames(false);
+    setStatus(false);
     setdocname(event.target.value as string);
 
   };
@@ -125,22 +113,31 @@ export default function ComponentsTable() {
       if (docname != "") {
         if (item.dOCNAME?.includes(docname)) {
           setdocnames(true);
-          alertMessage("success", "พบข้อมูลที่ค้นหา");
+          setStatus(true);
+          setAlert(true);
+
+          //พบข้อมูลที่ค้นหา
+          
           check = true;
         }
       }
     })
     if (!check) {
-      alertMessage("error", "ไม่พบข้อมูลที่ค้นหา");
+      setStatus(true);
+      setAlert(false);
+
+      //ไม่พบข้อมูลที่ค้นหา
     }
     console.log(checkdocname)
-    if (docname == "") {
-      alertMessage("info", "แสดงข้อมูลงานวิจัยทั้งหมดในระบบ");
-    }
+    if (docname == "" ) {
+      setStatus(true);
+      setAlert(true);
+
+      //แสดงข้อมูลงานวิจัยทั้งหมดในระบบ
+    }    
   };
 
   return (
-
     <Page theme={pageTheme.home}>
       <Header
         title={`${profile.givenName}`}
@@ -149,11 +146,11 @@ export default function ComponentsTable() {
           <tr>
             <th>
               <Button variant="contained" color='primary' size='large' >
-                <font size='3'>helo are you 🌵 {userName}🌵</font>
+                <font size='3'>hello are you 🌵 {userName}🌵</font>
               </Button>
             </th>
             <th>
-              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+              
           <Link component={RouterLink} to="/">
                 <Button variant="contained" style={{ background: 'linear-gradient(45deg, #3399FF 15%, #9900FF 120%)', height: 36 }}>
                   <h3
@@ -198,7 +195,9 @@ export default function ComponentsTable() {
                     className={classes.margin}
                     variant="outlined"
                   >
-                    <div className={classes.paper}><strong>ชื่องานวิจัย </strong></div>
+                    <div className={classes.paper}>
+                    <font size='5'>ชื่องานวิจัย 📜 </font>
+                     </div>
                     <TextField
                       id="docname"
                       value={docname}
@@ -255,11 +254,25 @@ export default function ComponentsTable() {
             </Paper>
           </Grid>
         </Grid>
-
-
+        {status ? (
+            <div>
+              {alert ? (
+                <Alert severity="success">
+                  แสดงข้อมูลงานวิจัย {docname} 📜
+                </Alert>
+              )
+              : (
+                  <Alert severity="warning" style={{ marginTop: 20 }}>
+                    ไม่พบข้อมูลที่ค้นหา
+                  </Alert>
+                )}
+            </div>
+          ) : null}
+        
         <Grid container justify="center">
           <Grid item xs={12} md={10}>
             <Paper>
+              
               {search ? (
                 <div>
                   {  checkdocname ? (
@@ -293,7 +306,9 @@ export default function ComponentsTable() {
                       </Table>
                     </TableContainer>
                   )
+                  
                     : docname == "" ? (
+                      
                       <div>
                         <TableContainer component={Paper}>
                           <Table className={classes.table} aria-label="simple table">
