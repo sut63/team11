@@ -198,6 +198,7 @@ const SearchBookborrows: FC<{}> = () => {
                 <TableCell align="center">จำนวนวันที่ยืม</TableCell>
                 <TableCell align="center">วิธีการรับหนังสือ</TableCell>
                 <TableCell align="center">เบอร์โทรศัพท์</TableCell>
+                <TableCell align="center">สถานะการยืม</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -212,6 +213,7 @@ const SearchBookborrows: FC<{}> = () => {
                   <TableCell align="center">{item.dAYOFBORROW}</TableCell>
                   <TableCell align="center">{item.pICKUP}</TableCell>
                   <TableCell align="center">{item.pHONENUMBER}</TableCell>
+                  <TableCell align="center">{item.edges?.status?.sTATUSNAME}</TableCell>
                 </TableRow>
               ))}
             </TableBody>
