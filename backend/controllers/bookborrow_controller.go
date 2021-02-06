@@ -216,6 +216,7 @@ func (ctl *BookborrowController) ListBookborrow(c *gin.Context) {
 		WithUSER().
 		WithBOOK().
 		WithSERVICEPOINT().
+		WithSTATUS().
 		Limit(limit).
 		Offset(offset).
 		All(context.Background())
