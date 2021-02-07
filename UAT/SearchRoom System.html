@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+	<meta content="text/html; charset=UTF-8" http-equiv="content-type" />
+	<title>SearchRoom</title>
+</head>
+<body>
+<table cellpadding="1" cellspacing="1" border="1">
+<thead>
+<tr><td rowspan="1" colspan="3">Correct</td></tr>
+</thead>
+<tbody>
+<tr><td>open</td><td>http://localhost:3000/<datalist><option>http://localhost:3000/</option></datalist></td><td></td>
+</tr>
+<tr><td>click</td><td>//div[@id='root']/div/div[2]/article/div[2]/div[3]/div[2]/div/div[2]/a[4]/span<datalist><option>//div[@id='root']/div/div[2]/article/div[2]/div[3]/div[2]/div/div[2]/a[4]/span</option><option>//div[2]/div/div[2]/a[4]/span</option></datalist></td><td></td>
+</tr>
+<tr><td>setText</td><td>id=name<datalist><option>id=name</option><option>//input[@id='name']</option><option>//div[@id='root']/div/div[2]/article/div[3]/form/div/div/div/input</option><option>//input</option><option>css=#name</option></datalist></td><td>Name Surname</td>
+</tr>
+<tr><td>click</td><td>//button[@type='button']<datalist><option>//button[@type='button']</option><option>//div[@id='root']/div/div[2]/article/div[3]/form/div[2]/button</option><option>//button</option><option>css=button.MuiButtonBase-root.MuiButton-root.MuiButton-contained.MuiButton-containedPrimary</option></datalist></td><td></td>
+</tr>
+<tr><td>assertText</td><td>//div[@id='root']/div/div[2]/article/div[3]/form/div[4]/table/tbody/tr/td<datalist><option>//div[@id='root']/div/div[2]/article/div[3]/form/div[4]/table/tbody/tr/td</option><option>//td</option><option>css=td.MuiTableCell-root.MuiTableCell-body.MuiTableCell-alignLeft</option></datalist></td><td>เลขใบจอง: 1 ห้อง: RS01 เวลา: 08.00 AM - 08.50 AM จองโดย: Name Surname ผู้รับกุญแจ: B6112936 เบอร์โทรติดต่อ: 0938678420</td>
+</tr>
+</tbody></table>
+<table cellpadding="1" cellspacing="1" border="1">
+<thead>
+<tr><td rowspan="1" colspan="3">Incorrect</td></tr>
+</thead>
+<tbody>
+<tr><td>open</td><td>http://localhost:3000/Searchroom<datalist><option>http://localhost:3000/Searchroom</option></datalist></td><td></td>
+</tr>
+<tr><td>click</td><td>id=name<datalist><option>id=name</option><option>//input[@id='name']</option><option>//div[@id='root']/div/div[2]/article/div[3]/form/div/div/div/input</option><option>//input</option><option>css=#name</option></datalist></td><td></td>
+</tr>
+<tr><td>setText</td><td>id=name<datalist><option>id=name</option><option>//input[@id='name']</option><option>//div[@id='root']/div/div[2]/article/div[3]/form/div/div/div/input</option><option>//input</option><option>css=#name</option></datalist></td><td>root</td>
+</tr>
+<tr><td>click</td><td>//div[@id='root']/div/div[2]/article/div[3]/form/div[2]/button/span<datalist><option>//div[@id='root']/div/div[2]/article/div[3]/form/div[2]/button/span</option><option>//button/span</option><option>css=button.MuiButtonBase-root.MuiButton-root.MuiButton-contained.MuiButton-containedPrimary &gt; span.MuiButton-label</option></datalist></td><td></td>
+</tr>
+<tr><td>assertText</td><td>id=swal2-title<datalist><option>id=swal2-title</option><option>//h2[@id='swal2-title']</option><option>//h2</option><option>css=#swal2-title</option></datalist></td><td>ไม่พบข้อมูล</td>
+</tr>
+</tbody></table>
+</body>
+</html>
