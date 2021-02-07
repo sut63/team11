@@ -306,7 +306,7 @@ const WelcomePage = () => {
                   </Button>
                   <br />
                   <Button
-                    disabled ={MemberBtn}
+                    
                     variant="contained"
                     color="primary"
                     className={classes.button}
