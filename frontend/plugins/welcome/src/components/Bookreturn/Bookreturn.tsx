@@ -6,11 +6,12 @@ import {
   Content, Header, Page, pageTheme, ContentHeader,
 } from '@backstage/core';
 import {
-  Typography, TextField, Button, makeStyles,
+   TextField, Button, makeStyles,
   Theme, FormControl, InputLabel, MenuItem,
   Select, createStyles,
 } from '@material-ui/core';
-import { Alert } from '@material-ui/lab';
+
+
 import { DefaultApi } from '../../api/apis';
 import {
   EntUser,
@@ -31,6 +32,18 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     withoutLabel: {
       marginTop: theme.spacing(3),
+    },
+    button: {
+      margin: theme.spacing(1),
+    },
+    formControl: {
+      margin: theme.spacing(1),
+      minWidth: 120,
+    },
+    paper: {
+      marginTop: theme.spacing(1),
+      marginBottom: theme.spacing(1),
+      marginLeft: theme.spacing(1),
     },
     textField: {
       width: '50ch',
@@ -55,8 +68,6 @@ export default function Create() {
   const classes = useStyles();
   const api = new DefaultApi();
   const [loading, setLoading] = useState(true);
-  // const [status, setStatus] = useState(false);
-  // const [alert, setAlert] = useState(true);
 
   const [users, setUsers] = React.useState<EntUser[]>(Array);
   const [bookborrows, setBookborrows] = React.useState<EntBookborrow[]>([]);
@@ -64,10 +75,6 @@ export default function Create() {
 
   const idString = JSON.parse(String(localStorage.getItem("userID")));
   const idInt = parseInt(idString);
-
-  const [damagedpointError, setdamagedpointError] = React.useState('');
-  const [damagedpointnameError, setDamagedpointnameError] = React.useState('');
-  const [lostError, setLostError] = React.useState('');
 
   const [damagedpoint, setDamagedpoint] = useState(Number);
   const [damagedpointname, setDamagedpointname] = useState(String);
@@ -86,32 +93,13 @@ export default function Create() {
 
   // function validate DamagedPointName
   const ValidateDamagedPointName = (val: string) => {
-    val.match("^[a-zA-Z]+$") ? setErrorDamagedpointName(true) : setErrorDamagedpointName(false);
+    val.match("^[a-zA-Z, ]+$") ? setErrorDamagedpointName(true) : setErrorDamagedpointName(false);
   }
 
   // function validate Lost
   const ValidateLost = (lost: string) => {
     lost.match("^[a-zA-Z]+$") ? setErrorLost(true) : setErrorLost(false);
   }
-
-  // สำหรับตรวจสอบรูปแบบข้อมูลที่กรอก ว่าเป็นไปตามที่กำหนดหรือไม่
-  /*
-  const checkPattern = (id: string, value: string) => {
-    switch (id) {
-      case 'damaged_point':
-        DamagedPoint(Number(value)) ? setdamagedpointError('') : setdamagedpointError('ต้องเป็นตัวเลข 1-10 ');
-        return;
-      case 'damaged_point_name':
-        DamagedPointName(value) ? setDamagedpointnameError('') : setDamagedpointnameError('จุดที่เสียหายเป็นภาษาอังกฤษเท่านั้น เช่น TopFront,BottomBack');
-        return;
-      case 'lost':
-        Lost(value) ? setLostError('') : setLostError('ถ้าหายให้พิมพ์ lost ถ้าไม่พิมพ์ no')
-        return;
-      default:
-        return;
-    }
-  }
-  */
 
   const alertMessage = (icon: any, title: any) => {
     Toast.fire({
@@ -165,9 +153,7 @@ export default function Create() {
 
   }, [loading]);
 
-  /*const UserIDhandleChange = (event: React.ChangeEvent<{ value: any }>) => {
-    setUserID(event.target.value as number);
-  };*/
+  
   const BookborrowIDhandleChange = (event: React.ChangeEvent<{ value: unknown }>) => {
     setBookborrowID(event.target.value as number);
   };
@@ -191,14 +177,6 @@ export default function Create() {
     ValidateLost(event.target.value as string);
   };
 
-  /*const handleChange = (event: React.ChangeEvent<{ id?: string; value: any }>) => {
-    const id = event.target.id as keyof typeof Create;
-    const { value } = event.target;
-    const validateValue = value.toString()
-    checkPattern(id, validateValue)
-    setBookreturn({ ...returnbook, [id]: value });
-  };*/
-
   const [userID, setUserID] = useState(Number);
   const [bookborrowID, setBookborrowID] = useState(Number);
   const [locationID, setLocationID] = useState(Number);
@@ -218,13 +196,6 @@ export default function Create() {
     };
     console.log(bookreturn);
 
-    /*const ErrorCaseCheck = (casename: string) => {
-      if (casename == "wheel_center") { setErrorMessege("ค่า ศูนย์ล้อ ต้องมากกว่า 0"); }
-      else if (casename == "sound_level") { setErrorMessege("ค่า ระดับเสียง ต้องมากกว่า 0"); }
-      else if (casename == "blacksmoke") { setErrorMessege("ค่า ควันดำ ต้องอยู่ในช่วง 1-100"); }
-      else { setErrorMessege("บันทึกไม่สำเร็จ"); }
-    }*/
-
     const requestOptions = {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -241,10 +212,13 @@ export default function Create() {
             title: 'บันทึกข้อมูลสำเร็จ',
           });
         } else {
-          //ErrorCaseCheck(data.error.Name)
+          
           checkCaseSaveError(data.error.Name)
         }
       });
+      const timer = setTimeout(() => {
+      window.location.reload(false);
+    }, 4000);
   };
 
   const resetLocalStorage = async () => {
@@ -281,24 +255,22 @@ export default function Create() {
 
         <div className={classes.root}>
           <form noValidate autoComplete="off">
-            <table align="center">
+            
 
-              <tr><td>
-                สมาชิกห้องสมุด
-            </td><td>
+             
                   <div>
                     <FormControl
-                      className={classes.margin}
-                      variant="outlined"
+                      required className={classes.formControl}
                     >
-                      <InputLabel id="user-label"><font size='5'>สมาชิกห้องสมุด</font></InputLabel>
+                      
+                      <InputLabel id="user-label">สมาชิกห้องสมุด</InputLabel>
                       <Select
                         disabled={true}
                         labelId="user-label"
                         id="user"
                         value={userID}
                         //onChange={UserIDhandleChange}
-                        style={{ width: 400, height: '7vh' }}
+                        style={{ width: 300, height: '7vh' }}
                       >
                         {users.map((item: EntUser) => (
                           <MenuItem value={item.id}>{item.uSERNAME}</MenuItem>
@@ -306,63 +278,55 @@ export default function Create() {
                       </Select>
                     </FormControl>
                   </div>
-                </td>
-              </tr>
+               
 
-              <tr><td>รายการยืมหนังสือ</td><td>
+                <div>
                 <FormControl
-                  className={classes.margin}
-                  variant="outlined"
+                  required className={classes.formControl}
                 >
-                  <InputLabel id="bookborrow-label"><font size='5'>รายการยืมหนังสือ</font></InputLabel>
+                  <InputLabel id="bookborrow-label">รายการยืมหนังสือ</InputLabel>
                   <Select
                     labelId="bookborrow-label"
                     id="bookborrow"
                     value={bookborrowID}
                     onChange={BookborrowIDhandleChange}
-                    style={{ width: 400, height: '7vh' }}
+                    style={{ width: 300, height: '7vh' }}
                   >
                     {bookborrows.map(item => {
                       return (
-                        <MenuItem value={item.id}>{item.id}</MenuItem>
+                        <MenuItem value={item.id}>{item.edges?.book?.bookName}</MenuItem>
                       );
                     })}
                   </Select>
                 </FormControl>
+                </div>
 
-              </td>
-              </tr>
-
-              <tr><td>
-                สถานที่คืนหนังสือ
-            </td><td>
+                <div>
                   <FormControl
-                    className={classes.margin}
-                    variant="outlined"
+                    required className={classes.formControl}
                   >
-                    <InputLabel id="location-label"><font size='5'>สถานที่คืนหนังสือ</font></InputLabel>
+                    
+                    <InputLabel id="location-label">สถานที่คืนหนังสือ</InputLabel>
                     <Select
                       labelId="location-label"
                       id="location"
                       value={locationID}
                       onChange={LocationIDhandleChange}
-                      style={{ width: 400, height: '7vh' }}
+                      style={{ width: 300, height: '7vh' }}
                     >
                       {locations.map((item: EntLocation) => (
                         <MenuItem value={item.id}>{item.lOCATIONNAME}</MenuItem>
                       ))}
                     </Select>
                   </FormControl>
-                </td>
-              </tr>
+                  </div>
 
               <div>
                 <FormControl
-                  //fullWidth
-                  className={classes.margin}
-                  variant="outlined"
+                  required className={classes.formControl}
                 >
                   <TextField
+                    style={{ width: 300 }}
                     error={errordamagedpoint ? false : true}
                     id="DAMAGED_POINT"
                     label="ตำแหน่งที่ชำรุด"
@@ -379,11 +343,10 @@ export default function Create() {
 
               <div>
                 <FormControl
-                  //fullWidth
-                  className={classes.margin}
-                  variant="outlined"
+                  required className={classes.formControl}
                 >
                   <TextField
+                    style={{ width: 300 }}
                     error={errordamagedpointname ? false : true}
                     id="DAMAGED_POINTNAME"
                     label="ชื่อตำแหน่งที่ชำรุด"
@@ -399,11 +362,10 @@ export default function Create() {
 
               <div>
                 <FormControl
-                  //fullWidth
-                  className={classes.margin}
-                  variant="outlined"
+                 required className={classes.formControl}
                 >
                   <TextField
+                    style={{ width: 300 }}
                     error={errorlost ? false : true}
                     id="LOST"
                     label="กรณีหนังสือหาย"
@@ -442,7 +404,7 @@ export default function Create() {
 
 
                 </div></td>
-            </table>
+            
           </form>
         </div>
 

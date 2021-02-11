@@ -21,7 +21,7 @@ func (Bookreturn) Fields() []ent.Field {
 		field.Int("DAMAGED_POINT").Range(-1, 10),
 		
 		field.String("DAMAGED_POINTNAME").Validate(func(s string) error {
-			match, _ := regexp.MatchString("^[a-zA-Z]+$", s)
+			match, _ := regexp.MatchString("^[a-zA-Z, ]+$", s)
 			if !match {
 				return errors.New("จุดที่เสียหายเป็นภาษาอังกฤษเท่านั้น เช่น TopFront,BottomBack")
 			}
