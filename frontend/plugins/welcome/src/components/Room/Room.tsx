@@ -15,7 +15,7 @@ import { makeStyles, Theme, createStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import FormControl from '@material-ui/core/FormControl';
-import { Alert } from '@material-ui/lab';
+
 import { DefaultApi } from '../../api/apis';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import InputLabel from '@material-ui/core/InputLabel';
@@ -25,7 +25,7 @@ import Select from '@material-ui/core/Select';
 import Swal from 'sweetalert2';
 import { EntRoominfo } from '../../api/models/EntRoominfo'; // import interface Roominfo
 
-import { EntPreemption } from '../../api/models/EntPreemption'; // import interface Preemption
+
 import { EntPurpose } from '../../api/models/EntPurpose'; // import interface Purpose
 import ComponanceTable from '../RoomTable';
 
@@ -88,8 +88,7 @@ export default function Create() {
   const userID = JSON.parse(String(localStorage.getItem("userID")));
   const userName ="ยินดีต้อนรับ "+name
   const classes = useStyles();
-  const [status, setStatus] = useState(false);
-  const [alert, setAlert] = useState(true);
+  
   const api = new DefaultApi();
   const [roominfos, setRoominfos] = React.useState<EntRoominfo[]>([]);
   const [purposes, setPurposes] = React.useState<EntPurpose[]>([]);
