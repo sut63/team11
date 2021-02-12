@@ -11,10 +11,9 @@ import { makeStyles, Theme, createStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import FormControl from '@material-ui/core/FormControl';
-import Alert from '@material-ui/lab/Alert';
+
 import { DefaultApi } from '../../api/apis';
-import AccountCircle from '@material-ui/icons/AccountCircle';
-import IconButton from '@material-ui/core/IconButton';
+
 import Swal from 'sweetalert2';
 
 import Table from '@material-ui/core/Table';
@@ -80,11 +79,11 @@ export default function Preempttable() {
  const [loading, setLoading] = useState(true);
  const api = new DefaultApi();
  const [preemptions, setPreemptions] = React.useState<EntPreemption[]>([]);
- const [preemptions1, setPreemptions1] = React.useState<EntPreemption[]>([]);
+ 
  const [users, setUsers] = useState<EntUser[]>(Array);
  const [name, setname] = useState(String);
- const [ck, setck] = useState(String);
- const [status, setStatus] = useState(false);
+ 
+ 
  useEffect(() => {
   
     const getUsers = async () => {
@@ -115,6 +114,7 @@ const alertMessage = () =>{
 var lenreturn : number
 
 const Seacrh = async () => {
+  setPreemptions([]);
   users.map((item: any) => {  
     if (item.uSERNAME == name ) {
       const getPreemptions = async () => {
@@ -155,18 +155,7 @@ const Seacrh = async () => {
        title={'ระบบค้นหาใบจอง'}
        subtitle=""
      >
-         <div className={classes.margin}>
-             
-             <Button
-               style={{ marginLeft: 40 }}
-               component={RouterLink}
-               to="/Room"
-               variant="contained"
-             >
-               จองห้อง
-             </Button>
-           </div>
-
+         
 
 
       
