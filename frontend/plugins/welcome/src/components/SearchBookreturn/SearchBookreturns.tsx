@@ -11,21 +11,13 @@ import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow'
 import Paper from '@material-ui/core/Paper';
-import SaveIcon from '@material-ui/icons/Save'; // icon save
-import Swal from 'sweetalert2'; // alert
+
 import {
-    MuiPickersUtilsProvider,
-    KeyboardTimePicker,
-    KeyboardDatePicker,
-} from '@material-ui/pickers';
-import {
-    Container,
     Grid,
     FormControl,
     Select,
     InputLabel,
     MenuItem,
-    TextField,
     Avatar,
     Button,
 } from '@material-ui/core';
@@ -34,7 +26,8 @@ import { EntBookreturn } from '../../api/models/EntBookreturn';
 import Snackbar from '@material-ui/core/Snackbar';
 import Alert from '@material-ui/lab/Alert';
 import { EntBookborrow, EntUser } from '../../api';
-import { stringNumberComparer } from '@material-ui/data-grid';
+
+
 // header css
 const HeaderCustom = {
     minHeight: '50px',
@@ -128,24 +121,7 @@ const SearchBookreturns: FC<{}> = () => {
     }
    console.log("bb",bookreturn);
    
-    const getB = async(i:any) =>{
-        let m = Number(i);
-        let o = (await api.getBook({id:m}));
-        
-        let y :string
-        y = String(o.bookName)+"omaha";
-        console.log("y = ",y);
-
-        return y;
-        }
-    const [b, bbb] = React.useState(String)
-    const getBk = (i:any)=>{
-        let userToken = getB(i)
-         userToken.then(function(result) {
-            bbb(result)
-         })
-         return b
-    }
+    
 
     // Lifecycle Hooks
     useEffect(() => {
