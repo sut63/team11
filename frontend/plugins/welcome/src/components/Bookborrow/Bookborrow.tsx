@@ -18,7 +18,6 @@ import MenuItem from '@material-ui/core/MenuItem';
 import Select from '@material-ui/core/Select';
 import { EntUser } from '../../api/models/EntUser';
 import { EntBook } from '../../api/models/EntBook';
-import { EntBookborrow } from '../../api/models/EntBookborrow';
 import { EntServicePoint } from '../../api/models/EntServicePoint';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 
@@ -65,15 +64,12 @@ export default function Create() {
   const [users, setUsers] = useState<EntUser[]>([]);
   const [books, setBooks] = useState<EntBook[]>([]);
   const [servicepoints, setServicepoints] = useState<EntServicePoint[]>([]);
-  const [bookborrows, setBookBorrows] = useState<EntBookborrow[]>([]);
 
   const [userID, setUser] = useState(Number);
   const [bookID, setBook] = useState(Number);
   const [servicePointID, setServicepoint] = useState(Number);
 
   const [status, setStatus] = useState(false);
-  const [alert, setAlert] = useState(true);
-  const [alert2, setAlerts] = useState(true);
   const [loading, setLoading] = useState(true);
 
   const [dayOfBorrow, setDayOfBorrow] = useState(Number);
@@ -91,7 +87,7 @@ export default function Create() {
 
   useEffect(() => {
     const getBook = async () => {
-      const res = await api.listBook({ limit: 10, offset: 0 });
+      const res = await api.listBookfrees({ limit: 10, offset: 0 });
       setLoading(false);
       setBooks(res);
     };

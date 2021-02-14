@@ -11,13 +11,15 @@ import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow'
 import Paper from '@material-ui/core/Paper';
-import { Alert , AlertTitle} from '@material-ui/lab';
+import { Alert } from '@material-ui/lab';
 import {
   Grid,
   Select,
   MenuItem,
   Button,
+  Link,
 } from '@material-ui/core';
+import { Link as RouterLink } from 'react-router-dom';
 import { DefaultApi } from '../../api/apis';
 import { EntBookborrow, EntUser } from '../../api';
 import { SearchIcon } from '@material-ui/data-grid';
@@ -85,6 +87,8 @@ const SearchBookborrows: FC<{}> = () => {
 
   const UserID_handleChange = (event: any) => {
     setUserid(event.target.value);
+    setStatus(false);
+    setBookborrows([]);
   }
 
   var lenBookborrow: number
@@ -94,6 +98,7 @@ const SearchBookborrows: FC<{}> = () => {
     for(let i = 0; i < res.length ; i++){
       if(res[i].edges?.user?.id == userid){
         lenBookborrow = 1
+        break
       }
       else{
         lenBookborrow = 0
@@ -115,6 +120,21 @@ const SearchBookborrows: FC<{}> = () => {
   return (
     <Page theme={pageTheme.home}>
       <Header title={`ระบบค้นหารายการยืมหนังสือ`}>
+      <Link component={RouterLink} to="/">
+            <Button variant="contained" style={{ background: '#FFFFFF', height: 36 }}>
+                  <h3
+                    style={
+                      {
+                        color: "#000000",
+                        borderRadius: 10,
+                        height: 25,
+                        padding: '0 5px',
+                      }
+                    }>
+                    ย้อนกลับ
+            </h3>
+                </Button>
+            </Link>
       </Header>
       <Content>
         <ContentHeader title={'ชื่อผู้ยืมหนังสือที่ต้องการค้นหา'}>

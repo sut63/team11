@@ -296,6 +296,11 @@ export interface ListBookborrowRequest {
     offset?: number;
 }
 
+export interface ListBookfreesRequest {
+    limit?: number;
+    offset?: number;
+}
+
 export interface ListBookreturnRequest {
     limit?: number;
     offset?: number;
@@ -2112,6 +2117,42 @@ export class DefaultApi extends runtime.BaseAPI {
      */
     async listBookborrow(requestParameters: ListBookborrowRequest): Promise<Array<EntBookborrow>> {
         const response = await this.listBookborrowRaw(requestParameters);
+        return await response.value();
+    }
+
+    /**
+     * list bookfrees entities
+     * List bookfrees entities
+     */
+    async listBookfreesRaw(requestParameters: ListBookfreesRequest): Promise<runtime.ApiResponse<Array<EntBook>>> {
+        const queryParameters: runtime.HTTPQuery = {};
+
+        if (requestParameters.limit !== undefined) {
+            queryParameters['limit'] = requestParameters.limit;
+        }
+
+        if (requestParameters.offset !== undefined) {
+            queryParameters['offset'] = requestParameters.offset;
+        }
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        const response = await this.request({
+            path: `/bookfrees`,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        });
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => jsonValue.map(EntBookFromJSON));
+    }
+
+    /**
+     * list bookfrees entities
+     * List bookfrees entities
+     */
+    async listBookfrees(requestParameters: ListBookfreesRequest): Promise<Array<EntBook>> {
+        const response = await this.listBookfreesRaw(requestParameters);
         return await response.value();
     }
 

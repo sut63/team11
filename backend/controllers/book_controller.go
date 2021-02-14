@@ -193,7 +193,6 @@ func (ctl *BookController) ListBook(c *gin.Context) {
 		WithCategory().
 		WithStatus().
 		WithUser().
-		Where(book.HasStatusWith(status.STATUSNAMEEQ("Available"))).
 		Limit(limit).
 		Offset(offset).
 		All(context.Background())
@@ -278,6 +277,55 @@ func (ctl *BookController) UpdateBook(c *gin.Context) {
 	c.JSON(200, u)
 }
 
+// ListBookFree handles request to get a list of book entities
+// @Summary List bookfrees entities
+// @Description list bookfrees entities
+// @ID list-bookfrees
+// @Produce json
+// @Param limit  query int false "Limit"
+// @Param offset query int false "Offset"
+// @Success 200 {array} ent.Book
+// @Failure 400 {object} gin.H
+// @Failure 500 {object} gin.H
+// @Router /bookfrees [get]
+func (ctl *BookController) ListBookFree(c *gin.Context) {
+	limitQuery := c.Query("limit")
+	limit := 10
+	if limitQuery != "" {
+		limit64, err := strconv.ParseInt(limitQuery, 10, 64)
+		if err == nil {
+			limit = int(limit64)
+		}
+	}
+
+	offsetQuery := c.Query("offset")
+	offset := 0
+	if offsetQuery != "" {
+		offset64, err := strconv.ParseInt(offsetQuery, 10, 64)
+		if err == nil {
+			offset = int(offset64)
+		}
+	}
+
+	books, err := ctl.client.Book.
+		Query().
+		WithAuthor().
+		WithBooklist().
+		WithCategory().
+		WithStatus().
+		WithUser().
+		Where(book.HasStatusWith(status.STATUSNAMEEQ("Available"))).
+		Limit(limit).
+		Offset(offset).
+		All(context.Background())
+	if err != nil {
+		c.JSON(400, gin.H{"error": err.Error()})
+		return
+	}
+
+	c.JSON(200, books)
+}
+
 // NewBookController creates and registers handles for the book controller
 func NewBookController(router gin.IRouter, client *ent.Client) *BookController {
 	uc := &BookController{
@@ -291,8 +339,9 @@ func NewBookController(router gin.IRouter, client *ent.Client) *BookController {
 // InitBookController registers routes to the main engine
 func (ctl *BookController) register() {
 	books := ctl.router.Group("/books")
-
+	bookfrees := ctl.router.Group("/bookfrees")
 	books.GET("", ctl.ListBook)
+	bookfrees.GET("",ctl.ListBookFree)
 
 	// CRUD
 	books.POST("", ctl.CreateBook)
