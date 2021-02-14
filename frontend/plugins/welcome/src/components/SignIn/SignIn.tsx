@@ -1,13 +1,9 @@
 import React, { useState, FC, useEffect } from 'react';
-import Radio from '@material-ui/core/Radio';
-import RadioGroup from '@material-ui/core/RadioGroup';
 import { Link as RouterLink } from 'react-router-dom';
-import FormHelperText from '@material-ui/core/FormHelperText';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import TextField from '@material-ui/core/TextField';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
@@ -64,10 +60,7 @@ const SignIn: FC<{}> = () => {
   const [users, setUsers] = useState<EntUser[]>(Array);
   const [email, setEmail] = useState(String);
   const [password, setPassword] = useState(String);
-  const [value, setValue] = React.useState('');
-  const [error, setError] = React.useState(true);
   const [path, setPath] = useState(String);
-  const [helperText, setHelperText] = React.useState('Choose wisely');
   useEffect(() => {
     const getUsers = async () => {
       const res = await api.listUser();
@@ -87,6 +80,7 @@ const SignIn: FC<{}> = () => {
   }, [loading]);
 
   const CheckUser = async () => {
+    var check = false
     users.map((item: any) => {
       
       if ((item.uSEREMAIL == email) && (item.pASSWORD == password)) {
@@ -95,26 +89,16 @@ const SignIn: FC<{}> = () => {
         localStorage.setItem("userID", JSON.stringify(item.id));
         localStorage.setItem("role", JSON.stringify(item.edges.position.rOLENAME));
         localStorage.setItem("valid", JSON.stringify(null));
-        if ((item.edges.position.rOLENAME === value) && (value === "Librarian")){
-          window.location.href = "/"
-          setPath("/")
-        } else if((item.edges.position.rOLENAME === value) && (value === "Library Member")){
-          window.location.href = "/"
-          setPath("/")
-        }
-        else {
-          setPath("/SignIn")
-          localStorage.setItem("valid", JSON.stringify("Invalid Username or Password"));
-          setInvalid(''+localStorage.getItem("valid"))
-        }
+        window.location.href = "/"
+        setPath("/")
+        check = true
       }
     })
-  };
-
-  const handleRadioChange = (event: any) => {
-    setValue(event.target.value);
-    setHelperText('  ');
-    setError(false);
+    if(check==false){
+      setPath("/SignIn")
+      localStorage.setItem("valid", JSON.stringify("Invalid Username or Password"));
+      setInvalid(''+localStorage.getItem("valid"))
+    }
   };
 
   const EmailHandleChange = (event: any) => {
@@ -165,17 +149,7 @@ const SignIn: FC<{}> = () => {
             autoComplete="current-password"
 
           />
-          <RadioGroup aria-label="quiz" name="quiz" value={value} onChange={handleRadioChange}>
-                <div>
-                  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
-                  <FormControlLabel value="Librarian" control={<Radio />} label="Librarian" />
-                  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
-                  <FormControlLabel value="Library Member" control={<Radio />} label="Library Member" />
-                </div>
-              </RadioGroup>
-              <FormHelperText>{helperText}</FormHelperText>
           <Button
-            disabled = {error}
             type="submit"
             fullWidth
             variant="contained"
