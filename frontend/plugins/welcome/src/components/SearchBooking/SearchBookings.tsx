@@ -3,7 +3,6 @@ import SaveAltIcon from '@material-ui/icons/Search';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import { DataGrid, ColDef } from '@material-ui/data-grid';
 import ClearAllIcon from '@material-ui/icons/ClearAll';
-import ComponanceTable from './Table/TablesBookings';
 import {
   Content,
   InfoCard,
@@ -14,14 +13,12 @@ import {
   ContentHeader,
 } from '@backstage/core';
 import {
-  Paper,
   FormControl, InputLabel, MenuItem, Select,
   Typography,
   Grid,
   TextField,
   makeStyles,
   Button,
-  FormHelperText,
 } from '@material-ui/core';
 
 import { Alert, AlertTitle } from '@material-ui/lab';
@@ -134,10 +131,6 @@ export default function Search() {
   }, [loading]);
 
 
-  const [phoneNumberError, setPhoneNumberError] = useState('');
-
-  const [alertMessage, setAlertMessage] = useState('');
-
   const [filter, setFilter] = useState("||");
   const handleSelect = (event: React.ChangeEvent<{ value: unknown }>) => {
     setFilter(event.target.value as string);
@@ -146,8 +139,6 @@ export default function Search() {
   const handleChange = (event: React.ChangeEvent<{ id?: string; value: any }>) => {
     const id = event.target.id as keyof typeof Search;
     const { value } = event.target;
-    const validateValue = value.toString()
-    checkPattern(id, validateValue)
     setBooking({ ...bookingField, [id]: value });
   };
   const handleOperator = (event: React.ChangeEvent<{ name?: string; value: any }>) => {
@@ -157,19 +148,6 @@ export default function Search() {
     setOperator({ ...operatorField, [name]: value });
   };
 
-  const validatePhoneNumber = (val: string) => {
-    return val.match("[0][689]\\d{8}") && val.length == 10;
-  }
-
-  const checkPattern = (id: string, value: any) => {
-    switch (id) {
-      case 'searchPhoneNumber':
-        validatePhoneNumber(value) ? setPhoneNumberError('') : setPhoneNumberError('หมายเลขโทรศัพท์จะต้องขึ้นต้นด้วย 06,08,09 และตามด้วยเลข 0-9 อีก 8 ตัว');
-        return;
-      default:
-        return;
-    }
-  }
   const [rows, setRows] = useState([]);
   var r: any = []
 

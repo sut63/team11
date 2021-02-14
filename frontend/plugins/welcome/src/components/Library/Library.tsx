@@ -64,8 +64,8 @@ const useStyles = makeStyles(theme => ({
 }));
 const WelcomePage = () => {
   const [userName, setName] = useState("Getting Started \"Please Login\"");
-  const [LibrarianBtn, setLibrarianBtn] = useState(Boolean);
-  const [MemberBtn, setMemberBtn] = useState(Boolean);
+  const [LibrarianBtn, setLibrarianBtn] = useState(false);
+  const [MemberBtn, setMemberBtn] = useState(false);
   const [LoginBtn, setLoginBtn] = useState(Boolean);
   const [LogoutBtn, setLogoutBtn] = useState(Boolean);
   const classes = useStyles();
@@ -270,7 +270,7 @@ const WelcomePage = () => {
             <Grid>
             <InfoCard title="เมนูสำหรับการค้นหา 🔎">
                   <Button
-                    disabled ={MemberBtn}
+                    disabled ={LogoutBtn}
                     variant="contained"
                     color="primary"
                     className={classes.button}
@@ -282,7 +282,7 @@ const WelcomePage = () => {
                   </Button>
                   <br />
                   <Button
-                    disabled ={MemberBtn}
+                    disabled ={LogoutBtn}
                     variant="contained"
                     color="primary"
                     className={classes.button}
@@ -294,7 +294,7 @@ const WelcomePage = () => {
                   </Button>
                   <br/>
                   <Button
-                    disabled ={MemberBtn}
+                    disabled ={LogoutBtn}
                     variant="contained"
                     color="primary"
                     className={classes.button}
@@ -305,8 +305,7 @@ const WelcomePage = () => {
                     ค้นหาการจองเครื่องรับชม Video On Demand
                   </Button>
                   <br />
-                  <Button
-                    
+                  <Button 
                     variant="contained"
                     color="primary"
                     className={classes.button}
@@ -319,7 +318,7 @@ const WelcomePage = () => {
                   <br />
 
                   <Button
-                    disabled ={MemberBtn}
+                    disabled ={LogoutBtn}
                     variant="contained"
                     color="primary"
                     className={classes.button}
@@ -331,7 +330,7 @@ const WelcomePage = () => {
                   </Button>
                   <br />
                   <Button
-                    disabled ={MemberBtn}
+                    disabled ={LogoutBtn}
                     variant="contained"
                     color="primary"
                     className={classes.button}
