@@ -339,7 +339,7 @@ const WelcomePage = () => {
                     component={RouterLink}
                     to="/SearchBookreturn"
                   >
-                    คืนหนังสือ
+                    ค้นหารายการคืนหนังสือ
                   </Button>
             </InfoCard>
             </Grid>
