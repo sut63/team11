@@ -104,6 +104,7 @@ export default function ComponentsTable() {
     setSearch(false);
     setdocnames(false);
     setSearch(false);
+    setStatus(false)
 
   }
   //---------------------
