@@ -56,22 +56,14 @@ const useStyles = makeStyles((theme: Theme) =>
   }),
 );
 const Toast = Swal.mixin({
-  // toast: true,
   position: 'center',
   showConfirmButton: false,
-  //timer: 3000,
-  //timerProgressBar: true,
   showCloseButton: true,
 
 });
 
 export default function ComponentsTable() {
 
-    //const name = JSON.parse(String(localStorage.getItem("userName")));
-   // const userName = name
-      //--------------------------
-      ;
-  
     const classes = useStyles();
     const api = new DefaultApi();
     const [loading, setLoading] = useState(true);
@@ -101,7 +93,6 @@ export default function ComponentsTable() {
       getBooks();
     }, [loading]);
   
-    //-------------------
     const Booknamehandlehange = (event: React.ChangeEvent<{ value: unknown }>) => {
       setSearch(false);
       setbooknames(false);
@@ -116,8 +107,8 @@ export default function ComponentsTable() {
       setSearch(false);
   
     }
-    //---------------------
-    const checkresearch = async () => {
+   
+    const checkbook = async () => {
       var check = false;
       book.map(item => {
         if (bookname != "") {
@@ -206,7 +197,7 @@ export default function ComponentsTable() {
                   <div></div>
                   <Button
                     onClick={() => {
-                      checkresearch();
+                      checkbook();
                       setSearch(true);
   
                     }}
@@ -266,6 +257,7 @@ export default function ComponentsTable() {
                               <TableCell align="center">รหัสBarcode</TableCell>
                               <TableCell align="center">ชื่อผู้แต่ง</TableCell>
                               <TableCell align="center">หมวด</TableCell>
+                              <TableCell align="center">สถานะหนังสือ</TableCell>
                             </TableRow>
                           </TableHead>
                           <TableBody>
@@ -278,6 +270,7 @@ export default function ComponentsTable() {
                                 <TableCell align="center">{item.barcode}</TableCell>
                                 <TableCell align="center">{item.edges?.author?.name}</TableCell>
                                 <TableCell align="center">{item.edges?.category?.categoryName}</TableCell>
+                                <TableCell align="center">{item.edges?.status?.sTATUSNAME}</TableCell>
                               </TableRow>
                             ))}
                           </TableBody>
@@ -296,6 +289,7 @@ export default function ComponentsTable() {
                                   <TableCell align="center">รหัสBarcode</TableCell>
                                   <TableCell align="center">ชื่อผู้แต่ง</TableCell>
                                   <TableCell align="center">หมวด</TableCell>
+                                  <TableCell align="center">สถานะหนังสือ</TableCell>
                                 </TableRow>
                               </TableHead>
                               <TableBody>
@@ -308,6 +302,7 @@ export default function ComponentsTable() {
                                     <TableCell align="center">{item.barcode}</TableCell>
                                     <TableCell align="center">{item.edges?.author?.name}</TableCell>
                                     <TableCell align="center">{item.edges?.category?.categoryName}</TableCell>
+                                    <TableCell align="center">{item.edges?.status?.sTATUSNAME}</TableCell>
                                   </TableRow>
                                 ))}
                               </TableBody>

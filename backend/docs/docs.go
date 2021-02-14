@@ -762,6 +762,53 @@ var doc = `{
                 }
             }
         },
+        "/bookfrees": {
+            "get": {
+                "description": "list bookfrees entities",
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "List bookfrees entities",
+                "operationId": "list-bookfrees",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Limit",
+                        "name": "limit",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Offset",
+                        "name": "offset",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/ent.Book"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/gin.H"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/gin.H"
+                        }
+                    }
+                }
+            }
+        },
         "/bookings": {
             "get": {
                 "description": "list booking entities",
