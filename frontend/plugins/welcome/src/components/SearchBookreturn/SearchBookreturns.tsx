@@ -13,12 +13,9 @@ import TableRow from '@material-ui/core/TableRow'
 import Paper from '@material-ui/core/Paper';
 
 import {
+    TextField,
     Grid,
     FormControl,
-    Select,
-    InputLabel,
-    MenuItem,
-    Avatar,
     Button,
 } from '@material-ui/core';
 import { DefaultApi } from '../../api/apis';
@@ -73,11 +70,10 @@ const SearchBookreturns: FC<{}> = () => {
     const classes = useStyles();
     const api = new DefaultApi();
 
-    
-
     // User
-    const [idUser, setIduser] = React.useState<number>(0)
     const [user, setUser] = React.useState<EntUser[]>([])
+    const [name, setName] = React.useState(String)
+    
     const getUser = async () => {
         const res = await api.listUser()
         setUser(res)
@@ -108,7 +104,7 @@ const SearchBookreturns: FC<{}> = () => {
     
     const [bookreturn, setBookreturn] = React.useState<EntBookreturn[]>([])
     const getBookreturns = async () => {
-        const res = await api.getBookreturn({id:idUser})
+        const res = await api.getBookreturn({id:name})
         setBookreturn(res)
         console.log(res);
         
@@ -133,16 +129,15 @@ const SearchBookreturns: FC<{}> = () => {
 
     // set data to object and setIduser
     const handleChange = (
-        event: React.ChangeEvent<{ name?: string; value: any }>,
+        event: React.ChangeEvent<{ value: any }>,
     ) => {
-        const name = event.target.name as keyof typeof SearchBookreturns;
         const { value } = event.target;
-        setIduser(value);
+        setName(value);
     };
 
 
     // function seach data
-    function seach() {
+    function search() {
         getBookreturns();
     }
 
@@ -151,42 +146,42 @@ const SearchBookreturns: FC<{}> = () => {
     return (
         <Page theme={pageTheme.home}>
             <Header style={HeaderCustom} title={`ระบบค้นหารายการคืนหนังสือ`}>
-                <Avatar alt="Remy Sharp" src="../../image/account.jpg" />
                 
             </Header>
             <Content>
-                <Grid container spacing={1}>
-                    <Grid item xs={1}>
-                        <div className={classes.paper}><h3>User</h3></div>
-                    </Grid>
-                    <Grid item xs={3}>
+            <Grid container alignItems="center" justify="center" item xs={12}>
+            <Grid item xs={3}>
                         <FormControl variant="outlined" className={classes.formControl}>
-                            <InputLabel>select customer</InputLabel>
-                            <Select
-                                name="User"
-                                value={idUser || ''} // (undefined || '') = ''
-                                onChange={handleChange}
-                            >
-                                {user.map(item => {
-                                    return (
-                                        <MenuItem key={item.id} value={item.id}>
-                                            {item.uSERNAME}
-                                        </MenuItem>
-                                    );
-                                })}
-                            </Select>
+                        <TextField 
+                        
+                        id="User"
+                        label="ชื่อสมาชิกห้องสมุด" 
+                        margin="normal" 
+                        variant="outlined"
+                        type="string"
+                        onChange={handleChange} 
+                         
+                        />
                         </FormControl>
                     </Grid>
-                    <Grid item xs={6}>
+                    <Grid item xs={3}>
+                    <FormControl variant="outlined" >
+
                         <Button
                             variant="contained"
                             color="secondary"
                             size="large"
-                            onClick={seach}
+                            onClick={search}
                         >
-                            seach
+                            search
                         </Button>
+
+                        </FormControl>
                     </Grid>
+                    <Grid item xs={6}></Grid>
+                </Grid>
+                <Grid container spacing={1}>
+                    
                 </Grid>
 
                 <Grid item xs={12}>
@@ -211,14 +206,14 @@ const SearchBookreturns: FC<{}> = () => {
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {bookreturn.map(item => (bookborrow.filter(bb => bb.id === item.edges?.mustreturn?.id).map(item2 => (
+                            {bookreturn.map(item => (
                                
-                                <TableRow key={item2.id}>
+                                <TableRow key={item.id}>
                                     
                                     <TableCell align="center">{item.id}</TableCell>
                                     <TableCell align="center">{item.edges?.user?.uSERNAME}</TableCell>
                                     <TableCell align="center">{item.edges?.mustreturn?.id}</TableCell>                         
-                                    <TableCell align="center">{item2.edges?.book?.bookName}</TableCell>
+                                    <TableCell align="center">{item.edges?.mustreturn?.edges?.book?.bookName}</TableCell>
                                     <TableCell align="center">{item.edges?.location?.lOCATIONNAME}</TableCell>
                                     <TableCell align="center">{item.dAMAGEDPOINT=== undefined? "0":item.dAMAGEDPOINT 
                                     }</TableCell>
@@ -227,7 +222,7 @@ const SearchBookreturns: FC<{}> = () => {
                                     <TableCell align="center">{item.rETURNTIME}</TableCell>
                                     
                                 </TableRow>
-                            ))))}
+                            ))}
                         </TableBody>
                     </Table>
                 </TableContainer>

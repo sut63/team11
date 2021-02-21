@@ -1407,14 +1407,10 @@ paths:
       description: list bookreturn entities
       operationId: list-bookreturn
       parameters:
-      - description: Limit
+      - description: Name
         in: query
-        name: limit
-        type: integer
-      - description: Offset
-        in: query
-        name: offset
-        type: integer
+        name: name
+        type: string
       produces:
       - application/json
       responses:
@@ -1499,7 +1495,7 @@ paths:
         in: path
         name: id
         required: true
-        type: integer
+        type: string
       produces:
       - application/json
       responses:
