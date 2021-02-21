@@ -10,9 +10,9 @@ import (
 	"github.com/team11/app/ent"
 	"github.com/team11/app/ent/book"
 	"github.com/team11/app/ent/bookborrow"
+	"github.com/team11/app/ent/bookreturn"
 	"github.com/team11/app/ent/location"
 	"github.com/team11/app/ent/user"
-	"github.com/team11/app/ent/bookreturn"
 )
 
 // BookreturnController defines the struct for the bookreturn controller
@@ -160,39 +160,21 @@ func (ctl *BookreturnController) CreateBookreturn(c *gin.Context) {
 // @Description list bookreturn entities
 // @ID list-bookreturn
 // @Produce json
-// @Param limit  query int false "Limit"
-// @Param offset query int false "Offset"
+// @Param name  query string false "Name"
 // @Success 200 {array} ent.Bookreturn
 // @Failure 400 {object} gin.H
 // @Failure 500 {object} gin.H
 // @Router /bookreturns [get]
 func (ctl *BookreturnController) ListBookreturn(c *gin.Context) {
-	limitQuery := c.Query("limit")
-	limit := 10
-	if limitQuery != "" {
-		limit64, err := strconv.ParseInt(limitQuery, 10, 64)
-		if err == nil {
-			limit = int(limit64)
-		}
-	}
-
-	offsetQuery := c.Query("offset")
-	offset := 0
-	if offsetQuery != "" {
-		offset64, err := strconv.ParseInt(offsetQuery, 10, 64)
-		if err == nil {
-			offset = int(offset64)
-		}
-	}
-
+	n := c.Query("Name")
 	bookreturns, err := ctl.client.Bookreturn.
 		Query().
 		WithUser().
 		WithLocation().
 		WithMustreturn().
-		Limit(limit).
-		Offset(offset).
+		Where(bookreturn.HasUserWith(user.USERNAME(n))).
 		All(context.Background())
+
 	if err != nil {
 		c.JSON(400, gin.H{"error": err.Error()})
 		return
@@ -206,27 +188,23 @@ func (ctl *BookreturnController) ListBookreturn(c *gin.Context) {
 // @Description get bookreturn by ID
 // @ID get-bookreturn
 // @Produce  json
-// @Param id path int true "Bookreturn ID"
+// @Param id path string true "Bookreturn ID"
 // @Success 200 {array} ent.Bookreturn
 // @Failure 400 {object} gin.H
 // @Failure 404 {object} gin.H
 // @Failure 500 {object} gin.H
 // @Router /bookreturns/{id} [get]
 func (ctl *BookreturnController) GetBookreturn(c *gin.Context) {
-	id, err := strconv.ParseInt(c.Param("id"), 10, 64)
-	if err != nil {
-		c.JSON(400, gin.H{
-			"error": err.Error(),
-		})
-		return
-	}
-
+	n := c.Param("id")
 	br, err := ctl.client.Bookreturn.
 		Query().
 		WithUser().
-		WithMustreturn().
 		WithLocation().
-		Where(bookreturn.HasUserWith(user.IDEQ(int(id)))).
+		WithMustreturn(func (q *ent.BookborrowQuery){
+			q.QueryBOOK()
+			q.WithBOOK()
+		}).
+		Where(bookreturn.HasMustreturnWith(bookborrow.HasUSERWith(user.USERNAMEContains(n)))).
 		All(context.Background())
 
 	if err != nil {

@@ -230,7 +230,7 @@ export interface GetBookingRequest {
 }
 
 export interface GetBookreturnRequest {
-    id: number;
+    id: string;
 }
 
 export interface GetCategoryRequest {
@@ -302,8 +302,7 @@ export interface ListBookfreesRequest {
 }
 
 export interface ListBookreturnRequest {
-    limit?: number;
-    offset?: number;
+    name?: string;
 }
 
 export interface ListCategoryRequest {
@@ -2191,12 +2190,8 @@ export class DefaultApi extends runtime.BaseAPI {
     async listBookreturnRaw(requestParameters: ListBookreturnRequest): Promise<runtime.ApiResponse<Array<EntBookreturn>>> {
         const queryParameters: runtime.HTTPQuery = {};
 
-        if (requestParameters.limit !== undefined) {
-            queryParameters['limit'] = requestParameters.limit;
-        }
-
-        if (requestParameters.offset !== undefined) {
-            queryParameters['offset'] = requestParameters.offset;
+        if (requestParameters.name !== undefined) {
+            queryParameters['name'] = requestParameters.name;
         }
 
         const headerParameters: runtime.HTTPHeaders = {};

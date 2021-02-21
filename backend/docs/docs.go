@@ -1031,15 +1031,9 @@ var doc = `{
                 "operationId": "list-bookreturn",
                 "parameters": [
                     {
-                        "type": "integer",
-                        "description": "Limit",
-                        "name": "limit",
-                        "in": "query"
-                    },
-                    {
-                        "type": "integer",
-                        "description": "Offset",
-                        "name": "offset",
+                        "type": "string",
+                        "description": "Name",
+                        "name": "name",
                         "in": "query"
                     }
                 ],
@@ -1120,7 +1114,7 @@ var doc = `{
                 "operationId": "get-bookreturn",
                 "parameters": [
                     {
-                        "type": "integer",
+                        "type": "string",
                         "description": "Bookreturn ID",
                         "name": "id",
                         "in": "path",
