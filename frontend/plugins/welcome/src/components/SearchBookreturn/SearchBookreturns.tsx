@@ -1,4 +1,4 @@
-import React, { FC, useEffect } from 'react';
+import React, { FC } from 'react';
 
 import { makeStyles } from '@material-ui/core/styles';
 import { Content, Header, Page, pageTheme } from '@backstage/core';
@@ -22,7 +22,7 @@ import { DefaultApi } from '../../api/apis';
 import { EntBookreturn } from '../../api/models/EntBookreturn';
 import Snackbar from '@material-ui/core/Snackbar';
 import Alert from '@material-ui/lab/Alert';
-import { EntBookborrow, EntUser } from '../../api';
+
 
 
 // header css
@@ -71,14 +71,8 @@ const SearchBookreturns: FC<{}> = () => {
     const api = new DefaultApi();
 
     // User
-    const [user, setUser] = React.useState<EntUser[]>([])
     const [name, setName] = React.useState(String)
     
-    const getUser = async () => {
-        const res = await api.listUser()
-        setUser(res)
-    }
-
     // alert setting
     const [open, setOpen] = React.useState(false);
     const [fail, setFail] = React.useState(false);
@@ -95,12 +89,7 @@ const SearchBookreturns: FC<{}> = () => {
 
     // Bookreturn
     var lenreturn : number
-    const [bookborrow, setBookBorrow] = React.useState<EntBookborrow[]>([])
-    const getBookBorrows = async () => {
-        const res = await api.listBookborrow({})
-        setBookBorrow(res)
-    }
-    console.log("xx",bookborrow);
+   
     
     const [bookreturn, setBookreturn] = React.useState<EntBookreturn[]>([])
     const getBookreturns = async () => {
@@ -116,18 +105,8 @@ const SearchBookreturns: FC<{}> = () => {
         }   
     }
    console.log("bb",bookreturn);
-   
-    
 
-    // Lifecycle Hooks
-    useEffect(() => {
-        getUser();
-        getBookBorrows();
-    }, []);
-    
-
-
-    // set data to object and setIduser
+    // set data to object and setName
     const handleChange = (
         event: React.ChangeEvent<{ value: any }>,
     ) => {
