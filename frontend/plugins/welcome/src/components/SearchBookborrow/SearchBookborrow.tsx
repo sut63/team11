@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useState } from 'react';
+import React, { FC, useState } from 'react';
 
 import { makeStyles } from '@material-ui/core/styles';
 import { Content, ContentHeader, Header, Page, pageTheme } from '@backstage/core';
@@ -14,14 +14,14 @@ import Paper from '@material-ui/core/Paper';
 import { Alert } from '@material-ui/lab';
 import {
   Grid,
-  Select,
-  MenuItem,
   Button,
   Link,
+  FormControl,
+  TextField,
 } from '@material-ui/core';
 import { Link as RouterLink } from 'react-router-dom';
 import { DefaultApi } from '../../api/apis';
-import { EntBookborrow, EntUser } from '../../api';
+import { EntBookborrow } from '../../api';
 import { SearchIcon } from '@material-ui/data-grid';
 
 
@@ -67,137 +67,114 @@ const SearchBookborrows: FC<{}> = () => {
   const classes = useStyles();
   const api = new DefaultApi();
 
-  const [users, setUsers] = useState<EntUser[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [userid, setUserid] = useState(Number);
+  const [name, setName] = useState(String);
 
   const [status, setStatus] = useState(false);
   const [alert, setAlert] = useState(true);
 
   const [bookborrows, setBookborrows] = useState<EntBookborrow[]>([]);
 
-  useEffect(() => {
-    const getUsers = async () => {
-      const pr = await api.listUser();
-      setLoading(false);
-      setUsers(pr);
-    };
-    getUsers();
-  }, [loading]);
 
-  const UserID_handleChange = (event: any) => {
-    setUserid(event.target.value);
+  const handleChange = (
+    event: React.ChangeEvent<{ value: any }>,
+  ) => {
+    const { value } = event.target;
+    setName(value);
     setStatus(false);
     setBookborrows([]);
-  }
+  };
 
   var lenBookborrow: number
-  const getCheckinBookborrw = async () => {
-    const res = await api.listBookborrow({limit:10 , offset:0})
+  const getCheckinBookborrow = async () => {
+    const res = await api.getBookborrow({ id: name })
     setBookborrows(res)
-    for(let i = 0; i < res.length ; i++){
-      if(res[i].edges?.user?.id == userid){
-        lenBookborrow = 1
-        break
-      }
-      else{
-        lenBookborrow = 0
-      }
-    }
     console.log(res)
-    console.log(userid)
-    if (lenBookborrow == 0) {
-      setStatus(true);
-      setAlert(false);
-    }
-    else {
+    lenBookborrow = res.length
+    if (lenBookborrow > 0) {
       setStatus(true);
       setAlert(true);
     }
-
+    else {
+      setStatus(true);
+      setAlert(false);
+    }
   }
 
   return (
     <Page theme={pageTheme.home}>
       <Header title={`ระบบค้นหารายการยืมหนังสือ`}>
-      <Link component={RouterLink} to="/">
-            <Button variant="contained" style={{ background: '#FFFFFF', height: 36 }}>
-                  <h3
-                    style={
-                      {
-                        color: "#000000",
-                        borderRadius: 10,
-                        height: 25,
-                        padding: '0 5px',
-                      }
-                    }>
-                    ย้อนกลับ
+        <Link component={RouterLink} to="/">
+          <Button variant="contained" style={{ background: '#FFFFFF', height: 36 }}>
+            <h3
+              style={
+                {
+                  color: "#000000",
+                  borderRadius: 10,
+                  height: 25,
+                  padding: '0 5px',
+                }
+              }>
+              ย้อนกลับ
             </h3>
-                </Button>
-            </Link>
+          </Button>
+        </Link>
       </Header>
       <Content>
         <ContentHeader title={'ชื่อผู้ยืมหนังสือที่ต้องการค้นหา'}>
           {status ? (
             <div>
               {alert ? (
-                <Alert severity="success" style={{ width: 400 }} onClose={() => { setStatus(false)}}>
-                 <div> ค้นหาข้อมูลพบ</div>
+                <Alert severity="success" style={{ width: 400 }} onClose={() => { setStatus(false) }}>
+                  <div> ค้นหาข้อมูลพบ</div>
                 </Alert>
-                
-          ) : (
-                <Alert severity="error" style={{ width: 400 }} onClose={() => { setStatus(false)}}>
-                <div>
-                  ไม่พบข้อมูลที่ค้นหา
+
+              ) : (
+                  <Alert severity="error" style={{ width: 400 }} onClose={() => { setStatus(false) }}>
+                    <div>
+                      ไม่พบข้อมูลที่ค้นหา
                 </div>
-                </Alert>
-                
-          )}
-           </div>) : null}
+                  </Alert>
+
+                )}
+            </div>) : null}
         </ContentHeader>
-        <Grid item xs={2}></Grid>
-        <Grid item xs={2}></Grid>
-        <Grid item xs={2}>
-          <Select
-            labelId="user_id-label"
-            label="User"
-            id="UserID"
-            onChange={UserID_handleChange}
-            style={{ width: 300 }}
-            value={userid}
-            variant="outlined"
-          >
-            {users.map((item: EntUser) =>
-              <MenuItem key={item.id} value={item.id}>{item.uSERNAME}</MenuItem>)}
-          </Select>
-        </Grid>
-        <Grid item xs={2}></Grid>
-        <Grid item xs={2}> </Grid>
+        <Grid container alignItems="center" justify="center" item xs={12}>
+        <Grid item xs={3}>
+          <FormControl variant="outlined" className={classes.formControl}>
+            <TextField
 
-        <Grid item xs={2}></Grid>
-        <Grid item xs={2}> </Grid>
-        <Grid item xs={2}></Grid>
-        <Grid item xs={2}>
-          <Button
+              id="User"
+              label="ชื่อสมาชิกห้องสมุด"
+              margin="normal"
+              variant="outlined"
+              type="string"
+              onChange={handleChange}
 
-            variant="contained"
-            color="primary"
-            size="large"
-            className={classes.button}
-            onClick={() => {
-              getCheckinBookborrw();
-            }}
+            />
+          </FormControl>
+          </Grid>
+          <Grid item xs={3}>
+            <Button
 
-            startIcon={<SearchIcon
-            />}
-          >
-            Search
+              variant="contained"
+              color="primary"
+              size="large"
+              className={classes.button}
+              onClick={() => {
+                getCheckinBookborrow();
+              }}
+
+              startIcon={<SearchIcon
+              />}
+            >
+              Search
               </Button>
+          </Grid>
+          <Grid item xs={6}></Grid>
         </Grid>
-        <Grid item xs={2}></Grid>
-        <Grid item xs={2}> </Grid>
-        <Grid item xs={12}></Grid>
-        <Grid item xs={12}></Grid>
+        <Grid container spacing={1}>
+
+        </Grid>
 
 
         <Grid item xs={12}>
@@ -222,7 +199,7 @@ const SearchBookborrows: FC<{}> = () => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {bookborrows.filter((filter: any) => filter.edges.user?.id == userid).map((item: any) => (
+              {bookborrows.map((item: any) => (
 
                 <TableRow key={item.id}>
                   <TableCell align="center">{item.id}</TableCell>

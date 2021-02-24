@@ -148,28 +148,23 @@ func (ctl *BookborrowController) CreateBookborrow(c *gin.Context) {
 // @Description get bookborrow by ID
 // @ID get-bookborrow
 // @Produce  json
-// @Param id path int true "Bookborrow ID"
+// @Param id path string true "Bookborrow ID"
 // @Success 200 {array} ent.Bookborrow
 // @Failure 400 {object} gin.H
 // @Failure 404 {object} gin.H
 // @Failure 500 {object} gin.H
 // @Router /bookborrows/{id} [get]
 func (ctl *BookborrowController) GetBookborrow(c *gin.Context) {
-	id, err := strconv.ParseInt(c.Param("id"), 10, 64)
-	if err != nil {
-		c.JSON(400, gin.H{
-			"error": err.Error(),
-		})
-		return
-	}
-
+	n := c.Param("id")
 	bb, err := ctl.client.Bookborrow.
 		Query().
 		WithUSER().
 		WithBOOK().
 		WithSERVICEPOINT().
-		Where(bookborrow.IDEQ(int(id))).
+		WithSTATUS().
+		Where(bookborrow.HasUSERWith(user.USERNAMEContains(n))).
 		All(context.Background())
+		
 	if err != nil {
 		c.JSON(404, gin.H{
 			"error": err.Error(),

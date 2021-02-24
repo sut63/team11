@@ -218,7 +218,7 @@ export interface GetBookRequest {
 }
 
 export interface GetBookborrowRequest {
-    id: number;
+    id: string;
 }
 
 export interface GetBookborrowuserRequest {

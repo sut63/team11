@@ -584,7 +584,7 @@ var doc = `{
                 "operationId": "get-bookborrow",
                 "parameters": [
                     {
-                        "type": "integer",
+                        "type": "string",
                         "description": "Bookborrow ID",
                         "name": "id",
                         "in": "path",
