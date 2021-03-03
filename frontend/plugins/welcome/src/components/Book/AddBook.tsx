@@ -13,14 +13,9 @@ import Button from '@material-ui/core/Button';
 import FormControl from '@material-ui/core/FormControl';
 import { Alert } from '@material-ui/lab';
 import { DefaultApi } from '../../api/apis';
-//import Autocomplete from '@material-ui/lab/Autocomplete';
-//import Typography from '@material-ui/core/Typography';
 import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
 import Select from '@material-ui/core/Select';
-//import InputAdornment from '@material-ui/core/InputAdornment';
-//import { EntCarservice } from '../../api/models/EntCarservice';
-import { EntUser } from '../../api/models/EntUser';
 import { EntAuthor } from '../../api/models/EntAuthor'; //-------
 import { EntCategory } from '../../api/models/EntCategory'; //-------
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';

@@ -156,6 +156,41 @@ func (ctl *BookController) GetBook(c *gin.Context) {
 	c.JSON(200, u)
 }
 
+// GetBookBySearch handles GET requests to retrieve a book entity
+// @Summary Get a book entity by Search
+// @Description get book by Search
+// @ID get-book-by-search
+// @Produce  json
+// @Param book query string false "Book Search"
+// @Success 200 {object} ent.Book
+// @Failure 400 {object} gin.H
+// @Failure 404 {object} gin.H
+// @Failure 500 {object} gin.H
+// @Router /searchbooks [get]
+func (ctl *BookController) GetBookBySearch(c *gin.Context) {
+	bsearch := c.Query("book")
+
+	ci, err := ctl.client.Book.
+		Query().
+		WithAuthor().
+		WithBooklist().
+		WithCategory().
+		WithStatus().
+		WithUser().
+		Where(book.BookNameContains(bsearch)).
+		All(context.Background())
+	if err != nil {
+		c.JSON(404, gin.H{
+			"error": err.Error(),
+		})
+		return
+	}
+
+	c.JSON(200, gin.H{
+		"data": ci,
+	})
+}
+
 // ListBook handles request to get a list of book entities
 // @Summary List book entities
 // @Description list book entities
@@ -343,6 +378,10 @@ func (ctl *BookController) register() {
 	books.GET("", ctl.ListBook)
 	bookfrees.GET("",ctl.ListBookFree)
 
+	searchbooks := ctl.router.Group("/searchbooks")
+	searchbooks.GET("",ctl.GetBookBySearch)
+	
+	
 	// CRUD
 	books.POST("", ctl.CreateBook)
 	books.GET(":id", ctl.GetBook)

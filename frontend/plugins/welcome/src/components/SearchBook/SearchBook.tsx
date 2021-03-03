@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { makeStyles, Theme, createStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -64,82 +64,97 @@ const Toast = Swal.mixin({
 
 export default function ComponentsTable() {
 
-    const classes = useStyles();
-    const api = new DefaultApi();
-    const [loading, setLoading] = useState(true);
-    const [search, setSearch] = useState(false);
-  
-    //---------------------------
-    const [checkbookname, setbooknames] = useState(false);
-    const [book, setBook] = useState<EntBook[]>([])
-  
-    //--------------------------
-    const [bookname, setbookname] = useState(String);
-    const profile = { givenName: 'ยินดีต้อนรับสู่ ระบบค้นหาข้อมูลหนังสือ' };
-    const alertMessage = (icon: any, title: any) => {
-      Toast.fire({
-        icon: icon,
-        title: title,
-      });
-      setSearch(false);
-    }
-  
-    useEffect(() => {
-      const getBooks = async () => {
-        const res = await api.listBook({ offset: 0 });
-        setLoading(false);
-        setBook(res);
+  const classes = useStyles();
+  const api = new DefaultApi();
+  const [loading, setLoading] = useState(true);
+  const [search, setSearch] = useState(true);
+
+  //---------------------------
+  const [checkbookname, setbooknames] = useState(false);
+  const [book, setBook] = useState<EntBook[]>([])
+
+  //--------------------------
+  const [bookname, setbookname] = useState(String);
+  const profile = { givenName: 'ยินดีต้อนรับสู่ ระบบค้นหาข้อมูลหนังสือ' };
+  const alertMessage = (icon: any, title: any) => {
+    Toast.fire({
+      icon: icon,
+      title: title,
+    });
+    setSearch(false);
+  }
+
+  const Booknamehandlehange = (event: React.ChangeEvent<{ value: unknown }>) => {
+    setSearch(false);
+    setbooknames(false);
+    setbookname(event.target.value as string);
+
+  };
+
+  const cleardata = () => {
+    setbookname("");
+    setSearch(false);
+    setbooknames(false);
+    setSearch(false);
+    setBook([]);
+  }
+
+  const SearchBook = async () => {
+    if (bookname == "") {
+      alertMessage("info", "แสดงข้อมูลหนังสือทั้งหมด")
+      const apiUrl = `http://localhost:8080/api/v1/searchbooks?book=${bookname}`;
+      const requestOptions = {
+        method: 'GET',
       };
-      getBooks();
-    }, [loading]);
-  
-    const Booknamehandlehange = (event: React.ChangeEvent<{ value: unknown }>) => {
-      setSearch(false);
-      setbooknames(false);
-      setbookname(event.target.value as string);
-  
-    };
-  
-    const cleardata = () => {
-      setbookname("");
-      setSearch(false);
-      setbooknames(false);
-      setSearch(false);
-  
-    }
-   
-    const checkbook = async () => {
-      var check = false;
-      book.map(item => {
-        if (bookname != "") {
-          if (item.bookName?.includes(bookname)) {
-            setbooknames(true);
-            alertMessage("success", "พบข้อมูลหนังสือที่ค้นหา");
-            check = true;
+      fetch(apiUrl, requestOptions)
+        .then(response => response.json())
+        .then(data => {
+          console.log(data.data)
+          if (data.data != null) {
+            if (data.data.length >= 1) {
+              console.log(data.data)
+              setBook(data.data);
+            }
           }
-        }
-      })
-      if (!check) {
-        alertMessage("error", "ไม่พบข้อมูลหนังสือที่ค้นหา");
-      }
-      console.log(checkbookname)
-      if (bookname == "") {
-        alertMessage("info", "แสดงข้อมูลหนังสือทั้งหมดในระบบ");
-      }
-    };
-  
-    return (
-  
-      <Page theme={pageTheme.home}>
-        <Header
-          title={`${profile.givenName}`}
-        >
-          <table>
-            <tr>
-              <th>
-                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        });
+
+    }
+    else {
+      const apiUrl = `http://localhost:8080/api/v1/searchbooks?book=${bookname}`;
+      const requestOptions = {
+        method: 'GET',
+      };
+      fetch(apiUrl, requestOptions)
+        .then(response => response.json())
+        .then(data => {
+          console.log(data.data)
+          alertMessage("warning", "ไม่พบข้อมูลที่ค้นหา")
+          setBook([]);
+          if (data.data != null) {
+            if (data.data.length >= 1) {
+              alertMessage("success", "พบข้อมูลที่ค้นหา")
+              console.log(data.data)
+              setBook(data.data);
+            }
+          }
+        });
+
+    }
+  }
+
+
+  return (
+
+    <Page theme={pageTheme.home}>
+      <Header
+        title={`${profile.givenName}`}
+      >
+        <table>
+          <tr>
+            <th>
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
             <Link component={RouterLink} to="/">
-            <Button variant="contained" style={{ background: '#FFFFFF', height: 36 }}>
+                <Button variant="contained" style={{ background: '#FFFFFF', height: 36 }}>
                   <h3
                     style={
                       {
@@ -152,173 +167,133 @@ export default function ComponentsTable() {
                     ย้อนกลับ
             </h3>
                 </Button>
-                </Link>
-              </th>
-            </tr>
-          </table>
-  
-        </Header>
-        <Content>
-          <Grid container item xs={12} justify="center">
-            <Grid item xs={5}>
-              <Paper>
-  
-                <Typography align="center" >
-                  <div style={{ background: '#BC85A3', height: 55 }}>
-                    <h1 style={
+              </Link>
+            </th>
+          </tr>
+        </table>
+
+      </Header>
+      <Content>
+        <Grid container item xs={12} justify="center">
+          <Grid item xs={5}>
+            <Paper>
+
+              <Typography align="center" >
+                <div style={{ background: '#BC85A3', height: 55 }}>
+                  <h1 style={
+                    {
+                      color: "#FFFFFF",
+                      borderRadius: 5,
+                      height: 18,
+                      padding: '0 5px',
+                      fontSize: '36px',
+                    }}>
+                    ค้นหาข้อมูลหนังสือ
+              </h1>
+                </div>
+
+                <div>
+                  <FormControl
+                    className={classes.margin}
+                    variant="outlined"
+                  >
+                    <div className={classes.paper}><strong>กรุณากรอกชื่อหนังสือ </strong></div>
+                    <TextField
+                      id="bookname"
+                      value={bookname}
+                      onChange={Booknamehandlehange}
+                      type="string"
+                      size="small"
+
+                      style={{ width: 200 }}
+                    />
+                  </FormControl>
+                </div>
+                <div></div>
+                <Button
+                  onClick={() => {
+                    SearchBook();
+
+                  }}
+                  endIcon={<SearchTwoToneIcon />}
+                  className={classes.margins}
+                  variant="contained"
+                  style={{ background: "#9900FF", height: 40 }}>
+                  <h3
+                    style={
                       {
                         color: "#FFFFFF",
-                        borderRadius: 5,
-                        height: 18,
-                        padding: '0 5px',
-                        fontSize: '36px',
-                      }}>
-                      ค้นหาข้อมูลหนังสือ
-              </h1>
-                  </div>
-  
-                  <div>
-                    <FormControl
-                      className={classes.margin}
-                      variant="outlined"
-                    >
-                      <div className={classes.paper}><strong>กรุณากรอกชื่อหนังสือ </strong></div>
-                      <TextField
-                        id="bookname"
-                        value={bookname}
-                        onChange={Booknamehandlehange}
-                        type="string"
-                        size="small"
-  
-                        style={{ width: 200 }}
-                      />
-                    </FormControl>
-                  </div>
-                  <div></div>
-                  <Button
-                    onClick={() => {
-                      checkbook();
-                      setSearch(true);
-  
-                    }}
-                    endIcon={<SearchTwoToneIcon />}
-                    className={classes.margins}
-                    variant="contained"
-                    style={{ background: "#9900FF", height: 40 }}>
-                    <h3
-                      style={
-                        {
-                          color: "#FFFFFF",
-                          padding: '0 10px',
-  
-                        }
-                      }>
-                      ค้นหา
+                        padding: '0 10px',
+
+                      }
+                    }>
+                    ค้นหา
               </h3>
-                  </Button>
-                  <Button
-                    onClick={() => {
-                      cleardata();
-  
-                    }}
-                    className={classes.margins}
-                    variant="contained"
-                    style={{ background: "#9900FF", height: 40 }}>
-                    <h3
-                      style={
-                        {
-                          color: "#FFFFFF",
-                          padding: '0 25px',
-  
-                        }
-                      }>
-                      ลบการค้นหาทั้งหมด
+                </Button>
+                <Button
+                  onClick={() => {
+                    cleardata();
+
+                  }}
+                  className={classes.margins}
+                  variant="contained"
+                  style={{ background: "#9900FF", height: 40 }}>
+                  <h3
+                    style={
+                      {
+                        color: "#FFFFFF",
+                        padding: '0 25px',
+
+                      }
+                    }>
+                    ลบการค้นหาทั้งหมด
               </h3>
-                  </Button>
-                </Typography>
-              </Paper>
-            </Grid>
+                </Button>
+              </Typography>
+            </Paper>
           </Grid>
-  
-  
-          <Grid container justify="center">
-            <Grid item xs={12} md={10}>
-              <Paper>
-                {search ? (
-                  <div>
-                    {  checkbookname ? (
-                      <TableContainer component={Paper}>
-                        <Table className={classes.table} aria-label="simple table">
-                          <TableHead>
-                            <TableRow>
-                              <TableCell align="center">ลำดับที่</TableCell>
-                              <TableCell align="center">ชื่อหนังสือ</TableCell>
-                              <TableCell align="center">จำนวนหน้า</TableCell>
-                              <TableCell align="center">รหัสBarcode</TableCell>
-                              <TableCell align="center">ชื่อผู้แต่ง</TableCell>
-                              <TableCell align="center">หมวด</TableCell>
-                              <TableCell align="center">สถานะหนังสือ</TableCell>
-                            </TableRow>
-                          </TableHead>
-                          <TableBody>
-  
-                            {book.filter((filter: any) => filter.bookName.includes(bookname)).map((item: any) => (
-                              <TableRow key={item.id}>
-                                <TableCell align="center">{item.id}</TableCell>
-                                <TableCell align="center">{item.bookName}</TableCell>
-                                <TableCell align="center">{item.bookPage}</TableCell>
-                                <TableCell align="center">{item.barcode}</TableCell>
-                                <TableCell align="center">{item.edges?.author?.name}</TableCell>
-                                <TableCell align="center">{item.edges?.category?.categoryName}</TableCell>
-                                <TableCell align="center">{item.edges?.status?.sTATUSNAME}</TableCell>
-                              </TableRow>
-                            ))}
-                          </TableBody>
-                        </Table>
-                      </TableContainer>
-                    )
-                      : bookname == "" ? (
-                        <div>
-                          <TableContainer component={Paper}>
-                            <Table className={classes.table} aria-label="simple table">
-                              <TableHead>
-                                <TableRow>
-                                  <TableCell align="center">ลำดับที่</TableCell>
-                                  <TableCell align="center">ชื่อหนังสือ</TableCell>
-                                  <TableCell align="center">จำนวนหน้า</TableCell>
-                                  <TableCell align="center">รหัสBarcode</TableCell>
-                                  <TableCell align="center">ชื่อผู้แต่ง</TableCell>
-                                  <TableCell align="center">หมวด</TableCell>
-                                  <TableCell align="center">สถานะหนังสือ</TableCell>
-                                </TableRow>
-                              </TableHead>
-                              <TableBody>
-  
-                                {book.map((item: any) => (
-                                  <TableRow key={item.id}>
-                                    <TableCell align="center">{item.id}</TableCell>
-                                    <TableCell align="center">{item.bookName}</TableCell>
-                                    <TableCell align="center">{item.bookPage}</TableCell>
-                                    <TableCell align="center">{item.barcode}</TableCell>
-                                    <TableCell align="center">{item.edges?.author?.name}</TableCell>
-                                    <TableCell align="center">{item.edges?.category?.categoryName}</TableCell>
-                                    <TableCell align="center">{item.edges?.status?.sTATUSNAME}</TableCell>
-                                  </TableRow>
-                                ))}
-                              </TableBody>
-                            </Table>
-                          </TableContainer>
-  
-                        </div>
-                      ) : null}
-                  </div>
-                ) : null}
-              </Paper>
-            </Grid>
+        </Grid>
+
+
+        <Grid container justify="center">
+          <Grid item xs={12} md={10}>
+            <Paper>
+
+              <TableContainer component={Paper}>
+                <Table className={classes.table} aria-label="simple table">
+                  <TableHead>
+                    <TableRow>
+                      <TableCell align="center">ลำดับที่</TableCell>
+                      <TableCell align="center">ชื่อหนังสือ</TableCell>
+                      <TableCell align="center">จำนวนหน้า</TableCell>
+                      <TableCell align="center">รหัสBarcode</TableCell>
+                      <TableCell align="center">ชื่อผู้แต่ง</TableCell>
+                      <TableCell align="center">หมวด</TableCell>
+                      <TableCell align="center">สถานะหนังสือ</TableCell>
+                    </TableRow>
+                  </TableHead>
+                  <TableBody>
+
+                    {book.map((item: any) => (
+                      <TableRow key={item.id}>
+                        <TableCell align="center">{item.id}</TableCell>
+                        <TableCell align="center">{item.BookName}</TableCell>
+                        <TableCell align="center">{item.BookPage}</TableCell>
+                        <TableCell align="center">{item.Barcode}</TableCell>
+                        <TableCell align="center">{item.edges?.Author?.Name}</TableCell>
+                        <TableCell align="center">{item.edges?.Category?.CategoryName}</TableCell>
+                        <TableCell align="center">{item.edges?.Status?.STATUS_NAME}</TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </TableContainer>
+
+            </Paper>
           </Grid>
-        </Content>
-      </Page>
-    );
-  
-  }
-  
+        </Grid>
+      </Content>
+    </Page>
+  );
+
+}
