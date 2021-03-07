@@ -174,6 +174,79 @@ func (ctl *BookingController) ListBooking(c *gin.Context) {
 	c.JSON(200, bookings)
 }
 
+// SearchBooking handles request to get a search of booking entities
+// @Summary search booking entities
+// @Description search booking entities
+// @ID search-booking
+// @Produce json
+// @Param userid  query int false "UserID"
+// @Param username query string false "UserName"
+// @Param clientname  query string false "ClientName"
+// @Param phonenumber query string false "PhoneNumber"
+// @Param operator  query string false "Operator"
+// @Success 200 {array} ent.Booking
+// @Failure 400 {object} gin.H
+// @Failure 500 {object} gin.H
+// @Router /searchbookings [get]
+func (ctl *BookingController) SearchBooking(c *gin.Context) {
+	bid, err := strconv.ParseInt(c.Query("userid"), 10, 64)
+	bookingid := 0
+	if err == nil {
+		bookingid = int(bid)
+	}
+	uname := c.Query("username")
+	cname := c.Query("clientname")
+	pnumber := c.Query("phonenumber")
+	op := c.Query("operator")
+
+	if op == "And" {
+		bookings, err := ctl.client.Booking.
+			Query().
+			WithGetservice().
+			WithUsedby().
+			WithUsing().
+			Where(booking.And(
+				booking.HasUsedbyWith(user.USERNAMEContains(uname)),
+				booking.HasUsingWith(cliententity.CLIENTNAMEContains(cname)),
+				booking.PHONENUMBERContains(pnumber),
+				booking.IDEQ(bookingid),
+			)).
+			All(context.Background())
+		if err != nil {
+			c.JSON(400, gin.H{"error": err.Error()})
+			return
+		}
+		c.JSON(200, bookings)
+	} else {
+		if uname == "" {
+			uname = "#"
+		}
+		if cname == "" {
+			cname = "#"
+		}
+		if pnumber == "" {
+			pnumber = "#"
+		}
+		bookings, err := ctl.client.Booking.
+			Query().
+			WithGetservice().
+			WithUsedby().
+			WithUsing().
+			Where(booking.Or(
+				booking.HasUsedbyWith(user.USERNAMEContains(uname)),
+				booking.HasUsingWith(cliententity.CLIENTNAMEContains(cname)),
+				booking.PHONENUMBERContains(pnumber),
+				booking.IDEQ(bookingid),
+			)).
+			All(context.Background())
+		if err != nil {
+			c.JSON(400, gin.H{"error": err.Error()})
+			return
+		}
+		c.JSON(200, bookings)
+	}
+}
+
 // DeleteBooking handles DELETE requests to delete a booking entity
 // @Summary Delete a booking entity by ID
 // @Description get booking by ID
@@ -260,9 +333,10 @@ func NewBookingController(router gin.IRouter, client *ent.Client) *BookingContro
 // InitBookingController registers routes to the main engine
 func (ctl *BookingController) register() {
 	bookings := ctl.router.Group("/bookings")
+	searchbookings := ctl.router.Group("/searchbookings")
 
+	searchbookings.GET("", ctl.SearchBooking)
 	bookings.GET("", ctl.ListBooking)
-
 	// CRUD
 	bookings.POST("", ctl.CreateBooking)
 	bookings.GET(":id", ctl.GetBooking)

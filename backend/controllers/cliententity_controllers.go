@@ -141,7 +141,7 @@ func (ctl *ClientEntityController) DeleteClientEntity(c *gin.Context) {
 
 	c.JSON(200, gin.H{"result": fmt.Sprintf("ok deleted %v", id)})
 }
-
+//ClientEntity Struct
 type ClientEntity struct {
 	Sid int
 }

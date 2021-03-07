@@ -2688,6 +2688,49 @@ paths:
           schema:
             $ref: '#/definitions/gin.H'
       summary: Update a roominfo entity by ID
+  /searchbookings:
+    get:
+      description: search booking entities
+      operationId: search-booking
+      parameters:
+      - description: UserID
+        in: query
+        name: userid
+        type: integer
+      - description: UserName
+        in: query
+        name: username
+        type: string
+      - description: ClientName
+        in: query
+        name: clientname
+        type: string
+      - description: PhoneNumber
+        in: query
+        name: phonenumber
+        type: string
+      - description: Operator
+        in: query
+        name: operator
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/ent.Booking'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/gin.H'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/gin.H'
+      summary: search booking entities
   /servicepoints:
     get:
       description: list servicepoint entities
@@ -3147,6 +3190,7 @@ securityDefinitions:
     tokenUrl: https://example.com/oauth/token
     type: oauth2
   OAuth2Application:
+    authorizationUrl: ""
     flow: application
     scopes:
       admin: ' Grants read and write access to administrative information'
@@ -3161,6 +3205,7 @@ securityDefinitions:
       write: ' Grants write access'
     type: oauth2
   OAuth2Password:
+    authorizationUrl: ""
     flow: password
     scopes:
       admin: ' Grants read and write access to administrative information'

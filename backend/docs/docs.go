@@ -2947,6 +2947,71 @@ var doc = `{
                 }
             }
         },
+        "/searchbookings": {
+            "get": {
+                "description": "search booking entities",
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "search booking entities",
+                "operationId": "search-booking",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "UserID",
+                        "name": "userid",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "UserName",
+                        "name": "username",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "ClientName",
+                        "name": "clientname",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "PhoneNumber",
+                        "name": "phonenumber",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Operator",
+                        "name": "operator",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/ent.Booking"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/gin.H"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/gin.H"
+                        }
+                    }
+                }
+            }
+        },
         "/servicepoints": {
             "get": {
                 "description": "list servicepoint entities",
@@ -4617,6 +4682,7 @@ var doc = `{
         "OAuth2Application": {
             "type": "oauth2",
             "flow": "application",
+            "authorizationUrl": "",
             "tokenUrl": "https://example.com/oauth/token",
             "scopes": {
                 "admin": " Grants read and write access to administrative information",
@@ -4635,6 +4701,7 @@ var doc = `{
         "OAuth2Password": {
             "type": "oauth2",
             "flow": "password",
+            "authorizationUrl": "",
             "tokenUrl": "https://example.com/oauth/token",
             "scopes": {
                 "admin": " Grants read and write access to administrative information",
