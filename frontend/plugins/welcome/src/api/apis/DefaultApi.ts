@@ -355,6 +355,14 @@ export interface ListStatusRequest {
     offset?: number;
 }
 
+export interface SearchBookingRequest {
+    userid?: number;
+    username?: string;
+    clientname?: string;
+    phonenumber?: string;
+    operator?: string;
+}
+
 export interface UpdateAuthorRequest {
     id: number;
     author: EntAuthor;
@@ -2628,6 +2636,54 @@ export class DefaultApi extends runtime.BaseAPI {
      */
     async listUser(): Promise<Array<EntUser>> {
         const response = await this.listUserRaw();
+        return await response.value();
+    }
+
+    /**
+     * search booking entities
+     * search booking entities
+     */
+    async searchBookingRaw(requestParameters: SearchBookingRequest): Promise<runtime.ApiResponse<Array<EntBooking>>> {
+        const queryParameters: runtime.HTTPQuery = {};
+
+        if (requestParameters.userid !== undefined) {
+            queryParameters['userid'] = requestParameters.userid;
+        }
+
+        if (requestParameters.username !== undefined) {
+            queryParameters['username'] = requestParameters.username;
+        }
+
+        if (requestParameters.clientname !== undefined) {
+            queryParameters['clientname'] = requestParameters.clientname;
+        }
+
+        if (requestParameters.phonenumber !== undefined) {
+            queryParameters['phonenumber'] = requestParameters.phonenumber;
+        }
+
+        if (requestParameters.operator !== undefined) {
+            queryParameters['operator'] = requestParameters.operator;
+        }
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        const response = await this.request({
+            path: `/searchbookings`,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        });
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => jsonValue.map(EntBookingFromJSON));
+    }
+
+    /**
+     * search booking entities
+     * search booking entities
+     */
+    async searchBooking(requestParameters: SearchBookingRequest): Promise<Array<EntBooking>> {
+        const response = await this.searchBookingRaw(requestParameters);
         return await response.value();
     }
 

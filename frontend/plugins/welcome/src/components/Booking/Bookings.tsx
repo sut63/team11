@@ -212,7 +212,7 @@ export default function Create() {
 
   const CreateBooking = async () => {
 
-    
+
     const resC = await api.listCliententity();
     setClients(resC);
     console.log(resC)
@@ -297,7 +297,7 @@ export default function Create() {
               <Typography variant="body1" gutterBottom>
                 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;🖱 Log off ออกจากเครื่องรับชมเมื่อเลิกใช้งาน และส่งคืนหูฟังที่เคาน์เตอร์
                 (After using the video on demand machines, please log off. Then kindly return the headphone to the staff at the Information Counter.)<br />
-   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;👨‍💻 ผู้ใช้บริการต้องรับผิดชอบต่ออุปกรณ์ที่ชำรุดเสียหาย (Library users are liable to any damage incurred or lost.)
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;👨‍💻 ผู้ใช้บริการต้องรับผิดชอบต่ออุปกรณ์ที่ชำรุดเสียหาย (Library users are liable to any damage incurred or lost.)
               </Typography>
               <br />
               <Grid container justify="center" >
@@ -400,7 +400,7 @@ export default function Create() {
                           <br />
                         </Alert>
                       ) : (
-                          <Alert severity="error" style={{ width: 400 }} onClose={() => { setStatus(false) ; window.location.reload(false);}}>
+                          <Alert severity="error" style={{ width: 400 }} onClose={() => { setStatus(false); window.location.reload(false); }}>
                             <AlertTitle>Error</AlertTitle >
                             <div>
                               {alertMessage} — <strong>❌</strong>
