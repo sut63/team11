@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState} from 'react';
 import { makeStyles, Theme, createStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -7,7 +7,6 @@ import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
-import { DefaultApi } from '../../api/apis';
 
 import { EntResearch } from '../../api/models/EntResearch';
 
@@ -16,7 +15,6 @@ import moment from 'moment';
 import { Page, pageTheme, Header, Content, Link } from '@backstage/core';
 import { Grid, Button, TextField, Typography, FormControl } from '@material-ui/core';
 import SearchTwoToneIcon from '@material-ui/icons/SearchTwoTone';
-
 import { Alert } from '@material-ui/lab';
 
 
@@ -53,96 +51,81 @@ const useStyles = makeStyles((theme: Theme) =>
     table: {
       minWidth: 500,
     },
-
-
   }),
 );
 
 export default function ComponentsTable() {
 
+  const profile = { givenName: 'ยินดีต้อนรับสู่ ระบบค้นหาข้อมูลงานวิจัย' };
   const name = JSON.parse(String(localStorage.getItem("userName")));
-  const userName = name
-    //--------------------------
-    ;
-
+  const userName = name;
   const classes = useStyles();
-  const api = new DefaultApi();
-  const [loading, setLoading] = useState(true);
-  const [search, setSearch] = useState(false);
 
-  //---------------------------
-  const [checkdocname, setdocnames] = useState(false);
   const [research, setResearch] = useState<EntResearch[]>([])
-
   const [alert, setAlert] = useState(true);
   const [status, setStatus] = useState(false);
-
-  //--------------------------
   const [docname, setdocname] = useState(String);
-  const profile = { givenName: 'ยินดีต้อนรับสู่ ระบบค้นหาข้อมูลงานวิจัย' };
   
-  useEffect(() => {
-    const getResearchs = async () => {
-      const res = await api.listResearch({ offset: 0 });
-      setLoading(false);
-      setResearch(res);
-    };
-    getResearchs();
-  }, [loading]);
-
   //-------------------
   const Docnamehandlehange = (event: React.ChangeEvent<{ value: unknown }>) => {
-    setSearch(false);
-    setdocnames(false);
     setStatus(false);
     setdocname(event.target.value as string);
-
   };
 
   const cleardata = () => {
     setdocname("");
-    setSearch(false);
-    setdocnames(false);
-    setSearch(false);
     setStatus(false)
-
+    setResearch([]);
   }
+
   //---------------------
-  const checkresearch = async () => {
-    var check = false;
-    research.map(item => {
-      if (docname != "") {
-        if (item.dOCNAME?.includes(docname)) {
-          setdocnames(true);
-          setStatus(true);
-          setAlert(true);
-
-          //พบข้อมูลที่ค้นหา
-          
-          check = true;
-        }
-      }
-    })
-    if (!check) {
-      setStatus(true);
-      setAlert(false);
-
-      //ไม่พบข้อมูลที่ค้นหา
-    }
-    console.log(checkdocname)
-    if (docname == "" ) {
+  const SearchResearch = async () => {
+    if (docname == "") {
       setStatus(true);
       setAlert(true);
-
-      //แสดงข้อมูลงานวิจัยทั้งหมดในระบบ
-    }    
-  };
+      const apiUrl = `http://localhost:8080/api/v1/searchresearchs?research=${docname}`;
+      const requestOptions = {
+        method: 'GET',
+      };
+      fetch(apiUrl, requestOptions)
+        .then(response => response.json())
+        .then(data => {
+          console.log(data.data)
+          if (data.data != null) {
+            if (data.data.length >= 1) {
+              console.log(data.data)
+              setResearch(data.data);
+            }
+          }
+        });
+    }
+    else {
+      const apiUrl = `http://localhost:8080/api/v1/searchresearchs?research=${docname}`;
+      const requestOptions = {
+        method: 'GET',
+      };
+      fetch(apiUrl, requestOptions)
+        .then(response => response.json())
+        .then(data => {
+          console.log(data.data)
+          setStatus(true);
+          setAlert(false);
+          setResearch([]);
+          if (data.data != null) {
+            if (data.data.length >= 1) {
+              setStatus(true);
+              setAlert(true);
+              console.log(data.data)
+              setResearch(data.data);
+            }
+          }
+        });
+    }
+  }
 
   return (
     <Page theme={pageTheme.home}>
-      <Header
-        title={`${profile.givenName}`}
-      >
+      <Header title={`${profile.givenName}`}>
         <table>
           <tr>
             <th>
@@ -151,8 +134,7 @@ export default function ComponentsTable() {
               </Button>
             </th>
             <th>
-              
-          <Link component={RouterLink} to="/">
+              <Link component={RouterLink} to="/">
                 <Button variant="contained" style={{ background: 'linear-gradient(45deg, #3399FF 15%, #9900FF 120%)', height: 36 }}>
                   <h3
                     style={
@@ -164,20 +146,19 @@ export default function ComponentsTable() {
                       }
                     }>
                     กลับหน้าหลัก
-            </h3>
+                  </h3>
                 </Button>
               </Link>
             </th>
           </tr>
         </table>
-
       </Header>
+
       <Content>
         <Grid container item xs={12} justify="center">
           <Grid item xs={5}>
             <Paper>
-
-              <Typography align="center" >
+              <Typography align="center">
                 <div style={{ background: 'linear-gradient(45deg, #00FFCC 15%, #9900FF 120%)', height: 55 }}>
                   <h1 style={
                     {
@@ -188,35 +169,28 @@ export default function ComponentsTable() {
                       fontSize: '40px',
                     }}>
                     ค้นหาข้อมูลงานวิจัย
-            </h1>
+                  </h1>
                 </div>
 
                 <div>
-                  <FormControl
-                    className={classes.margin}
-                    variant="outlined"
-                  >
-                    <div className={classes.paper}>
-                    <font size='5'>ชื่องานวิจัย 📜 </font>
-                     </div>
+                  <FormControl className={classes.margin} variant="outlined">
+                    <div className={classes.paper}><font size='5'>ชื่องานวิจัย 📜 </font></div>
                     <TextField
                       id="docname"
                       value={docname}
                       onChange={Docnamehandlehange}
                       type="string"
                       size="small"
-
                       style={{ width: 200 }}
                     />
                   </FormControl>
                 </div>
-                <div></div>
-                <Button
-                  onClick={() => {
-                    checkresearch();
-                    setSearch(true);
 
-                  }}
+                <div></div>
+
+                <Button
+                  onClick={() => {SearchResearch();}}
+
                   endIcon={<SearchTwoToneIcon />}
                   className={classes.margins}
                   variant="contained"
@@ -226,17 +200,14 @@ export default function ComponentsTable() {
                       {
                         color: "#FFFFFF",
                         padding: '0 10px',
-
                       }
                     }>
                     ค้นหาข้อมูล
-            </h3>
+                  </h3>
                 </Button>
-                <Button
-                  onClick={() => {
-                    cleardata();
 
-                  }}
+                <Button
+                  onClick={() => {cleardata();}}
                   className={classes.margins}
                   variant="contained"
                   style={{ background: "#9900FF", height: 40 }}>
@@ -249,107 +220,70 @@ export default function ComponentsTable() {
                       }
                     }>
                     เคลียร์ข้อมูล
-            </h3>
+                  </h3>
                 </Button>
+
               </Typography>
             </Paper>
+            
+            {status ? (
+              <div>
+                {alert ? (
+                  <Alert severity="success">
+                    แสดงข้อมูลงานวิจัย {docname} 📜
+                  </Alert>
+                )
+                  : (
+                    <Alert severity="warning" style={{ marginTop: 20 }}>
+                      ไม่พบข้อมูลที่ค้นหา
+                    </Alert>
+                  )}
+              </div>
+            ) : null}
+
           </Grid>
         </Grid>
-        {status ? (
-            <div>
-              {alert ? (
-                <Alert severity="success">
-                  แสดงข้อมูลงานวิจัย {docname} 📜
-                </Alert>
-              )
-              : (
-                  <Alert severity="warning" style={{ marginTop: 20 }}>
-                    ไม่พบข้อมูลที่ค้นหา
-                  </Alert>
-                )}
-            </div>
-          ) : null}
-        
+
+
         <Grid container justify="center">
           <Grid item xs={12} md={10}>
             <Paper>
-              
-              {search ? (
-                <div>
-                  {  checkdocname ? (
-                    <TableContainer component={Paper}>
-                      <Table className={classes.table} aria-label="simple table">
-                        <TableHead>
-                          <TableRow>
-                            <TableCell align="center">ลำดับที่</TableCell>
-                            <TableCell align="center">ชื่องานวิจัย</TableCell>
-                            <TableCell align="center">จำนวนหน้า</TableCell>
-                            <TableCell align="center">ปีที่พิมพ์</TableCell>
-                            <TableCell align="center">ชื่อผู้แต่ง</TableCell>
-                            <TableCell align="center">ประเภทงานวิจัย</TableCell>
-                            <TableCell align="center">วันที่</TableCell>
-                          </TableRow>
-                        </TableHead>
-                        <TableBody>
 
-                          {research.filter((filter: any) => filter.dOCNAME.includes(docname)).map((item: any) => (
-                            <TableRow key={item.id}>
-                              <TableCell align="center">{item.id}</TableCell>
-                              <TableCell align="center">{item.dOCNAME}</TableCell>
-                              <TableCell align="center">{item.pAGENUMBER}</TableCell>
-                              <TableCell align="center">{item.yEARNUMBER}</TableCell>
-                              <TableCell align="center">{item.edges?.myDoc?.name}</TableCell>
-                              <TableCell align="center">{item.edges?.docType?.tYPENAME}</TableCell>
-                              <TableCell align="center">{moment(item.dATE).format('DD/MM/YYYY HH.mm น.')}</TableCell>
-                            </TableRow>
-                          ))}
-                        </TableBody>
-                      </Table>
-                    </TableContainer>
-                  )
-                  
-                    : docname == "" ? (
-                      
-                      <div>
-                        <TableContainer component={Paper}>
-                          <Table className={classes.table} aria-label="simple table">
-                            <TableHead>
-                              <TableRow>
-                                <TableCell align="center">ลำดับที่</TableCell>
-                                <TableCell align="center">ชื่องานวิจัย</TableCell>
-                                <TableCell align="center">จำนวนหน้า</TableCell>
-                                <TableCell align="center">ปีที่พิมพ์</TableCell>
-                                <TableCell align="center">ชื่อผู้แต่ง</TableCell>
-                                <TableCell align="center">ประเภทงานวิจัย</TableCell>
-                                <TableCell align="center">วันที่</TableCell>
-                              </TableRow>
-                            </TableHead>
-                            <TableBody>
+              <TableContainer component={Paper}>
+                <Table className={classes.table} aria-label="simple table">
+                  <TableHead>
+                    <TableRow>
+                      <TableCell align="center">ลำดับที่</TableCell>
+                      <TableCell align="center">ชื่องานวิจัย</TableCell>
+                      <TableCell align="center">จำนวนหน้า</TableCell>
+                      <TableCell align="center">ปีที่พิมพ์</TableCell>
+                      <TableCell align="center">ชื่อผู้แต่ง</TableCell>
+                      <TableCell align="center">ประเภทงานวิจัย</TableCell>
+                      <TableCell align="center">วันที่</TableCell>
+                    </TableRow>
+                  </TableHead>
+                  <TableBody>
 
-                              {research.map((item: any) => (
-                                <TableRow key={item.id}>
-                                  <TableCell align="center">{item.id}</TableCell>
-                                  <TableCell align="center">{item.dOCNAME}</TableCell>
-                                  <TableCell align="center">{item.pAGENUMBER}</TableCell>
-                                  <TableCell align="center">{item.yEARNUMBER}</TableCell>
-                                  <TableCell align="center">{item.edges?.myDoc?.name}</TableCell>
-                                  <TableCell align="center">{item.edges?.docType?.tYPENAME}</TableCell>
-                                  <TableCell align="center">{moment(item.dATE).format('DD/MM/YYYY HH.mm น.')}</TableCell>
-                                </TableRow>
-                              ))}
-                            </TableBody>
-                          </Table>
-                        </TableContainer>
+                    {research.map((item: any) => (
+                      <TableRow key={item.id}>
+                        <TableCell align="center">{item.id}</TableCell>
+                        <TableCell align="center">{item.DOC_NAME}</TableCell>
+                        <TableCell align="center">{item.PAGE_NUMBER}</TableCell>
+                        <TableCell align="center">{item.YEAR_NUMBER}</TableCell>
+                        <TableCell align="center">{item.edges?.MyDoc?.Name}</TableCell>
+                        <TableCell align="center">{item.edges?.DocType?.TYPE_NAME}</TableCell>
+                        <TableCell align="center">{moment(item.DATE).format('DD/MM/YYYY HH.mm น.')}</TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </TableContainer>
 
-                      </div>
-                    ) : null}
-                </div>
-              ) : null}
             </Paper>
           </Grid>
         </Grid>
-      </Content>
-    </Page>
+      </Content >
+    </Page >
   );
 
 }

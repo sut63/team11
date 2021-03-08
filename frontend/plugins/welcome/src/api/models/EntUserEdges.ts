@@ -104,13 +104,13 @@ export function EntUserEdgesFromJSONTyped(json: any, ignoreDiscriminator: boolea
     }
     return {
         
-        'addby': !exists(json, 'addby') ? undefined : ((json['addby'] as Array<any>).map(EntBookFromJSON)),
-        'booking': !exists(json, 'booking') ? undefined : ((json['booking'] as Array<any>).map(EntBookingFromJSON)),
-        'borrow': !exists(json, 'borrow') ? undefined : ((json['borrow'] as Array<any>).map(EntBookborrowFromJSON)),
+        'addby': !exists(json, 'Addby') ? undefined : ((json['Addby'] as Array<any>).map(EntBookFromJSON)),
+        'booking': !exists(json, 'Booking') ? undefined : ((json['Booking'] as Array<any>).map(EntBookingFromJSON)),
+        'borrow': !exists(json, 'Borrow') ? undefined : ((json['Borrow'] as Array<any>).map(EntBookborrowFromJSON)),
         'position': !exists(json, 'Position') ? undefined : EntRoleFromJSON(json['Position']),
-        'preemption': !exists(json, 'preemption') ? undefined : ((json['preemption'] as Array<any>).map(EntPreemptionFromJSON)),
-        'record': !exists(json, 'record') ? undefined : ((json['record'] as Array<any>).map(EntResearchFromJSON)),
-        '_return': !exists(json, 'return') ? undefined : ((json['return'] as Array<any>).map(EntBookreturnFromJSON)),
+        'preemption': !exists(json, 'Preemption') ? undefined : ((json['Preemption'] as Array<any>).map(EntPreemptionFromJSON)),
+        'record': !exists(json, 'Record') ? undefined : ((json['Record'] as Array<any>).map(EntResearchFromJSON)),
+        '_return': !exists(json, 'Return') ? undefined : ((json['Return'] as Array<any>).map(EntBookreturnFromJSON)),
     };
 }
 

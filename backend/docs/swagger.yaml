@@ -2731,6 +2731,64 @@ paths:
           schema:
             $ref: '#/definitions/gin.H'
       summary: search booking entities
+  /searchbooks:
+    get:
+      description: get book by Search
+      operationId: get-book-by-search
+      parameters:
+      - description: Book Search
+        in: query
+        name: book
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/ent.Book'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/gin.H'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/gin.H'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/gin.H'
+      summary: Get a book entity by Search
+  /searchresearchs:
+    get:
+      description: get research by Search
+      operationId: get-research-by-search
+      parameters:
+      - description: Search Research
+        in: query
+        name: research
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/ent.Research'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/gin.H'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/gin.H'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/gin.H'
+      summary: Get a research entity by Search
   /servicepoints:
     get:
       description: list servicepoint entities
@@ -3190,7 +3248,6 @@ securityDefinitions:
     tokenUrl: https://example.com/oauth/token
     type: oauth2
   OAuth2Application:
-    authorizationUrl: ""
     flow: application
     scopes:
       admin: ' Grants read and write access to administrative information'
@@ -3205,7 +3262,6 @@ securityDefinitions:
       write: ' Grants write access'
     type: oauth2
   OAuth2Password:
-    authorizationUrl: ""
     flow: password
     scopes:
       admin: ' Grants read and write access to administrative information'
