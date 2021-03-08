@@ -217,6 +217,10 @@ export interface GetBookRequest {
     id: number;
 }
 
+export interface GetBookBySearchRequest {
+    book?: string;
+}
+
 export interface GetBookborrowRequest {
     id: string;
 }
@@ -255,6 +259,10 @@ export interface GetPurposeRequest {
 
 export interface GetRearchRequest {
     id: number;
+}
+
+export interface GetResearchBySearchRequest {
+    research?: string;
 }
 
 export interface GetResearchtypeRequest {
@@ -1508,6 +1516,38 @@ export class DefaultApi extends runtime.BaseAPI {
     }
 
     /**
+     * get book by Search
+     * Get a book entity by Search
+     */
+    async getBookBySearchRaw(requestParameters: GetBookBySearchRequest): Promise<runtime.ApiResponse<EntBook>> {
+        const queryParameters: runtime.HTTPQuery = {};
+
+        if (requestParameters.book !== undefined) {
+            queryParameters['book'] = requestParameters.book;
+        }
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        const response = await this.request({
+            path: `/searchbooks`,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        });
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => EntBookFromJSON(jsonValue));
+    }
+
+    /**
+     * get book by Search
+     * Get a book entity by Search
+     */
+    async getBookBySearch(requestParameters: GetBookBySearchRequest): Promise<EntBook> {
+        const response = await this.getBookBySearchRaw(requestParameters);
+        return await response.value();
+    }
+
+    /**
      * get bookborrow by ID
      * Get a bookborrow entity by ID
      */
@@ -1824,6 +1864,38 @@ export class DefaultApi extends runtime.BaseAPI {
      */
     async getRearch(requestParameters: GetRearchRequest): Promise<EntResearch> {
         const response = await this.getRearchRaw(requestParameters);
+        return await response.value();
+    }
+
+    /**
+     * get research by Search
+     * Get a research entity by Search
+     */
+    async getResearchBySearchRaw(requestParameters: GetResearchBySearchRequest): Promise<runtime.ApiResponse<EntResearch>> {
+        const queryParameters: runtime.HTTPQuery = {};
+
+        if (requestParameters.research !== undefined) {
+            queryParameters['research'] = requestParameters.research;
+        }
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        const response = await this.request({
+            path: `/searchresearchs`,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        });
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => EntResearchFromJSON(jsonValue));
+    }
+
+    /**
+     * get research by Search
+     * Get a research entity by Search
+     */
+    async getResearchBySearch(requestParameters: GetResearchBySearchRequest): Promise<EntResearch> {
+        const response = await this.getResearchBySearchRaw(requestParameters);
         return await response.value();
     }
 

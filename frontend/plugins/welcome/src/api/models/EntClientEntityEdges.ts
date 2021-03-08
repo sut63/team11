@@ -55,7 +55,7 @@ export function EntClientEntityEdgesFromJSONTyped(json: any, ignoreDiscriminator
     return {
         
         'booked': !exists(json, 'booked') ? undefined : ((json['booked'] as Array<any>).map(EntBookingFromJSON)),
-        'state': !exists(json, 'State') ? undefined : EntStatusFromJSON(json['State']),
+        'state': !exists(json, 'state') ? undefined : EntStatusFromJSON(json['state']),
     };
 }
 

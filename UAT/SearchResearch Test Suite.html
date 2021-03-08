@@ -3,12 +3,24 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
 	<meta content="text/html; charset=UTF-8" http-equiv="content-type" />
-	<title>Lab10</title>
+	<title>SearchResearch Sprint2</title>
 </head>
 <body>
 <table cellpadding="1" cellspacing="1" border="1">
 <thead>
-<tr><td rowspan="1" colspan="3">ค้นแล้วเจอ</td></tr>
+<tr><td rowspan="1" colspan="3">ค้นหาเเล้วเจอหมด</td></tr>
+</thead>
+<tbody>
+<tr><td>open</td><td>http://localhost:3000/SearchResearch<datalist><option>http://localhost:3000/SearchResearch</option></datalist></td><td></td>
+</tr>
+<tr><td>click</td><td>//div[@id='root']/div/div[2]/article/div/div/div/p/button/span/h3<datalist><option>//div[@id='root']/div/div[2]/article/div/div/div/p/button/span/h3</option><option>//p/button/span/h3</option><option>css=button.MuiButtonBase-root.MuiButton-root.MuiButton-contained.makeStyles-margins-27 &gt; span.MuiButton-label &gt; h3</option></datalist></td><td></td>
+</tr>
+<tr><td>assertText</td><td>//div[@id='root']/div/div[2]/article/div/div/div[2]/div/div[2]<datalist><option>//div[@id='root']/div/div[2]/article/div/div/div[2]/div/div[2]</option><option>//div[2]/div/div[2]</option><option>css=div.MuiAlert-message</option></datalist></td><td>แสดงข้อมูลงานวิจัย 📜</td>
+</tr>
+</tbody></table>
+<table cellpadding="1" cellspacing="1" border="1">
+<thead>
+<tr><td rowspan="1" colspan="3">ค้นเเล้วเจอ</td></tr>
 </thead>
 <tbody>
 <tr><td>open</td><td>http://localhost:3000/SearchResearch<datalist><option>http://localhost:3000/SearchResearch</option></datalist></td><td></td>
@@ -17,25 +29,25 @@
 </tr>
 <tr><td>type</td><td>id=docname<datalist><option>id=docname</option><option>//input[@id='docname']</option><option>//div[@id='root']/div/div[2]/article/div/div/div/p/div[2]/div/div[2]/div/input</option><option>//input</option><option>css=#docname</option></datalist></td><td>dog</td>
 </tr>
-<tr><td>click</td><td>//div[@id='root']/div/div[2]/article/div/div/div/p/button/span/h3<datalist><option>//div[@id='root']/div/div[2]/article/div/div/div/p/button/span/h3</option><option>//p/button/span/h3</option><option>css=button.MuiButtonBase-root.MuiButton-root.MuiButton-contained.makeStyles-margins-27 &gt; span.MuiButton-label &gt; h3</option></datalist></td><td></td>
+<tr><td>click</td><td>//div[@id='root']/div/div[2]/article/div/div/div/p/button/span<datalist><option>//div[@id='root']/div/div[2]/article/div/div/div/p/button/span</option><option>//p/button/span</option><option>css=button.MuiButtonBase-root.MuiButton-root.MuiButton-contained.makeStyles-margins-27 &gt; span.MuiButton-label</option></datalist></td><td></td>
 </tr>
-<tr><td>assertText</td><td>id=swal2-title<datalist><option>id=swal2-title</option><option>//h2[@id='swal2-title']</option><option>//h2</option><option>css=#swal2-title</option></datalist></td><td>พบข้อมูลที่ค้นหา</td>
+<tr><td>assertText</td><td>//div[@id='root']/div/div[2]/article/div[2]/div/div/div/table/tbody/tr/td[2]<datalist><option>//div[@id='root']/div/div[2]/article/div[2]/div/div/div/table/tbody/tr/td[2]</option><option>//td[2]</option></datalist></td><td>dog</td>
 </tr>
 </tbody></table>
 <table cellpadding="1" cellspacing="1" border="1">
 <thead>
-<tr><td rowspan="1" colspan="3">ค้นแล้วไม่เจอ</td></tr>
+<tr><td rowspan="1" colspan="3">ค้นเเล้วไม่เจอ</td></tr>
 </thead>
 <tbody>
 <tr><td>open</td><td>http://localhost:3000/SearchResearch<datalist><option>http://localhost:3000/SearchResearch</option></datalist></td><td></td>
 </tr>
 <tr><td>click</td><td>id=docname<datalist><option>id=docname</option><option>//input[@id='docname']</option><option>//div[@id='root']/div/div[2]/article/div/div/div/p/div[2]/div/div[2]/div/input</option><option>//input</option><option>css=#docname</option></datalist></td><td></td>
 </tr>
-<tr><td>type</td><td>id=docname<datalist><option>id=docname</option><option>//input[@id='docname']</option><option>//div[@id='root']/div/div[2]/article/div/div/div/p/div[2]/div/div[2]/div/input</option><option>//input</option><option>css=#docname</option></datalist></td><td>หหห</td>
+<tr><td>type</td><td>id=docname<datalist><option>id=docname</option><option>//input[@id='docname']</option><option>//div[@id='root']/div/div[2]/article/div/div/div/p/div[2]/div/div[2]/div/input</option><option>//input</option><option>css=#docname</option></datalist></td><td>abtt</td>
 </tr>
 <tr><td>click</td><td>//div[@id='root']/div/div[2]/article/div/div/div/p/button/span/h3<datalist><option>//div[@id='root']/div/div[2]/article/div/div/div/p/button/span/h3</option><option>//p/button/span/h3</option><option>css=button.MuiButtonBase-root.MuiButton-root.MuiButton-contained.makeStyles-margins-27 &gt; span.MuiButton-label &gt; h3</option></datalist></td><td></td>
 </tr>
-<tr><td>assertText</td><td>id=swal2-title<datalist><option>id=swal2-title</option><option>//h2[@id='swal2-title']</option><option>//h2</option><option>css=#swal2-title</option></datalist></td><td>ไม่พบข้อมูลที่ค้นหา</td>
+<tr><td>assertText</td><td>//div[@id='root']/div/div[2]/article/div/div/div[2]/div/div[2]<datalist><option>//div[@id='root']/div/div[2]/article/div/div/div[2]/div/div[2]</option><option>//div[2]/div/div[2]</option><option>css=div.MuiAlert-message</option></datalist></td><td>ไม่พบข้อมูลที่ค้นหา</td>
 </tr>
 </tbody></table>
 </body>

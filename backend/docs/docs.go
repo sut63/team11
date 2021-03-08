@@ -3012,6 +3012,94 @@ var doc = `{
                 }
             }
         },
+        "/searchbooks": {
+            "get": {
+                "description": "get book by Search",
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "Get a book entity by Search",
+                "operationId": "get-book-by-search",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Book Search",
+                        "name": "book",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/ent.Book"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/gin.H"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/gin.H"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/gin.H"
+                        }
+                    }
+                }
+            }
+        },
+        "/searchresearchs": {
+            "get": {
+                "description": "get research by Search",
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "Get a research entity by Search",
+                "operationId": "get-research-by-search",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Search Research",
+                        "name": "research",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/ent.Research"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/gin.H"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/gin.H"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/gin.H"
+                        }
+                    }
+                }
+            }
+        },
         "/servicepoints": {
             "get": {
                 "description": "list servicepoint entities",
@@ -4682,7 +4770,6 @@ var doc = `{
         "OAuth2Application": {
             "type": "oauth2",
             "flow": "application",
-            "authorizationUrl": "",
             "tokenUrl": "https://example.com/oauth/token",
             "scopes": {
                 "admin": " Grants read and write access to administrative information",
@@ -4701,7 +4788,6 @@ var doc = `{
         "OAuth2Password": {
             "type": "oauth2",
             "flow": "password",
-            "authorizationUrl": "",
             "tokenUrl": "https://example.com/oauth/token",
             "scopes": {
                 "admin": " Grants read and write access to administrative information",
