@@ -3,20 +3,23 @@ import { makeStyles, Theme, createStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
+
 import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
+import { Link as RouterLink } from 'react-router-dom';
 
 import { EntResearch } from '../../api/models/EntResearch';
 
-import { Link as RouterLink } from 'react-router-dom';
 import moment from 'moment';
 import { Page, pageTheme, Header, Content, Link } from '@backstage/core';
 import { Grid, Button, TextField, Typography, FormControl } from '@material-ui/core';
 import SearchTwoToneIcon from '@material-ui/icons/SearchTwoTone';
 import { Alert } from '@material-ui/lab';
 
+import { styled } from '@material-ui/core/styles';
+import { compose, spacing, palette, sizing, shadows   } from '@material-ui/system';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -65,6 +68,8 @@ export default function ComponentsTable() {
   const [alert, setAlert] = useState(true);
   const [status, setStatus] = useState(false);
   const [docname, setdocname] = useState(String);
+
+  const Box = styled('div')(compose(spacing, palette, shadows, sizing ));
   
   //-------------------
   const Docnamehandlehange = (event: React.ChangeEvent<{ value: unknown }>) => {
@@ -80,26 +85,8 @@ export default function ComponentsTable() {
 
   //---------------------
   const SearchResearch = async () => {
-    if (docname == "") {
       setStatus(true);
       setAlert(true);
-      const apiUrl = `http://localhost:8080/api/v1/searchresearchs?research=${docname}`;
-      const requestOptions = {
-        method: 'GET',
-      };
-      fetch(apiUrl, requestOptions)
-        .then(response => response.json())
-        .then(data => {
-          console.log(data.data)
-          if (data.data != null) {
-            if (data.data.length >= 1) {
-              console.log(data.data)
-              setResearch(data.data);
-            }
-          }
-        });
-    }
-    else {
       const apiUrl = `http://localhost:8080/api/v1/searchresearchs?research=${docname}`;
       const requestOptions = {
         method: 'GET',
@@ -120,7 +107,6 @@ export default function ComponentsTable() {
             }
           }
         });
-    }
   }
 
   return (
@@ -129,10 +115,12 @@ export default function ComponentsTable() {
         <table>
           <tr>
             <th>
-              <Button variant="contained" color='primary' size='large' >
-                <font size='3'>hello are you 🌵 {userName}🌵</font>
-              </Button>
+              <Box color="black" bgcolor="info.main" p={1} boxShadow={1} width="auto">
+                <font size='5' color= "black">Hello are you 🌵 {userName}🌵</font>
+              </Box>
             </th>
+          </tr>
+          <tr>
             <th>
               <Link component={RouterLink} to="/">
                 <Button variant="contained" style={{ background: 'linear-gradient(45deg, #3399FF 15%, #9900FF 120%)', height: 36 }}>
