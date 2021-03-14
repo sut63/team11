@@ -119,39 +119,22 @@ func (ctl *PreemptionController) CreatePreemption(c *gin.Context) {
 // @Description list Preemption entities
 // @ID list-preemption
 // @Produce json
-// @Param limit  query int false "Limit"
-// @Param offset query int false "Offset"
+// @Param nameu  query string false "Nameu"
 // @Success 200 {array} ent.Preemption
 // @Failure 400 {object} gin.H
 // @Failure 500 {object} gin.H
 // @Router /preemptions [get]
 func (ctl *PreemptionController) ListPreemption(c *gin.Context) {
+	name := string(c.Query("nameu"))
 	
-	limitQuery := c.Query("limit")
-	limit := 10
-	if limitQuery != "" {
-		limit64, err := strconv.ParseInt(limitQuery, 10, 64)
-		if err == nil {
-			limit = int(limit64)
-		}
-	}
-
-	offsetQuery := c.Query("offset")
-	offset := 0
-	if offsetQuery != "" {
-		offset64, err := strconv.ParseInt(offsetQuery, 10, 64)
-		if err == nil {
-			offset = int(offset64)
-		}
-	}
 
 	preemptions, err := ctl.client.Preemption.
 		Query().
-		Where(preemption.HasUserIDWith(user.ID(offset))).
+		Where(preemption.HasUserIDWith(user.USERNAME(name))).
 		WithUserID().
 		WithRoomID().
 		WithPurposeID().
-		Limit(limit).
+		Limit(10).
 		Offset(0).
 		All(context.Background())
 		

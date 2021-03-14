@@ -324,8 +324,7 @@ export interface ListLocationRequest {
 }
 
 export interface ListPreemptionRequest {
-    limit?: number;
-    offset?: number;
+    nameu?: string;
 }
 
 export interface ListPurposeRequest {
@@ -2402,12 +2401,8 @@ export class DefaultApi extends runtime.BaseAPI {
     async listPreemptionRaw(requestParameters: ListPreemptionRequest): Promise<runtime.ApiResponse<Array<EntPreemption>>> {
         const queryParameters: runtime.HTTPQuery = {};
 
-        if (requestParameters.limit !== undefined) {
-            queryParameters['limit'] = requestParameters.limit;
-        }
-
-        if (requestParameters.offset !== undefined) {
-            queryParameters['offset'] = requestParameters.offset;
+        if (requestParameters.nameu !== undefined) {
+            queryParameters['nameu'] = requestParameters.nameu;
         }
 
         const headerParameters: runtime.HTTPHeaders = {};

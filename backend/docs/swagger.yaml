@@ -2118,14 +2118,10 @@ paths:
       description: list Preemption entities
       operationId: list-preemption
       parameters:
-      - description: Limit
+      - description: Nameu
         in: query
-        name: limit
-        type: integer
-      - description: Offset
-        in: query
-        name: offset
-        type: integer
+        name: nameu
+        type: string
       produces:
       - application/json
       responses:

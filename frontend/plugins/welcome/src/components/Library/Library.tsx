@@ -306,6 +306,7 @@ const WelcomePage = () => {
                   </Button>
                   <br />
                   <Button 
+                    disabled ={LogoutBtn}
                     variant="contained"
                     color="primary"
                     className={classes.button}

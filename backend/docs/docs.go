@@ -2095,15 +2095,9 @@ var doc = `{
                 "operationId": "list-preemption",
                 "parameters": [
                     {
-                        "type": "integer",
-                        "description": "Limit",
-                        "name": "limit",
-                        "in": "query"
-                    },
-                    {
-                        "type": "integer",
-                        "description": "Offset",
-                        "name": "offset",
+                        "type": "string",
+                        "description": "Nameu",
+                        "name": "nameu",
                         "in": "query"
                     }
                 ],
