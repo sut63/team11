@@ -64,9 +64,9 @@ export function EntPreemptionEdgesFromJSONTyped(json: any, ignoreDiscriminator: 
     }
     return {
         
-        'purposeID': !exists(json, 'purposeID') ? undefined : EntPurposeFromJSON(json['purposeID']),
-        'roomID': !exists(json, 'roomID') ? undefined : EntRoominfoFromJSON(json['roomID']),
-        'userID': !exists(json, 'userID') ? undefined : EntUserFromJSON(json['userID']),
+        'purposeID': !exists(json, 'PurposeID') ? undefined : EntPurposeFromJSON(json['PurposeID']),
+        'roomID': !exists(json, 'RoomID') ? undefined : EntRoominfoFromJSON(json['RoomID']),
+        'userID': !exists(json, 'UserID') ? undefined : EntUserFromJSON(json['UserID']),
     };
 }
 

@@ -118,7 +118,7 @@ const Seacrh = async () => {
   users.map((item: any) => {  
     if (item.uSERNAME == name ) {
       const getPreemptions = async () => {
-        const res = await api.listPreemption({limit: 10, offset: item.id });
+        const res = await api.listPreemption({nameu: name });
         setPreemptions(res); 
         console.log(res);   
         lenreturn = res.length
