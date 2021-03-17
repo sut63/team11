@@ -101,7 +101,7 @@ export default function ComponentsTable() {
 
   const SearchBook = async () => {
     if (bookname == "") {
-      alertMessage("info", "แสดงข้อมูลหนังสือทั้งหมด")
+      alertMessage("info", "แสดงข้อมูลหนังสือทั้งหมดในระบบ")
       const apiUrl = `http://localhost:8080/api/v1/searchbooks?book=${bookname}`;
       const requestOptions = {
         method: 'GET',
@@ -128,11 +128,11 @@ export default function ComponentsTable() {
         .then(response => response.json())
         .then(data => {
           console.log(data.data)
-          alertMessage("warning", "ไม่พบข้อมูลที่ค้นหา")
+          alertMessage("warning", "ไม่พบข้อมูลหนังสือที่ค้นหา")
           setBook([]);
           if (data.data != null) {
             if (data.data.length >= 1) {
-              alertMessage("success", "พบข้อมูลที่ค้นหา")
+              alertMessage("success", "พบข้อมูลหนังสือที่ค้นหา")
               console.log(data.data)
               setBook(data.data);
             }
